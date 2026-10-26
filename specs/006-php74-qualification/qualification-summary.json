@@ -1,0 +1,3666 @@
+{
+  "scope": "real-PHP-reference-only",
+  "decision": "GO",
+  "imageRef": "php:7.4.33-cli-bullseye",
+  "imageDigest": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+  "imageId": "sha256:525580b12477b912e85c9a2d960674ff948285570ec535504b6e1ab740794869",
+  "candidates": [
+    {
+      "runtimeProfile": "examsuite",
+      "sourceRepo": "https://github.com/MarionForm/Tech2Teach-ExamSuite",
+      "sourceCommit": "444a2f71491b755ab3f84dbaa3e4ebf5f2227805",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 MarionForm",
+      "sourceArchiveSha256": "20672339cf3105d2d0960666bdd69dd8367ec7a48ca0461606849205e4f51dcb",
+      "phpVersion": "7.4.33",
+      "imageRef": "php:7.4.33-cli-bullseye",
+      "imageDigest": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "imageId": "sha256:525580b12477b912e85c9a2d960674ff948285570ec535504b6e1ab740794869",
+      "runtime": "restricted-offline-Docker-PHP74",
+      "executedChecks": [
+        {
+          "id": "restricted-container-replay",
+          "exitCode": 0,
+          "elapsedMs": 7939,
+          "timedOut": false
+        },
+        {
+          "id": "archive-extract",
+          "exitCode": 0
+        },
+        {
+          "id": "php-lint",
+          "exitCode": 0,
+          "fileCount": 26
+        },
+        {
+          "id": "php-version-command",
+          "exitCode": 0
+        },
+        {
+          "id": "php-modules-command",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-business:1:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-business:1:seed_questions.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-business:2:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-business:2:seed_questions.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-rejected:1:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-rejected:1:seed_questions.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-rejected:2:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-rejected:2:seed_questions.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-fresh:1:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-fresh:1:seed_questions.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-fresh:2:init_db.php",
+          "exitCode": 0
+        },
+        {
+          "id": "exam-fresh:2:seed_questions.php",
+          "exitCode": 0
+        }
+      ],
+      "scenarioIds": [
+        "exam-business",
+        "exam-rejected",
+        "exam-fresh"
+      ],
+      "executedStepIds": [
+        "exam-business:replay-1:create-intake",
+        "exam-business:replay-1:read-pack",
+        "exam-business:replay-1:generate-exam",
+        "exam-business:replay-1:take-exam",
+        "exam-business:replay-1:grade-empty-answers",
+        "exam-business:replay-1:read-results",
+        "exam-business:replay-1:export-json",
+        "exam-business:replay-2:create-intake",
+        "exam-business:replay-2:read-pack",
+        "exam-business:replay-2:generate-exam",
+        "exam-business:replay-2:take-exam",
+        "exam-business:replay-2:grade-empty-answers",
+        "exam-business:replay-2:read-results",
+        "exam-business:replay-2:export-json",
+        "exam-rejected:replay-1:invalid-intake",
+        "exam-rejected:replay-1:read-home",
+        "exam-rejected:replay-1:missing-pack",
+        "exam-rejected:replay-1:read-after-rejection",
+        "exam-rejected:replay-2:invalid-intake",
+        "exam-rejected:replay-2:read-home",
+        "exam-rejected:replay-2:missing-pack",
+        "exam-rejected:replay-2:read-after-rejection",
+        "exam-fresh:replay-1:create-intake",
+        "exam-fresh:replay-1:read-pack",
+        "exam-fresh:replay-2:create-intake",
+        "exam-fresh:replay-2:read-pack"
+      ],
+      "replayCount": 2,
+      "bootstrapStatus": "PASS",
+      "statefulReplayStatus": "PASS",
+      "decision": "NO-GO",
+      "blockers": [],
+      "nondeterminismNotes": [
+        "UUID random_bytes: metamorphic-check-required",
+        "ORDER BY RANDOM question selection/order: metamorphic-check-required",
+        "SQLite datetime(now): metamorphic-check-required"
+      ],
+      "containerExitCode": 0,
+      "sqliteVersion": "3.34.1",
+      "extensions": [
+        "Core",
+        "date",
+        "libxml",
+        "openssl",
+        "pcre",
+        "sqlite3",
+        "zlib",
+        "ctype",
+        "curl",
+        "dom",
+        "fileinfo",
+        "filter",
+        "ftp",
+        "hash",
+        "iconv",
+        "json",
+        "mbstring",
+        "mysqlnd",
+        "PDO",
+        "pdo_sqlite",
+        "Phar",
+        "posix",
+        "readline",
+        "Reflection",
+        "session",
+        "SimpleXML",
+        "sodium",
+        "SPL",
+        "standard",
+        "tokenizer",
+        "xml",
+        "xmlreader",
+        "xmlwriter"
+      ],
+      "clockControl": null,
+      "licenseSha256": "0fa34aa0e8ae102749ec0c13e137f543bc88d975c4e52d058f545ea25a7cdba5",
+      "scenarios": [
+        {
+          "scenarioId": "exam-business",
+          "replay": 1,
+          "dbPath": "/work/exam-business-1/storage/tech2teach.sqlite",
+          "initialSha256": "93eb6e20cbc3b328e674774a747ac280901cd22e4dd561917bd1af1331e66ec6",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "e38455b834ca0d9eab189c22e90e891ee35963f4083abf8818a39e8c30ab1fd1",
+              "beforeSha256": "93eb6e20cbc3b328e674774a747ac280901cd22e4dd561917bd1af1331e66ec6",
+              "afterSha256": "d1c43fb77062b08f2ce98c129a03d2f5e59383fe7ccf1921638880c28bc9f314",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-pack",
+              "status": 200,
+              "responseSha256": "df65579673f44312c22be4b7595018b7b019f76c6a5592c8bc0551a78fef8072",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "d1c43fb77062b08f2ce98c129a03d2f5e59383fe7ccf1921638880c28bc9f314",
+              "afterSha256": "d1c43fb77062b08f2ce98c129a03d2f5e59383fe7ccf1921638880c28bc9f314",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "generate-exam",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "e54832cb2c80fd95f511e7acad348497811ee3055c4314a1aed87e92f78ddf36",
+              "beforeSha256": "d1c43fb77062b08f2ce98c129a03d2f5e59383fe7ccf1921638880c28bc9f314",
+              "afterSha256": "7a2306eeff6b924913337f75b2c784637112f1cf4907d9094464829d113c7a9b",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "take-exam",
+              "status": 200,
+              "responseSha256": "2df4d430bfccdfd15b3e3fde32c82b8fbcbc24e8066c251060522ce81dc479b5",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "7a2306eeff6b924913337f75b2c784637112f1cf4907d9094464829d113c7a9b",
+              "afterSha256": "7a2306eeff6b924913337f75b2c784637112f1cf4907d9094464829d113c7a9b",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "grade-empty-answers",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "e4b65f3b6dc939ed4b2aff2f24379ee5fb967ad79317fd298bfc496a00cb2fb9",
+              "beforeSha256": "7a2306eeff6b924913337f75b2c784637112f1cf4907d9094464829d113c7a9b",
+              "afterSha256": "61bdea8c51d426577b2a2bd39eb1af6c0d28631b702cb8eaa178deeb1893c3dd",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-results",
+              "status": 200,
+              "responseSha256": "2ebd6dbbb1a7599d8bb360ac33916be4ce9627c28e804667dfa98843932a089c",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "61bdea8c51d426577b2a2bd39eb1af6c0d28631b702cb8eaa178deeb1893c3dd",
+              "afterSha256": "61bdea8c51d426577b2a2bd39eb1af6c0d28631b702cb8eaa178deeb1893c3dd",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "export-json",
+              "status": 200,
+              "responseSha256": "5711472d644d88d20cfc871cb4f20c3766612bad9a195574fae472eac369b201",
+              "stableHeadersSha256": "ac7fff3d6294689fd651b28663d20381b7ff7cba0b54a7957bb2cccda2d7cf06",
+              "beforeSha256": "61bdea8c51d426577b2a2bd39eb1af6c0d28631b702cb8eaa178deeb1893c3dd",
+              "afterSha256": "61bdea8c51d426577b2a2bd39eb1af6c0d28631b702cb8eaa178deeb1893c3dd",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-business",
+          "replay": 2,
+          "dbPath": "/work/exam-business-2/storage/tech2teach.sqlite",
+          "initialSha256": "0c61dc5cf4d8d94b1741ba6acbf3c493cf3523ee4f0a3a2835821aa7ad20ac2e",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "f7193aef9abf05a8ab3971cee5db9304b304e7a90a4d191ad46c0924ebb8206c",
+              "beforeSha256": "0c61dc5cf4d8d94b1741ba6acbf3c493cf3523ee4f0a3a2835821aa7ad20ac2e",
+              "afterSha256": "000969055f6674235176305ae5486afe3b820ee32c486025b2a20671d27fe83e",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-pack",
+              "status": 200,
+              "responseSha256": "341a72d8795930f30f95805f514b45b70d2059c0b022dadde509ead5b8285716",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "000969055f6674235176305ae5486afe3b820ee32c486025b2a20671d27fe83e",
+              "afterSha256": "000969055f6674235176305ae5486afe3b820ee32c486025b2a20671d27fe83e",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "generate-exam",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "863902979daa3bf175860c5abbbd1ba72d494c54f6db0b73c3056f54cd542e95",
+              "beforeSha256": "000969055f6674235176305ae5486afe3b820ee32c486025b2a20671d27fe83e",
+              "afterSha256": "08fd6db0d241bb0f61a6f89b24d70310ca0f8dbc82500f0113e1816fa8c8ffc2",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "take-exam",
+              "status": 200,
+              "responseSha256": "77577acffc61ca63c20fd3c9f9aefd4ee40d94a643990795d77ac4514b09e066",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "08fd6db0d241bb0f61a6f89b24d70310ca0f8dbc82500f0113e1816fa8c8ffc2",
+              "afterSha256": "08fd6db0d241bb0f61a6f89b24d70310ca0f8dbc82500f0113e1816fa8c8ffc2",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "grade-empty-answers",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "cc38bcc194f1059d9c3c0750014a696566438daba54f6b5023f5ecc67520d5f0",
+              "beforeSha256": "08fd6db0d241bb0f61a6f89b24d70310ca0f8dbc82500f0113e1816fa8c8ffc2",
+              "afterSha256": "9e4d7355a7ae7d4bc5956223edd46e75680a3445e17fe1460ab353f93107466e",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-results",
+              "status": 200,
+              "responseSha256": "e4aa055342231a496ff2599bfa58e8f9d566a06e51d38f7fd0b8986c98019026",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "9e4d7355a7ae7d4bc5956223edd46e75680a3445e17fe1460ab353f93107466e",
+              "afterSha256": "9e4d7355a7ae7d4bc5956223edd46e75680a3445e17fe1460ab353f93107466e",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "export-json",
+              "status": 200,
+              "responseSha256": "e24a9cd94792f9ebbf5eaad68fa64826ed1e7151466e8f45364793986342a4b6",
+              "stableHeadersSha256": "2de31a4d6c6d5373ce1e12e64bf2f889a6a634a857570482e5d63c9f450b934c",
+              "beforeSha256": "9e4d7355a7ae7d4bc5956223edd46e75680a3445e17fe1460ab353f93107466e",
+              "afterSha256": "9e4d7355a7ae7d4bc5956223edd46e75680a3445e17fe1460ab353f93107466e",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 1,
+                "exam_questions": 5,
+                "attempts": 1
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-rejected",
+          "replay": 1,
+          "dbPath": "/work/exam-rejected-1/storage/tech2teach.sqlite",
+          "initialSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "invalid-intake",
+              "status": 200,
+              "responseSha256": "e20566ac851151932ce9eec93669715d90fa3767b7555ab4b8d8b3f468f5a293",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "afterSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-home",
+              "status": 200,
+              "responseSha256": "d9f83923ba308841784d4e160aa488d05eaa38491c1a8e51b2ec9d68f3894024",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "afterSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "missing-pack",
+              "status": 404,
+              "responseSha256": "8f614940053f3c3407e36dbd36a3b0781a890648826993cc589246e2a9ef1c12",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "afterSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-rejection",
+              "status": 200,
+              "responseSha256": "d9f83923ba308841784d4e160aa488d05eaa38491c1a8e51b2ec9d68f3894024",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "afterSha256": "e47c40507c2233eb06573f42938e5c5bd08e751c5b7d6a16e49b146da55fd274",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-rejected",
+          "replay": 2,
+          "dbPath": "/work/exam-rejected-2/storage/tech2teach.sqlite",
+          "initialSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "invalid-intake",
+              "status": 200,
+              "responseSha256": "e20566ac851151932ce9eec93669715d90fa3767b7555ab4b8d8b3f468f5a293",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "afterSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-home",
+              "status": 200,
+              "responseSha256": "d9f83923ba308841784d4e160aa488d05eaa38491c1a8e51b2ec9d68f3894024",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "afterSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "missing-pack",
+              "status": 404,
+              "responseSha256": "8f614940053f3c3407e36dbd36a3b0781a890648826993cc589246e2a9ef1c12",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "afterSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-rejection",
+              "status": 200,
+              "responseSha256": "d9f83923ba308841784d4e160aa488d05eaa38491c1a8e51b2ec9d68f3894024",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "afterSha256": "10da41a1da70649cf1449d990697b492e6bcb4ddb3fac648ca1e01667da8bc33",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-fresh",
+          "replay": 1,
+          "dbPath": "/work/exam-fresh-1/storage/tech2teach.sqlite",
+          "initialSha256": "7408839c1060f4e164d5e22838c2222d39459f968175f5337eb8ed0b0408946f",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "442d7bf2c3b4194cc4a82789deff6632d71701cbef9658f79ae7e09895969084",
+              "beforeSha256": "7408839c1060f4e164d5e22838c2222d39459f968175f5337eb8ed0b0408946f",
+              "afterSha256": "1af63845535f51710f99be0126ea72dd7106036a8618ba474e4f13b5356b5170",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-pack",
+              "status": 200,
+              "responseSha256": "4bad650fda42df36b84b932b7aff896d9ffc9fa1c6201b0cfa1c0ae9c9f4973d",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "1af63845535f51710f99be0126ea72dd7106036a8618ba474e4f13b5356b5170",
+              "afterSha256": "1af63845535f51710f99be0126ea72dd7106036a8618ba474e4f13b5356b5170",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-fresh",
+          "replay": 2,
+          "dbPath": "/work/exam-fresh-2/storage/tech2teach.sqlite",
+          "initialSha256": "84b4ef04ea8e8332a280f12455c240034fe9d42d22f7a67a56b5132d7f6d57ad",
+          "initialCounts": {
+            "intakes": 0,
+            "questions": 5,
+            "exams": 0,
+            "exam_questions": 0,
+            "attempts": 0
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "status": 302,
+              "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stableHeadersSha256": "00758fdcb560e1fb1eb7fc7aa7f59d94f6d83107351a2a295333024a34dcc195",
+              "beforeSha256": "84b4ef04ea8e8332a280f12455c240034fe9d42d22f7a67a56b5132d7f6d57ad",
+              "afterSha256": "070f958e29287dfe3e5a22f10b89930f9ea87f30c50fc2f28ed0959708a74fc7",
+              "beforeCounts": {
+                "intakes": 0,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 3,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-pack",
+              "status": 200,
+              "responseSha256": "2ad7c06fb42b4ee8880c4253b3a2d9450f91edb468d5c4946af50cb6d6d2e362",
+              "stableHeadersSha256": "902393254ac91d2509bdf3c0a0aec0a9f2e20062584e39eecc84ed83df8d2c10",
+              "beforeSha256": "070f958e29287dfe3e5a22f10b89930f9ea87f30c50fc2f28ed0959708a74fc7",
+              "afterSha256": "070f958e29287dfe3e5a22f10b89930f9ea87f30c50fc2f28ed0959708a74fc7",
+              "beforeCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "afterCounts": {
+                "intakes": 1,
+                "questions": 5,
+                "exams": 0,
+                "exam_questions": 0,
+                "attempts": 0
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        }
+      ],
+      "repeatability": [
+        {
+          "scenarioId": "exam-business",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "questions.id",
+            "questions.topic",
+            "questions.tags",
+            "questions.difficulty",
+            "questions.question_text",
+            "questions.choices_json",
+            "questions.correct_choice",
+            "questions.explanation"
+          ],
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": false,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            },
+            {
+              "stepId": "read-pack",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            },
+            {
+              "stepId": "generate-exam",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": false,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation",
+                "exams.id",
+                "exams.intake_id",
+                "exams.created_at",
+                "exam_questions.exam_id",
+                "exam_questions.question_id",
+                "exam_questions.q_order"
+              ]
+            },
+            {
+              "stepId": "take-exam",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation",
+                "exams.id",
+                "exams.intake_id",
+                "exams.created_at",
+                "exam_questions.exam_id",
+                "exam_questions.question_id",
+                "exam_questions.q_order"
+              ]
+            },
+            {
+              "stepId": "grade-empty-answers",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": false,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation",
+                "exams.id",
+                "exams.intake_id",
+                "exams.created_at",
+                "exam_questions.exam_id",
+                "exam_questions.question_id",
+                "exam_questions.q_order",
+                "attempts.id",
+                "attempts.exam_id",
+                "attempts.created_at",
+                "attempts.detail_json"
+              ]
+            },
+            {
+              "stepId": "read-results",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation",
+                "exams.id",
+                "exams.intake_id",
+                "exams.created_at",
+                "exam_questions.exam_id",
+                "exam_questions.question_id",
+                "exam_questions.q_order",
+                "attempts.id",
+                "attempts.exam_id",
+                "attempts.created_at",
+                "attempts.detail_json"
+              ]
+            },
+            {
+              "stepId": "export-json",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": false,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation",
+                "exams.id",
+                "exams.intake_id",
+                "exams.created_at",
+                "exam_questions.exam_id",
+                "exam_questions.question_id",
+                "exam_questions.q_order",
+                "attempts.id",
+                "attempts.exam_id",
+                "attempts.created_at",
+                "attempts.detail_json"
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-rejected",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "questions.id",
+            "questions.topic",
+            "questions.tags",
+            "questions.difficulty",
+            "questions.question_text",
+            "questions.choices_json",
+            "questions.correct_choice",
+            "questions.explanation"
+          ],
+          "steps": [
+            {
+              "stepId": "invalid-intake",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            },
+            {
+              "stepId": "read-home",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            },
+            {
+              "stepId": "missing-pack",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            },
+            {
+              "stepId": "read-after-rejection",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice",
+                "questions.explanation"
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "exam-fresh",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "questions.id",
+            "questions.topic",
+            "questions.tags",
+            "questions.difficulty",
+            "questions.question_text",
+            "questions.choices_json",
+            "questions.correct_choice"
+          ],
+          "steps": [
+            {
+              "stepId": "create-intake",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": false,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice"
+              ]
+            },
+            {
+              "stepId": "read-pack",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "intakes.id",
+                "intakes.created_at",
+                "questions.id",
+                "questions.topic",
+                "questions.tags",
+                "questions.difficulty",
+                "questions.question_text",
+                "questions.choices_json",
+                "questions.correct_choice"
+              ]
+            }
+          ]
+        }
+      ],
+      "exactReplayEqual": false
+    },
+    {
+      "runtimeProfile": "workshop",
+      "sourceRepo": "https://github.com/tanjilaafsarirubina/car-workshop",
+      "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Tanjila Afsari Rubina",
+      "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+      "phpVersion": "7.4.33",
+      "imageRef": "php:7.4.33-cli-bullseye",
+      "imageDigest": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "imageId": "sha256:525580b12477b912e85c9a2d960674ff948285570ec535504b6e1ab740794869",
+      "runtime": "restricted-offline-Docker-PHP74",
+      "executedChecks": [
+        {
+          "id": "restricted-container-replay",
+          "exitCode": 0,
+          "elapsedMs": 7568,
+          "timedOut": false
+        },
+        {
+          "id": "archive-extract",
+          "exitCode": 0
+        },
+        {
+          "id": "php-lint",
+          "exitCode": 0,
+          "fileCount": 6
+        },
+        {
+          "id": "php-version-command",
+          "exitCode": 0
+        },
+        {
+          "id": "php-modules-command",
+          "exitCode": 0
+        }
+      ],
+      "scenarioIds": [
+        "workshop-business",
+        "workshop-rejected",
+        "workshop-capacity"
+      ],
+      "executedStepIds": [
+        "workshop-business:replay-1:book",
+        "workshop-business:replay-1:read-booking",
+        "workshop-business:replay-1:update",
+        "workshop-business:replay-1:read-update",
+        "workshop-business:replay-1:cancel",
+        "workshop-business:replay-1:read-cancel",
+        "workshop-business:replay-2:book",
+        "workshop-business:replay-2:read-booking",
+        "workshop-business:replay-2:update",
+        "workshop-business:replay-2:read-update",
+        "workshop-business:replay-2:cancel",
+        "workshop-business:replay-2:read-cancel",
+        "workshop-rejected:replay-1:book",
+        "workshop-rejected:replay-1:duplicate",
+        "workshop-rejected:replay-1:read-after-duplicate",
+        "workshop-rejected:replay-1:invalid-booking",
+        "workshop-rejected:replay-1:read-after-invalid",
+        "workshop-rejected:replay-2:book",
+        "workshop-rejected:replay-2:duplicate",
+        "workshop-rejected:replay-2:read-after-duplicate",
+        "workshop-rejected:replay-2:invalid-booking",
+        "workshop-rejected:replay-2:read-after-invalid",
+        "workshop-capacity:replay-1:fill-1",
+        "workshop-capacity:replay-1:fill-2",
+        "workshop-capacity:replay-1:fill-3",
+        "workshop-capacity:replay-1:fill-4",
+        "workshop-capacity:replay-1:over-capacity",
+        "workshop-capacity:replay-1:read-after-capacity",
+        "workshop-capacity:replay-2:fill-1",
+        "workshop-capacity:replay-2:fill-2",
+        "workshop-capacity:replay-2:fill-3",
+        "workshop-capacity:replay-2:fill-4",
+        "workshop-capacity:replay-2:over-capacity",
+        "workshop-capacity:replay-2:read-after-capacity"
+      ],
+      "replayCount": 2,
+      "bootstrapStatus": "PASS",
+      "statefulReplayStatus": "PASS",
+      "decision": "NO-GO",
+      "blockers": [],
+      "nondeterminismNotes": [
+        "Asia/Dhaka and explicit future appointment dates: controlled",
+        "SQLite CURRENT_TIMESTAMP creation fields: metamorphic-check-required",
+        "Appointment ids after fresh reset: deterministic"
+      ],
+      "containerExitCode": 0,
+      "sqliteVersion": "3.34.1",
+      "extensions": [
+        "Core",
+        "date",
+        "libxml",
+        "openssl",
+        "pcre",
+        "sqlite3",
+        "zlib",
+        "ctype",
+        "curl",
+        "dom",
+        "fileinfo",
+        "filter",
+        "ftp",
+        "hash",
+        "iconv",
+        "json",
+        "mbstring",
+        "mysqlnd",
+        "PDO",
+        "pdo_sqlite",
+        "Phar",
+        "posix",
+        "readline",
+        "Reflection",
+        "session",
+        "SimpleXML",
+        "sodium",
+        "SPL",
+        "standard",
+        "tokenizer",
+        "xml",
+        "xmlreader",
+        "xmlwriter"
+      ],
+      "clockControl": null,
+      "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+      "scenarios": [
+        {
+          "scenarioId": "workshop-business",
+          "replay": 1,
+          "dbPath": "/work/workshop-business-1/workshop.sqlite",
+          "initialSha256": "155f7f5529babfdfa05c97243add84698519fdc9ae36eaaa5b08bb1917024de2",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "155f7f5529babfdfa05c97243add84698519fdc9ae36eaaa5b08bb1917024de2",
+              "afterSha256": "a25206b5fdb12e3893f8a82678adf661006ba7e963282a4b70977eaec37e5fa0",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-booking",
+              "status": 200,
+              "responseSha256": "68afc07245df91cabeb530264acb871f2ba65eb1c7ef7172d709e7acc594a96a",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "a25206b5fdb12e3893f8a82678adf661006ba7e963282a4b70977eaec37e5fa0",
+              "afterSha256": "a25206b5fdb12e3893f8a82678adf661006ba7e963282a4b70977eaec37e5fa0",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "update",
+              "status": 200,
+              "responseSha256": "972de4af6fc7e0fdaa57af2046b1f69be6467533973a3d3c081321f1f43bcd64",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "a25206b5fdb12e3893f8a82678adf661006ba7e963282a4b70977eaec37e5fa0",
+              "afterSha256": "41afadc992afc76ce128319e3df5c8ff2d7bdb5d56a1adaef5ff0ece8a6863c9",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-update",
+              "status": 200,
+              "responseSha256": "c643bce3ad6e9ef68c8ec8debecb44c723b2260fcf3ed489359190c32c1d895c",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "41afadc992afc76ce128319e3df5c8ff2d7bdb5d56a1adaef5ff0ece8a6863c9",
+              "afterSha256": "41afadc992afc76ce128319e3df5c8ff2d7bdb5d56a1adaef5ff0ece8a6863c9",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "cancel",
+              "status": 200,
+              "responseSha256": "e79f07aae946d9d3d8a792331808eb504c0870929dd4f8dadf56d022c14013f1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "41afadc992afc76ce128319e3df5c8ff2d7bdb5d56a1adaef5ff0ece8a6863c9",
+              "afterSha256": "e49b0cff547b75c56885d79bec4853df74b36670e0a05b9b9db362699544d96e",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-cancel",
+              "status": 200,
+              "responseSha256": "cc75e8c5ff29b90a6caedbaaad123f519810a407ae2040e9ddc62884be3d7288",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "e49b0cff547b75c56885d79bec4853df74b36670e0a05b9b9db362699544d96e",
+              "afterSha256": "e49b0cff547b75c56885d79bec4853df74b36670e0a05b9b9db362699544d96e",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-business",
+          "replay": 2,
+          "dbPath": "/work/workshop-business-2/workshop.sqlite",
+          "initialSha256": "cfda72e2b1d2a34eb00a6e6b0a0493c86a1e78b4cf5e3dfee84cfba6420bd642",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "cfda72e2b1d2a34eb00a6e6b0a0493c86a1e78b4cf5e3dfee84cfba6420bd642",
+              "afterSha256": "fdd9ed206c8f9544bb4464121d80fc39f47f9a37f77608f354a9bae8b0152b86",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-booking",
+              "status": 200,
+              "responseSha256": "0986e65fb5409e178e98fbc7bb9d2928caa30077fcba793367dce52e7d1b361c",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "fdd9ed206c8f9544bb4464121d80fc39f47f9a37f77608f354a9bae8b0152b86",
+              "afterSha256": "fdd9ed206c8f9544bb4464121d80fc39f47f9a37f77608f354a9bae8b0152b86",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "update",
+              "status": 200,
+              "responseSha256": "972de4af6fc7e0fdaa57af2046b1f69be6467533973a3d3c081321f1f43bcd64",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "fdd9ed206c8f9544bb4464121d80fc39f47f9a37f77608f354a9bae8b0152b86",
+              "afterSha256": "eef44cb70b23b79d2560f9557cfd6961c1ec85e135b165d31afc26ed55233ff6",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-update",
+              "status": 200,
+              "responseSha256": "9a05de9c5ad7f5abc44e7660e5a7006a12f606a36734cb41aa685458089dd585",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "eef44cb70b23b79d2560f9557cfd6961c1ec85e135b165d31afc26ed55233ff6",
+              "afterSha256": "eef44cb70b23b79d2560f9557cfd6961c1ec85e135b165d31afc26ed55233ff6",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "cancel",
+              "status": 200,
+              "responseSha256": "e79f07aae946d9d3d8a792331808eb504c0870929dd4f8dadf56d022c14013f1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "eef44cb70b23b79d2560f9557cfd6961c1ec85e135b165d31afc26ed55233ff6",
+              "afterSha256": "bf20eacef3cdd27d24a4c326830e5830f22668cf941c6970aea1481d5c91140d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-cancel",
+              "status": 200,
+              "responseSha256": "cc75e8c5ff29b90a6caedbaaad123f519810a407ae2040e9ddc62884be3d7288",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "bf20eacef3cdd27d24a4c326830e5830f22668cf941c6970aea1481d5c91140d",
+              "afterSha256": "bf20eacef3cdd27d24a4c326830e5830f22668cf941c6970aea1481d5c91140d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "replay": 1,
+          "dbPath": "/work/workshop-rejected-1/workshop.sqlite",
+          "initialSha256": "1494597b8296f4dde1ecf8d3398b44de6d150ce0e7511f1ad03f290e1039d147",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "1494597b8296f4dde1ecf8d3398b44de6d150ce0e7511f1ad03f290e1039d147",
+              "afterSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "duplicate",
+              "status": 200,
+              "responseSha256": "9f0bc17d9eb06b74b1b1f55f79bba8d41903991a540daee39310be3236180843",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "afterSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "status": 200,
+              "responseSha256": "027075e49bc7e42e0bfb96c8786f165928151bfd089c2f7bac18036427cebd48",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "afterSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "invalid-booking",
+              "status": 200,
+              "responseSha256": "6b1d11f14bf7d9c064e1bfbf639f0a8282cee8b65bd9e4b8798a3299488f8e0a",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "afterSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-invalid",
+              "status": 200,
+              "responseSha256": "027075e49bc7e42e0bfb96c8786f165928151bfd089c2f7bac18036427cebd48",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "afterSha256": "72a4a79b24d51f80fce731a06e67512172eae3039a11ffd57ff830ace6e2638d",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "replay": 2,
+          "dbPath": "/work/workshop-rejected-2/workshop.sqlite",
+          "initialSha256": "0435a71fc7ca9057b5865ae2cac24d0b3da6d189289232866739050f30c9f327",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "0435a71fc7ca9057b5865ae2cac24d0b3da6d189289232866739050f30c9f327",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "duplicate",
+              "status": 200,
+              "responseSha256": "9f0bc17d9eb06b74b1b1f55f79bba8d41903991a540daee39310be3236180843",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "status": 200,
+              "responseSha256": "0a87aa2e144d9a6b971101f15da0174cc107e66597ddef0d3c8dac9cabd4b07e",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "invalid-booking",
+              "status": 200,
+              "responseSha256": "6b1d11f14bf7d9c064e1bfbf639f0a8282cee8b65bd9e4b8798a3299488f8e0a",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-invalid",
+              "status": 200,
+              "responseSha256": "0a87aa2e144d9a6b971101f15da0174cc107e66597ddef0d3c8dac9cabd4b07e",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "replay": 1,
+          "dbPath": "/work/workshop-capacity-1/workshop.sqlite",
+          "initialSha256": "0435a71fc7ca9057b5865ae2cac24d0b3da6d189289232866739050f30c9f327",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "0435a71fc7ca9057b5865ae2cac24d0b3da6d189289232866739050f30c9f327",
+              "afterSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-2",
+              "status": 200,
+              "responseSha256": "d6785bd808f2c5eaf128dd4e36d68897772f61cc8e47af213b668b274197aa91",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "254d5b3d5e56a799372fd86ff277d5a1f9936cb6f2bb9bd78151666d2737901c",
+              "afterSha256": "76a99c20329351650f5d72faa27bac6a03bcb1530e9038858437a2a256ee0404",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-3",
+              "status": 200,
+              "responseSha256": "d91fe7105bceeff3a3d63666cab988b01fa42920c4f5d546aed815c55c0d9956",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "76a99c20329351650f5d72faa27bac6a03bcb1530e9038858437a2a256ee0404",
+              "afterSha256": "9fec37799addff7d99997b897d8f23803fed78d2b8339444acf5cf5ec4b452d9",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-4",
+              "status": 200,
+              "responseSha256": "de2da0d53695baef2d979a32c1e8c9f87a68bae99e4acd72db6ec03c4d0ef4e1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "9fec37799addff7d99997b897d8f23803fed78d2b8339444acf5cf5ec4b452d9",
+              "afterSha256": "0ef8327d92f48468db2f2d0ed2c8e1a381b060a18f49b9fc107960fe426cb993",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "over-capacity",
+              "status": 200,
+              "responseSha256": "9054ab01146394faeded99fda3daafa46818704a4da3e425efe8ac72ed45b617",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "0ef8327d92f48468db2f2d0ed2c8e1a381b060a18f49b9fc107960fe426cb993",
+              "afterSha256": "0ef8327d92f48468db2f2d0ed2c8e1a381b060a18f49b9fc107960fe426cb993",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-capacity",
+              "status": 200,
+              "responseSha256": "cc72d5840b4be2fb9d316252682b33eba4e49f7c36ac8141eaea9479ab6b00cf",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "0ef8327d92f48468db2f2d0ed2c8e1a381b060a18f49b9fc107960fe426cb993",
+              "afterSha256": "0ef8327d92f48468db2f2d0ed2c8e1a381b060a18f49b9fc107960fe426cb993",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "replay": 2,
+          "dbPath": "/work/workshop-capacity-2/workshop.sqlite",
+          "initialSha256": "1a05164651422ecc8789f74c956111cabee8ff45d8613f117297cb5367f17a03",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "1a05164651422ecc8789f74c956111cabee8ff45d8613f117297cb5367f17a03",
+              "afterSha256": "151aad4b7f0c9c44807dab9c92fd3b57615013a0dd054626c843566ef722e38b",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-2",
+              "status": 200,
+              "responseSha256": "d6785bd808f2c5eaf128dd4e36d68897772f61cc8e47af213b668b274197aa91",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "151aad4b7f0c9c44807dab9c92fd3b57615013a0dd054626c843566ef722e38b",
+              "afterSha256": "14b523f68f62177d04e9a4f0a8a6439c53abe91d388a66b5978043345c21c029",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-3",
+              "status": 200,
+              "responseSha256": "d91fe7105bceeff3a3d63666cab988b01fa42920c4f5d546aed815c55c0d9956",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "14b523f68f62177d04e9a4f0a8a6439c53abe91d388a66b5978043345c21c029",
+              "afterSha256": "e57e2759e9e944e689c2c79bb93d91f74bcb234a70af71323d8aeebe9559d07a",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-4",
+              "status": 200,
+              "responseSha256": "de2da0d53695baef2d979a32c1e8c9f87a68bae99e4acd72db6ec03c4d0ef4e1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "e57e2759e9e944e689c2c79bb93d91f74bcb234a70af71323d8aeebe9559d07a",
+              "afterSha256": "e838abdd8785645ba549ac662027d73327bef74e389347eabb9550d4822d0511",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "over-capacity",
+              "status": 200,
+              "responseSha256": "9054ab01146394faeded99fda3daafa46818704a4da3e425efe8ac72ed45b617",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "e838abdd8785645ba549ac662027d73327bef74e389347eabb9550d4822d0511",
+              "afterSha256": "e838abdd8785645ba549ac662027d73327bef74e389347eabb9550d4822d0511",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-capacity",
+              "status": 200,
+              "responseSha256": "cc72d5840b4be2fb9d316252682b33eba4e49f7c36ac8141eaea9479ab6b00cf",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "e838abdd8785645ba549ac662027d73327bef74e389347eabb9550d4822d0511",
+              "afterSha256": "e838abdd8785645ba549ac662027d73327bef74e389347eabb9550d4822d0511",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        }
+      ],
+      "repeatability": [
+        {
+          "scenarioId": "workshop-business",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "mechanics.created_at"
+          ],
+          "steps": [
+            {
+              "stepId": "book",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "read-booking",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "update",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "read-update",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "cancel",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at"
+              ]
+            },
+            {
+              "stepId": "read-cancel",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at"
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "mechanics.created_at"
+          ],
+          "steps": [
+            {
+              "stepId": "book",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "duplicate",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "invalid-booking",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "read-after-invalid",
+              "statusEqual": true,
+              "bodyEqual": false,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "initialEqual": false,
+          "initialChangedColumns": [
+            "mechanics.created_at"
+          ],
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "fill-2",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "fill-3",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "fill-4",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "over-capacity",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            },
+            {
+              "stepId": "read-after-capacity",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": false,
+              "changedColumns": [
+                "mechanics.created_at",
+                "appointments.created_at"
+              ]
+            }
+          ]
+        }
+      ],
+      "exactReplayEqual": false
+    },
+    {
+      "runtimeProfile": "workshop-clock",
+      "sourceRepo": "https://github.com/tanjilaafsarirubina/car-workshop",
+      "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Tanjila Afsari Rubina",
+      "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+      "phpVersion": "7.4.33",
+      "imageRef": "php:7.4.33-cli-bullseye",
+      "imageDigest": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "imageId": "sha256:525580b12477b912e85c9a2d960674ff948285570ec535504b6e1ab740794869",
+      "runtime": "restricted-offline-Docker-PHP74",
+      "executedChecks": [
+        {
+          "id": "restricted-container-replay",
+          "exitCode": 0,
+          "elapsedMs": 7598,
+          "timedOut": false
+        },
+        {
+          "id": "archive-extract",
+          "exitCode": 0
+        },
+        {
+          "id": "php-lint",
+          "exitCode": 0,
+          "fileCount": 6
+        },
+        {
+          "id": "php-version-command",
+          "exitCode": 0
+        },
+        {
+          "id": "php-modules-command",
+          "exitCode": 0
+        },
+        {
+          "id": "frozen-clock-php-sqlite",
+          "exitCode": 0
+        }
+      ],
+      "scenarioIds": [
+        "workshop-business",
+        "workshop-rejected",
+        "workshop-capacity"
+      ],
+      "executedStepIds": [
+        "workshop-business:replay-1:book",
+        "workshop-business:replay-1:read-booking",
+        "workshop-business:replay-1:update",
+        "workshop-business:replay-1:read-update",
+        "workshop-business:replay-1:cancel",
+        "workshop-business:replay-1:read-cancel",
+        "workshop-business:replay-2:book",
+        "workshop-business:replay-2:read-booking",
+        "workshop-business:replay-2:update",
+        "workshop-business:replay-2:read-update",
+        "workshop-business:replay-2:cancel",
+        "workshop-business:replay-2:read-cancel",
+        "workshop-rejected:replay-1:book",
+        "workshop-rejected:replay-1:duplicate",
+        "workshop-rejected:replay-1:read-after-duplicate",
+        "workshop-rejected:replay-1:invalid-booking",
+        "workshop-rejected:replay-1:read-after-invalid",
+        "workshop-rejected:replay-2:book",
+        "workshop-rejected:replay-2:duplicate",
+        "workshop-rejected:replay-2:read-after-duplicate",
+        "workshop-rejected:replay-2:invalid-booking",
+        "workshop-rejected:replay-2:read-after-invalid",
+        "workshop-capacity:replay-1:fill-1",
+        "workshop-capacity:replay-1:fill-2",
+        "workshop-capacity:replay-1:fill-3",
+        "workshop-capacity:replay-1:fill-4",
+        "workshop-capacity:replay-1:over-capacity",
+        "workshop-capacity:replay-1:read-after-capacity",
+        "workshop-capacity:replay-2:fill-1",
+        "workshop-capacity:replay-2:fill-2",
+        "workshop-capacity:replay-2:fill-3",
+        "workshop-capacity:replay-2:fill-4",
+        "workshop-capacity:replay-2:over-capacity",
+        "workshop-capacity:replay-2:read-after-capacity"
+      ],
+      "replayCount": 2,
+      "bootstrapStatus": "PASS",
+      "statefulReplayStatus": "PASS",
+      "decision": "GO",
+      "blockers": [],
+      "nondeterminismNotes": [
+        "PHP and SQLite wall clocks: controlled at 2026-10-27 12:00:00 UTC; verified before source execution",
+        "Monotonic deadlines: real; appointment dates: explicit 2099-06-15/16",
+        "All timestamp fields/values are retained, with no normalization or RNG control"
+      ],
+      "containerExitCode": 0,
+      "sqliteVersion": "3.34.1",
+      "extensions": [
+        "Core",
+        "date",
+        "libxml",
+        "openssl",
+        "pcre",
+        "sqlite3",
+        "zlib",
+        "ctype",
+        "curl",
+        "dom",
+        "fileinfo",
+        "filter",
+        "ftp",
+        "hash",
+        "iconv",
+        "json",
+        "mbstring",
+        "mysqlnd",
+        "PDO",
+        "pdo_sqlite",
+        "Phar",
+        "posix",
+        "readline",
+        "Reflection",
+        "session",
+        "SimpleXML",
+        "sodium",
+        "SPL",
+        "standard",
+        "tokenizer",
+        "xml",
+        "xmlreader",
+        "xmlwriter"
+      ],
+      "clockControl": {
+        "kind": "frozen-wall-real-monotonic",
+        "requestedUtc": "2026-10-27 12:00:00",
+        "phpUtc": "2026-10-27 12:00:00",
+        "sqliteUtc": "2026-10-27 12:00:00",
+        "libraryVersion": "0.9.8-9",
+        "copyrightSha256": "6c361c87f8a9a7999ffab9924fabaaf499b372379cd8a7c19e7eca94d43df7ef"
+      },
+      "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+      "scenarios": [
+        {
+          "scenarioId": "workshop-business",
+          "replay": 1,
+          "dbPath": "/work/workshop-business-1/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-booking",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "update",
+              "status": 200,
+              "responseSha256": "972de4af6fc7e0fdaa57af2046b1f69be6467533973a3d3c081321f1f43bcd64",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-update",
+              "status": 200,
+              "responseSha256": "2ea036c523f170c6bae42dfb2a14091355dfa28045adf4bfc77268e5a2661d66",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "afterSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "cancel",
+              "status": 200,
+              "responseSha256": "e79f07aae946d9d3d8a792331808eb504c0870929dd4f8dadf56d022c14013f1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "afterSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-cancel",
+              "status": 200,
+              "responseSha256": "cc75e8c5ff29b90a6caedbaaad123f519810a407ae2040e9ddc62884be3d7288",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "afterSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-business",
+          "replay": 2,
+          "dbPath": "/work/workshop-business-2/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-booking",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "update",
+              "status": 200,
+              "responseSha256": "972de4af6fc7e0fdaa57af2046b1f69be6467533973a3d3c081321f1f43bcd64",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-update",
+              "status": 200,
+              "responseSha256": "2ea036c523f170c6bae42dfb2a14091355dfa28045adf4bfc77268e5a2661d66",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "afterSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "cancel",
+              "status": 200,
+              "responseSha256": "e79f07aae946d9d3d8a792331808eb504c0870929dd4f8dadf56d022c14013f1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "976826a8c172d1452aa165c2427f914d99875e751eeaa4f4b8f502ef31b9aefb",
+              "afterSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-cancel",
+              "status": 200,
+              "responseSha256": "cc75e8c5ff29b90a6caedbaaad123f519810a407ae2040e9ddc62884be3d7288",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "afterSha256": "6d5b5c1faddee882159c1b3ac7ed51959039f9d8844d996624f4318a024af701",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "replay": 1,
+          "dbPath": "/work/workshop-rejected-1/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "duplicate",
+              "status": 200,
+              "responseSha256": "9f0bc17d9eb06b74b1b1f55f79bba8d41903991a540daee39310be3236180843",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "invalid-booking",
+              "status": 200,
+              "responseSha256": "6b1d11f14bf7d9c064e1bfbf639f0a8282cee8b65bd9e4b8798a3299488f8e0a",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-invalid",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "replay": 2,
+          "dbPath": "/work/workshop-rejected-2/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "book",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "duplicate",
+              "status": 200,
+              "responseSha256": "9f0bc17d9eb06b74b1b1f55f79bba8d41903991a540daee39310be3236180843",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "invalid-booking",
+              "status": 200,
+              "responseSha256": "6b1d11f14bf7d9c064e1bfbf639f0a8282cee8b65bd9e4b8798a3299488f8e0a",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-invalid",
+              "status": 200,
+              "responseSha256": "d3c11c308e074cab856b6b3ac9f5c4aba088247d47377eaaf2571bb295cd57c5",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "replay": 1,
+          "dbPath": "/work/workshop-capacity-1/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-2",
+              "status": 200,
+              "responseSha256": "d6785bd808f2c5eaf128dd4e36d68897772f61cc8e47af213b668b274197aa91",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "b8aa598829b3a7bfb936f1d2c26221ba1ffd2b455bf561fdcfc7ae3c9411c0b3",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-3",
+              "status": 200,
+              "responseSha256": "d91fe7105bceeff3a3d63666cab988b01fa42920c4f5d546aed815c55c0d9956",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "b8aa598829b3a7bfb936f1d2c26221ba1ffd2b455bf561fdcfc7ae3c9411c0b3",
+              "afterSha256": "c76eb26b30a13e3211e5c9e364797d7981378f7215fb10d960916af8bf6e7086",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-4",
+              "status": 200,
+              "responseSha256": "de2da0d53695baef2d979a32c1e8c9f87a68bae99e4acd72db6ec03c4d0ef4e1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c76eb26b30a13e3211e5c9e364797d7981378f7215fb10d960916af8bf6e7086",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "over-capacity",
+              "status": 200,
+              "responseSha256": "9054ab01146394faeded99fda3daafa46818704a4da3e425efe8ac72ed45b617",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-capacity",
+              "status": 200,
+              "responseSha256": "cc72d5840b4be2fb9d316252682b33eba4e49f7c36ac8141eaea9479ab6b00cf",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "replay": 2,
+          "dbPath": "/work/workshop-capacity-2/workshop.sqlite",
+          "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+          "initialCounts": {
+            "mechanics": 5,
+            "appointments": 0,
+            "sqlite_sequence": 1
+          },
+          "status": "PASS",
+          "exitCode": 0,
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "status": 200,
+              "responseSha256": "a3e9d58082a31275c714a6b029a9f13789e91b0adb31b562f8ab83db28893105",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb",
+              "afterSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 0,
+                "sqlite_sequence": 1
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-2",
+              "status": 200,
+              "responseSha256": "d6785bd808f2c5eaf128dd4e36d68897772f61cc8e47af213b668b274197aa91",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "88d15a99db16d41c66d23cfcb649afce4785386b2a22640f3f0a5f7c3cf81b0f",
+              "afterSha256": "b8aa598829b3a7bfb936f1d2c26221ba1ffd2b455bf561fdcfc7ae3c9411c0b3",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 1,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-3",
+              "status": 200,
+              "responseSha256": "d91fe7105bceeff3a3d63666cab988b01fa42920c4f5d546aed815c55c0d9956",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "b8aa598829b3a7bfb936f1d2c26221ba1ffd2b455bf561fdcfc7ae3c9411c0b3",
+              "afterSha256": "c76eb26b30a13e3211e5c9e364797d7981378f7215fb10d960916af8bf6e7086",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 2,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "fill-4",
+              "status": 200,
+              "responseSha256": "de2da0d53695baef2d979a32c1e8c9f87a68bae99e4acd72db6ec03c4d0ef4e1",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c76eb26b30a13e3211e5c9e364797d7981378f7215fb10d960916af8bf6e7086",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 3,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": false,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "over-capacity",
+              "status": 200,
+              "responseSha256": "9054ab01146394faeded99fda3daafa46818704a4da3e425efe8ac72ed45b617",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            },
+            {
+              "stepId": "read-after-capacity",
+              "status": 200,
+              "responseSha256": "cc72d5840b4be2fb9d316252682b33eba4e49f7c36ac8141eaea9479ab6b00cf",
+              "stableHeadersSha256": "fff0d349f1a3c161beeb32249fe7196bb82c86697bb6ca85ffc9ef7d1f265e68",
+              "beforeSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "afterSha256": "c62c3d6c72114067744255d05316333e16344af1704e9e4f6df45efd187cc54f",
+              "beforeCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "afterCounts": {
+                "mechanics": 5,
+                "appointments": 4,
+                "sqlite_sequence": 2
+              },
+              "unchanged": true,
+              "lockProbeExitCode": 0,
+              "elapsedMs": 2,
+              "exitCode": 0
+            }
+          ]
+        }
+      ],
+      "repeatability": [
+        {
+          "scenarioId": "workshop-business",
+          "initialEqual": true,
+          "initialChangedColumns": [],
+          "steps": [
+            {
+              "stepId": "book",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-booking",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "update",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-update",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "cancel",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-cancel",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "initialEqual": true,
+          "initialChangedColumns": [],
+          "steps": [
+            {
+              "stepId": "book",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "duplicate",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-after-duplicate",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "invalid-booking",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-after-invalid",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "initialEqual": true,
+          "initialChangedColumns": [],
+          "steps": [
+            {
+              "stepId": "fill-1",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "fill-2",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "fill-3",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "fill-4",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "over-capacity",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            },
+            {
+              "stepId": "read-after-capacity",
+              "statusEqual": true,
+              "bodyEqual": true,
+              "headersEqual": true,
+              "postStateEqual": true,
+              "changedColumns": []
+            }
+          ]
+        }
+      ],
+      "exactReplayEqual": true
+    }
+  ],
+  "infrastructureChecks": [
+    {
+      "id": "docker-version",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 76,
+      "privateOutputSha256": "7ba4296d98811b3f6017879e4adb5452f8fe84ab8242b9bfd4fe14e394459098"
+    },
+    {
+      "id": "docker-info",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 168,
+      "privateOutputSha256": "5b19ae24145640f34f3f9c46205acbae30b234a683de08cea220ff243d0dd369"
+    },
+    {
+      "id": "php74-image-pull",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 9880,
+      "privateOutputSha256": "d8956ccc7d1a44a8cf8083962a281b0b7eb4321387ce06084a47c14b1017c459"
+    },
+    {
+      "id": "php74-image-inspect",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 15,
+      "privateOutputSha256": "552ac30ab94a534d667c2c9d6c93c0d2a47766c0d62b5aac46d5ac74d84a75fe"
+    },
+    {
+      "id": "trusted-extension-image-build",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 3481,
+      "privateOutputSha256": "96e990d715705b0c33e5c436cd27ef49cca863b117710356b2b6243c3486a2e9"
+    },
+    {
+      "id": "trusted-image-inspect",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedMs": 14,
+      "privateOutputSha256": "7c134ef0ffc2caa8bb1fd8d85142908e3e9c143dfbbb139ab77ea897f50ff949"
+    }
+  ],
+  "limitations": [
+    "Raw HTTP/SQLite evidence remains ephemeral inside private container tmpfs and is destroyed after the run; no external private evidence store is configured.",
+    "No candidate TS, product G0-G4 acceptance, concurrency qualification, model calls or benchmark registration.",
+    "UUID/time/random values remain intact; no scoped metamorphic invariant has independent owner approval."
+  ],
+  "evidenceProvenance": {
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40420872942",
+    "headSha": "43287bb38280b4bf9b9fc93185c52ab1aaad809e",
+    "runner": "GitHub-hosted Ubuntu 24.04",
+    "collectedAt": "2026-10-26T23:36:20.403Z",
+    "rawRetention": "ephemeral-container-tmpfs-only",
+    "summaryKind": "allowlisted-structural-metadata-and-hashes"
+  },
+  "blockers": []
+}

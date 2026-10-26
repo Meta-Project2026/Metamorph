@@ -1,0 +1,238 @@
+[
+  {
+    "stage": "initial-image-build",
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40419697464",
+    "headSha": "5d767435367a2177a1d90062a44fe152ad6954c6",
+    "decision": "BLOCKED",
+    "infrastructureChecks": [
+      {
+        "id": "docker-version",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 115,
+        "privateOutputSha256": "7ba4296d98811b3f6017879e4adb5452f8fe84ab8242b9bfd4fe14e394459098"
+      },
+      {
+        "id": "docker-info",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 237,
+        "privateOutputSha256": "5b19ae24145640f34f3f9c46205acbae30b234a683de08cea220ff243d0dd369"
+      },
+      {
+        "id": "php74-image-pull",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 5964,
+        "privateOutputSha256": "6191294226a218b97efb6106dc40139ae724812b5aed7b00c6d5799adfefca7d"
+      },
+      {
+        "id": "php74-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 15,
+        "privateOutputSha256": "55ffaa219da60cb00ec7d050a109836febdd42268d8a500f35f6c5d5b11f3580"
+      },
+      {
+        "id": "trusted-extension-image-build",
+        "exitCode": 1,
+        "timedOut": false,
+        "elapsedMs": 2686,
+        "privateOutputSha256": "dee3d3b91c9e3510b416a60edf1ae034953747037decec59fedf759e6e1e4c17"
+      }
+    ],
+    "candidates": [],
+    "blockers": [
+      "trusted-extension-image-build"
+    ]
+  },
+  {
+    "stage": "trusted-build-diagnostics",
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40419845832",
+    "headSha": "12653e07033e00d108e775c1357264eb23d8b895",
+    "decision": "BLOCKED",
+    "infrastructureChecks": [
+      {
+        "id": "docker-version",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 139,
+        "privateOutputSha256": "7ba4296d98811b3f6017879e4adb5452f8fe84ab8242b9bfd4fe14e394459098"
+      },
+      {
+        "id": "docker-info",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 332,
+        "privateOutputSha256": "5b19ae24145640f34f3f9c46205acbae30b234a683de08cea220ff243d0dd369"
+      },
+      {
+        "id": "php74-image-pull",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 9485,
+        "privateOutputSha256": "06fbff56ec2dd0c9af9a3c0bd1018deb652c9e2e4eb7f6f13080b0414580af3a"
+      },
+      {
+        "id": "php74-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 16,
+        "privateOutputSha256": "b76627787c744b9f461ff24f18ef823957f750f0752fbc1d4c8a9e68626c3ae4"
+      },
+      {
+        "id": "trusted-extension-image-build",
+        "exitCode": 1,
+        "timedOut": false,
+        "elapsedMs": 3017,
+        "privateOutputSha256": "0dde1fad4136d988386e9bc5e83745b5471b0cba8649c14821d837577445c39a"
+      }
+    ],
+    "candidates": [],
+    "blockers": [
+      "trusted-extension-image-build"
+    ]
+  },
+  {
+    "stage": "ordinary-real-clock-profiles",
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40419976420",
+    "headSha": "bc9a172d0436286140e56d8b050239529d6c9f71",
+    "decision": "NO-GO",
+    "infrastructureChecks": [
+      {
+        "id": "docker-version",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 83,
+        "privateOutputSha256": "7ba4296d98811b3f6017879e4adb5452f8fe84ab8242b9bfd4fe14e394459098"
+      },
+      {
+        "id": "docker-info",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 186,
+        "privateOutputSha256": "5b19ae24145640f34f3f9c46205acbae30b234a683de08cea220ff243d0dd369"
+      },
+      {
+        "id": "php74-image-pull",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 7717,
+        "privateOutputSha256": "141686da9b5e58a3dacc1f2158851d4fe2bf3803d0d39115b3b5e71a49513090"
+      },
+      {
+        "id": "php74-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 11,
+        "privateOutputSha256": "ea2b411e12c4bb1f2d5c15dddcaf13a4edaf5cc943c06949517157e3b124fafd"
+      },
+      {
+        "id": "trusted-extension-image-build",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 1075,
+        "privateOutputSha256": "aab36277d9fcc051cc907fe48ee1488207fbf81781b20654cffcf5f97910514b"
+      },
+      {
+        "id": "trusted-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 10,
+        "privateOutputSha256": "a830b90f829fc0f9488d27b38d720ce5e5e560e85020b3c10ff7f3e7627d1f3a"
+      }
+    ],
+    "candidates": [
+      {
+        "sourceCommit": "444a2f71491b755ab3f84dbaa3e4ebf5f2227805",
+        "bootstrapStatus": "PASS",
+        "statefulReplayStatus": "PASS",
+        "decision": "NO-GO",
+        "replayCount": 2,
+        "executedStepCount": 26,
+        "containerExitCode": 0
+      },
+      {
+        "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "bootstrapStatus": "PASS",
+        "statefulReplayStatus": "PASS",
+        "decision": "NO-GO",
+        "replayCount": 2,
+        "executedStepCount": 34,
+        "containerExitCode": 0
+      }
+    ],
+    "blockers": []
+  },
+  {
+    "stage": "structural-and-lock-checks",
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40420474753",
+    "headSha": "3eb91b1fdd08cea2bfe4a2c23aa0c1193043377e",
+    "decision": "NO-GO",
+    "infrastructureChecks": [
+      {
+        "id": "docker-version",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 541,
+        "privateOutputSha256": "7ba4296d98811b3f6017879e4adb5452f8fe84ab8242b9bfd4fe14e394459098"
+      },
+      {
+        "id": "docker-info",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 699,
+        "privateOutputSha256": "5b19ae24145640f34f3f9c46205acbae30b234a683de08cea220ff243d0dd369"
+      },
+      {
+        "id": "php74-image-pull",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 10505,
+        "privateOutputSha256": "e5bceaa8473a0c5adaa718890cc0c4781dfa327b95eb85e990635c73c66bfe04"
+      },
+      {
+        "id": "php74-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 13,
+        "privateOutputSha256": "dc2905fc399e2c1e6b8480751b134297c570dbe02ba11ef315ccfb78cdb89b7c"
+      },
+      {
+        "id": "trusted-extension-image-build",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 1079,
+        "privateOutputSha256": "bf790b76bf402919443ac9b38c9b92c7612540260da04fc28da95da52f84bdd0"
+      },
+      {
+        "id": "trusted-image-inspect",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedMs": 12,
+        "privateOutputSha256": "7f1f812e6365c3135a2308c2272df5b32deba4021c2affd7aebefcae6c9231c9"
+      }
+    ],
+    "candidates": [
+      {
+        "sourceCommit": "444a2f71491b755ab3f84dbaa3e4ebf5f2227805",
+        "bootstrapStatus": "PASS",
+        "statefulReplayStatus": "PASS",
+        "decision": "NO-GO",
+        "replayCount": 2,
+        "executedStepCount": 26,
+        "containerExitCode": 0
+      },
+      {
+        "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "bootstrapStatus": "PASS",
+        "statefulReplayStatus": "PASS",
+        "decision": "NO-GO",
+        "replayCount": 2,
+        "executedStepCount": 34,
+        "containerExitCode": 0
+      }
+    ],
+    "blockers": []
+  }
+]

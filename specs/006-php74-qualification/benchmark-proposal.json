@@ -1,0 +1,10 @@
+{
+  "id": "workshop-php74-clock-v1",
+  "sourceRepo": "https://github.com/tanjilaafsarirubina/car-workshop",
+  "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "license": "MIT",
+  "phpRuntime": "PHP 7.4.33 / SQLite 3.34.1; workshop-clock profile, libfaketime 0.9.8-9; wall time 2026-10-27 12:00:00 UTC, real monotonic clock",
+  "scenarioIds": ["workshop-business", "workshop-rejected", "workshop-capacity"],
+  "migrationUnitIds": ["slots", "booking", "appointments"],
+  "normalizationVersion": "oracle-exact-v1"
+}
