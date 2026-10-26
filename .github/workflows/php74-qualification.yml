@@ -1,0 +1,43 @@
+name: PHP 7.4 qualification
+
+on:
+  workflow_dispatch:
+  # Temporary pre-merge execution; remove after collecting this milestone's evidence.
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/php74-qualification.yml'
+      - 'packages/oracle/probes/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: php74-qualification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualification:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       github.event.pull_request.head.ref == 'feat/mmp-005-php74-qualification')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Run bounded reference qualification
+        env:
+          QUALIFICATION_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node packages/oracle/probes/qualification.mjs
+      - name: Publish sanitized structural summary only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php74-qualification-summary
+          path: qualification-public/qualification-summary.json
+          if-no-files-found: error
+          retention-days: 7
