@@ -75,6 +75,60 @@ const tables = [
   "appointments",
   "sqlite_sequence",
 ];
+const columns = {
+  intakes: ["id", "title", "raw_text", "pack_json", "created_at"],
+  questions: [
+    "id",
+    "topic",
+    "tags",
+    "difficulty",
+    "question_text",
+    "choices_json",
+    "correct_choice",
+    "explanation",
+    "times_seen",
+    "times_wrong",
+  ],
+  exams: ["id", "intake_id", "variant", "created_at"],
+  exam_questions: ["exam_id", "question_id", "q_order"],
+  attempts: [
+    "id",
+    "exam_id",
+    "score_10",
+    "correct",
+    "total",
+    "created_at",
+    "detail_json",
+  ],
+  mechanics: [
+    "id",
+    "name",
+    "specialty",
+    "phone",
+    "max_daily_slots",
+    "created_at",
+  ],
+  appointments: [
+    "id",
+    "client_name",
+    "address",
+    "phone",
+    "car_license",
+    "car_engine",
+    "appointment_date",
+    "mechanic_id",
+    "status",
+    "created_at",
+  ],
+  sqlite_sequence: ["name", "seq"],
+};
+const allowedColumns = Object.entries(columns).flatMap(([table, names]) =>
+  names.map((name) => `${table}.${name}`),
+);
+const columnNames = (values) =>
+  allowedColumns.filter(
+    (name) => Array.isArray(values) && values.includes(name),
+  );
 const modules = [
   "Core",
   "date",
@@ -156,6 +210,7 @@ export function sanitizeResult(value, mode) {
           beforeCounts: rowCounts(step.beforeCounts),
           afterCounts: rowCounts(step.afterCounts),
           unchanged: step.unchanged === true,
+          lockProbeExitCode: integer(step.lockProbeExitCode, 255),
           elapsedMs: integer(step.elapsedMs, 180000),
           exitCode: integer(step.exitCode, 255),
         });
@@ -182,6 +237,7 @@ export function sanitizeResult(value, mode) {
         scenario.steps.every(
           (step) =>
             step.exitCode === 0 &&
+            step.lockProbeExitCode === 0 &&
             step.responseSha256 &&
             step.beforeSha256 &&
             step.afterSha256,
@@ -191,6 +247,8 @@ export function sanitizeResult(value, mode) {
   const checkIds = [
     "archive-extract",
     "php-lint",
+    "php-version-command",
+    "php-modules-command",
     ...scenarioIds.flatMap((id) =>
       [1, 2].flatMap((replay) => [
         `${id}:${replay}:init_db.php`,
@@ -245,6 +303,36 @@ export function sanitizeResult(value, mode) {
     : value.statefulReplayStatus === "NOT_RUN"
       ? "NOT_RUN"
       : "FAIL";
+  const repeatability = scenarioIds.flatMap((scenarioId) => {
+    const matches =
+      value.repeatability?.filter((entry) => entry.scenarioId === scenarioId) ??
+      [];
+    if (matches.length !== 1) return [];
+    const entry = matches[0];
+    return [
+      {
+        scenarioId,
+        initialEqual: entry.initialEqual === true,
+        initialChangedColumns: columnNames(entry.initialChangedColumns),
+        steps: allowedSteps[scenarioId].flatMap((stepId) => {
+          const matching =
+            entry.steps?.filter((step) => step.stepId === stepId) ?? [];
+          if (matching.length !== 1) return [];
+          const step = matching[0];
+          return [
+            {
+              stepId,
+              statusEqual: step.statusEqual === true,
+              bodyEqual: step.bodyEqual === true,
+              headersEqual: step.headersEqual === true,
+              postStateEqual: step.postStateEqual === true,
+              changedColumns: columnNames(step.changedColumns),
+            },
+          ];
+        }),
+      },
+    ];
+  });
   return {
     phpVersion,
     sqliteVersion,
@@ -260,6 +348,7 @@ export function sanitizeResult(value, mode) {
     ),
     replayCount: complete ? 2 : 0,
     scenarios,
+    repeatability,
     bootstrapStatus,
     statefulReplayStatus,
     exactReplayEqual,
