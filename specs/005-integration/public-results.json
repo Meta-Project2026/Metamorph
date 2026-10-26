@@ -1,0 +1,55 @@
+{
+  "scope": "PUBLIC/SYNTHETIC ONLY",
+  "observedDate": "2026-10-27",
+  "command": "pnpm demo:integration",
+  "exitCode": 0,
+  "runId": "synthetic-248fc1eb-1e90-40cd-b360-0843dd28b470",
+  "runtime": {
+    "node": "v22.23.1",
+    "pnpm": "11.25.0",
+    "platform": "Windows"
+  },
+  "attempts": [
+    {
+      "verificationAttempt": 1,
+      "candidateSha256": "a0ef88e1967b39d7f948ec522cdcf3f9ff2e669e316835a10a85adb484db1991",
+      "gates": {
+        "G2": "FAIL",
+        "G3": "FAIL",
+        "G4": "INCONCLUSIVE"
+      },
+      "executedScenarioIds": [
+        "public:write-read",
+        "public:fresh"
+      ],
+      "evidenceFileCount": 30,
+      "referencedEvidenceFilesChecked": true
+    },
+    {
+      "verificationAttempt": 2,
+      "candidateSha256": "c21fbfbbeb2c9154b289a8629099d181a76534cadb2f00f04f23f64447a26651",
+      "gates": {
+        "G2": "PASS",
+        "G3": "PASS",
+        "G4": "INCONCLUSIVE"
+      },
+      "executedScenarioIds": [
+        "public:write-read",
+        "public:fresh"
+      ],
+      "evidenceFileCount": 30,
+      "referencedEvidenceFilesChecked": true
+    }
+  ],
+  "agentVerdict": "INCONCLUSIVE",
+  "repairs": {
+    "candidate": 1
+  },
+  "PHP": "NOT_RUN",
+  "LIVE_META": "NOT_RUN",
+  "G0": "NOT_RUN",
+  "G1": "NOT_RUN",
+  "HELD_OUT": "NOT_RUN",
+  "PRODUCT_PASS": "NOT_ESTABLISHED",
+  "evidenceStorage": "Retained in local OS temporary storage outside Git; raw observations and paths deliberately omitted"
+}
