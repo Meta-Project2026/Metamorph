@@ -1,0 +1,15 @@
+{
+  "name": "@metamorph/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "node dist/start.js"
+  },
+  "dependencies": {
+    "@metamorph/contracts": "workspace:*",
+    "fastify": "5.12.7"
+  }
+}
