@@ -67,8 +67,8 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
   [interface note for Ilia](specs/002-foundation/interface-note.md).
 - `.github/workflows/ci.yml`: fast checks on PRs and pushes to `main`, Node 22/24
-  matrix, eight-minute timeout per job. Target 2–4 minutes per job is an estimate;
-  hosted duration/results have not been measured here.
+  matrix, eight-minute timeout per job. Target 2–4 minutes per job; the
+  first PR's Node 22/24 hosted CI passed in approximately 39 seconds.
 
 Green Fast CI means technical checks passed. **Oracle PASS** additionally requires
 independent G0–G4 execution, all mandatory scenarios and evidence for the exact
@@ -77,12 +77,14 @@ See the unchanged [Oracle contract](metamorph-architecture-v0.1/docs/architectur
 
 ## Ilia / parallel work
 
-The foundation branch is published in [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1).
-To work from that branch:
+MMP-001 is merged into `main` through [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1).
+Parallel follow-ups: [MMP-002 Oracle](https://github.com/Meta-Project2026/Metamorph/issues/2)
+(Ilia) and [MMP-003 agent/orchestrator](https://github.com/Meta-Project2026/Metamorph/issues/3)
+(Vladimir). Start both from current `main`:
 
 ```powershell
 $repoUrl = 'https://github.com/Meta-Project2026/Metamorph.git'
-$foundationRef = 'origin/feat/mmp-001-foundation'
+$foundationRef = 'origin/main'
 git clone $repoUrl metamorph-ilia
 Set-Location -LiteralPath '.\metamorph-ilia'
 git switch --create feat/mmp-002-oracle $foundationRef
@@ -93,7 +95,7 @@ pnpm test
 pnpm build
 ```
 
-Do not assume main contains the foundation branch. Vladimir should use a
+Main now contains the foundation. Vladimir should use a
 separate checkout/branch for MMP-003. Review the shared interface note together
 before extending DTOs; no teammate approval is implied by local implementation.
 
