@@ -7,8 +7,14 @@ is deferred until there is real run data to display.
 
 The [imported architecture pack](metamorph-architecture-v0.1/README.md) remains a
 proposal, including its model names, API hostname, ADR and constitution.
-The root [Spec Kit constitution](.specify/memory/constitution.md) remains the
-generated placeholder. This implementation does not ratify either constitution.
+Coding agents start at root [AGENTS.md](AGENTS.md), then read the root
+[Spec Kit constitution](.specify/memory/constitution.md) and relevant feature
+documents. The root constitution is now a Metamorph working draft marked
+**PROPOSED / PENDING OWNER RATIFICATION**, adapted from the imported proposal.
+These are the canonical operational entrypoints; discoverability does not ratify
+governance or the imported architecture. Both Vladimir and Ilia must explicitly
+agree to shared cross-team API changes and governance ratification; ordinary
+reversible work within authorized scope needs no repeated approval.
 
 ## Windows PowerShell
 
@@ -71,12 +77,12 @@ See the unchanged [Oracle contract](metamorph-architecture-v0.1/docs/architectur
 
 ## Ilia / parallel work
 
-No remote was created or pushed by MMP-001. After an owner publishes this commit,
-replace both placeholders below with the owner-supplied URL and published ref:
+The foundation branch is published in [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1).
+To work from that branch:
 
 ```powershell
-$repoUrl = '<owner-supplied-repository-url>'
-$foundationRef = '<published-foundation-ref>'
+$repoUrl = 'https://github.com/Meta-Project2026/Metamorph.git'
+$foundationRef = 'origin/feat/mmp-001-foundation'
 git clone $repoUrl metamorph-ilia
 Set-Location -LiteralPath '.\metamorph-ilia'
 git switch --create feat/mmp-002-oracle $foundationRef
@@ -87,7 +93,7 @@ pnpm test
 pnpm build
 ```
 
-Do not assume main contains the local foundation commit. Vladimir should use a
+Do not assume main contains the foundation branch. Vladimir should use a
 separate checkout/branch for MMP-003. Review the shared interface note together
 before extending DTOs; no teammate approval is implied by local implementation.
 
