@@ -1,50 +1,89 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Metamorph Constitution — working draft v0.1
 
-## Core Principles
+**Status: PROPOSED / PENDING OWNER RATIFICATION**
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+**Updated:** 2026-10-27. **Ratified:** No; explicit agreement from Vladimir and
+Ilia remains pending. This is the canonical root Spec Kit working draft, adapted
+from the [imported proposed constitution](../../metamorph-architecture-v0.1/.specify/memory/constitution.md).
+It guides authorized work without recording owner acceptance of the architecture,
+ADRs, shared interfaces or governance.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+## I. Vertical slices and lean Spec Kit
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+Prefer one observable, runnable slice to speculative frameworks. Keep scope tied
+to the current task and concrete acceptance checks. Use compact spec/plan/tasks
+for substantial features; tiny reversible fixes need no full Spec Kit sequence.
+Preserve installed scaffolding and other contributors' local feature pointers.
+The imported umbrella spec does not authorize the entire product.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## II. Independent Oracle and strict product acceptance
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+Preserve the [G0–G4 evaluation meanings](../../metamorph-architecture-v0.1/docs/architecture/oracle-contract.md):
+G0 independent and complete target; G1 executed build/type/smoke; G2 HTTP contracts;
+G3 stateful HTTP/SQLite differential parity; G4 independent positive/negative
+controls and held-out isolation. Product PASS requires all applicable mandatory
+gates to PASS and all mandatory scenarios to execute with independent evidence.
+Compilation, valid schemas and model self-assessment are insufficient. Never
+remove mandatory tests, weaken normalization or modify expected results for green
+reports. The imported Oracle contract retains its proposed status.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## III. Fast PR CI
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+PR checks stay at frozen install, lint, typecheck, unit/contract smoke and build.
+Keep the existing eight-minute job timeout; 2–4 minutes is a target, not a measured
+claim. Full PHP/TS differential, concurrency and model runs belong to separately
+authorized milestone validation. Green fast CI does not establish Oracle PASS.
+No per-PR approval digests, hash recertification or expensive ritual.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## IV. Two-person ownership
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Vladimir owns migration/orchestration/integration; Ilia owns independent
+baseline/comparator/Oracle. Work in separate branches/checkouts and respect module
+ownership. Shared cross-team API changes require both owners' explicit agreement
+before implementation/integration. Ordinary reversible work already within
+authorized scope proceeds without repeated approval.
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+## V. Restricted execution and held-out isolation
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Run untrusted PHP/reference or generated candidate code only in authorized
+disposable isolated runtimes, with separate state and bounded resources; never on
+the host. Migration attempts write candidate source only, never reference
+fixtures, Oracle/comparator/controls, held-out tests or CI. Keep held-out inputs
+and expected outputs outside model context, repair feedback and public logs.
+Credentials stay in the trusted host adapter, outside workers and Git.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+## VI. OSS provenance and bounded scope
+
+Verify licenses and retain notices. Distinguish original implementation,
+pre-event research, reused OSS and untouched upstream fixtures. The proposed MVP
+is one PHP 7.4 to TypeScript/Node.js benchmark, selected only after isolated startup
+and repeatable stateful replay are proven. No benchmark is selected by this draft.
+Do not import Casper's framework or governance wholesale.
+
+## VII. Bounded Meta usage
+
+API hostname, model IDs, entitlements, limits and pricing remain unverified until
+a separately authorized live probe. Do not guess credentials or assert provider
+capabilities from architectural suggestions. Future model work needs explicit
+spend, timeout, repair and escalation limits; record actual request/usage receipts
+and preserve unavailable values as unknown. A draft is not permission for
+billable calls.
+
+## VIII. Truthful evidence
+
+Distinguish proposed, implemented, locally tested, hosted-tested and owner-approved
+states. Report actual commands, exit statuses, scenario coverage and evidence;
+unexecuted checks are NOT_RUN. FAIL means proven mismatch, INCONCLUSIVE missing
+evidence, ERROR environment/harness/provider failure. None implies PASS. Record
+meaningful run/fixture provenance without making checksums approval rituals.
+MMP-001 is a contracts/health foundation, not a migration or Oracle implementation.
+
+## Governance — ratification pending
+
+Root [AGENTS.md](../../AGENTS.md) is the coding-agent first stop; this file is the
+active Spec Kit draft. The imported architecture pack remains proposed. Existing
+explicitly approved requirements and accepted ADRs, where present, take precedence
+over autogenerated plans. Governance ratification requires explicit agreement
+from both Vladimir and Ilia and a recorded status change; publishing this draft
+does not supply that agreement. Do not infer owner approval from implementation,
+local checks, a commit, CI or PR publication.
