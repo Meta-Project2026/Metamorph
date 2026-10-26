@@ -1,8 +1,10 @@
-# Metamorph — development foundation
+# Metamorph — development and agent foundations
 
 MMP-001 implements shared TypeScript/Zod contracts and a local Fastify health
-endpoint. Migration generation, Meta integration, PHP execution and the Oracle
-are **not implemented**. No benchmark has been selected. The optional web app
+endpoint. MMP-003 adds a bounded offline agent lifecycle with scripted providers,
+a restricted candidate writer and a trusted verifier port. Real migration
+generation, Meta integration, PHP execution and the Oracle are **not implemented**.
+No benchmark has been selected. The optional web app
 is deferred until there is real run data to display.
 
 The [imported architecture pack](metamorph-architecture-v0.1/README.md) remains a
@@ -54,15 +56,20 @@ capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchma
 | Command | Executed work |
 | --- | --- |
 | `pnpm lint` | Biome lint, formatting and imports for workspace source/config/tests |
-| `pnpm typecheck` | Build contracts declarations; check both packages and a public types consumer |
-| `pnpm test` | Build packages; run contract tests, injection smoke and real HTTP against the built CLI |
-| `pnpm build` | Compile contracts first, then server, using TypeScript |
+| `pnpm typecheck` | Build contracts declarations; check contracts, server, agent and a public types consumer |
+| `pnpm test` | Build packages; run contracts, agent synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
+| `pnpm build` | Compile contracts first, then agent/server, using TypeScript |
 
 Tests use synthetic fixtures, never a real benchmark/provider. The child server
 smoke receives no credentials or PATH. Test builds exercise compiled exports.
 
 - `packages/contracts/`: schemas and inferred types, without adapters or I/O.
 - `apps/server/`: app factory, loopback CLI and health tests.
+- `packages/agent/`: bounded orchestration, restricted source writer, scripted
+  adapters, disabled live Meta seam and [usage/probe blockers](packages/agent/README.md).
+  Run `pnpm demo:agent` for a synthetic repair/escalation lifecycle and journal;
+  its PASS is synthetic orchestration evidence, never Oracle/product acceptance.
+- `specs/004-agent/`: compact MMP-003 spec, plan, tasks and validation record.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
   [interface note for Ilia](specs/002-foundation/interface-note.md).
@@ -111,10 +118,11 @@ Remove-Item Env:SPECIFY_FEATURE_DIRECTORY
 Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 ```
 
-Next: **MMP-002 Oracle foundation** (Ilia): independent verifier/controls and PHP
-7.4 benchmark qualification in an authorized disposable runtime. **MMP-003 Agent
-foundation** (Vladimir): bounded orchestration and adapter boundary. API access,
-model IDs and pricing require a separately authorized live probe.
+Separate integration work: **MMP-002 Oracle foundation** (Ilia): independent
+verifier/controls and PHP 7.4 benchmark qualification in an authorized disposable
+runtime. **Agent integration** (Vladimir): connect the bounded agent to authorized
+real adapters. API access, model IDs and pricing require a separately authorized
+live probe.
 
 ## Dependency provenance
 
