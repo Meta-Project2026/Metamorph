@@ -12,8 +12,9 @@ rejected intake followed by reads, and a new clean-state intake/read.
 Keep raw bodies, upstream questions/answers and typed before/after DB snapshots
 private in ephemeral scratch. Publish only allowlisted structural results and
 hashes. Compare exact replay hashes without deleting UUID/time/random fields.
-GO requires stable behavior or independently approved scoped invariants; boot
-alone is insufficient. Report proven NO-GO or infrastructure BLOCKED honestly.
+GO requires stable behavior under a predeclared verified runtime profile or
+independently approved scoped invariants; boot alone is insufficient. Report
+proven NO-GO or infrastructure BLOCKED honestly.
 
 Use a separate same-repo/exact-branch PR workflow for the first authorized remote
 execution if local Docker is absent, then remove its temporary PR trigger.

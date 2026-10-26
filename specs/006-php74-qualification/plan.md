@@ -17,3 +17,21 @@ upstream test/answer contents enter model context. Replay comparison detects
 nondeterminism; no production comparator/normalization changes are needed.
 Use fallback only after a documented primary NO-GO/blocker. Keep feature selection
 non-persisting. No platform framework, model calls, workstation installation or merge.
+
+## Predeclared clock experiment (after unmodified runtime measurements)
+
+Run `workshop-clock` only after the primary and ordinary workshop profiles have
+actually returned NO-GO. Build Debian libfaketime into the trusted runtime before
+source admission; retain its installed copyright notice. Freeze wall time only
+for the workshop PHP server at **2026-10-27 12:00:00 UTC**, preserving real monotonic
+time. Before source execution, verify the actual PHP and SQLite clocks both equal
+that value. Keep dates explicit (2099-06-15/16) and let the application's Dhaka
+timezone logic execute normally. Record the library version and clock checks.
+
+This is a controlled runtime profile, not a field normalizer: keep all timestamp
+values, schema, response bytes, IDs and ordering intact. No RNG interception is
+authorized or configured. Parent inspection/host deadlines use the real clock.
+Re-run all three workshop scenarios twice with independent fresh DBs and the
+same clock profile. GO is restricted to that measured sequential demo profile;
+real-clock/date-boundary/concurrency semantics remain unverified. Do not register
+it as a benchmark or imply either owner's acceptance.

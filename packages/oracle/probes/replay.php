@@ -58,14 +58,31 @@ function counts(array $state): array {
     foreach ($state['tables'] as $table) $result[$table['name']] = count($table['rows']);
     return $result;
 }
+function changedColumns(array $a, array $b): array {
+    $changes=[];
+    foreach ($a['tables'] as $index=>$table) {
+        $other=$b['tables'][$index]??null;
+        if (!$other || $table['name']!==$other['name']) continue;
+        foreach ($table['columns'] as $columnIndex=>$column) {
+            $left=array_map(function ($row) use ($columnIndex) { return $row[$columnIndex]; },$table['rows']);
+            $right=array_map(function ($row) use ($columnIndex) { return $row[$columnIndex]; },$other['rows']);
+            if (digest($left)!==digest($right)) $changes[]=$table['name'].'.'.$column['name'];
+        }
+    }
+    return $changes;
+}
 function command(array $args, string $cwd, string $log): int {
     $process = proc_open($args, [0 => ['file', '/dev/null', 'r'], 1 => ['file', $log, 'a'], 2 => ['file', $log, 'a']], $pipes, $cwd);
     if (!is_resource($process)) throw new RuntimeException('process-start-failed');
     return proc_close($process);
 }
-function startServer(string $cwd, bool $exam, string $log) {
+function clockCommand(array $args): array {
+    return array_merge(['env','TZ=UTC','LD_PRELOAD=/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1','FAKETIME=2026-10-27 12:00:00','FAKETIME_DONT_FAKE_MONOTONIC=1'],$args);
+}
+function startServer(string $cwd, bool $exam, bool $frozenClock, string $log) {
     $args = ['php', '-d', 'display_errors=0', '-d', 'log_errors=1', '-S', '127.0.0.1:8080'];
     if ($exam) $args = array_merge($args, ['-t', 'public', 'public/index.php']);
+    if ($frozenClock) $args=clockCommand($args);
     $process = proc_open($args, [0 => ['file','/dev/null','r'], 1 => ['file',$log,'a'], 2 => ['file',$log,'a']], $pipes, $cwd);
     if (!is_resource($process)) throw new RuntimeException('server-start-failed');
     for ($attempt=0; $attempt<50; $attempt++) {
@@ -98,11 +115,22 @@ function httpRequest(string $method, string $path, array $form): array {
 }
 
 $mode = $argv[1] ?? '';
-requireCheck(in_array($mode, ['examsuite','workshop'], true));
+requireCheck(in_array($mode, ['examsuite','workshop','workshop-clock'], true));
 $exam = $mode === 'examsuite';
+$frozenClock=$mode==='workshop-clock';
 $runtime = ['phpVersion'=>PHP_VERSION,'sqliteVersion'=>SQLite3::version()['versionString'],'extensions'=>get_loaded_extensions()];
 $result = ['format'=>'php74-qualification-v1','mode'=>$mode,'runtime'=>$runtime,'checks'=>[],'scenarios'=>[],'bootstrapStatus'=>'NOT_RUN','statefulReplayStatus'=>'NOT_RUN','decision'=>'BLOCKED'];
 $source = '/work/pristine';
+$result['checks'][]=['id'=>'php-version-command','exitCode'=>command(['php','-v'],'/work','/work/private/php-version.log')];
+$result['checks'][]=['id'=>'php-modules-command','exitCode'=>command(['php','-m'],'/work','/work/private/php-modules.log')];
+if ($frozenClock) {
+    $clockExit=command(clockCommand(['php','-r','$p=new PDO("sqlite::memory:"); $sql=$p->query("SELECT datetime(\'now\')")->fetchColumn(); $php=gmdate("Y-m-d H:i:s"); echo json_encode(["phpUtc"=>$php,"sqliteUtc"=>$sql]); exit($php==="2026-10-27 12:00:00" && $sql==="2026-10-27 12:00:00" ? 0 : 1);']),'/work','/work/private/clock.json');
+    $result['checks'][]=['id'=>'frozen-clock-php-sqlite','exitCode'=>$clockExit];
+    $clockObservation=json_decode(file_get_contents('/work/private/clock.json'),true,512,JSON_THROW_ON_ERROR);
+    $versionExit=command(['dpkg-query','-W','-f=${Version}','libfaketime'],'/work','/work/private/faketime-version.txt');
+    $result['clockControl']=['kind'=>'frozen-wall-real-monotonic','requestedUtc'=>'2026-10-27 12:00:00','phpUtc'=>$clockObservation['phpUtc']??null,'sqliteUtc'=>$clockObservation['sqliteUtc']??null,'libraryVersion'=>trim(file_get_contents('/work/private/faketime-version.txt')),'copyrightSha256'=>hash_file('sha256','/usr/share/doc/libfaketime/copyright')];
+    if ($clockExit!==0 || $versionExit!==0) { echo encode($result); exit(1); }
+}
 mkdir($source,0700);
 $tarExit = command(['tar','-xzf','/input/source.tgz','-C',$source,'--strip-components=1','--no-same-owner','--no-same-permissions'],'/work','/work/private/archive.log');
 $result['checks'][] = ['id'=>'archive-extract','exitCode'=>$tarExit];
@@ -140,7 +168,7 @@ foreach ($ids as $scenarioId) {
                     requireCheck($exit===0);
                 }
             }
-            $server = startServer($root,$exam,'/work/private/' . $name . '-server.log');
+            $server = startServer($root,$exam,$frozenClock,'/work/private/' . $name . '-server.log');
             // Workshop initializes its DB lazily. This bootstrap request is captured privately.
             $boot = httpRequest('GET','/',[]);
             savePrivate($name . '-boot.json',$boot);
@@ -163,10 +191,13 @@ foreach ($ids as $scenarioId) {
                 $before = snapshot($dbPath);
                 $response = httpRequest($method,$path,$form);
                 $after = snapshot($dbPath);
+                $lockExit=0;
+                try { $lock=connection($dbPath); $lock->exec('BEGIN IMMEDIATE; ROLLBACK;'); $lock=null; }
+                catch (Throwable $lockError) { $lockExit=1; }
                 $observation = ['request'=>['method'=>$method,'path'=>$path,'body'=>$response['requestBody']],'response'=>$response,'before'=>$before,'after'=>$after];
                 savePrivate($name . '-' . $id . '.json',$observation);
-                $record = ['stepId'=>$id,'method'=>$method,'status'=>$response['status'],'responseSha256'=>hash('sha256',$response['body']),'stableHeadersSha256'=>digest($response['headers']),'beforeSha256'=>digest($before),'afterSha256'=>digest($after),'beforeCounts'=>counts($before),'afterCounts'=>counts($after),'unchanged'=>digest($before)===digest($after),'elapsedMs'=>(int)round((microtime(true)-$started)*1000),'exitCode'=>1];
-                try { $assertion($response,$before,$after); $record['exitCode']=0; }
+                $record = ['stepId'=>$id,'method'=>$method,'status'=>$response['status'],'responseSha256'=>hash('sha256',$response['body']),'stableHeadersSha256'=>digest($response['headers']),'beforeSha256'=>digest($before),'afterSha256'=>digest($after),'beforeCounts'=>counts($before),'afterCounts'=>counts($after),'unchanged'=>digest($before)===digest($after),'lockProbeExitCode'=>$lockExit,'elapsedMs'=>(int)round((microtime(true)-$started)*1000),'exitCode'=>1];
+                try { requireCheck($lockExit===0); $assertion($response,$before,$after); $record['exitCode']=0; }
                 finally { $scenario['steps'][]=$record; }
                 return $response;
             };
@@ -190,7 +221,14 @@ foreach ($ids as $scenarioId) {
                         $examId=$examMatch[1];
                         $step('take-exam','GET',$target,[],$readOnly);
                         // Submit no answers: no upstream correct choices are used as probe inputs.
-                        $step('grade-empty-answers','POST','/exam/corregir',['exam_id'=>$examId],function ($r,$a,$b) { requireCheck($r['status']===302 && counts($b)['attempts']===1); });
+                        $step('grade-empty-answers','POST','/exam/corregir',['exam_id'=>$examId],function ($r,$a,$b) use ($dbPath) {
+                            requireCheck($r['status']===302 && counts($b)['attempts']===1);
+                            $pdo=connection($dbPath);
+                            $attempt=$pdo->query('SELECT correct,total,score_10 FROM attempts')->fetch(PDO::FETCH_ASSOC);
+                            requireCheck((int)$attempt['correct']===0 && (float)$attempt['score_10']===0.0 && (int)$attempt['total']===counts($b)['exam_questions']);
+                            $analytics=$pdo->query('SELECT SUM(times_seen) AS seen, SUM(times_wrong) AS wrong FROM questions')->fetch(PDO::FETCH_ASSOC);
+                            requireCheck((int)$analytics['seen']===(int)$attempt['total'] && (int)$analytics['wrong']===(int)$attempt['total']);
+                        });
                         $step('read-results','GET','/exam/resultados?id=' . $examId,[],$readOnly);
                         $step('export-json','GET','/exam/export?id=' . $examId . '&type=json',[],function ($r,$a,$b) { requireCheck($r['status']===200 && digest($a)===digest($b)); $json=json_decode($r['body'],true,512,JSON_THROW_ON_ERROR); requireCheck(isset($json['exam']['questions']) && count($json['exam']['questions'])>0); });
                     }
@@ -236,14 +274,33 @@ $all = count($result['scenarios'])===6;
 foreach ($result['scenarios'] as $scenario) if ($scenario['exitCode']!==0) $all=false;
 $result['statefulReplayStatus']=$all?'PASS':'FAIL';
 $result['exactReplayEqual']=true;
+$result['repeatability']=[];
 for ($i=0;$i<count($result['scenarios']);$i+=2) {
     $a=$result['scenarios'][$i]; $b=$result['scenarios'][$i+1];
+    $repeat=['scenarioId'=>$a['scenarioId'],'initialEqual'=>($a['initialSha256']??null)===($b['initialSha256']??null),'steps'=>[]];
+    $initialPathA='/work/private/'.$a['scenarioId'].'-1-initial.json';
+    $initialPathB='/work/private/'.$a['scenarioId'].'-2-initial.json';
+    $repeat['initialChangedColumns']=[];
+    if (is_file($initialPathA) && is_file($initialPathB)) {
+        $initialA=json_decode(file_get_contents($initialPathA),true,512,JSON_THROW_ON_ERROR);
+        $initialB=json_decode(file_get_contents($initialPathB),true,512,JSON_THROW_ON_ERROR);
+        $repeat['initialChangedColumns']=changedColumns($initialA,$initialB);
+    }
     if (($a['initialSha256']??null)!==($b['initialSha256']??null)) $result['exactReplayEqual']=false;
     foreach ($a['steps'] as $index=>$step) {
         $other=$b['steps'][$index]??[];
+        $id=$step['stepId'];
+        $pathA='/work/private/'.$a['scenarioId'].'-1-'.$id.'.json';
+        $pathB='/work/private/'.$a['scenarioId'].'-2-'.$id.'.json';
+        if (is_file($pathA) && is_file($pathB)) {
+            $rawA=json_decode(file_get_contents($pathA),true,512,JSON_THROW_ON_ERROR);
+            $rawB=json_decode(file_get_contents($pathB),true,512,JSON_THROW_ON_ERROR);
+            $repeat['steps'][]=['stepId'=>$id,'statusEqual'=>$step['status']===($other['status']??null),'bodyEqual'=>$step['responseSha256']===($other['responseSha256']??null),'headersEqual'=>$step['stableHeadersSha256']===($other['stableHeadersSha256']??null),'postStateEqual'=>$step['afterSha256']===($other['afterSha256']??null),'changedColumns'=>changedColumns($rawA['after'],$rawB['after'])];
+        }
         foreach (['status','responseSha256','stableHeadersSha256','beforeSha256','afterSha256'] as $key) if (($step[$key]??null)!==($other[$key]??null)) $result['exactReplayEqual']=false;
     }
     if (count($a['steps'])!==count($b['steps'])) $result['exactReplayEqual']=false;
+    $result['repeatability'][]=$repeat;
 }
 // No scoped UUID/time/random invariants have independent owner approval yet.
 $result['decision']=$all && $result['exactReplayEqual']?'GO':'NO-GO';

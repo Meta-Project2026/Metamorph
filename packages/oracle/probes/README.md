@@ -9,7 +9,10 @@ node packages/oracle/probes/qualification.mjs
 
 The driver checks Docker version/info, pulls `php:7.4.33-cli-bullseye`, resolves
 its actual RepoDigest and builds the trusted runtime from that digest with PDO
-SQLite and mbstring before any source archive enters a worker. It downloads the
+SQLite, mbstring and Debian libfaketime before any source archive enters a worker.
+Dependencies are installed only when missing; existing PDO SQLite is used rather
+than unnecessarily upgrading it. Installed copyright notices remain in the image.
+It downloads the
 exact pinned source archive (10 MiB maximum/45-second deadline), reads its pinned
 MIT LICENSE, records hashes and mounts that archive plus `replay.php` readonly.
 No archive extraction, PHP lint or third-party execution occurs on the host.
@@ -67,6 +70,19 @@ copyright 2026 MarionForm). Only after a measured primary NO-GO/blocker does the
 driver attempt car-workshop commit `d272170d0aecbd28eb5b13e272d9dd11d545b66c`
 (MIT, copyright 2026 Tanjila Afsari Rubina). The archive retains LICENSE, and the
 license hash is verified again inside the container. No upstream source is vendored.
+
+After both ordinary profiles return measured NO-GO, a predeclared third profile
+`workshop-clock` runs the same source with the PHP server's wall clock fixed at
+`2026-10-27 12:00:00 UTC`. The parent inspector/deadlines use real time. The library
+is loaded only inside that PHP child, with real monotonic time; before admitting
+source, a trusted child confirms actual PHP UTC and SQLite `datetime('now')` both
+equal the requested value. Its Debian library version and retained copyright hash
+are recorded. No system-wide clock, RNG, source, fields or normalizer changes.
+All timestamp values remain present and must match exactly. This profile covers
+sequential scenarios only: real-clock behavior, clock advances, midnight boundaries
+and concurrent booking semantics remain NOT_RUN. See the pre-execution plan for
+the declared control and [upstream usage documentation](https://github.com/wolfcw/libfaketime#readme)
+for absolute stopped clocks and real-monotonic caveats.
 
 The dedicated workflow's initial PR trigger is temporary, exact branch and
 same-repo guarded; final delivery keeps manual dispatch only. After it is merged

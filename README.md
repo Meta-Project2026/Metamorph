@@ -129,12 +129,14 @@ Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 ```
 
 MMP-002's public/synthetic G2/G3 controls and evidence runner exist independently.
-[Real PHP 7.4 qualification](specs/003-oracle/benchmark-qualification.md), G0/G1,
-held-out isolation and complete G4 remain NOT_RUN, so [issue #2](https://github.com/Meta-Project2026/Metamorph/issues/2)
-was already closed when inspected on 2026-10-27; that metadata does not establish
-PHP qualification. MMP-004 connects Agent and Oracle using trusted public synthetic
-fixtures only. Isolated PHP/TS workers and verified Meta API access remain future
-work; model IDs and pricing require a separately authorized live probe.
+[MMP-005 real PHP 7.4 qualification](specs/006-php74-qualification/qualification-report.md)
+executed on an isolated GitHub Docker runner. The sequential car-workshop profile
+with a verified fixed clock has two exact clean replays; its benchmark definition
+is proposed for agreement, not registered. G0/G1 for a migrated target, held-out
+isolation and complete G4 remain NOT_RUN. MMP-004 connects Agent and Oracle using
+trusted public synthetic fixtures only. Production isolated PHP/TS worker adapters
+and verified Meta API access remain future work; model IDs and pricing require a
+separately authorized live probe.
 
 ## Dependency provenance
 

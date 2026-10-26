@@ -2,12 +2,6 @@ name: PHP 7.4 qualification
 
 on:
   workflow_dispatch:
-  # Temporary pre-merge execution; remove after collecting this milestone's evidence.
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - '.github/workflows/php74-qualification.yml'
-      - 'packages/oracle/probes/**'
 
 permissions:
   contents: read
@@ -18,20 +12,19 @@ concurrency:
 
 jobs:
   qualification:
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.head.repo.full_name == github.repository &&
-       github.event.pull_request.head.ref == 'feat/mmp-005-php74-qualification')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
+      - name: Validate trusted summary redaction and recipe
+        run: node --test packages/oracle/probes/qualification.test.mjs
       - name: Run bounded reference qualification
         env:
-          QUALIFICATION_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          QUALIFICATION_HEAD_SHA: ${{ github.sha }}
         run: node packages/oracle/probes/qualification.mjs
       - name: Publish sanitized structural summary only
         if: always()
