@@ -1,0 +1,30 @@
+# TEMPLATE ONLY. Move to .github/workflows/ci.yml after pnpm workspace, lockfile and scripts exist.
+name: Fast PR CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  quick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:unit
+      - run: pnpm build
+# Intentionally not run here: LLM requests, Docker images, PHP integration,
+# differential corpus, model benchmarks or evidence hashing.
+# These run locally / via manual dispatch as a release-level quality gate.
