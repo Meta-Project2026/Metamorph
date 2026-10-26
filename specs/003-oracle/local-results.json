@@ -1,0 +1,402 @@
+{
+  "scope": "reviewed-original-public-synthetic-controls",
+  "command": "pnpm --filter @metamorph/oracle controls -- ../../.oracle-evidence",
+  "observedAt": "2026-10-26T22:42:05.93Z",
+  "runtime": {
+    "node": "v24.21.0",
+    "sqlite": "3.53.4",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "normalizationVersion": "oracle-exact-v1",
+  "productVerdict": "NOT_RUN",
+  "phpQualification": "NOT_RUN",
+  "independentControls": [
+    {
+      "id": "http-positive",
+      "expected": "equal",
+      "outcome": "PASS",
+      "differences": []
+    },
+    {
+      "id": "http-key-order",
+      "expected": "equal",
+      "outcome": "PASS",
+      "differences": []
+    },
+    {
+      "id": "http-status-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "HTTP_STATUS",
+          "path": "/status"
+        }
+      ]
+    },
+    {
+      "id": "http-type-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "HTTP_JSON_TYPE",
+          "path": "/body/id"
+        }
+      ]
+    },
+    {
+      "id": "http-missing-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "HTTP_JSON_MISSING",
+          "path": "/body/optional"
+        }
+      ]
+    },
+    {
+      "id": "http-order-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "HTTP_JSON_VALUE",
+          "path": "/body/items/0"
+        },
+        {
+          "code": "HTTP_JSON_VALUE",
+          "path": "/body/items/1"
+        }
+      ]
+    },
+    {
+      "id": "db-positive",
+      "expected": "equal",
+      "outcome": "PASS",
+      "differences": []
+    },
+    {
+      "id": "db-row-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "DB_STATE",
+          "path": "/tables"
+        }
+      ]
+    },
+    {
+      "id": "db-sequence-mutant",
+      "expected": "different",
+      "outcome": "PASS",
+      "differences": [
+        {
+          "code": "DB_STATE",
+          "path": "/tables"
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "fixture": "none",
+      "expectedG3": "PASS",
+      "actualG3": "PASS",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "PASS",
+          "executedTestIds": [
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": []
+        },
+        {
+          "gate": "G3",
+          "verdict": "PASS",
+          "executedTestIds": [
+            "write-then-read:initial",
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:initial",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": []
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "http-status",
+      "expectedG3": "FAIL",
+      "actualG3": "FAIL",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "HTTP_STATUS",
+            "HTTP_STATUS",
+            "HTTP_STATUS"
+          ]
+        },
+        {
+          "gate": "G3",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:initial",
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:initial",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "HTTP_STATUS",
+            "HTTP_STATUS",
+            "HTTP_STATUS"
+          ]
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "http-type",
+      "expectedG3": "FAIL",
+      "actualG3": "FAIL",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "HTTP_JSON_TYPE",
+            "HTTP_JSON_TYPE"
+          ]
+        },
+        {
+          "gate": "G3",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:initial",
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:initial",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "HTTP_JSON_TYPE",
+            "HTTP_JSON_TYPE"
+          ]
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "db-row",
+      "expectedG3": "FAIL",
+      "actualG3": "FAIL",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "PASS",
+          "executedTestIds": [
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": []
+        },
+        {
+          "gate": "G3",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:initial",
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:initial",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "DB_STATE",
+            "DB_STATE"
+          ]
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "db-sequence",
+      "expectedG3": "FAIL",
+      "actualG3": "FAIL",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "PASS",
+          "executedTestIds": [
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": []
+        },
+        {
+          "gate": "G3",
+          "verdict": "FAIL",
+          "executedTestIds": [
+            "write-then-read:initial",
+            "write-then-read:step-0",
+            "write-then-read:step-1",
+            "fresh-state:initial",
+            "fresh-state:step-0"
+          ],
+          "findingCodes": [
+            "DB_STATE",
+            "DB_STATE"
+          ]
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    },
+    {
+      "fixture": "snapshot-error",
+      "expectedG3": "ERROR",
+      "actualG3": "ERROR",
+      "gates": [
+        {
+          "gate": "G2",
+          "verdict": "ERROR",
+          "executedTestIds": [],
+          "findingCodes": [
+            "VERIFIER_ERROR"
+          ]
+        },
+        {
+          "gate": "G3",
+          "verdict": "ERROR",
+          "executedTestIds": [],
+          "findingCodes": [
+            "VERIFIER_ERROR"
+          ]
+        },
+        {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedTestIds": [
+            "http-positive",
+            "http-key-order",
+            "http-status-mutant",
+            "http-type-mutant",
+            "http-missing-mutant",
+            "http-order-mutant",
+            "db-positive",
+            "db-row-mutant",
+            "db-sequence-mutant"
+          ],
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      ]
+    }
+  ]
+}

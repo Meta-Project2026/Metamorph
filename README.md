@@ -2,8 +2,10 @@
 
 MMP-001 implements shared TypeScript/Zod contracts and a local Fastify health
 endpoint. MMP-003 adds a bounded offline agent lifecycle with scripted providers,
-a restricted candidate writer and a trusted verifier port. Real migration
-generation, Meta integration, PHP execution and the Oracle are **not implemented**.
+a restricted candidate writer and a trusted verifier port. MMP-002 adds a standalone
+[Oracle foundation](packages/oracle/README.md) for original public/synthetic HTTP
+and SQLite comparison, controls and evidence. Real migration generation, Meta
+integration, PHP workers and complete product verification are **not implemented**.
 No benchmark has been selected. The optional web app
 is deferred until there is real run data to display.
 
@@ -56,9 +58,9 @@ capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchma
 | Command | Executed work |
 | --- | --- |
 | `pnpm lint` | Biome lint, formatting and imports for workspace source/config/tests |
-| `pnpm typecheck` | Build contracts declarations; check contracts, server, agent and a public types consumer |
-| `pnpm test` | Build packages; run contracts, agent synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
-| `pnpm build` | Compile contracts first, then agent/server, using TypeScript |
+| `pnpm typecheck` | Build contracts declarations; check contracts, server, agent, oracle and a public types consumer |
+| `pnpm test` | Build packages; run contracts, agent and oracle synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
+| `pnpm build` | Compile contracts first, then agent/oracle/server, using TypeScript |
 
 Tests use synthetic fixtures, never a real benchmark/provider. The child server
 smoke receives no credentials or PATH. Test builds exercise compiled exports.
@@ -69,6 +71,9 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
   adapters, disabled live Meta seam and [usage/probe blockers](packages/agent/README.md).
   Run `pnpm demo:agent` for a synthetic repair/escalation lifecycle and journal;
   its PASS is synthetic orchestration evidence, never Oracle/product acceptance.
+- `packages/oracle/`: independent HTTP/SQLite comparison, public synthetic controls,
+  evidence and a trusted broker interface; no PHP/TS worker provisioning.
+- `specs/003-oracle/`: MMP-002 spec, qualification blocker and validation records.
 - `specs/004-agent/`: compact MMP-003 spec, plan, tasks and validation record.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
@@ -118,11 +123,12 @@ Remove-Item Env:SPECIFY_FEATURE_DIRECTORY
 Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 ```
 
-Separate integration work: **MMP-002 Oracle foundation** (Ilia): independent
-verifier/controls and PHP 7.4 benchmark qualification in an authorized disposable
-runtime. **Agent integration** (Vladimir): connect the bounded agent to authorized
-real adapters. API access, model IDs and pricing require a separately authorized
-live probe.
+MMP-002's public/synthetic G2/G3 controls and evidence runner exist independently.
+[Real PHP 7.4 qualification](specs/003-oracle/benchmark-qualification.md), G0/G1,
+held-out isolation and complete G4 remain NOT_RUN, so [issue #2](https://github.com/Meta-Project2026/Metamorph/issues/2)
+remains open. **Agent integration** (Vladimir): connect the bounded agent to authorized
+Oracle/PHP worker adapters and verified Meta API access; model IDs and pricing
+require a separately authorized live probe.
 
 ## Dependency provenance
 
