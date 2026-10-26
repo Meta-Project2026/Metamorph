@@ -58,9 +58,9 @@ capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchma
 | Command | Executed work |
 | --- | --- |
 | `pnpm lint` | Biome lint, formatting and imports for workspace source/config/tests |
-| `pnpm typecheck` | Build contracts declarations; check contracts, server, agent, oracle and a public types consumer |
-| `pnpm test` | Build packages; run contracts, agent and oracle synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
-| `pnpm build` | Compile contracts first, then agent/oracle/server, using TypeScript |
+| `pnpm typecheck` | Build dependency declarations; check contracts, server, agent, oracle, integration and a public types consumer |
+| `pnpm test` | Build packages; run contracts, agent, oracle and integration synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
+| `pnpm build` | Compile packages in dependency order, using TypeScript |
 
 Tests use synthetic fixtures, never a real benchmark/provider. The child server
 smoke receives no credentials or PATH. Test builds exercise compiled exports.
@@ -73,6 +73,11 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
   its PASS is synthetic orchestration evidence, never Oracle/product acceptance.
 - `packages/oracle/`: independent HTTP/SQLite comparison, public synthetic controls,
   evidence and a trusted broker interface; no PHP/TS worker provisioning.
+- `packages/integration/`: [real Agent / Oracle public repair loop](packages/integration/README.md).
+  Run `pnpm demo:integration`: real synthetic HTTP/SQLite FAIL -> one repair ->
+  G2/G3 PASS; final **INCONCLUSIVE** with actual temporary evidence packs.
+  Generated text is never executed; PHP, live Meta, G0/G1 and held-out remain NOT_RUN.
+- `specs/005-integration/`: compact MMP-004 specification, plan and validation.
 - `specs/003-oracle/`: MMP-002 spec, qualification blocker and validation records.
 - `specs/004-agent/`: compact MMP-003 spec, plan, tasks and validation record.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
@@ -126,9 +131,10 @@ Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 MMP-002's public/synthetic G2/G3 controls and evidence runner exist independently.
 [Real PHP 7.4 qualification](specs/003-oracle/benchmark-qualification.md), G0/G1,
 held-out isolation and complete G4 remain NOT_RUN, so [issue #2](https://github.com/Meta-Project2026/Metamorph/issues/2)
-remains open. **Agent integration** (Vladimir): connect the bounded agent to authorized
-Oracle/PHP worker adapters and verified Meta API access; model IDs and pricing
-require a separately authorized live probe.
+was already closed when inspected on 2026-10-27; that metadata does not establish
+PHP qualification. MMP-004 connects Agent and Oracle using trusted public synthetic
+fixtures only. Isolated PHP/TS workers and verified Meta API access remain future
+work; model IDs and pricing require a separately authorized live probe.
 
 ## Dependency provenance
 
