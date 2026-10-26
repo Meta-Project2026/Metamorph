@@ -66,3 +66,12 @@ parity and model integration are NOT_RUN. The package's Promise timeouts and typ
 broker interface are not OS isolation. Only original trusted synthetic fixtures
 executed on the host. Candidate provisioning and external enforcement remain
 future work. Both-owner agreement and governance ratification remain pending.
+
+## Delivery
+
+Implementation commit: `c281b24c6309d30f290c02225209d14a46a24b7f`.
+`git commit`, `git push --set-upstream origin feat/mmp-002-oracle` and
+`gh pr create --base main --head feat/mmp-002-oracle --body-file ...` exited 0.
+[PR #5](https://github.com/Meta-Project2026/Metamorph/pull/5) uses `Refs #2` and
+records the current head SHA, local results and remaining blockers. It has not
+been merged. A documentation-only follow-up records this delivery.
