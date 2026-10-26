@@ -1,7 +1,9 @@
 # Metamorph — development foundation
 
 MMP-001 implements shared TypeScript/Zod contracts and a local Fastify health
-endpoint. Migration generation, Meta integration, PHP execution and the Oracle
+endpoint. MMP-002 adds a standalone [Oracle foundation](packages/oracle/README.md)
+for original synthetic/public HTTP and SQLite scenarios, controls and evidence.
+Migration generation, Meta integration, PHP workers and full product verification
 are **not implemented**. No benchmark has been selected. The optional web app
 is deferred until there is real run data to display.
 
@@ -62,6 +64,8 @@ Tests use synthetic fixtures, never a real benchmark/provider. The child server
 smoke receives no credentials or PATH. Test builds exercise compiled exports.
 
 - `packages/contracts/`: schemas and inferred types, without adapters or I/O.
+- `packages/oracle/`: independent HTTP/SQLite comparison, public synthetic
+  controls, evidence and a trusted broker interface; no worker provisioning.
 - `apps/server/`: app factory, loopback CLI and health tests.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
@@ -111,8 +115,12 @@ Remove-Item Env:SPECIFY_FEATURE_DIRECTORY
 Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 ```
 
-Next: **MMP-002 Oracle foundation** (Ilia): independent verifier/controls and PHP
-7.4 benchmark qualification in an authorized disposable runtime. **MMP-003 Agent
+MMP-002 local controls and scope are documented in [003-oracle](specs/003-oracle/spec.md).
+PHP 7.4 qualification is [NOT_RUN](specs/003-oracle/benchmark-qualification.md):
+Docker/Podman are unavailable and WSL has no installed distributions. The health
+endpoint retains its existing foundation-only contract; the standalone Oracle is
+not integrated into server routes. Next: finish isolated PHP qualification and
+independent held-out/isolation checks. **MMP-003 Agent
 foundation** (Vladimir): bounded orchestration and adapter boundary. API access,
 model IDs and pricing require a separately authorized live probe.
 
