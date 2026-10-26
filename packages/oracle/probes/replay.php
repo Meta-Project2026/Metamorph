@@ -76,9 +76,13 @@ function command(array $args, string $cwd, string $log): int {
     if (!is_resource($process)) throw new RuntimeException('process-start-failed');
     return proc_close($process);
 }
-function startServer(string $cwd, bool $exam, string $log) {
+function clockCommand(array $args): array {
+    return array_merge(['env','TZ=UTC','LD_PRELOAD=/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1','FAKETIME=2026-10-27 12:00:00','FAKETIME_DONT_FAKE_MONOTONIC=1'],$args);
+}
+function startServer(string $cwd, bool $exam, bool $frozenClock, string $log) {
     $args = ['php', '-d', 'display_errors=0', '-d', 'log_errors=1', '-S', '127.0.0.1:8080'];
     if ($exam) $args = array_merge($args, ['-t', 'public', 'public/index.php']);
+    if ($frozenClock) $args=clockCommand($args);
     $process = proc_open($args, [0 => ['file','/dev/null','r'], 1 => ['file',$log,'a'], 2 => ['file',$log,'a']], $pipes, $cwd);
     if (!is_resource($process)) throw new RuntimeException('server-start-failed');
     for ($attempt=0; $attempt<50; $attempt++) {
@@ -111,13 +115,22 @@ function httpRequest(string $method, string $path, array $form): array {
 }
 
 $mode = $argv[1] ?? '';
-requireCheck(in_array($mode, ['examsuite','workshop'], true));
+requireCheck(in_array($mode, ['examsuite','workshop','workshop-clock'], true));
 $exam = $mode === 'examsuite';
+$frozenClock=$mode==='workshop-clock';
 $runtime = ['phpVersion'=>PHP_VERSION,'sqliteVersion'=>SQLite3::version()['versionString'],'extensions'=>get_loaded_extensions()];
 $result = ['format'=>'php74-qualification-v1','mode'=>$mode,'runtime'=>$runtime,'checks'=>[],'scenarios'=>[],'bootstrapStatus'=>'NOT_RUN','statefulReplayStatus'=>'NOT_RUN','decision'=>'BLOCKED'];
 $source = '/work/pristine';
 $result['checks'][]=['id'=>'php-version-command','exitCode'=>command(['php','-v'],'/work','/work/private/php-version.log')];
 $result['checks'][]=['id'=>'php-modules-command','exitCode'=>command(['php','-m'],'/work','/work/private/php-modules.log')];
+if ($frozenClock) {
+    $clockExit=command(clockCommand(['php','-r','$p=new PDO("sqlite::memory:"); $sql=$p->query("SELECT datetime(\'now\')")->fetchColumn(); $php=gmdate("Y-m-d H:i:s"); echo json_encode(["phpUtc"=>$php,"sqliteUtc"=>$sql]); exit($php==="2026-10-27 12:00:00" && $sql==="2026-10-27 12:00:00" ? 0 : 1);']),'/work','/work/private/clock.json');
+    $result['checks'][]=['id'=>'frozen-clock-php-sqlite','exitCode'=>$clockExit];
+    $clockObservation=json_decode(file_get_contents('/work/private/clock.json'),true,512,JSON_THROW_ON_ERROR);
+    $versionExit=command(['dpkg-query','-W','-f=${Version}','libfaketime'],'/work','/work/private/faketime-version.txt');
+    $result['clockControl']=['kind'=>'frozen-wall-real-monotonic','requestedUtc'=>'2026-10-27 12:00:00','phpUtc'=>$clockObservation['phpUtc']??null,'sqliteUtc'=>$clockObservation['sqliteUtc']??null,'libraryVersion'=>trim(file_get_contents('/work/private/faketime-version.txt')),'copyrightSha256'=>hash_file('sha256','/usr/share/doc/libfaketime/copyright')];
+    if ($clockExit!==0 || $versionExit!==0) { echo encode($result); exit(1); }
+}
 mkdir($source,0700);
 $tarExit = command(['tar','-xzf','/input/source.tgz','-C',$source,'--strip-components=1','--no-same-owner','--no-same-permissions'],'/work','/work/private/archive.log');
 $result['checks'][] = ['id'=>'archive-extract','exitCode'=>$tarExit];
@@ -155,7 +168,7 @@ foreach ($ids as $scenarioId) {
                     requireCheck($exit===0);
                 }
             }
-            $server = startServer($root,$exam,'/work/private/' . $name . '-server.log');
+            $server = startServer($root,$exam,$frozenClock,'/work/private/' . $name . '-server.log');
             // Workshop initializes its DB lazily. This bootstrap request is captured privately.
             $boot = httpRequest('GET','/',[]);
             savePrivate($name . '-boot.json',$boot);

@@ -24,6 +24,8 @@ const sources = [
     attribution: "Copyright (c) 2026 Tanjila Afsari Rubina",
   },
 ];
+// Separate predeclared runtime profile, attempted only after ordinary NO-GO.
+sources.push({ ...sources[1], mode: "workshop-clock" });
 const allowedSteps = {
   "exam-business": [
     "create-intake",
@@ -249,6 +251,7 @@ export function sanitizeResult(value, mode) {
     "php-lint",
     "php-version-command",
     "php-modules-command",
+    "frozen-clock-php-sqlite",
     ...scenarioIds.flatMap((id) =>
       [1, 2].flatMap((replay) => [
         `${id}:${replay}:init_db.php`,
@@ -303,6 +306,14 @@ export function sanitizeResult(value, mode) {
     : value.statefulReplayStatus === "NOT_RUN"
       ? "NOT_RUN"
       : "FAIL";
+  const clockVerified =
+    mode !== "workshop-clock" ||
+    (value.clockControl?.phpUtc === "2026-10-27 12:00:00" &&
+      value.clockControl?.sqliteUtc === "2026-10-27 12:00:00" &&
+      checks.some(
+        (check) =>
+          check.id === "frozen-clock-php-sqlite" && check.exitCode === 0,
+      ));
   const repeatability = scenarioIds.flatMap((scenarioId) => {
     const matches =
       value.repeatability?.filter((entry) => entry.scenarioId === scenarioId) ??
@@ -337,6 +348,29 @@ export function sanitizeResult(value, mode) {
     phpVersion,
     sqliteVersion,
     extensions,
+    clockControl:
+      mode === "workshop-clock"
+        ? {
+            kind: "frozen-wall-real-monotonic",
+            requestedUtc: "2026-10-27 12:00:00",
+            phpUtc:
+              value.clockControl?.phpUtc === "2026-10-27 12:00:00"
+                ? "2026-10-27 12:00:00"
+                : null,
+            sqliteUtc:
+              value.clockControl?.sqliteUtc === "2026-10-27 12:00:00"
+                ? "2026-10-27 12:00:00"
+                : null,
+            libraryVersion:
+              typeof value.clockControl?.libraryVersion === "string" &&
+              /^[0-9][0-9a-z.+:~-]{0,40}$/.test(
+                value.clockControl.libraryVersion,
+              )
+                ? value.clockControl.libraryVersion
+                : null,
+            copyrightSha256: sha(value.clockControl?.copyrightSha256),
+          }
+        : null,
     licenseSha256: sha(value.licenseSha256),
     executedChecks: checks,
     scenarioIds: [...new Set(scenarios.map((entry) => entry.scenarioId))],
@@ -355,6 +389,7 @@ export function sanitizeResult(value, mode) {
     decision:
       complete &&
       exactReplayEqual &&
+      clockVerified &&
       phpVersion &&
       extensions.includes("pdo_sqlite") &&
       bootstrapStatus === "PASS"
@@ -530,6 +565,7 @@ export async function main() {
     report.imageId = imageId;
     for (const source of sources) {
       const candidate = {
+        runtimeProfile: source.mode,
         sourceRepo: source.sourceRepo,
         sourceCommit: source.sourceCommit,
         license: "MIT",
@@ -555,11 +591,17 @@ export async function main() {
                 "ORDER BY RANDOM question selection/order: metamorphic-check-required",
                 "SQLite datetime(now): metamorphic-check-required",
               ]
-            : [
-                "Asia/Dhaka and explicit future appointment dates: controlled",
-                "SQLite CURRENT_TIMESTAMP creation fields: metamorphic-check-required",
-                "Appointment ids after fresh reset: deterministic",
-              ],
+            : source.mode === "workshop-clock"
+              ? [
+                  "PHP and SQLite wall clocks: controlled at 2026-10-27 12:00:00 UTC; verified before source execution",
+                  "Monotonic deadlines: real; appointment dates: explicit 2099-06-15/16",
+                  "All timestamp fields/values are retained, with no normalization or RNG control",
+                ]
+              : [
+                  "Asia/Dhaka and explicit future appointment dates: controlled",
+                  "SQLite CURRENT_TIMESTAMP creation fields: metamorphic-check-required",
+                  "Appointment ids after fresh reset: deterministic",
+                ],
       };
       report.candidates.push(candidate);
       try {
