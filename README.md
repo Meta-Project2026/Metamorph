@@ -1,10 +1,12 @@
-# Metamorph — development foundation
+# Metamorph — development and agent foundations
 
 MMP-001 implements shared TypeScript/Zod contracts and a local Fastify health
-endpoint. MMP-002 adds a standalone [Oracle foundation](packages/oracle/README.md)
-for original synthetic/public HTTP and SQLite scenarios, controls and evidence.
-Migration generation, Meta integration, PHP workers and full product verification
-are **not implemented**. No benchmark has been selected. The optional web app
+endpoint. MMP-003 adds a bounded offline agent lifecycle with scripted providers,
+a restricted candidate writer and a trusted verifier port. MMP-002 adds a standalone
+[Oracle foundation](packages/oracle/README.md) for original public/synthetic HTTP
+and SQLite comparison, controls and evidence. Real migration generation, Meta
+integration, PHP workers and complete product verification are **not implemented**.
+No benchmark has been selected. The optional web app
 is deferred until there is real run data to display.
 
 The [imported architecture pack](metamorph-architecture-v0.1/README.md) remains a
@@ -56,17 +58,23 @@ capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchma
 | Command | Executed work |
 | --- | --- |
 | `pnpm lint` | Biome lint, formatting and imports for workspace source/config/tests |
-| `pnpm typecheck` | Build contracts declarations; check both packages and a public types consumer |
-| `pnpm test` | Build packages; run contract tests, injection smoke and real HTTP against the built CLI |
-| `pnpm build` | Compile contracts first, then server, using TypeScript |
+| `pnpm typecheck` | Build contracts declarations; check contracts, server, agent, oracle and a public types consumer |
+| `pnpm test` | Build packages; run contracts, agent and oracle synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
+| `pnpm build` | Compile contracts first, then agent/oracle/server, using TypeScript |
 
 Tests use synthetic fixtures, never a real benchmark/provider. The child server
 smoke receives no credentials or PATH. Test builds exercise compiled exports.
 
 - `packages/contracts/`: schemas and inferred types, without adapters or I/O.
-- `packages/oracle/`: independent HTTP/SQLite comparison, public synthetic
-  controls, evidence and a trusted broker interface; no worker provisioning.
 - `apps/server/`: app factory, loopback CLI and health tests.
+- `packages/agent/`: bounded orchestration, restricted source writer, scripted
+  adapters, disabled live Meta seam and [usage/probe blockers](packages/agent/README.md).
+  Run `pnpm demo:agent` for a synthetic repair/escalation lifecycle and journal;
+  its PASS is synthetic orchestration evidence, never Oracle/product acceptance.
+- `packages/oracle/`: independent HTTP/SQLite comparison, public synthetic controls,
+  evidence and a trusted broker interface; no PHP/TS worker provisioning.
+- `specs/003-oracle/`: MMP-002 spec, qualification blocker and validation records.
+- `specs/004-agent/`: compact MMP-003 spec, plan, tasks and validation record.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
   [interface note for Ilia](specs/002-foundation/interface-note.md).
@@ -115,14 +123,12 @@ Remove-Item Env:SPECIFY_FEATURE_DIRECTORY
 Remove-Item Env:SPECIFY_FEATURE_NO_PERSIST
 ```
 
-MMP-002 local controls and scope are documented in [003-oracle](specs/003-oracle/spec.md).
-PHP 7.4 qualification is [NOT_RUN](specs/003-oracle/benchmark-qualification.md):
-Docker/Podman are unavailable and WSL has no installed distributions. The health
-endpoint retains its existing foundation-only contract; the standalone Oracle is
-not integrated into server routes. Next: finish isolated PHP qualification and
-independent held-out/isolation checks. **MMP-003 Agent
-foundation** (Vladimir): bounded orchestration and adapter boundary. API access,
-model IDs and pricing require a separately authorized live probe.
+MMP-002's public/synthetic G2/G3 controls and evidence runner exist independently.
+[Real PHP 7.4 qualification](specs/003-oracle/benchmark-qualification.md), G0/G1,
+held-out isolation and complete G4 remain NOT_RUN, so [issue #2](https://github.com/Meta-Project2026/Metamorph/issues/2)
+remains open. **Agent integration** (Vladimir): connect the bounded agent to authorized
+Oracle/PHP worker adapters and verified Meta API access; model IDs and pricing
+require a separately authorized live probe.
 
 ## Dependency provenance
 

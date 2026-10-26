@@ -27,6 +27,15 @@ importers:
         specifier: 5.12.7
         version: 5.12.7
 
+  packages/agent:
+    dependencies:
+      '@metamorph/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
   packages/contracts:
     dependencies:
       zod:
