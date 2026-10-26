@@ -384,7 +384,15 @@ export async function main() {
         .update(result.stdout + result.stderr)
         .digest("hex"),
     });
-    if (result.exitCode !== 0) throw new Error(id);
+    if (result.exitCode !== 0) {
+      // This phase precedes every source download: only trusted image/tool output.
+      // Keep actual preparation diagnostics so obsolete apt/image failures are actionable.
+      if (id === "trusted-extension-image-build")
+        report.trustedRuntimePreparationDiagnostics = (
+          result.stdout + result.stderr
+        ).slice(-12000);
+      throw new Error(id);
+    }
     return result;
   };
   try {
