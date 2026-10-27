@@ -37,8 +37,13 @@ disposable isolation, not a proof against kernel/container-engine vulnerabilitie
 Host stages must be exclusively trusted-owned; source admission snapshots bytes
 once, bounds reads and rejects symlinks/junctions/hardlinks. Concurrent hostile
 host writers are outside this boundary. Hashes bind source/build provenance,
-not owner approval. `TargetWorker` only accepts a trusted image ID; untrusted callers
-must not choose runtime images or override policy. Evidence output contains raw
+not owner approval. `buildTrustedRuntime()` builds the pinned recipe, verifies
+image/toolchain/file identities and issues an in-process runtime capability.
+`new TargetWorker(runtime, bundle)` rejects arbitrary digest strings and copied
+objects. This trusts the host adapter, recipe, Docker daemon and dependency
+sources; it is not cryptographic attestation. The explicit `trustedTest.command`
+seam is for trusted fault simulations/instrumentation only. Untrusted callers
+must not choose images, commands or policy. Evidence output contains raw
 **public** bodies/state/diagnostics; do not use this public driver for held-out data.
 
 Fixture provenance: original task-time code authored by the coding assistant;
@@ -59,3 +64,35 @@ midnight/DST, registration and product acceptance remain NOT_RUN.
 See [proposed handoff](../../specs/008-ts-target-worker/interface-handoff.md) and
 [validation](../../specs/008-ts-target-worker/validation.md). Dedicated workflow
 is manual-only. It does not expand ordinary Fast CI.
+
+## R1 lifecycle
+
+Build the trusted runtime before source admission, admit bytes, construct the
+worker, then `await provision(signal?)`. Provision and every
+`reset(scenarioId, signal?)` wait for an independent inspector's bounded GET
+`/items` handshake (HTTP 200, request identity, JSON items array), a live launch
+and running Docker container. The probe joins only that generation's network by
+immutable container ID; readiness is transport evidence, not parity. Call
+`request()` immediately after reset; client sleeps are unnecessary.
+
+The first operation starts one monotonic 180s work deadline, including candidate
+build, probes, inspection and resets. Startup cap 10s, operation cap 15s (candidate
+build 35s), total resets 16 including initial provision, operations 128 including
+provision/reset/request/snapshot. Only the trusted adapter can lower these limits
+via `{ limits }`; it cannot raise them. Image preparation before candidate
+admission has a separate 240s bound. CPU/RAM/PID limits are unchanged. Cleanup has
+a separate 10s grace per attempt; it never renews useful work. Expiry cancels CLI
+work and automatically reaps resources; successful work cannot escape after expiry.
+
+Operations are exclusive: a concurrent operation rejects with
+`RUNTIME_FAILED: BUSY`. `close()`/`kill()` cancel and join the active operation,
+stop then force-remove runtime/inspectors, join docker-exec receipts, remove DB
+volumes and verify actual Docker inventory. Reset deletes the old pair before
+creating the next. Successful close/kill is idempotent; failed close can retry
+removal, but cleanup faults stay sticky and block acceptance. A failed operation
+terminally ends useful work: create a new worker afterwards. Always await
+`close()` in `finally`; inspect trusted cleanup receipts on error. Feedback
+adapters must expose only allowlisted codes, counts, hashes and known test IDs.
+
+See [R1 validation](../../specs/008-ts-target-worker/r1-validation.md) for new
+controls and exact-source receipts. Historical evidence is preserved.
