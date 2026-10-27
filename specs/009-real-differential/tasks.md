@@ -1,0 +1,17 @@
+# Tasks
+
+- [x] Fetch latest main and inspect Issue17/open PRs/actual APIs and handoffs.
+- [x] Freeze allowed public scenario and independent original TS source SHA.
+- [x] Implement strict target adapter, raw transport validation and exact mapping.
+- [x] Original positive/mutated snapshot, identity/schedule/clock/cleanup controls.
+- [x] Implement real two-runtime pilot and private evidence/catalog/public allowlist.
+- [x] Add narrow own workflow with explicit PR-head checkout and no secret mounts.
+- [x] Run required root checks and separate worker/bridge controls; record exit codes.
+- [ ] Commit/push/open Refs17 PR; no merge.
+- [ ] Execute actual isolated pilot on exact checked-out source; retain safe receipt.
+- [ ] Record actual comparison IDs/counts/gates, cleanup, artifact ID/hash and latest CI.
+- [x] Record target-owner follow-up and unconfigured external retention.
+
+DoD status: IN_PROGRESS. Hard target state quota is not certified by current API;
+any claim requiring that property remains BLOCKED pending target-owner agreement.
+Expected initial incompatibility is an observed G3 FAIL only after actual execution.

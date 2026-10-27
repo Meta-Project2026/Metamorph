@@ -1,0 +1,70 @@
+name: Real PHP TS differential pilot
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: php-ts-differential-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pilot:
+    # Temporary bootstrap only: no forks or other branch can execute the pilot.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       github.event.pull_request.head.ref == 'feat/mmp-008a-real-differential-bridge' &&
+       github.event.pull_request.base.ref == 'main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PILOT_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      PILOT_PRIVATE_PARENT: ${{ runner.temp }}/mmp008a-private-${{ github.run_id }}-${{ github.run_attempt }}
+      PILOT_PUBLIC_OUTPUT: ${{ runner.temp }}/mmp008a-public-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Confirm exact source SHA
+        run: test "$(git rev-parse HEAD)" = "$PILOT_HEAD_SHA" && git rev-parse HEAD
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - name: Existing fast checks
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+      - name: Independent bridge and existing worker controls
+        run: |
+          pnpm --filter @metamorph/differential test
+          pnpm --filter @metamorph/oracle test:reference
+          node --test packages/target-worker/test/*.test.mjs
+      - name: Real bounded PHP TS Oracle pilot
+        run: node packages/differential/src/pilot.mjs
+      - name: Verify interrupted-job cleanup
+        if: always()
+        run: |
+          if test -f "$PILOT_PRIVATE_PARENT/resources.json"; then
+            node packages/differential/src/reap.mjs
+          fi
+      - name: Upload regenerated allowlisted summary only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-differential-public
+          path: |
+            ${{ env.PILOT_PUBLIC_OUTPUT }}/summary.json
+            ${{ env.PILOT_PUBLIC_OUTPUT }}/error.json
+          if-no-files-found: error
+          retention-days: 7

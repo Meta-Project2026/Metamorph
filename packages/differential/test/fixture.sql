@@ -1,0 +1,11 @@
+CREATE TABLE scalar (id INTEGER PRIMARY KEY AUTOINCREMENT, n INTEGER, fraction REAL, text_value TEXT DEFAULT 'original-default', bytes BLOB, nullable TEXT);
+CREATE INDEX scalar_n ON scalar(n);
+INSERT INTO scalar(n,fraction,text_value,bytes,nullable) VALUES (-9223372036854775808,1.2345678901234567,'original',X'00ABFF',NULL),(9223372036854775807,-0.125,'',X'',NULL);
+INSERT INTO scalar(n) VALUES (0);
+DELETE FROM scalar WHERE id=3;
+CREATE TABLE composite (a TEXT,b INTEGER,value TEXT,PRIMARY KEY(b,a));
+INSERT INTO composite VALUES ('z',-10,'first'),('a',2,'second'),(NULL,2,'nullable');
+CREATE TABLE multiset (value TEXT,n INTEGER);
+INSERT INTO multiset VALUES ('repeat',10),('repeat',-2),('repeat',10),(NULL,0);
+CREATE VIEW visible AS SELECT id,text_value FROM scalar;
+CREATE TRIGGER scalar_insert AFTER INSERT ON scalar BEGIN UPDATE scalar SET nullable='trigger' WHERE id=NEW.id; END;
