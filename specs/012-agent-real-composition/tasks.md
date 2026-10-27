@@ -8,4 +8,9 @@
       differential78 and new tests; report actual counts and skips.
 - [ ] Execute known-good and FAIL/repair through real workers on final PR SHA.
 - [ ] Record private hashes, public artifact identity and final zero inventory.
-- [ ] Commit, push, PR Refs #23; no merge or issue closure.
+- [x] Commit, push, [PR30](https://github.com/Meta-Project2026/Metamorph/pull/30)
+      Refs #23; no merge or issue closure.
+
+Status: PARTIAL. Both workflow dispatch attempts returned404 because the new
+workflow is absent from the default branch. The unchecked real-proof tasks are
+NOT_RUN; see validation.md for the exact blocker and commands.
