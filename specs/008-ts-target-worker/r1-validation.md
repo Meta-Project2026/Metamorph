@@ -1,4 +1,4 @@
-# MMP-007-R1 validation — 2026-10-27
+# MMP-007-R1 validation - 2026-10-27
 
 Status: implemented; qualified-source Docker replay passed30/30 controls.
 Final delivery HEAD is replayed separately; exact final SHA/run/job/artifact
@@ -36,8 +36,8 @@ DB parser failures become OBSERVATION_ERROR; infinite loop reaches startup TIMEO
 The former Docker-wait timeout operation is retained as separate bounded-cli-wait.
 New Docker controls: slow startup/immediate request, never listener, wrong port,
 wrong response, hung HTTP, eight resets/inventories, real aggregate deadline,
-abort pending readiness. The abort uses a trusted wrapper that cancels immediately after a real readiness
-probe receipt, while reset is pending; no Docker result is replaced or Date patched.
+abort pending readiness. The abort uses a trusted wrapper that cancels immediately
+after a real readiness probe receipt, while reset is pending; no Docker result is replaced or Date patched.
 
 Trusted simulation coverage includes stale runtime/scenario results, partial
 volume provisioning cancellation, early exit, build-vs-infrastructure errors,
@@ -68,7 +68,7 @@ NOT_RUN in this failed attempt. Node24.11.0, SQLite3.50.4, TypeScript5.9.3,
 libfaketime0.9.10-2.1 measured; Docker28.0.4, host Node24.21.0. Actual image
 sha256:96ad221b47d9121ef5c8d915889c192431ec76ca4f4062c0630812a898ade2a6.
 [Fast CI40432293472](https://github.com/Meta-Project2026/Metamorph/actions/runs/40432293472)
-passed Node22/24 for that source only; final HEAD replay remains pending.
+passed Node22/24 for that source only; that earlier receipt does not qualify final HEAD.
 
 ## Qualified replay and downloaded evidence audit
 
