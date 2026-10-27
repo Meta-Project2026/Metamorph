@@ -1,0 +1,16 @@
+{
+  "name": "@metamorph/differential",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs",
+    "pilot": "node src/pilot.mjs"
+  },
+  "dependencies": {
+    "@metamorph/oracle": "workspace:*",
+    "@metamorph/target-worker": "workspace:*"
+  }
+}

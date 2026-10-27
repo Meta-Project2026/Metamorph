@@ -42,6 +42,15 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
 
+  packages/differential:
+    dependencies:
+      '@metamorph/oracle':
+        specifier: workspace:*
+        version: link:../oracle
+      '@metamorph/target-worker':
+        specifier: workspace:*
+        version: link:../target-worker
+
   packages/integration:
     dependencies:
       '@metamorph/agent':

@@ -1,0 +1,116 @@
+{
+  "format": "real-differential-public-v1",
+  "checkedOutSha": "0ff7d640ca2aeb0c2b5301d13ab93d1103cedf16",
+  "baseSha": "49859eab33d5979336f19dbbf75519f0dc1dcfd2",
+  "scope": "real-car-workshop-php-versus-original-items-ts-incompatibility-pilot",
+  "php": {
+    "source": {
+      "repository": "tanjilaafsarirubina/car-workshop",
+      "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+      "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+      "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "clock": "2026-10-27 12:00:00",
+      "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+    },
+    "imageId": "sha256:43e3941b158687f10cd1232f081811a502ce417432a9aba2a0e0a9343571aa2e",
+    "version": "7.4.33",
+    "sqlite": "3.34.1"
+  },
+  "target": {
+    "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+    "imageId": "sha256:8023ddc2ba4d9432749f438b3bd6f7d9ed7a713a85d80b2353a7196bb9b0f994",
+    "recipeSha": "a6279ec83d3bab925ec21daa08b401ab22409286d3f1995d85458d64249197c1",
+    "node": "24.11.0",
+    "sqlite": "3.50.4",
+    "typescript": "5.9.3",
+    "faketime": "0.9.10-2.1",
+    "fixture": "original-public-items-not-workshop"
+  },
+  "clock": "VERIFIED_FIXED_WALL_REAL_MONOTONIC",
+  "fixedUtc": "2026-10-27 12:00:00",
+  "normalization": "oracle-exact-v1",
+  "scenarioIds": [
+    "workshop-business"
+  ],
+  "declaredHttpSteps": 6,
+  "initialStateComparison": "EXECUTED",
+  "initialDifferenceCodes": [
+    "DB_SCHEMA",
+    "DB_STATE"
+  ],
+  "httpDifferential": "NOT_EXECUTED_AFTER_INITIAL_MISMATCH",
+  "comparisons": {
+    "http": 0,
+    "db": 1
+  },
+  "serviceObservations": {
+    "phpBootstrap": 1,
+    "targetReadinessAttempts": 2,
+    "targetReadinessSuccesses": 2,
+    "targetResetsIncludingProvision": 2,
+    "targetOperations": 5,
+    "targetOracleSnapshots": 1,
+    "targetHttpRequests": 0
+  },
+  "gates": [
+    {
+      "gate": "G2",
+      "verdict": "INCONCLUSIVE",
+      "executedTestIds": [],
+      "findingCodes": [
+        "MISSING_COVERAGE"
+      ]
+    },
+    {
+      "gate": "G3",
+      "verdict": "FAIL",
+      "executedTestIds": [
+        "workshop-business:initial"
+      ],
+      "findingCodes": [
+        "DB_SCHEMA",
+        "DB_STATE",
+        "MISSING_COVERAGE"
+      ]
+    },
+    {
+      "gate": "G4",
+      "verdict": "INCONCLUSIVE",
+      "executedTestIds": [
+        "http-positive",
+        "http-key-order",
+        "http-status-mutant",
+        "http-type-mutant",
+        "http-missing-mutant",
+        "http-order-mutant",
+        "db-positive",
+        "db-row-mutant",
+        "db-sequence-mutant"
+      ],
+      "findingCodes": [
+        "HELD_OUT_NOT_RUN"
+      ]
+    }
+  ],
+  "G0": "NOT_RUN",
+  "G1": "NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "cleanup": "VERIFIED_ZERO_RESOURCES",
+  "phpPackSha256": "0bb71b2be582a0a42d3ccaf38f640f69c5b259f560937323fc523679b7b21ea3",
+  "bridgePackSha256": "df07e3783cf19198bcdcf9cb4a32bb64247b9583b5c0aacc4b6bd49498948f9a",
+  "retention": "EVIDENCE_RETENTION_NOT_CONFIGURED",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+  "otherScenarios": {
+    "workshop-rejected": "NOT_RUN",
+    "workshop-capacity": "NOT_RUN"
+  },
+  "heldOut": "NOT_RUN",
+  "concurrency": "NOT_RUN",
+  "clockAdvanceDst": "NOT_RUN",
+  "registration": "NOT_APPROVED",
+  "targetStateLimit": "16MIB_INSPECTOR_ADMISSION_NOT_WRITE_QUOTA",
+  "hardStateQuotaAcceptance": "BLOCKED_TARGET_OWNER_API",
+  "ownerSignoff": "NOT_CLAIMED",
+  "modelCalls": "NOT_RUN"
+}
