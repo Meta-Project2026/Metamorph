@@ -12,6 +12,24 @@ export {
   STABLE_HEADERS,
 } from "./http.js";
 export {
+  DockerReferenceTransport,
+  provisionRuntime,
+  type Runtime,
+} from "./reference/docker.js";
+export { PrivateEvidence, RETENTION } from "./reference/evidence.js";
+export {
+  BOOTSTRAP,
+  MANIFEST,
+  MANIFEST_SHA256,
+  SOURCE,
+} from "./reference/manifest.js";
+export { mapPhpSnapshot } from "./reference/mapping.js";
+export { dockerCommand } from "./reference/process.js";
+export {
+  PhpReferenceWorker,
+  type ReferenceTransport,
+} from "./reference/worker.js";
+export {
   type PublicScenario,
   type ScenarioRequest,
   type VerificationResult,

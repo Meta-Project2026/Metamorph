@@ -1,0 +1,39 @@
+{
+  "format": "php74-reference-summary-v1",
+  "scope": "reference-only-public-sequential-proposal",
+  "headSha": "c35a407914ec99ff00c1793bd7f45bbe22dd1a61",
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "clock": "2026-10-27 12:00:00",
+    "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+  },
+  "imageId": "sha256:ff88040e34cde32af496e70c5ac79981e0864f13bd32d58152e2848b7c725419",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "attempts": 6,
+  "steps": 34,
+  "replayEqual": true,
+  "mappingEqual": true,
+  "privatePackVerifiedAfterWorkerClose": true,
+  "packSha256": "e2d23906c565d40131b77a37b68ef304c04f44f1856029af7227f8ba188c80a0",
+  "retention": {
+    "local": "OWNER_ONLY_LOCAL_PRIVATE_PACK",
+    "durable": "EVIDENCE_RETENTION_NOT_CONFIGURED",
+    "external": "EXTERNAL_RETENTION_NOT_RUN"
+  },
+  "crossLanguage": "NOT_RUN",
+  "concurrency": "NOT_RUN",
+  "clockAdvanceDst": "NOT_RUN",
+  "crashRecovery": "NOT_RUN",
+  "gates": {
+    "G0": "INCONCLUSIVE",
+    "G1": "NOT_RUN",
+    "G2": "INCONCLUSIVE",
+    "G3": "INCONCLUSIVE",
+    "G4": "INCONCLUSIVE"
+  },
+  "benchmarkRegistration": "NOT_APPROVED"
+}
