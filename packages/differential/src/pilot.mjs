@@ -1,12 +1,11 @@
 // Trusted CLI only. No candidate import/eval, no third-party PHP/SQLite on host.
 import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  chmodSync,
   DockerReferenceTransport,
   dockerCommand,
   PhpReferenceWorker,
@@ -32,6 +31,8 @@ import { Resources } from "./resources.mjs";
 import { BridgeError, requireCheck, strictJson } from "./strict.mjs";
 import { TargetOracleAdapter } from "./target-adapter.mjs";
 
+// Link all trusted imports without provisioning anything (offline CLI smoke).
+if (process.argv.includes("--validate-imports")) process.exit(0);
 const root = fileURLToPath(new URL("../../..", import.meta.url));
 const output = resolve(
   process.env.PILOT_PUBLIC_OUTPUT ?? join(tmpdir(), "mmp008a-public"),
@@ -212,11 +213,13 @@ try {
     target?.close(AbortSignal.timeout(30000)),
   ]);
   try {
+    // Reap ledger-owned resources even when either owner reports close failure.
+    // The original failure remains sticky; successful reaping cannot turn it green.
+    const inventory = await resources.reap();
     requireCheck(
       statuses.every((s) => s.status === "fulfilled"),
       "CLEANUP_ERROR",
     );
-    const inventory = await resources.reap();
     requireCheck(
       !inventory.before.containers.length && !inventory.before.volumes.length,
       "CLEANUP_RECOVERED_ERROR",

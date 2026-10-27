@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import {
   compareHttp,
   compareSqlite,
@@ -22,6 +24,19 @@ import { strictJson } from "../src/strict.mjs";
 import { TargetOracleAdapter } from "../src/target-adapter.mjs";
 
 const scratch = mkdtempSync(join(tmpdir(), "mmp008a-control-"));
+test("trusted pilot CLI resolves its actual import graph without provisioning or candidate execution", () => {
+  assert.equal(
+    execFileSync(
+      process.execPath,
+      [
+        fileURLToPath(new URL("../src/pilot.mjs", import.meta.url)),
+        "--validate-imports",
+      ],
+      { encoding: "utf8", windowsHide: true },
+    ),
+    "",
+  );
+});
 const path = join(scratch, "original.sqlite");
 const db = new DatabaseSync(path);
 db.exec(readFileSync(new URL("fixture.sql", import.meta.url), "utf8"));

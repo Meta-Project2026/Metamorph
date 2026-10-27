@@ -52,6 +52,7 @@ export async function targetInventory(runId) {
   };
 }
 /** Trusted-only adapter. Inventory seam is exclusively for original unit fault controls. */
+/** @implements {import('@metamorph/oracle').WorkerAdapter} */
 export class TargetOracleAdapter {
   constructor(worker, scenarios, { record, inventory = targetInventory } = {}) {
     requireCheck(
