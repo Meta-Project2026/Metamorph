@@ -260,7 +260,9 @@ export class TargetWorker {
     });
     this.deadline = setTimeout(() => {
       this.expired = true;
-      void this.kill();
+      this.expiration = this.kill().catch((error) => {
+        this.evidence.expirationError = error.message;
+      });
     }, POLICY.lifetimeMs);
     return {
       runId: this.runId,

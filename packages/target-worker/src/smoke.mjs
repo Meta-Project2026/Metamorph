@@ -191,8 +191,6 @@ try {
       fresh,
     };
   });
-  report.G1 = "PASS_SCOPED_ORIGINAL_FIXTURE";
-  report.G0Scoped = "PASS_SELECTED_PUBLIC_ROUTES_WITHOUT_PHP";
   for (const [id, source] of [
     ["syntax-error", "const invalid = ;"],
     ["type-error", 'const n: number = "wrong"; console.log(n);'],
@@ -277,6 +275,24 @@ try {
     // Killing the CLI alone is insufficient; close below reaps the whole container.
     return cancelled;
   });
+  await exercise(
+    "malformed-http",
+    mutated(
+      'import { createServer } from "node:net"; createServer(socket => socket.end("not-http\\r\\n")).listen(3000, "127.0.0.1");',
+    ),
+    async (worker) => {
+      await delay(300);
+      return worker.request("malformed", "GET", "/items");
+    },
+    /ENVIRONMENT_ERROR/,
+    (evidence) => {
+      assert.ok(
+        evidence.commands.some((receipt) =>
+          /HPE_INVALID_CONSTANT|Parse Error/.test(receipt.stderr),
+        ),
+      );
+    },
+  );
   for (const [id, injected] of [
     [
       "corrupt-db",
@@ -309,6 +325,8 @@ try {
     ),
     async (worker) => {
       await delay(300);
+      const forged = await worker.request("forged", "GET", "/snapshot");
+      assert.deepEqual(body(forged), { verdict: "PASS", tables: [] });
       await worker.request(
         "write",
         "POST",
@@ -317,7 +335,7 @@ try {
       );
       const db = await worker.snapshot("trusted");
       assert.equal(db.tables.find((t) => t.name === "items").rows.length, 1);
-      return db;
+      return { forged, db };
     },
   );
   await exercise(
@@ -342,13 +360,22 @@ try {
       return snapshot;
     },
   );
-  for (const mode of ["real", "fixed-experiment"]) {
+  report.G1 = "PASS_SCOPED_ORIGINAL_FIXTURE";
+  report.G0Scoped = "PASS_SELECTED_PUBLIC_ROUTES_WITHOUT_PHP";
+  for (const mode of ["real", "fixed-experiment", "drift-control"]) {
     const name = `mmp007-clock-${process.pid}-${mode}`;
     try {
       const result = await command([
         "run",
         ...sandboxArgs(name),
-        ...(mode === "fixed-experiment" ? FIXED_ENV : []),
+        ...(mode === "real"
+          ? []
+          : FIXED_ENV.map((value) =>
+              mode === "drift-control" &&
+              value === "FAKETIME=2026-10-27 12:00:00"
+                ? "FAKETIME=2026-10-27 12:00:01"
+                : value,
+            )),
         image,
         "node",
         "/opt/worker/clock.mjs",
@@ -377,6 +404,10 @@ try {
   )
     ? "MEASURED_NODE_SQLITE_FIXED_WALL_PARITY_ONLY"
     : "CLOCK_PARITY_BLOCKED";
+  const drift = report.clocks.find((clock) => clock.mode === "drift-control");
+  assert.equal(drift.before.sqlite.datetime, "2026-10-27 12:00:01");
+  assert.notEqual(drift.before.sqlite.datetime, "2026-10-27 12:00:00");
+  report.clockDriftControl = "REJECTED_WRONG_WALL_TIME";
   report.procedure = "PASS";
 } catch (error) {
   report.procedure = "ERROR";
