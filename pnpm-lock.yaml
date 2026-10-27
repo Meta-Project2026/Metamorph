@@ -71,6 +71,18 @@ importers:
 
   packages/target-worker: {}
 
+  packages/workshop-audit:
+    dependencies:
+      '@metamorph/differential':
+        specifier: workspace:*
+        version: link:../differential
+      '@metamorph/oracle':
+        specifier: workspace:*
+        version: link:../oracle
+      '@metamorph/target-worker':
+        specifier: workspace:*
+        version: link:../target-worker
+
 packages:
 
   '@biomejs/biome@2.6.3':
