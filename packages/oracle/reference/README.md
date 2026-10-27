@@ -32,6 +32,16 @@ App has a 600s wall watchdog; inspector 12s; broker commands default15s, cleanup
 Pull/build bounds are180/300s; driver budget12min; manual job20min.
 
 The driver produces only `reference-public/reference-summary.json` for upload.
+MMP-009A adds a strictly structural, versioned `acceptanceCorpus` field to that
+summary. `acceptance-proof.mjs` uses two independent workers, each scheduled
+exactly as `MANIFEST.map(s => s.id)`, preserving the registered manual entrypoint.
+Each pass runs all three scenarios. `acceptance.mjs` excludes response values,
+DDL, raw paths and diagnostics; `acceptance-controls.mjs` labels original synthetic
+faults separately from three actual isolated process controls. The independent
+resource ledger verifies zero containers/volumes before all three evidence packs
+are sealed/verified. SIGINT/SIGTERM cancel active operations and enter cleanup.
+Hard job/host termination cannot produce verified completion; ephemeral runner
+destruction is not durable evidence. See specs/010-workshop-acceptance.
 It runs the three immutable public scenarios twice and verifies exact raw HTTP
 repeatability plus unchanged core comparator results. Full HTTP headers/base64,
 before/after SQLite, legacy wire bytes, runtime/provenance/manifest, monotonic
