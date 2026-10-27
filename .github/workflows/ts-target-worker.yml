@@ -1,0 +1,53 @@
+name: Isolated TS target worker
+
+on:
+  workflow_dispatch:
+  # TEMPORARY exact-branch bootstrap; remove before final delivery.
+  pull_request:
+    branches: [main]
+    paths:
+      - packages/target-worker/**
+      - .github/workflows/ts-target-worker.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ts-target-worker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isolated:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/mmp-007-ts-target-worker')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          # Branch checkout permits rerunning this bootstrap definition against
+          # the final manual-only source SHA; git HEAD below is the authority.
+          ref: ${{ github.head_ref || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Trusted boundary checks
+        run: node --test packages/target-worker/test/*.test.mjs
+      - name: Bounded isolated public smoke
+        env:
+          TARGET_WORKER_EVIDENCE: ${{ runner.temp }}/ts-target-worker-public
+        run: TARGET_WORKER_HEAD_SHA="$(git rev-parse HEAD)" node packages/target-worker/src/smoke.mjs
+      - name: Retain original public fixture evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ts-target-worker-public
+          path: ${{ runner.temp }}/ts-target-worker-public/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Reap any interrupted worker resources
+        if: always()
+        shell: bash
+        run: |
+          docker ps -aq --filter label=metamorph.target-worker=true | xargs -r docker rm -f
+          docker volume ls -q --filter label=metamorph.target-worker=true | xargs -r docker volume rm
