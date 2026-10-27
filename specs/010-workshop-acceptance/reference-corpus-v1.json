@@ -1,0 +1,3214 @@
+{
+  "format": "workshop-reference-corpus-v1",
+  "headSha": "1a4fca019e0a32c98549eccef22b9834d1e5305e",
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "clock": "2026-10-27 12:00:00",
+    "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+  },
+  "sourceFiles": {
+    "apiPhpSha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77",
+    "configPhpSha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd"
+  },
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "imageId": "sha256:d1962f3bcb3ee1e7189371a2d00fdfdcc5bb3732f6d8bb736e6782eea5e6aafd",
+  "clock": "VERIFIED_FIXED_UTC_REAL_MONOTONIC",
+  "attempts": 6,
+  "businessHttp": 34,
+  "bootstrapHttp": 6,
+  "inspectorSnapshots": 114,
+  "repeatability": "PASS",
+  "passes": [
+    {
+      "pass": 1,
+      "scenarios": [
+        {
+          "scenarioId": "workshop-business",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-02",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-03",
+              "requestSha256": "5f438d9377d6ff89ff4e5eb034def8dc5e2f22b65a5362bb076810c4751f369b",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "c064637f64398ab4fdbbc6f75dc1dc09ff42b27ee0560aca4c32537a1957ff7c",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-04",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "8150f94d6f34dd217757a19b11b5b8c2bee4ea9029b17ff57ebb7893361b6181",
+              "beforeSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "afterSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-05",
+              "requestSha256": "849e7d17e09837643a96973ee14aa128ff17417cec3fb4585caecc4652180bc3",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "5a3af73c21e9cf2a93e8e0a769193a0ced6a0da7471e32e6b27a47a469b1c261",
+              "beforeSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "afterSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 0,
+                  "cellTypes": []
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-06",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": []
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "e547782815c9ee2cb351242b37e51939af3ad9418f383b708a7f2d5c12b10d93",
+              "beforeSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "afterSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 0,
+                  "cellTypes": []
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-02",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "error_type": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "974e20b9cac667aed7d3c45e404c010fdf4bb458b1640e2469b826b4571ced4f",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-03",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-04",
+              "requestSha256": "ea89e4459a3ac36083f063e0f0cc9ac13af2af8b2879dc175069992ea3877bd4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "86cd537c854c9dad0f5c1860f7d667740af9606ccd024c2c7566a476a00180d0",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-05",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-02",
+              "requestSha256": "c9a31b288b7be233e418746f65230db0d204e90efb22c552ea4470a6168574d4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "acde48b566d24ea6def6c4215a7f83b4cdf4370a1ca1d40cb739a82c1e534ecd",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-03",
+              "requestSha256": "9f194f4d5966913adf433ffa4b449ad9058fb8e263b47cd6796470e68484767b",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "6305149eaa42a1e4042d11c334c2dc2a1bfb5c10e75ad4007d1b4a8ebf16b1f2",
+              "beforeSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88",
+              "afterSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 3,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-04",
+              "requestSha256": "7c6ca586bb45d8f91ee977b140c4e0af12460fae597021d1941f13c0869e2ec4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "a908182354fb68252918c87ad550895fbe04707d1daca060c665d74ff9630fc6",
+              "beforeSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-05",
+              "requestSha256": "e68d069a6938c655cd9e2bc63320d8bb7b48f85afebbf1d4b0c8c028aafe7937",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "error_type": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "4ffc4dca899806e15312154551033e9e203011df0dd163870eed7d12ae5aa215",
+              "beforeSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-06",
+              "requestSha256": "1dba11220e0c3be2a4e469826440d7975772d53e7f47e21bca10415698821aab",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "date": "string",
+                "mechanics": {
+                  "array": [
+                    {
+                      "available_slots": "number",
+                      "booked_count": "number",
+                      "id": "number",
+                      "is_full": "boolean",
+                      "max_daily_slots": "number",
+                      "name": "string",
+                      "phone": "string",
+                      "specialty": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "ac1e97d61ec83172afbf07a4f58b7f54e668b329a689e3270bb293b6d379ff77",
+              "beforeSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "pass": 2,
+      "scenarios": [
+        {
+          "scenarioId": "workshop-business",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-02",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-03",
+              "requestSha256": "5f438d9377d6ff89ff4e5eb034def8dc5e2f22b65a5362bb076810c4751f369b",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "c064637f64398ab4fdbbc6f75dc1dc09ff42b27ee0560aca4c32537a1957ff7c",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-04",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "8150f94d6f34dd217757a19b11b5b8c2bee4ea9029b17ff57ebb7893361b6181",
+              "beforeSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "afterSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-05",
+              "requestSha256": "849e7d17e09837643a96973ee14aa128ff17417cec3fb4585caecc4652180bc3",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "5a3af73c21e9cf2a93e8e0a769193a0ced6a0da7471e32e6b27a47a469b1c261",
+              "beforeSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+              "afterSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 0,
+                  "cellTypes": []
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-business",
+              "stepId": "step-06",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": []
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "e547782815c9ee2cb351242b37e51939af3ad9418f383b708a7f2d5c12b10d93",
+              "beforeSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "afterSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 0,
+                  "cellTypes": []
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-02",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "error_type": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "974e20b9cac667aed7d3c45e404c010fdf4bb458b1640e2469b826b4571ced4f",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-03",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-04",
+              "requestSha256": "ea89e4459a3ac36083f063e0f0cc9ac13af2af8b2879dc175069992ea3877bd4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "86cd537c854c9dad0f5c1860f7d667740af9606ccd024c2c7566a476a00180d0",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "stepId": "step-05",
+              "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointments": {
+                  "array": [
+                    {
+                      "address": "string",
+                      "appointment_date": "string",
+                      "car_engine": "string",
+                      "car_license": "string",
+                      "client_name": "string",
+                      "created_at": "string",
+                      "id": "string",
+                      "mechanic_id": "string",
+                      "mechanic_name": "string",
+                      "mechanic_specialty": "string",
+                      "phone": "string",
+                      "status": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "3f49ea81a816419d96e007fd044d5aeb56fb184ee48bbf8b7856fbeb608c5409",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "initialSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+          "initialDatabase": [
+            {
+              "name": "appointments",
+              "columns": [
+                "id",
+                "client_name",
+                "address",
+                "phone",
+                "car_license",
+                "car_engine",
+                "appointment_date",
+                "mechanic_id",
+                "status",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 0,
+              "cellTypes": []
+            },
+            {
+              "name": "mechanics",
+              "columns": [
+                "id",
+                "name",
+                "specialty",
+                "phone",
+                "max_daily_slots",
+                "created_at"
+              ],
+              "primaryKey": [
+                0
+              ],
+              "rows": 5,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            },
+            {
+              "name": "sqlite_sequence",
+              "columns": [
+                "name",
+                "seq"
+              ],
+              "primaryKey": [],
+              "rows": 1,
+              "cellTypes": [
+                "integer",
+                "text"
+              ]
+            }
+          ],
+          "bootstrapSha256": "a1e1a81812127d5b9d5a67ad680879ebcc9fcdf68ccf2c0bedf6ac90176babbb",
+          "steps": [
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-01",
+              "requestSha256": "a51153c6c03b38793eddeec27a8edeef04d4669b954d5843ac57f0ed44acb938",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "9fd28e54f5b7d9e3414a2782c011c07d6bc61a06b4160a3bd9789d3f5f881d69",
+              "beforeSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+              "afterSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 1,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-02",
+              "requestSha256": "c9a31b288b7be233e418746f65230db0d204e90efb22c552ea4470a6168574d4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "acde48b566d24ea6def6c4215a7f83b4cdf4370a1ca1d40cb739a82c1e534ecd",
+              "beforeSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+              "afterSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-03",
+              "requestSha256": "9f194f4d5966913adf433ffa4b449ad9058fb8e263b47cd6796470e68484767b",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "6305149eaa42a1e4042d11c334c2dc2a1bfb5c10e75ad4007d1b4a8ebf16b1f2",
+              "beforeSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88",
+              "afterSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 3,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-04",
+              "requestSha256": "7c6ca586bb45d8f91ee977b140c4e0af12460fae597021d1941f13c0869e2ec4",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "appointment_id": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "a908182354fb68252918c87ad550895fbe04707d1daca060c665d74ff9630fc6",
+              "beforeSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-05",
+              "requestSha256": "e68d069a6938c655cd9e2bc63320d8bb7b48f85afebbf1d4b0c8c028aafe7937",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "error_type": "string",
+                "message": "string",
+                "success": "boolean"
+              },
+              "outcome": "REJECTED",
+              "httpSha256": "4ffc4dca899806e15312154551033e9e203011df0dd163870eed7d12ae5aa215",
+              "beforeSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "stepId": "step-06",
+              "requestSha256": "1dba11220e0c3be2a4e469826440d7975772d53e7f47e21bca10415698821aab",
+              "status": 200,
+              "contentType": "application/json; charset=utf-8",
+              "responseShape": {
+                "date": "string",
+                "mechanics": {
+                  "array": [
+                    {
+                      "available_slots": "number",
+                      "booked_count": "number",
+                      "id": "number",
+                      "is_full": "boolean",
+                      "max_daily_slots": "number",
+                      "name": "string",
+                      "phone": "string",
+                      "specialty": "string"
+                    }
+                  ]
+                },
+                "success": "boolean"
+              },
+              "outcome": "SUCCESS",
+              "httpSha256": "ac1e97d61ec83172afbf07a4f58b7f54e668b329a689e3270bb293b6d379ff77",
+              "beforeSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "afterSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+              "database": [
+                {
+                  "name": "appointments",
+                  "columns": [
+                    "id",
+                    "client_name",
+                    "address",
+                    "phone",
+                    "car_license",
+                    "car_engine",
+                    "appointment_date",
+                    "mechanic_id",
+                    "status",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 4,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "mechanics",
+                  "columns": [
+                    "id",
+                    "name",
+                    "specialty",
+                    "phone",
+                    "max_daily_slots",
+                    "created_at"
+                  ],
+                  "primaryKey": [
+                    0
+                  ],
+                  "rows": 5,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                },
+                {
+                  "name": "sqlite_sequence",
+                  "columns": [
+                    "name",
+                    "seq"
+                  ],
+                  "primaryKey": [],
+                  "rows": 2,
+                  "cellTypes": [
+                    "integer",
+                    "text"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "http-status",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "HTTP_STATUS"
+      ]
+    },
+    {
+      "id": "http-field",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "HTTP_JSON_VALUE"
+      ]
+    },
+    {
+      "id": "http-type",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "HTTP_JSON_TYPE"
+      ]
+    },
+    {
+      "id": "http-encoding",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "ERROR"
+      ]
+    },
+    {
+      "id": "http-body",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "ERROR"
+      ]
+    },
+    {
+      "id": "db-ddl",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_SCHEMA"
+      ]
+    },
+    {
+      "id": "db-default",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_SCHEMA"
+      ]
+    },
+    {
+      "id": "db-pk",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_STATE"
+      ]
+    },
+    {
+      "id": "db-index",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_SCHEMA"
+      ]
+    },
+    {
+      "id": "db-sequence",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_STATE"
+      ]
+    },
+    {
+      "id": "db-type",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_STATE"
+      ]
+    },
+    {
+      "id": "db-value",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_STATE"
+      ]
+    },
+    {
+      "id": "db-multiplicity",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DB_STATE"
+      ]
+    },
+    {
+      "id": "step-reorder",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "STEP_ID"
+      ]
+    },
+    {
+      "id": "step-replay",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "STEP_ID"
+      ]
+    },
+    {
+      "id": "dirty-reset",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "DIRTY_RESET"
+      ]
+    },
+    {
+      "id": "corrupt-snapshot",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "ERROR"
+      ]
+    },
+    {
+      "id": "cleanup-failure",
+      "kind": "SYNTHETIC_MUTATION",
+      "effective": true,
+      "codes": [
+        "CLEANUP_ERROR"
+      ]
+    },
+    {
+      "id": "process-exit",
+      "kind": "ISOLATED_PROCESS",
+      "effective": true,
+      "codes": [
+        "COMMAND_START_ERROR"
+      ]
+    },
+    {
+      "id": "process-timeout",
+      "kind": "ISOLATED_PROCESS",
+      "effective": true,
+      "codes": [
+        "WORKER_TIMEOUT"
+      ]
+    },
+    {
+      "id": "process-cancel",
+      "kind": "ISOLATED_PROCESS",
+      "effective": true,
+      "codes": [
+        "WORKER_ABORTED"
+      ]
+    }
+  ],
+  "packSha256": [
+    "53c1479c692567b3cc075c4d2cf7b8da878deb000df912cba20efafc89bf848e",
+    "869191c093e419adfa9827c081ed88cca7cd5ce83e7433265024482f22f7aac5",
+    "f603ce9dae932efb4b5478a01e86240c823a6e34384d9795e3b5c8459ebd64ac"
+  ],
+  "privateVerifiedAfterCleanup": true,
+  "inventory": {
+    "containers": 0,
+    "volumes": 0
+  },
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+  "retention": "EVIDENCE_RETENTION_NOT_CONFIGURED",
+  "phpTsGates": {
+    "G0": "NOT_RUN",
+    "G1": "NOT_RUN",
+    "G2": "NOT_RUN",
+    "G3": "NOT_RUN",
+    "G4": "NOT_RUN"
+  },
+  "targetInterface": "BLOCKED_TARGET_OWNER_API",
+  "product": "NOT_ESTABLISHED"
+}
