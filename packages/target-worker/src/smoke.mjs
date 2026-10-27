@@ -128,6 +128,16 @@ try {
   // No PHP worker is provisioned. Its executable/source/DB/network are absent.
   await exercise("public-write-read-reset", bundle, async (worker) => {
     await delay(300);
+    worker.evidence.unitSmoke = requireSuccess(
+      await worker.cmd([
+        "exec",
+        worker.runtime.name,
+        "node",
+        "/opt/worker/unit-smoke.mjs",
+      ]),
+    );
+    await worker.reset("public-independent-observation");
+    await delay(300);
     const initial = await worker.request("initial", "GET", "/items");
     assert.deepEqual(body(initial), { items: [] });
     const initialDb = await worker.snapshot("initial");
@@ -283,6 +293,8 @@ try {
       mutated(original + injected),
       async (worker) => {
         await delay(300);
+        const alive = await worker.request("alive", "GET", "/absent");
+        assert.equal(alive.status, 404);
         return worker.snapshot("must-fail");
       },
       /ENVIRONMENT_ERROR|OBSERVATION_ERROR/,
