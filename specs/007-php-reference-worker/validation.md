@@ -74,8 +74,31 @@ Successful real Docker execution:
   `60e46ef2ef162df94a80e7075d6b1d6c3a32a3271fd74390c4b91390a56a96a3`.
   This is a verification receipt, not a location or recoverable external archive.
 
-After this tested runtime SHA, changes are documentation/public summary and a
-residual-volume negative unit assertion only; no protected or runtime source changed.
+Final confirmation:
+
+- [Run 40428649395](https://github.com/Meta-Project2026/Metamorph/actions/runs/40428649395)
+  / [job 121940659807](https://github.com/Meta-Project2026/Metamorph/actions/runs/40428649395/job/121940659807),
+  tested SHA `c35a407914ec99ff00c1793bd7f45bbe22dd1a61`: frozen install, lint,
+  typecheck, original65 tests, build, all38 Linux broker tests (zero skips), and
+  complete real Docker proof all exit0. Includes residual-volume cleanup negative.
+- Again six clean attempts/34 actual steps, complete mapped snapshots, exact
+  replay equality and private pack verification after container/volume cleanup.
+- Latest actual image ID:
+  `sha256:ff88040e34cde32af496e70c5ac79981e0864f13bd32d58152e2848b7c725419`.
+  Builds are recorded by actual content ID; no reproducible derived-image claim.
+- Latest sanitized artifact ID12701032648, SHA256
+  `7e1409e1e38a73bde08a6ae73e3285fa2585be3b64033a5b0b7a1116ac6a1aac`.
+  Latest private pack index receipt:
+  `e2d23906c565d40131b77a37b68ef304c04f44f1856029af7227f8ba188c80a0`.
+  `reference-summary.json` now contains this final run's allowlist-verified receipt.
+- [Fast CI 40428702150](https://github.com/Meta-Project2026/Metamorph/actions/runs/40428702150)
+  succeeds separately on Node22 and24 at the same tested SHA.
+- Delivery: [PR #14](https://github.com/Meta-Project2026/Metamorph/pull/14), Refs #11.
+  PR remains open for independent review; no merge or owner ratification performed.
+
+Subsequent commit changes only validation/task documentation and sanitized receipt.
+Runtime source is identical to both successful isolated runs. Final PR HEAD and
+the newest hosted CI result are recorded in the PR description.
 
 NOT_RUN: external encrypted/durable retention, cross-language candidate parity,
 concurrency, clock advance/DST, upstream crash recovery, held-out controls, Meta

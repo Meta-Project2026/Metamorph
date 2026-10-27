@@ -9,7 +9,8 @@
 - [x] Execute Linux owner-only retention controls and real 6-attempt/34-step proof.
 - [x] Record actual frozen install/lint/typecheck/test/build and remote run URLs/SHA.
 - [x] Complete interface handoff and evidence/retention limitations.
-- [ ] Commit, push and open main PR with Refs #11; do not merge.
+- [x] Commit, push and open [PR #14](https://github.com/Meta-Project2026/Metamorph/pull/14)
+  into main with Refs #11; no merge performed.
 
 External retention, target integration, held-out testing and owner acceptance are
 outside this slice and remain NOT_RUN / NOT_APPROVED.
