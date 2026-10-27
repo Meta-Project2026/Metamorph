@@ -25,9 +25,11 @@ jobs:
     timeout-minutes: 20
     env:
       PILOT_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-      PILOT_PRIVATE_PARENT: ${{ runner.temp }}/mmp008a-private-${{ github.run_id }}-${{ github.run_attempt }}
-      PILOT_PUBLIC_OUTPUT: ${{ runner.temp }}/mmp008a-public-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
+      - name: Set isolated output directories
+        run: |
+          echo "PILOT_PRIVATE_PARENT=$RUNNER_TEMP/mmp008a-private-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
+          echo "PILOT_PUBLIC_OUTPUT=$RUNNER_TEMP/mmp008a-public-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
