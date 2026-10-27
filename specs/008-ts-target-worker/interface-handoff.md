@@ -24,7 +24,8 @@ Stable header selection is left to Oracle; raw headers remain retained.
 in a separate container and returns format `target-worker-sqlite-v1-proposed`,
 runtime/volume identity, SQLite version, complete schema SQL, table_xinfo metadata
 and typed rows. SQLite INTEGER is a decimal string (BigInt, including sequence),
-REAL a number, TEXT a string, BLOB hex, NULL explicitly tagged. Hidden/generated
+REAL a finite number (nonfinite values reject rather than silently becoming
+JSON null), TEXT a string, BLOB hex, NULL explicitly tagged. Hidden/generated
 columns and PK ordinals remain in metadata. `sqlite_sequence` is included.
 Rows are observed in SQLite order: this proposal is **not** Oracle's
 `sqlite-logical-v1`. Independent Oracle adaptation must preserve PK/full-row

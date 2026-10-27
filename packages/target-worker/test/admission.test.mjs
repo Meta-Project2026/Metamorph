@@ -3,6 +3,7 @@ import { link, mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { encode } from "../runtime/sqlite-value.mjs";
 import { admitDirectory, sha256, validateBundle } from "../src/admission.mjs";
 import {
   parseObservation,
@@ -14,6 +15,18 @@ const source = (path = "src/main.ts", content = "export const n = 1;") => ({
   path,
   content,
   sha256: sha256(content),
+});
+test("SQLite scalar serialization never silently turns nonfinite REAL into null", () => {
+  assert.deepEqual(encode(9223372036854775807n), {
+    type: "integer",
+    value: "9223372036854775807",
+  });
+  assert.deepEqual(encode(new Uint8Array([0, 255])), {
+    type: "blob",
+    value: "00ff",
+  });
+  for (const invalid of [Infinity, -Infinity, NaN, undefined, {}])
+    assert.throws(() => encode(invalid), /UNREPRESENTABLE_SQLITE_VALUE/);
 });
 test("canonical source hashes bind exact bytes and reject wrong hash", () => {
   const bundle = validateBundle([source()]);

@@ -43,6 +43,12 @@ runtime policy/IDs, notices, clock samples and cleanup.
 typed state, rejection immutability, isolation flags and cleanup; this is an
 implementation-author audit, not independent owner approval.
 
+Final source adds fail-closed serialization for nonfinite SQLite REAL: no silent
+JSON null substitution. A seventh trusted boundary test passes locally; final
+replay adds a twentieth runtime case using a real isolated SQLite1e999 value.
+Final HEAD/7-test/20-case receipts are reported in PR #13, separately from the
+19-case qualified-source evidence retained here.
+
 ## G1 and scoped G0
 
 Actual isolated typecheck/build exits 0; trusted unit-smoke inside candidate

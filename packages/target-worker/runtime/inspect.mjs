@@ -2,19 +2,10 @@
 import { lstatSync, realpathSync } from "node:fs";
 import { request } from "node:http";
 import { DatabaseSync } from "node:sqlite";
+import { encode } from "./sqlite-value.mjs";
 
 const action = JSON.parse(process.argv[2]);
 const quote = (s) => `"${s.replaceAll('"', '""')}"`;
-const encode = (v) =>
-  v === null
-    ? { type: "null" }
-    : typeof v === "bigint"
-      ? { type: "integer", value: String(v) }
-      : typeof v === "number"
-        ? { type: "real", value: v }
-        : typeof v === "string"
-          ? { type: "text", value: v }
-          : { type: "blob", value: Buffer.from(v).toString("hex") };
 if (action.kind === "http") {
   if (
     !/^(GET|POST)$/.test(action.method) ||

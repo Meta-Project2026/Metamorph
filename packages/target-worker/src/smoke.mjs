@@ -360,6 +360,29 @@ try {
       return snapshot;
     },
   );
+  await exercise(
+    "nonfinite-sqlite-rejected",
+    mutated(
+      original +
+        '\ndb.exec("CREATE TABLE nonfinite(value REAL); INSERT INTO nonfinite VALUES(1e999)");',
+    ),
+    async (worker) => {
+      await delay(300);
+      assert.equal(
+        (await worker.request("alive", "GET", "/absent")).status,
+        404,
+      );
+      return worker.snapshot("nonfinite");
+    },
+    /ENVIRONMENT_ERROR/,
+    (evidence) => {
+      assert.ok(
+        evidence.commands.some((receipt) =>
+          receipt.stderr.includes("UNREPRESENTABLE_SQLITE_VALUE"),
+        ),
+      );
+    },
+  );
   report.G1 = "PASS_SCOPED_ORIGINAL_FIXTURE";
   report.G0Scoped = "PASS_SELECTED_PUBLIC_ROUTES_WITHOUT_PHP";
   for (const mode of ["real", "fixed-experiment", "drift-control"]) {
