@@ -317,6 +317,11 @@ try {
       "DIRTY_TARGET_RESET",
       "EVIDENCE_ERROR",
       "PILOT_ERROR",
+      "STEP_IDENTITY",
+      "RESET_SCHEDULE",
+      "INCOMPLETE_SCENARIO",
+      "PRIVATE_LIMIT",
+      "TARGET_OPERATION_ERROR",
     ]);
     atomicJson(
       join(output, "error.json"),
@@ -325,6 +330,22 @@ try {
         code: safeCodes.has(failure.code) ? failure.code : "PILOT_ERROR",
         phase: failure.phase,
         cleanup,
+        targetOperationCode: safeCodes.has(target?.failure?.operationCode)
+          ? target.failure.operationCode
+          : target?.failure
+            ? "TARGET_OPERATION_ERROR"
+            : "NONE",
+        targetCleanupCode:
+          target?.failure?.cleanupCode === "CLEANUP_ERROR"
+            ? "CLEANUP_ERROR"
+            : "NONE",
+        gates: result
+          ? result.gateResults.map((gate) => ({
+              gate: gate.gate,
+              verdict: gate.verdict,
+              executedCount: gate.executedTestIds.length,
+            }))
+          : [],
         externalRetention: "EXTERNAL_RETENTION_NOT_RUN",
       },
       0o644,

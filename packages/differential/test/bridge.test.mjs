@@ -416,6 +416,20 @@ test("schedule rejects missing/duplicate/unknown/unordered scenario or changed p
   ])
     assert.throws(() => checkedScenarios(value), /SCENARIO_SCHEDULE/);
 });
+test("accepted target transport rejects actual workshop dotted paths; no route rewrite is attempted", async () => {
+  const boundary = { operation: async (fn) => fn() };
+  await assert.rejects(
+    TargetWorker.prototype.request.call(
+      boundary,
+      "step-01",
+      "POST",
+      "/api.php?action=book",
+      SCENARIOS[0].requests[0].body,
+      signal(),
+    ),
+    /ADMISSION_REJECTED/,
+  );
+});
 test("close cancels and joins an in-flight target operation even with an expired caller signal", async () => {
   const w = fakeWorker();
   const a = adapter(w);

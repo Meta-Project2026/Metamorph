@@ -2,6 +2,7 @@ import {
   chmodSync,
   closeSync,
   constants,
+  existsSync,
   fstatSync,
   lstatSync,
   mkdirSync,
@@ -124,8 +125,8 @@ export function retainOracle(result, oracleParent, pack) {
   return {
     gates,
     manifest,
-    initialDiffs: JSON.parse(
-      readFileSync(join(root, "diffs/0-initial.json"), "utf8"),
-    ),
+    initialDiffs: existsSync(join(root, "diffs/0-initial.json"))
+      ? JSON.parse(readFileSync(join(root, "diffs/0-initial.json"), "utf8"))
+      : [],
   };
 }

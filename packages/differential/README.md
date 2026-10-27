@@ -41,6 +41,10 @@ method/path/body/step and trusted inspector identities. Snapshots use the existi
 independent inspector, not an app `/snapshot` endpoint. Raw inspector JSON is also
 checked before lossy duplicate-key parsing; `x-request-id` is service identity,
 while the existing stable business header comparison remains unchanged.
+Current target path admission also excludes `.` in `/api.php`, and its HTTP client
+forces application/json instead of workshop form-urlencoded. Initial mismatch
+skips those requests in this pilot; future HTTP parity needs a two-owner transport
+proposal. This bridge forwards exact inputs and must fail instead of rewriting them.
 
 Target sqlite wire is validated before a proven `mapPhpSnapshot` conversion:
 `tbl`→`tbl_name`→`table`, null adds then removes its wire value, all other scalar
