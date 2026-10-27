@@ -132,8 +132,20 @@ zero skips) and `pnpm build` each exited0. Installed PyYAML6.0.3 parsed the
 workflow and confirmed only the intended event/identity changes against pre-R1;
 all remaining parsed workflow structure is identical. `git diff --check` exited0;
 only the workflow, this validation and tasks.md changed. GitHub contents API for
-the workflow on `main` returned HTTP404; final dispatch outcome is tracked below
-in the PR handoff. No host Docker/PHP/TS fixture execution was performed for R1.
+the workflow on `main` returned HTTP404, but actual `gh workflow run` was accepted
+(exit0): manual dispatch IS available. No registration blocker is asserted.
+No host Docker/PHP/TS fixture execution was performed for R1.
+
+R1 policy commit: `245d22e1b1d08c926cc229b202f1d0abdbdee66f`, parent
+`ed6b3123059c7c697a162a0aa4ae6b8bb9384d3f`. Runtime source unchanged.
+[Fast CI40558158063](https://github.com/Meta-Project2026/Metamorph/actions/runs/40558158063)
+passed Node22 (job122379691512) and Node24 (job122379690997) on that SHA.
+[Manual run40558188856](https://github.com/Meta-Project2026/Metamorph/actions/runs/40558188856)
+(job122379801978) records `event=workflow_dispatch` and that exact head SHA;
+source identity step passed. At this documentation update the pilot is still
+IN_PROGRESS, so this is not a success claim. This receipt-only documentation
+commit changes no workflow/runtime code. Its exact final SHA, final Fast CI and
+exact-final-HEAD manual-run outcome belong to the post-push PR18 handoff.
 
 Known boundary: target regular state volume lacks enforced hard byte quota;
 16MiB inspector admission is only a parser limit. Any DoD interpretation requiring
