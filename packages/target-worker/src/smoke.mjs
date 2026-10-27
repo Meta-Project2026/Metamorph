@@ -11,6 +11,7 @@ import {
   sandboxArgs,
   TargetWorker,
 } from "./controller.mjs";
+import { buildTrustedRuntime } from "./runtime-broker.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const evidenceRoot = resolve(
@@ -42,18 +43,30 @@ const report = {
 await mkdir(evidenceRoot, { recursive: true });
 const save = (name, data) =>
   writeFile(join(evidenceRoot, name), `${JSON.stringify(data, null, 2)}\n`);
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const body = (http) =>
   JSON.parse(Buffer.from(http.bodyBase64, "base64").toString());
 let image;
+let runtime;
 let caseIndex = 0;
-async function exercise(id, bundle, operation, expectedError, runtimeCheck) {
-  const worker = new TargetWorker(image, bundle);
+async function exercise(
+  id,
+  bundle,
+  operation,
+  expectedError,
+  runtimeCheck,
+  options = {},
+) {
+  const worker = new TargetWorker(
+    runtime,
+    bundle,
+    "real",
+    options.workerOptions,
+  );
   let error = null;
   let cleanupError = null;
   let observation;
   try {
-    await worker.provision();
+    await worker.provision(options.signal);
     observation = await operation(worker);
   } catch (caught) {
     error = caught.message;
@@ -86,25 +99,13 @@ async function exercise(id, bundle, operation, expectedError, runtimeCheck) {
 }
 try {
   requireSuccess(await command(["info"], { timeoutMs: 15000 }));
-  const build = await command(
-    [
-      "build",
-      "--pull",
-      "--tag",
-      "metamorph-target-worker:mmp007",
-      join(packageRoot, "runtime"),
-    ],
-    { timeoutMs: 240000 },
+  runtime = await buildTrustedRuntime(save);
+  image = runtime.imageId;
+  report.image = runtime.provenance;
+  report.hostNode = process.version;
+  report.docker = requireSuccess(
+    await command(["version", "--format", "{{json .}}"]),
   );
-  await save("image-build.json", build);
-  requireSuccess(build);
-  const inspected = JSON.parse(
-    requireSuccess(
-      await command(["image", "inspect", "metamorph-target-worker:mmp007"]),
-    ).stdout,
-  )[0];
-  image = inspected.Id;
-  report.image = inspected;
   const noticeName = `mmp007-notices-${process.pid}`;
   try {
     const notices = requireSuccess(
@@ -127,7 +128,6 @@ try {
     validateBundle([{ path: "src/main.ts", content, sha256: sha256(content) }]);
   // No PHP worker is provisioned. Its executable/source/DB/network are absent.
   await exercise("public-write-read-reset", bundle, async (worker) => {
-    await delay(300);
     worker.evidence.unitSmoke = requireSuccess(
       await worker.cmd([
         "exec",
@@ -137,7 +137,6 @@ try {
       ]),
     );
     await worker.reset("public-independent-observation");
-    await delay(300);
     const initial = await worker.request("initial", "GET", "/items");
     assert.deepEqual(body(initial), { items: [] });
     const initialDb = await worker.snapshot("initial");
@@ -175,7 +174,6 @@ try {
     assert.equal(missing.status, 404);
     const priorId = db.runtimeId;
     await worker.reset("public-fresh");
-    await delay(300);
     const fresh = await worker.request("fresh", "GET", "/items");
     assert.deepEqual(body(fresh), { items: [] });
     assert.notEqual(worker.evidence.runtimeInspect.Id, priorId);
@@ -228,12 +226,14 @@ try {
       id,
       mutated(source),
       async (worker) => {
-        await delay(1200);
         return worker.request("must-fail", "GET", "/items");
       },
-      /ENVIRONMENT_ERROR|TIMEOUT/,
+      /RUNTIME_FAILED|TIMEOUT/,
       (evidence) => {
-        const execution = evidence.cleanup.at(-1).execution;
+        const execution = evidence.cleanup.findLast(
+          (entry) => entry.execution,
+        )?.execution;
+        assert.ok(execution, `${id}: missing subprocess receipt`);
         assert.notEqual(
           execution.exitCode,
           0,
@@ -266,10 +266,17 @@ try {
     },
     /TIMEOUT/,
   );
+  await exercise("bounded-cli-wait", bundle, async (worker) => {
+    const timed = await worker.cmd(["wait", worker.runtime.name], {
+      timeoutMs: 750,
+    });
+    assert.equal(timed.timedOut, true);
+    return timed;
+  });
   await exercise("cancel-reap", bundle, async (worker) => {
     const cancelled = await worker.cmd(
       ["exec", worker.runtime.name, "sleep", "30"],
-      { signal: AbortSignal.timeout(200) },
+      { signal: AbortSignal.timeout(200), background: true },
     );
     assert.equal(cancelled.cancelled, true);
     // Killing the CLI alone is insufficient; close below reaps the whole container.
@@ -281,15 +288,12 @@ try {
       'import { createServer } from "node:net"; createServer(socket => socket.end("not-http\\r\\n")).listen(3000, "127.0.0.1");',
     ),
     async (worker) => {
-      await delay(300);
       return worker.request("malformed", "GET", "/items");
     },
-    /ENVIRONMENT_ERROR/,
+    /RUNTIME_FAILED/,
     (evidence) => {
       assert.ok(
-        evidence.commands.some((receipt) =>
-          /HPE_INVALID_CONSTANT|Parse Error/.test(receipt.stderr),
-        ),
+        evidence.readiness.some((probe) => probe.reason === "MALFORMED_HTTP"),
       );
     },
   );
@@ -308,12 +312,11 @@ try {
       id,
       mutated(original + injected),
       async (worker) => {
-        await delay(300);
         const alive = await worker.request("alive", "GET", "/absent");
         assert.equal(alive.status, 404);
         return worker.snapshot("must-fail");
       },
-      /ENVIRONMENT_ERROR|OBSERVATION_ERROR/,
+      /OBSERVATION_ERROR/,
     );
   await exercise(
     "ignore-candidate-snapshot-endpoint",
@@ -324,7 +327,6 @@ try {
       ),
     ),
     async (worker) => {
-      await delay(300);
       const forged = await worker.request("forged", "GET", "/snapshot");
       assert.deepEqual(body(forged), { verdict: "PASS", tables: [] });
       await worker.request(
@@ -345,7 +347,6 @@ try {
         "\ndb.exec(\"CREATE TABLE primitives(id INTEGER PRIMARY KEY, big INTEGER, bytes BLOB, fraction REAL, empty TEXT); INSERT INTO primitives VALUES(1,9223372036854775807,x'00ff',1.25,NULL)\");",
     ),
     async (worker) => {
-      await delay(300);
       const snapshot = await worker.snapshot("typed");
       assert.deepEqual(
         snapshot.tables.find((t) => t.name === "primitives").rows[0],
@@ -367,20 +368,146 @@ try {
         '\ndb.exec("CREATE TABLE nonfinite(value REAL); INSERT INTO nonfinite VALUES(1e999)");',
     ),
     async (worker) => {
-      await delay(300);
       assert.equal(
         (await worker.request("alive", "GET", "/absent")).status,
         404,
       );
       return worker.snapshot("nonfinite");
     },
-    /ENVIRONMENT_ERROR/,
+    /OBSERVATION_ERROR/,
     (evidence) => {
       assert.ok(
         evidence.commands.some((receipt) =>
           receipt.stderr.includes("UNREPRESENTABLE_SQLITE_VALUE"),
         ),
       );
+    },
+  );
+  await exercise(
+    "slow-startup-no-client-sleep",
+    mutated(
+      original.replace(
+        'server.listen(3000, "127.0.0.1");',
+        'setTimeout(() => server.listen(3000, "127.0.0.1"), 1800);',
+      ),
+    ),
+    async (worker) => {
+      assert.deepEqual(
+        body(await worker.request("immediate", "GET", "/items")),
+        { items: [] },
+      );
+    },
+  );
+  for (const [id, source, expected] of [
+    ["never-listen", "setInterval(() => {}, 1000);", /TIMEOUT/],
+    [
+      "wrong-port",
+      original.replace("server.listen(3000,", "server.listen(3001,"),
+      /TIMEOUT/,
+    ],
+    [
+      "wrong-response",
+      original.replace(
+        "res.end(\n    JSON.stringify({",
+        "res.statusCode = 503; res.end(\n    JSON.stringify({",
+      ),
+      /RUNTIME_FAILED/,
+    ],
+    [
+      "hung-http",
+      'import { createServer } from "node:net"; createServer(() => {}).listen(3000, "127.0.0.1");',
+      /TIMEOUT/,
+    ],
+  ])
+    await exercise(id, mutated(source), async () => {}, expected);
+  await exercise("eight-resets-resource-inventory", bundle, async (worker) => {
+    worker.evidence.resetInventories = [];
+    for (let index = 0; index < 8; index++) {
+      const previousId = worker.runtime.id;
+      await worker.reset(`resource-${index}`);
+      assert.notEqual(worker.runtime.id, previousId);
+      const containers = requireSuccess(
+        await command([
+          "container",
+          "ls",
+          "--all",
+          "--filter",
+          "label=metamorph.target-worker=true",
+          "--format",
+          "{{.Names}}",
+        ]),
+      );
+      const volumes = requireSuccess(
+        await command([
+          "volume",
+          "ls",
+          "--filter",
+          "label=metamorph.target-worker=true",
+          "--format",
+          "{{.Name}}",
+        ]),
+      );
+      worker.evidence.resetInventories.push({ containers, volumes });
+      assert.deepEqual(
+        containers.stdout
+          .trim()
+          .split(/\s+/)
+          .filter((n) => n.startsWith(worker.runId)),
+        [worker.runtime.name],
+      );
+      assert.deepEqual(
+        volumes.stdout
+          .trim()
+          .split(/\s+/)
+          .filter((n) => n.startsWith(worker.runId)),
+        [worker.runtime.volume],
+      );
+      assert.equal(
+        (await worker.request("immediate", "GET", "/items")).status,
+        200,
+      );
+    }
+  });
+  await exercise(
+    "aggregate-deadline-real-monotonic",
+    bundle,
+    async (worker) => {
+      const deadline = worker.endsAt;
+      for (let index = 0; index < 16; index++) {
+        await worker.reset(`budget-${index}`);
+        assert.equal(worker.endsAt, deadline);
+      }
+    },
+    /TIMEOUT/,
+    (evidence) => {
+      assert.equal(evidence.operationError, "TIMEOUT");
+      assert.equal(evidence.cleanupVerified, true);
+    },
+    { workerOptions: { limits: { lifetimeMs: 12000 } } },
+  );
+  const cancellation = new AbortController();
+  await exercise(
+    "abort-pending-readiness",
+    mutated(
+      original.replace(
+        'server.listen(3000, "127.0.0.1");',
+        'setTimeout(() => server.listen(3000, "127.0.0.1"), 9000);',
+      ),
+    ),
+    async () => {},
+    /CANCELLED/,
+    undefined,
+    {
+      signal: cancellation.signal,
+      workerOptions: {
+        trustedTest: {
+          command: (args, config) => {
+            if (args.includes("/opt/worker/launch.mjs"))
+              setTimeout(() => cancellation.abort(), 150);
+            return command(args, config);
+          },
+        },
+      },
     },
   );
   report.G1 = "PASS_SCOPED_ORIGINAL_FIXTURE";

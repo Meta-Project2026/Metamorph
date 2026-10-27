@@ -6,7 +6,90 @@ import { encode } from "./sqlite-value.mjs";
 
 const action = JSON.parse(process.argv[2]);
 const quote = (s) => `"${s.replaceAll('"', '""')}"`;
-if (action.kind === "http") {
+if (action.kind === "readiness") {
+  if (
+    !/^[a-f0-9]{64}$/.test(action.runtimeId) ||
+    !/^[A-Za-z0-9:_-]{1,100}$/.test(action.scenarioId) ||
+    !/^[a-f0-9-]{36}$/.test(action.requestId)
+  )
+    throw new Error("READINESS_IDENTITY");
+  // Fixed read-only public route. Identity is supplied by the trusted controller,
+  // echoed by the independent inspector, never accepted from candidate JSON.
+  const result = await new Promise((resolve) => {
+    let settled = false;
+    const finish = (value) => {
+      if (!settled) {
+        settled = true;
+        clearTimeout(deadline);
+        resolve(value);
+      }
+    };
+    const req = request(
+      {
+        host: "127.0.0.1",
+        port: 3000,
+        method: "GET",
+        path: "/items",
+        headers: { "x-request-id": action.requestId },
+      },
+      (res) => {
+        const chunks = [];
+        let size = 0;
+        res.on("data", (chunk) => {
+          size += chunk.length;
+          if (size > 256 * 1024) {
+            finish({ ready: false, reason: "WRONG_RESPONSE" });
+            res.destroy();
+          } else chunks.push(chunk);
+        });
+        res.on("error", () =>
+          finish({ ready: false, reason: "MALFORMED_HTTP" }),
+        );
+        res.on("end", () => {
+          let payload;
+          try {
+            payload = JSON.parse(Buffer.concat(chunks).toString());
+          } catch {}
+          const ready =
+            res.statusCode === 200 &&
+            res.headers["x-request-id"] === action.requestId &&
+            payload !== null &&
+            typeof payload === "object" &&
+            Array.isArray(payload.items);
+          finish({
+            ready,
+            reason: ready ? "HTTP_READY" : "WRONG_RESPONSE",
+            status: res.statusCode,
+          });
+        });
+      },
+    );
+    // Absolute monotonic real timer also bounds a peer that trickles bytes forever.
+    const deadline = setTimeout(() => {
+      finish({ ready: false, reason: "HTTP_TIMEOUT" });
+      req.destroy();
+    }, 1500);
+    req.on("error", (error) =>
+      finish({
+        ready: false,
+        reason:
+          error.code === "ECONNREFUSED"
+            ? "CONNECTION_REFUSED"
+            : "MALFORMED_HTTP",
+      }),
+    );
+    req.end();
+  });
+  console.log(
+    JSON.stringify({
+      ...result,
+      kind: "readiness",
+      runtimeId: action.runtimeId,
+      scenarioId: action.scenarioId,
+      requestId: action.requestId,
+    }),
+  );
+} else if (action.kind === "http") {
   if (
     !/^(GET|POST)$/.test(action.method) ||
     !/^\/[a-zA-Z0-9/?=&_-]*$/.test(action.path)

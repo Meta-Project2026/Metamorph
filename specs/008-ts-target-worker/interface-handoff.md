@@ -5,8 +5,10 @@ benchmark or implementation of `verifyPair()` on PHP/TS. Oracle remains independ
 Concrete local type sketch: `packages/target-worker/src/boundary.ts`. Executable
 controller: `src/controller.mjs`; it does not import Agent/Oracle/shared contracts.
 
-`new TargetWorker(imageId, bundle, clock)` accepts a trusted local image identity
-and `validateBundle()` result. `provision()` compiles and returns run ID, candidate
+`new TargetWorker(runtime, bundle, clock)` requires an in-process capability from
+`buildTrustedRuntime()` and a `validateBundle()` result. Broker verification binds
+the actual image ID, pinned recipe/lockfile/runtime bytes and measured toolchain.
+This trusts the host and Docker daemon; it is not cryptographic attestation. `provision()` compiles and returns run ID, candidate
 SHA, runtime container ID, policy and initial scenario identity. `reset(scenarioId)`
 destroys the prior runtime and provisions a fresh uniquely named DB volume and
 runtime from the same built bytes. It never requests candidate reset semantics.
@@ -34,19 +36,27 @@ Reject missing/corrupt/linked DBs, virtual tables, >128 schema entries/columns o
 >10000 rows per table; total command output ≤4 MiB. Candidate-chosen DBs are
 untrusted parser input, so parsing itself is isolated and time/memory bounded.
 
-`close()` stops/reaps execution, captures actual docker-exec result/container
-state, force-removes all tracked containers and volumes, and reports cleanup.
-`kill()` hard-kills runtime then closes. Compilation deadline 35s (each compiler
-12s); inspector command 15s / HTTP 1.5s; runtime lifetime 180s, container PID1
-expires at 240s; job 20min. CPU1, RAM/swap256MiB, PIDs64, work64MiB/tmp16MiB.
-Host deadlines use real timers, outside fixed-wall candidate context.
+R1 lifecycle/error policy supersedes the original implementation. See
+[R1 handoff](r1-handoff.md) and [R1 validation](r1-validation.md). The first operation
+starts a single monotonic 180s work deadline. Startup 10s, build 35s, operation
+15s; total resets 16 including initial provision, operations 128. Trusted limits
+may only lower these values. Cleanup gets 10s per attempt, without renewing work.
+Reset waits for independent HTTP readiness tied to runtime/scenario/request IDs.
+Previous resources are removed and Docker inventory verified before new creation.
 
-Errors: ADMISSION_REJECTED, BUILD_FAILED, RUNTIME_FAILED, TIMEOUT, CANCELLED,
-OBSERVATION_ERROR, CLEANUP_ERROR, ENVIRONMENT_ERROR. Current failed Docker
-inspections use ENVIRONMENT_ERROR with raw trusted receipts distinguishing
-startup/refusal/parser failure; a future adapter maps these to ERROR/INCONCLUSIVE,
-never fabricated PASS. Cleanup faults override acceptance. A negative control
-being correctly rejected is not the negative candidate receiving PASS.
+Concurrent operations reject as `RUNTIME_FAILED: BUSY`. `close()`/`kill()` cancel
+and join active work, stop/force-remove resources, retain exec/state receipts,
+remove volumes and check Docker inventory. Repeated successful close is safe;
+failed cleanup can retry removal, but the fault stays sticky. Failed workers
+cannot reset. CPU1, RAM/swap256MiB, PIDs64, work64MiB/tmp16MiB remain unchanged.
+
+Errors retain the same owner-scoped taxonomy: ADMISSION_REJECTED, BUILD_FAILED,
+RUNTIME_FAILED, TIMEOUT, CANCELLED, OBSERVATION_ERROR, CLEANUP_ERROR,
+ENVIRONMENT_ERROR. Compiler exit2 confirms BUILD_FAILED; confirmed launch exit
+or invalid readiness means RUNTIME_FAILED; independent parser exit1 means
+OBSERVATION_ERROR; Docker/host failures mean ENVIRONMENT_ERROR. Receipts determine
+the category, without stderr guessing. Cleanup failure overrides acceptance.
+No shared DTO or Oracle adapter was changed or approved.
 
 Clock modes: real; experimental stopped wall `2026-10-27 12:00:00 UTC` through
 libfaketime with real monotonic timers. Actual Date/Date.now/SQLite/performance/hrtime

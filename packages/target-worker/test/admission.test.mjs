@@ -169,8 +169,10 @@ test("fixed policy has no host mounts, ports, privileges or mutable candidate fl
 });
 test("cleanup timeout fault cannot become PASS and force removal still runs", async () => {
   const worker = new TargetWorker(
-    `sha256:${"a".repeat(64)}`,
+    { imageId: `sha256:${"a".repeat(64)}` },
     validateBundle([source()]),
+    "real",
+    { trustedTest: { command: async () => ({ exitCode: 0, stdout: "" }) } },
   );
   worker.runtime = { name: "fault-runtime" };
   worker.containers.add("fault-runtime");
