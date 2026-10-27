@@ -482,6 +482,19 @@ test("transport reports residual container as cleanup ERROR and retains name for
   await assert.rejects(t.close(), /CLEANUP_ERROR/);
   assert.equal(t.app, "unit-residual");
 });
+test("transport reports residual DB volume as cleanup ERROR and retains name for retry", async () => {
+  const t = Object.assign(Object.create(DockerReferenceTransport.prototype), {
+    volume: "unit-residual-volume",
+    inspectors: new Set(),
+    command: async () => ({
+      stdout: Buffer.from("unit-residual-volume\n"),
+      stderr: Buffer.alloc(0),
+      elapsedMs: 0,
+    }),
+  });
+  await assert.rejects(t.close(), /CLEANUP_ERROR/);
+  assert.equal(t.volume, "unit-residual-volume");
+});
 for (const [label, code, timeout, aborted] of [
   ["crash", "process.exit(7)", 2000, false],
   ["hang", "setInterval(()=>{},1000)", 150, false],

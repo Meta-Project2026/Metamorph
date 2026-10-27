@@ -18,12 +18,16 @@ REFERENCE_HEAD_SHA=$(git rev-parse HEAD) node packages/oracle/reference/proof.mj
 
 No upstream PHP/SQLite runs on the host. The host opens only an original trusted
 synthetic fixture using Node SQLite to test conversion against the independent
-PHP inspector. Actual upstream state is copied as opaque bounded tar into the
-inspector sandbox. PHP server and inspector are distinct containers; neither has
+PHP inspector. Each reset gets a unique Docker-managed local tmpfs volume
+(8MiB, uid/gid65534, mode0700, noexec/nosuid/nodev). While the entire app cgroup
+is paused, inspector sees that volume read-only, rejects links/unexpected files,
+and copies DB/journal/WAL into its own tmpfs before a consistent transaction.
+PHP server and inspector are distinct containers; neither has
 private evidence, credentials, Docker socket, workspace or candidate mounts.
 The archive bind is the app's only host file. Inspector binds its own code only.
 All execution is UID65534, read-only root, offline loopback, cap-drop ALL,
-no-new-privileges, 1 CPU/256MiB/64 PIDs, 32MiB work + 8MiB temp, no Docker logs.
+no-new-privileges, 1 CPU/256MiB/64 PIDs, 32MiB work + 8MiB temp + 8MiB DB,
+no Docker logs. Cleanup removes and verifies absence of both containers and DB volume.
 App has a 600s wall watchdog; inspector 12s; broker commands default15s, cleanup5s.
 Pull/build bounds are180/300s; driver budget12min; manual job20min.
 
@@ -46,6 +50,10 @@ synthetic personal-looking booking data; never attach it to public issues/PRs.
 survive container teardown; Actions files do not survive runner destruction.
 There is no configured durable external service, encryption recipient or upload.
 The public hash alone cannot recover raw observations.
+
+Docker `cp` cannot read container tmpfs; the DB transport uses Docker's local
+tmpfs volume option instead. See [Docker copy corner cases](https://docs.docker.com/reference/cli/docker/container/cp/)
+and [local tmpfs volume options](https://docs.docker.com/reference/cli/docker/volume/create/).
 
 Use existing manual `php74-qualification.yml` with `proof=reference` and the exact
 feature ref. `proof=qualification` preserves the MMP-005 entrypoint. Ordinary Fast

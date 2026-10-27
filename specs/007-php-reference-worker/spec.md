@@ -1,6 +1,7 @@
 # MMP-006: isolated PHP reference worker
 
-Status: implementation under validation; benchmark proposal only. Refs #11.
+Status: reference-only implementation and isolated replay validated; external
+retention unconfigured; benchmark proposal only. Refs #11.
 Base: `07f37fc24f37971aa2254cfcd0024e1b33b53192`. Owner: Ilia.
 The root constitution remains PROPOSED / PENDING OWNER RATIFICATION.
 

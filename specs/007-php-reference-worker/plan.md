@@ -7,9 +7,12 @@
 3. App: UID 65534, root read-only, network none, capabilities dropped, no-new-
    privileges, CPU/RAM/PID/tmpfs/wall deadlines. Bind only public verified archive.
    Bootstrap genuine upstream API; execute requests through trusted loopback client.
-4. Pause app, Docker-copy state as a bounded tar stream, unpause in finally.
-   Extract only inside a separate similarly bounded inspector container; bind only
-   inspector code there. Never parse third-party DB or extract its tar on host.
+4. Use a unique Docker-managed 8MiB local tmpfs DB volume per reset. Pause app,
+   mount DB read-only into a separate inspector and copy it into inspector tmpfs;
+   unpause in finally. Reject symlinks/unexpected state files. Bind inspector code
+   only there. Never parse third-party DB or extract its tar on host. Verify that
+   containers AND the DB volume have been removed on cleanup. Docker cp from
+   tmpfs is unsupported; that attempted transport was removed after a real failure.
 5. Inspector runs a consistent query-only SQLite transaction, returns hashed
    legacy bytes plus runtime/clock checks. Strict mapper produces canonical existing
    sqlite-logical-v1; no comparator normalization changes.
