@@ -293,6 +293,8 @@ export class TargetWorker {
           ...sandboxArgs(name, network),
           "--user",
           "10002:10002",
+          "--workdir",
+          "/tmp",
           ...mounts,
           this.image,
           "node",
