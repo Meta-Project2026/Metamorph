@@ -122,10 +122,21 @@ try {
         observed.code === (mode === "aux" ? "ENOSPC" : "SQLITE_FULL"),
       "QUOTA_CONTROL",
     );
-    await worker.snapshot("after-quota", workSignal);
+    const dirty = await worker.snapshot("after-quota", workSignal);
+    requireCheck(
+      dirty.tables.some(
+        (t) => t.name === "quota_reset_marker" && t.rows.length === 1,
+      ),
+      "DIRTY_CONTROL_MISSING",
+    );
     await worker.reset("quota-clean-reset", workSignal);
     requireCheck(worker.endsAt === deadline, "LIFETIME_RENEWED");
-    await worker.snapshot("after-clean-reset", workSignal);
+    const fresh = await worker.snapshot("after-clean-reset", workSignal);
+    requireCheck(
+      !fresh.tables.some((t) => t.name === "quota_reset_marker") &&
+        fresh.tables.find((t) => t.name === "appointments")?.rows.length === 0,
+      "STATE_CARRYOVER",
+    );
     await worker.close();
     record("quota-worker", worker.evidence);
     requireCheck(worker.evidence.cleanupVerified, "CLEANUP_ERROR");
@@ -297,6 +308,9 @@ try {
       "HEAD_IDENTITY",
       "QUOTA_CONTROL",
       "LIFETIME_RENEWED",
+      "DIRTY_CONTROL_MISSING",
+      "STATE_CARRYOVER",
+      "WORKSHOP_CONTROL",
       "CLEANUP_ERROR",
       "BUILD_FAILED",
       "ENVIRONMENT_ERROR",

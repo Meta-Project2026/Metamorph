@@ -59,6 +59,16 @@ for (const name of mode === "aux"
     if (e.code !== "ENOENT") throw e;
   }
 }
+// Persist a real dirty-state marker; the driver must independently observe it
+// before reset and prove that it is absent from the fresh volume afterwards.
+const marker = new DatabaseSync("/state/target.sqlite");
+try {
+  marker.exec(
+    "CREATE TABLE quota_reset_marker(value TEXT); INSERT INTO quota_reset_marker VALUES ('original-quota-control')",
+  );
+} finally {
+  marker.close();
+}
 console.log(
   JSON.stringify({
     mode,
