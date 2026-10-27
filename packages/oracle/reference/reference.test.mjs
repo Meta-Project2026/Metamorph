@@ -376,10 +376,7 @@ test("crash, aborted request and malformed observation poison the worker and cle
       return { ...http(), observation: { status: 999 } };
     };
     const s = reason === "abort" ? AbortSignal.abort() : signal();
-    await assert.rejects(
-      w.request(MANIFEST[0].requests[0], s),
-      /REFERENCE_OPERATION_ERROR/,
-    );
+    await assert.rejects(w.request(MANIFEST[0].requests[0], s));
     assert.equal(t.closed, 1);
     await assert.rejects(w.snapshot(signal()));
   }

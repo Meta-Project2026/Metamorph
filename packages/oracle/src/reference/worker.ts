@@ -60,13 +60,15 @@ export class PhpReferenceWorker implements WorkerAdapter {
     });
     try {
       return await operation();
-    } catch {
+    } catch (error) {
       this.failed = true;
       try {
         await this.transport.close();
       } catch {
         throw new ReferenceWorkerError("CLEANUP_ERROR");
       }
+      // Only trusted typed codes survive. Parser/worker exception text stays private.
+      if (error instanceof ReferenceWorkerError) throw error;
       throw new ReferenceWorkerError("REFERENCE_OPERATION_ERROR");
     } finally {
       this.busy = false;

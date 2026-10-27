@@ -148,11 +148,14 @@ try {
   for (const scenario of MANIFEST) {
     const observations = [];
     for (let replay = 0; replay < 2; replay++) {
+      phase = `${scenario.id}-reset-${replay + 1}`;
       await worker.reset(signal);
+      phase = `${scenario.id}-initial-${replay + 1}`;
       const initial = await worker.snapshot(signal);
       ensure(count(initial) === 0);
       const current = [{ snapshot: initial }];
       for (const [i, request] of scenario.requests.entries()) {
+        phase = `${scenario.id}-${stepId(i)}-${replay + 1}`;
         const before = current.at(-1).snapshot;
         const http = await worker.requestStep(
           scenario.id,
@@ -281,6 +284,12 @@ try {
       "IMAGE_DIGEST",
       "REFERENCE_OPERATION_ERROR",
       "CLEANUP_ERROR",
+      "DIRTY_RESET",
+      "WORKER_NOT_RESET",
+      "BOOTSTRAP_ERROR",
+      "WORKER_TIMEOUT",
+      "WORKER_ABORTED",
+      "UNEXPECTED_STATE_CHANGE",
     ]).has(error.code)
       ? error.code
       : "TRUSTED_ERROR";
