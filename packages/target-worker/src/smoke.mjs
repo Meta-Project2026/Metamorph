@@ -526,9 +526,11 @@ try {
       }
       // A real pending Docker wait uses the remaining *original* run budget.
       // No client sleep or candidate Date patch can advance/renew this deadline.
-      await worker.cmd(["wait", worker.runtime.name], {
-        timeoutMs: worker.policy.lifetimeMs,
-      });
+      await worker.operation(() =>
+        worker.cmd(["wait", worker.runtime.name], {
+          timeoutMs: worker.policy.lifetimeMs,
+        }),
+      );
     },
     /TIMEOUT/,
     (evidence) => {
