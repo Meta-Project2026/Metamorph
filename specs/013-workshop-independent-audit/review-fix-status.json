@@ -1,0 +1,24 @@
+{
+  "format": "workshop-audit-review-fix-registration-v1",
+  "reviewId": 5675008255,
+  "reviewedHead": "69b8c50e3a62832ca90fe14bbbd1eb4bc13abe8d",
+  "observedMain": "37608f8dd3cf941e95b4156a51980023a99fe0d2",
+  "registrationIssue": 32,
+  "registrationPR": 33,
+  "registrationMerge": "84ac71602ddeedba39dde8eafb937ae32751dffa",
+  "registeredWorkflowSha256": "3032a4716739a912eadad131eb911c6ccb4344b3a91ed32687b05d508c618d56",
+  "correctedWorkflowSha256": "eaecd695253b95ecabc61d46b30a5e6131678c99d70fae951b16a1a957e5484c",
+  "policyChange": {
+    "cancelInProgress": false
+  },
+  "status": "HOSTED_PROOF_BLOCKED",
+  "reason": "WORKFLOW_REGISTRATION_BYTES_MISMATCH",
+  "hostedAuditTests": "HOSTED_AUDIT_TESTS_NOT_RUN",
+  "sampledAudit": "NOT_RUN",
+  "rawPrivatePacksCreated": "NOT_RUN",
+  "canonicalG4": "INCONCLUSIVE",
+  "G0": "NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "formalHeldOut": "HELDOUT_ISOLATION_NOT_PROVEN",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+}

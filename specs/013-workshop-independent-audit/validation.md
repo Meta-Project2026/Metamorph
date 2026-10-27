@@ -109,3 +109,71 @@ The final follow-up commit adds only this report/structural evidence. These Dock
 results apply specifically to a14429c; they are not relabeled as execution of a
 later documentation SHA. Final Fast CI is linked in PR31. The new audit remains
 NOT_RUN/AUDIT_PARTIAL; independent registration and review are still required.
+
+## Review-fix validation (2026-10-28; current status overrides historical blocker)
+
+Read entire CHANGES_REQUESTED review5675008255 and both inline comments; Issue24,
+Issue32 and Issue34 plus PR30 latest48932cd. Started clean in existing dedicated
+PR31 worktree/branch at69b8c50. Fresh main is37608f8 (includes registration PR33
+merge84ac716 and Fast CI PR35). No remote feature changes overwritten, no main
+push/merge/issue close, no provider/paid API. Common merge base remains3de9d5c.
+
+P1: PairRegistry keeps packs across provision/Oracle/retention/close/inventory
+faults. All-path finally attempts independent bounded cleanup, then captures
+partial Oracle raw bytes and seals/verifies available PHP/bridge/oracle indexes.
+Primary fault is separate from secondary errors. Incomplete/failed evidence never
+becomes FINALIZED_PRIVATE_COMPLETE. Pack types/status/hash/count only enter public
+error-v2; private paths/diagnostics stay outside Git. Safe builder and writer
+failure controls prevent a secondary exception from suppressing safe failure
+publication when storage works. Physical storage failure remains explicitERROR.
+P2: cancellation now false; all other manual workflow security policy unchanged.
+
+Actual local matrix, Windows Node24.21.0/pnpm11.25.0, corrected source bytes in the
+review-fix commit (final SHA is linked in PR31; no candidate execution on host):
+
+| Command | Exit | PASS / FAIL / SKIP |
+| --- | ---: | --- |
+| pnpm install --frozen-lockfile | 0 | frozen importer unchanged |
+| pnpm lint | 0 | no diagnostics after formatting |
+| pnpm typecheck | 0 | original workspace TS checks |
+| pnpm test | 0 |65 /0 /0 root tests only |
+| pnpm build | 0 | original package builds |
+| pnpm --filter @metamorph/oracle test:reference | 0 |55 /0 /1 POSIX skip |
+| pnpm --filter @metamorph/target-worker test | 0 |69 /0 /0 |
+| pnpm --filter @metamorph/differential test | 0 |77 /0 /1 POSIX skip |
+| pnpm --filter @metamorph/workshop-audit test | 0 |51 /0 /1 of52 total |
+| node packages/workshop-audit/src/run.mjs --validate-imports | 0 |import-only, no samples |
+
+The25 new tests are original PUBLIC_DEV_CONTROL fault injections; total audit
+suite52 includes27 previous tests. Provision, before/during Oracle, retention,
+close/inventory/emergency cleanup, partial construction/catalog, seal/verify/write,
+primary+secondary failures, timeout/cancellation/late receipt, registry and public
+publication failure are covered. Filesystem test indexes independently verify their
+synthetic bytes; actual production POSIX PrivateEvidence test is SKIP on Windows.
+No actual private Docker pack index/hash/count is claimed. Unit canary absence in
+public error JSON is tested; no new real public audit artifact exists to certify.
+
+PR35's current-main Fast CI adds original reference/target/differential commands;
+it still does not imply this separate audit suite executes. Do not conflate old
+65/65 root or prior Fast CI69b8c50 with new52 tests. New manual workflow explicitly
+runs audit tests before Docker. Until its aligned version runs at the final SHA:
+HOSTED_AUDIT_TESTS_NOT_RUN; sampled7scenarios/59HTTP/66DB and real positive/negative
+controls NOT_RUN. Prior baseline40588295315 at a14429c stays historical and ERROR
+for items-smoke twice/emergencyRemoved1 (Issue34). Cause remains unknown. Existing
+worker/smoke/comparators/workflows are unmodified; no all-workflows PASS or30/30
+Docker claim, no merge-ready. No new baseline diagnosis or private logs retrieved.
+
+Registration32 closed after reviewed PR33 merge, but main still has old workflow
+SHA2563032a4716739a912eadad131eb911c6ccb4344b3a91ed32687b05d508c618d56
+(cancel true). Corrected branch SHA256
+ eaecd695253b95ecabc61d46b30a5e6131678c99d70fae951b16a1a957e5484c
+(cancel false). This task explicitly requires byte equality with reviewed main
+before dispatch. Therefore no dispatch of mismatched bytes, no automatic Docker
+trigger/registration edit/self-merge workaround: HOSTED_PROOF_BLOCKED /
+WORKFLOW_REGISTRATION_BYTES_MISMATCH. See review-fix-status.json. Registration
+handoff contains only the corrected YAML SHA and cancellation-policy change.
+
+Final delivery status: CODE_FIX_PUSHED / HOSTED_AUDIT_NOT_RUN; canonicalG4 remains
+INCONCLUSIVE, G0NOT_RUN, productNOT_ESTABLISHED, formal held-out isolation not
+proven, external recoverable raw retentionNOT_RUN. Request independent review of
+code and registration reconciliation; no owner acceptance is inferred.

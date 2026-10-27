@@ -24,7 +24,6 @@ import {
 import { validateTargetClock } from "../../differential/src/clock.mjs";
 import {
   atomicJson,
-  privateRun,
   retainOracle,
 } from "../../differential/src/private-run.mjs";
 import { Resources } from "../../differential/src/resources.mjs";
@@ -40,6 +39,8 @@ import {
 import { buildTrustedRuntime } from "../../target-worker/src/runtime-broker.mjs";
 import { AuditReference, AuditTarget } from "./adapters.mjs";
 import { DECLARED, digest, freezeCandidate, samplePrivate } from "./corpus.mjs";
+import { publishFailure } from "./errors.mjs";
+import { bounded, PairRegistry } from "./lifecycle.mjs";
 import { gatesForPublic, publicSummary } from "./public.mjs";
 
 if (process.argv.includes("--validate-imports")) process.exit(0);
@@ -69,14 +70,12 @@ const signal = AbortSignal.any([
 ]);
 let phase = "freeze",
   failure,
-  activeTarget,
-  activeReference,
-  activeTransport,
   identity,
   sampleCommitment;
 const runs = [],
   controls = {};
-let summary;
+const finalFailures = [];
+let summary, registry;
 try {
   const headSha = execFileSync("git", ["rev-parse", "HEAD"], {
     cwd: root,
@@ -134,106 +133,146 @@ try {
   const sampled = samplePrivate(identity);
   sampleCommitment = sampled.commitment;
   record("private-corpus", sampled);
+  registry = new PairRegistry({
+    parent,
+    root,
+    identity,
+    inventory: () => ledger.inventory(),
+    reap: () => ledger.reap(),
+    record,
+  });
   const execute = async (scenario, negative = false) => {
-    const id = scenario.id;
-    process.env.PILOT_PRIVATE_PARENT = join(parent, id);
-    const state = privateRun(root, {
-      identity,
-      sampleCommitment,
-      scenarioId: id,
-    });
-    let n = 0;
-    const receipt = (kind, value) =>
-      state.bridge.write(`pair-${++n}-${kind}`, value);
-    const worker = new TargetWorker(runtime, bundle, "fixed-experiment", {
-      profile: WORKSHOP_PROFILE,
-    });
-    ledger.target(worker.runId);
-    const target = new AuditTarget(worker, scenario, receipt);
-    activeTarget = target;
-    await target.provision(signal);
-    const wall = requireSuccess(
-      await worker.cmd(
-        [
-          "exec",
-          ...FIXED_ENV,
-          worker.runtime.name,
-          "node",
-          "/opt/worker/clock.mjs",
-        ],
-        { signal },
-      ),
-    );
-    receipt("clock", wall);
-    validateTargetClock(strictJson(wall.stdout));
-    const cmd = dockerCommand(state.php),
-      transport = new DockerReferenceTransport(php, (args, ...rest) => {
-        ledger.track(args);
-        return cmd(args, ...rest);
-      });
-    activeTransport = transport;
-    const reference = new AuditReference(transport, scenario, receipt);
-    activeReference = reference;
-    let mutated = false;
-    // Real Docker traffic, independently checked first, then one deliberate
-    // trusted status corruption. No comparator stub, replay, or candidate edit.
-    const observedTarget = negative
-      ? {
-          reset: (s) => target.reset(s),
-          snapshot: (s) => target.snapshot(s),
-          close: (s) => target.close(s),
-          request: async (input, s) => {
-            const actual = await target.request(input, s);
-            if (!mutated) {
-              mutated = true;
-              const corrupted = { ...actual, status: 503 };
-              receipt("public-negative-wire-control", { actual, corrupted });
-              return corrupted;
-            }
-            return actual;
-          },
-        }
-      : target;
-    const result = await verifyPair({
+    const id = scenario.id,
+      pair = registry.open(id);
+    let worker,
+      target,
       reference,
-      candidate: observedTarget,
-      scenarios: [scenario],
-      artifactParent: state.oracleParent,
-      operationTimeoutMs: 30000,
-    });
-    const actual = retainOracle(result, state.oracleParent, state.bridge);
-    receipt("completion", {
-      result,
-      targetStats: target.stats,
-      referenceStats: reference.stats,
-      workerEvidence: worker.evidence,
-      negativeMutationApplied: mutated,
-    });
-    // All workers closed before sealing; complete Oracle catalog included.
-    await reference.close();
-    await target.close();
-    const inventory = await ledger.inventory();
-    requireCheck(
-      !inventory.containers.length &&
-        !inventory.volumes.length &&
-        worker.evidence.cleanupVerified,
-      "CLEANUP_ERROR",
-    );
-    receipt("inventory", inventory);
-    const phpSha = state.php.seal();
-    PrivateEvidence.verify(state.php.path, phpSha);
-    receipt("verified-php-pack", { sha: phpSha });
-    const packSha = state.bridge.seal();
-    PrivateEvidence.verify(state.bridge.path, packSha);
-    requireCheck(!negative || mutated, "NEGATIVE_CONTROL_NOT_EXECUTED");
-    // Validate IDs now even if a later case fails; only counts/codes go public.
-    gatesForPublic(actual.gates, id, scenario.requests.length);
-    activeTarget = activeReference = activeTransport = undefined;
+      actual,
+      mutated = false;
+    const receipt = (kind, value) => pair.receipt(kind, value);
+    try {
+      pair.create();
+      const state = {
+        bridge: pair.pack("bridge"),
+        php: pair.pack("php"),
+        oracleParent: pair.oracleParent,
+      };
+      worker = new TargetWorker(runtime, bundle, "fixed-experiment", {
+        profile: WORKSHOP_PROFILE,
+      });
+      pair.captureExecution = () => ({
+        targetStats: target?.stats ?? null,
+        referenceStats: reference?.stats ?? null,
+        workerEvidence: worker.evidence,
+        negativeMutationApplied: mutated,
+        executionComplete: pair.workComplete,
+      });
+      pair.closeWith("target", () => worker.close());
+      ledger.target(worker.runId);
+      target = new AuditTarget(worker, scenario, receipt);
+      pair.closeWith("target", () => target.close());
+      await pair.step("provision", (s) => target.provision(s), signal);
+      await pair.step(
+        "clock",
+        async (s) => {
+          const wall = requireSuccess(
+            await worker.cmd(
+              [
+                "exec",
+                ...FIXED_ENV,
+                worker.runtime.name,
+                "node",
+                "/opt/worker/clock.mjs",
+              ],
+              { signal: s },
+            ),
+          );
+          receipt("clock", wall);
+          validateTargetClock(strictJson(wall.stdout));
+        },
+        signal,
+      );
+      await pair.step(
+        "reference",
+        async () => {
+          const cmd = dockerCommand(state.php),
+            transport = new DockerReferenceTransport(php, (args, ...rest) => {
+              ledger.track(args);
+              return cmd(args, ...rest);
+            });
+          pair.closeWith("reference", () => transport.close());
+          reference = new AuditReference(transport, scenario, receipt);
+          pair.closeWith("reference", () => reference.close());
+        },
+        signal,
+      );
+      const observedTarget = negative
+        ? {
+            reset: (s) => target.reset(s),
+            snapshot: (s) => target.snapshot(s),
+            close: (s) => target.close(s),
+            request: async (input, s) => {
+              const observed = await target.request(input, s);
+              if (!mutated) {
+                mutated = true;
+                const corrupted = { ...observed, status: 503 };
+                receipt("public-negative-wire-control", {
+                  observed,
+                  corrupted,
+                });
+                return corrupted;
+              }
+              return observed;
+            },
+          }
+        : target;
+      const result = await pair.step(
+        "oracle",
+        () =>
+          verifyPair({
+            reference,
+            candidate: observedTarget,
+            scenarios: [scenario],
+            artifactParent: state.oracleParent,
+            operationTimeoutMs: 30000,
+          }),
+        signal,
+      );
+      actual = await pair.step(
+        "retention",
+        () => retainOracle(result, state.oracleParent, state.bridge),
+        signal,
+      );
+      receipt("completion", {
+        result,
+        targetStats: target.stats,
+        referenceStats: reference.stats,
+        workerEvidence: worker.evidence,
+        negativeMutationApplied: mutated,
+      });
+      await pair.step(
+        "coverage",
+        () => {
+          requireCheck(!negative || mutated, "NEGATIVE_CONTROL_NOT_EXECUTED");
+          gatesForPublic(actual.gates, id, scenario.requests.length);
+        },
+        signal,
+      );
+      pair.workComplete = true;
+    } catch (e) {
+      if (!pair.primary) pair.fail("EVALUATOR_ERROR", e);
+    } finally {
+      await pair.finish();
+    }
+    if (pair.status !== "FINALIZED_PRIVATE_COMPLETE")
+      throw Object.assign(new Error("PAIR_FAILED"), {
+        code: pair.primary?.code ?? "EVALUATOR_ERROR",
+      });
     return {
       id,
       steps: scenario.requests.length,
       gates: actual.gates,
-      packSha,
+      packSha: pair.pack("bridge").result.sha256,
       cleanup: "VERIFIED_ZERO_RESOURCES",
     };
   };
@@ -260,31 +299,40 @@ try {
     record("failure", { phase, diagnostic: String(e.stack ?? e) });
   } catch {}
 } finally {
-  const closed = await Promise.allSettled([
-    activeTarget?.close(),
-    activeReference?.close(),
-  ]);
   try {
-    await activeTransport?.close();
+    await registry?.finishAll();
   } catch (e) {
+    finalFailures.push("EVIDENCE_REGISTRY_ERROR");
     failure ??= e;
   }
-  let cleanup;
+  let cleanup,
+    provenanceReceipt = { status: "ERROR", sha256: null };
   try {
-    const inventory = await ledger.reap();
+    const inventory = await bounded(
+      () => ledger.reap(),
+      25000,
+      "CLEANUP_TIMEOUT",
+    );
     requireCheck(
-      closed.every((r) => r.status === "fulfilled") &&
-        !inventory.before.containers.length &&
-        !inventory.before.volumes.length,
+      !inventory.before.containers.length &&
+        !inventory.before.volumes.length &&
+        !inventory.after.containers.length &&
+        !inventory.after.volumes.length,
+      "CLEANUP_ERROR",
+    );
+    requireCheck(
+      !registry ||
+        registry
+          .publicState()
+          .every((p) => p.cleanup === "VERIFIED_ZERO_RESOURCES"),
       "CLEANUP_ERROR",
     );
     cleanup = { containers: 0, volumes: 0, emergencyRemoved: 0 };
   } catch (e) {
+    finalFailures.push("CLEANUP_ERROR");
     failure ??= e;
   }
   try {
-    // Retain actual raw unpublished gates before seal; serializer reconstructs
-    // public fields and cannot pass through raw or unrecognized diagnostics.
     record("final-result", {
       phase,
       identity,
@@ -292,11 +340,14 @@ try {
       runs,
       controls,
       cleanup,
+      pairs: registry?.publicState(),
       failed: !!failure,
     });
     const provenancePackSha = provenance.seal();
     PrivateEvidence.verify(provenance.path, provenancePackSha);
+    provenanceReceipt = { status: "VERIFIED", sha256: provenancePackSha };
     if (!failure) {
+      requireCheck(registry?.complete, "EVIDENCE_REGISTRY_ERROR");
       summary = publicSummary({
         identity,
         sampleCommitment,
@@ -308,54 +359,26 @@ try {
       atomicJson(join(output, "summary.json"), summary, 0o644);
     }
   } catch (e) {
+    finalFailures.push("EVIDENCE_PROVENANCE_ERROR");
     failure ??= e;
   }
   if (failure) {
-    // Fixed codes/family only. Never print exceptions, request values or paths.
-    const safePhases = new Set([
-      "freeze",
-      "runtime",
-      "public-controls",
-      "publication",
-      ...DECLARED.map((d) => d.family),
-    ]);
-    atomicJson(
-      join(output, "error.json"),
-      {
-        format: "independent-workshop-audit-error-v1",
-        headSha: /^[a-f0-9]{40}$/.test(process.env.AUDIT_HEAD_SHA ?? "")
-          ? process.env.AUDIT_HEAD_SHA
-          : null,
-        verdict: "AUDIT_ERROR",
-        phase: safePhases.has(phase) ? phase : "UNKNOWN",
-        code: new Set([
-          "HEAD_IDENTITY",
-          "FREEZE_IDENTITY",
-          "FREEZE_REQUIRED",
-          "CORPUS_SHAPE",
-          "CLEANUP_ERROR",
-          "PUBLIC_COVERAGE",
-          "INDEPENDENT_CONTROL",
-          "BUILD_FAILED",
-          "TIMEOUT",
-          "ENVIRONMENT_ERROR",
-        ]).has(failure.code)
-          ? failure.code
-          : "EVALUATOR_ERROR",
-        identity: identity ? { ...identity } : null,
-        completed: runs.map((r, i) => ({
-          family: DECLARED[i].family,
-          id: DECLARED[i].id,
-          gates: gatesForPublic(r.gates, DECLARED[i].id, DECLARED[i].steps),
-        })),
-        cleanup: cleanup ? "VERIFIED_ZERO_RESOURCES" : "ERROR",
-        canonicalG4: "INCONCLUSIVE",
-        product: "NOT_ESTABLISHED",
-        externalRetention: "EXTERNAL_RETENTION_NOT_RUN",
-      },
-      0o644,
-    );
     process.exitCode = 1;
+    // Error JSON construction is total and independent of raw gates. Filesystem
+    // publication failure emits one fixed code only, never an uncaught stack.
+    let pairs = [];
+    try {
+      pairs = registry?.publicState() ?? [];
+    } catch {}
+    publishFailure(join(output, "error.json"), {
+      headSha: process.env.AUDIT_HEAD_SHA,
+      phase,
+      primaryCode: failure?.code,
+      secondaryCodes: finalFailures,
+      pairs,
+      cleanup: cleanup ? "VERIFIED_ZERO_RESOURCES" : "ERROR",
+      provenance: provenanceReceipt,
+    });
   }
   process.removeListener("SIGTERM", stop);
   process.removeListener("SIGINT", stop);
