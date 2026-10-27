@@ -31,3 +31,9 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      - name: Oracle reference tests
+        run: pnpm --filter @metamorph/oracle test:reference
+      - name: Target-worker tests
+        run: pnpm --filter @metamorph/target-worker test
+      - name: Differential tests
+        run: pnpm --filter @metamorph/differential test
