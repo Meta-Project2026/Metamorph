@@ -1,0 +1,314 @@
+{
+  "scope": "original-public-mini-api-only",
+  "sourceHead": "f612b9b642cf035f4797c1a64d59cc813a5f57ab",
+  "startedAt": "2026-10-27T00:24:56.379Z",
+  "cases": [
+    {
+      "id": "public-write-read-reset",
+      "control": "positive-executed",
+      "outcome": "PASS_SCOPED",
+      "cleanupVerified": true,
+      "sourceSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0"
+    },
+    {
+      "id": "syntax-error",
+      "control": "negative-rejected",
+      "outcome": "BUILD_FAILED",
+      "cleanupVerified": true,
+      "sourceSha": "c0fedd41e2b986348b8b93e4374e55ccdc5514b4cd8e9483614a7e36fac0fdef"
+    },
+    {
+      "id": "type-error",
+      "control": "negative-rejected",
+      "outcome": "BUILD_FAILED",
+      "cleanupVerified": true,
+      "sourceSha": "2c2f5eb149818ac03996842bb7f5c53c7973e825b7ac1cae72871b210f8277f6"
+    },
+    {
+      "id": "invalid-import",
+      "control": "negative-rejected",
+      "outcome": "BUILD_FAILED",
+      "cleanupVerified": true,
+      "sourceSha": "938e4642e92d97de2fab48e7c397ba044106c1f994c6a315858fec922f1cfa61"
+    },
+    {
+      "id": "bad-startup",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "cba8cc96faef656796c936a610835db3f782e73df5ed569836578caf46abb263"
+    },
+    {
+      "id": "crash",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "dc8eff792836ee175004c3be2bb1e366823b3faafdcb12e70967139c13666c71"
+    },
+    {
+      "id": "oom",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "9f116bed1732f1752ca4818b519f3b9837e94ec96f0cda3fb9ee785f4c889c86"
+    },
+    {
+      "id": "blocked-npm-script",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "fccffdb289be70ddcf6376a33deeb82eb2b5b951adba9119132b1df0fd712a22"
+    },
+    {
+      "id": "blocked-php-process",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "e561c8add0b4a4923e51f6f7cdcb050837a9182a6b1e7bbb102a78b5783e7360"
+    },
+    {
+      "id": "blocked-reference-file",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "aa7e652920d61954236d22ce08a0cee97836b3dd083be9167b9dfe097e4bb00e"
+    },
+    {
+      "id": "blocked-external-network",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "a1734f1788d28d36d85f20dc4578ed147ecd3009ca5b6d87c091517e41b2de30"
+    },
+    {
+      "id": "infinite-loop-timeout",
+      "control": "negative-rejected",
+      "outcome": "TIMEOUT",
+      "cleanupVerified": true,
+      "sourceSha": "f0bb9dc4a3b49c35e7c054e04dc37a6c08223f1914b0833470f012e2563462e8"
+    },
+    {
+      "id": "cancel-reap",
+      "control": "positive-executed",
+      "outcome": "PASS_SCOPED",
+      "cleanupVerified": true,
+      "sourceSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0"
+    },
+    {
+      "id": "malformed-http",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "2a3f1dbe846fa9a10614d1131803172c1085de0e0346bf385a3bec7741b7430c"
+    },
+    {
+      "id": "corrupt-db",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "7dfe9fb9eac105d6967e8265688cc90abe0c9989d1d9df94e6109f45fe6387ce"
+    },
+    {
+      "id": "missing-db",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "441643150d83c1c9e4133ff211e07753bd06f851cbb86a0b08e2409c656f8f60"
+    },
+    {
+      "id": "wrong-snapshot-source",
+      "control": "negative-rejected",
+      "outcome": "ENVIRONMENT_ERROR",
+      "cleanupVerified": true,
+      "sourceSha": "a0e5ed5c51893985dcb6e0ea6be591abeab551d9e8fc183e40311e9f3f4e4b23"
+    },
+    {
+      "id": "ignore-candidate-snapshot-endpoint",
+      "control": "positive-executed",
+      "outcome": "PASS_SCOPED",
+      "cleanupVerified": true,
+      "sourceSha": "29e4d1997275e3b389bb1bc6b887cd90f5f3b7931efcd4416446574f3605ba68"
+    },
+    {
+      "id": "typed-sqlite",
+      "control": "positive-executed",
+      "outcome": "PASS_SCOPED",
+      "cleanupVerified": true,
+      "sourceSha": "fca019799b6ec2b0c4eeaf725a10be07afd8cdd47401ca526e1b1ad5a3504cb4"
+    }
+  ],
+  "clocks": [
+    {
+      "mode": "real",
+      "node": "v24.11.0",
+      "sqlite": "3.50.4",
+      "before": {
+        "date": "2026-10-27T00:27:26.688Z",
+        "dateNow": 1793060846688,
+        "sqlite": {
+          "datetime": "2026-10-27 00:27:26",
+          "timestamp": "2026-10-27 00:27:26"
+        },
+        "performanceNow": 14.136087,
+        "hrtime": "169891850958"
+      },
+      "after": {
+        "date": "2026-10-27T00:27:27.889Z",
+        "dateNow": 1793060847889,
+        "sqlite": {
+          "datetime": "2026-10-27 00:27:27",
+          "timestamp": "2026-10-27 00:27:27"
+        },
+        "performanceNow": 1215.121027,
+        "hrtime": "171092836066"
+      },
+      "monotonicDeltaMs": 1200.9849399999998
+    },
+    {
+      "mode": "fixed-experiment",
+      "node": "v24.11.0",
+      "sqlite": "3.50.4",
+      "before": {
+        "date": "2026-10-27T12:00:00.000Z",
+        "dateNow": 1793102400000,
+        "sqlite": {
+          "datetime": "2026-10-27 12:00:00",
+          "timestamp": "2026-10-27 12:00:00"
+        },
+        "performanceNow": 14.065846,
+        "hrtime": "171238183397"
+      },
+      "after": {
+        "date": "2026-10-27T12:00:00.000Z",
+        "dateNow": 1793102400000,
+        "sqlite": {
+          "datetime": "2026-10-27 12:00:00",
+          "timestamp": "2026-10-27 12:00:00"
+        },
+        "performanceNow": 1216.049702,
+        "hrtime": "172440168094"
+      },
+      "monotonicDeltaMs": 1201.983856
+    },
+    {
+      "mode": "drift-control",
+      "node": "v24.11.0",
+      "sqlite": "3.50.4",
+      "before": {
+        "date": "2026-10-27T12:00:01.000Z",
+        "dateNow": 1793102401000,
+        "sqlite": {
+          "datetime": "2026-10-27 12:00:01",
+          "timestamp": "2026-10-27 12:00:01"
+        },
+        "performanceNow": 14.253694,
+        "hrtime": "172614166566"
+      },
+      "after": {
+        "date": "2026-10-27T12:00:01.000Z",
+        "dateNow": 1793102401000,
+        "sqlite": {
+          "datetime": "2026-10-27 12:00:01",
+          "timestamp": "2026-10-27 12:00:01"
+        },
+        "performanceNow": 1216.270209,
+        "hrtime": "173816183661"
+      },
+      "monotonicDeltaMs": 1202.016515
+    }
+  ],
+  "G0": "NOT_RUN",
+  "G1": "PASS_SCOPED_ORIGINAL_FIXTURE",
+  "G2": "NOT_RUN",
+  "G3": "NOT_RUN",
+  "G4": "NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "notRun": [
+    "complete G0 and all benchmark routes",
+    "PHP-TS parity",
+    "held-out",
+    "model provider",
+    "concurrency",
+    "clock boundaries/midnight/DST",
+    "benchmark registration",
+    "joint owner API acceptance"
+  ],
+  "image": {
+    "Id": "sha256:129c44883c63d1bb029d0b9425ee2c6ac546505d0c23fb2f9ae0fcbe6a01ad25",
+    "RepoTags": [
+      "metamorph-target-worker:mmp007"
+    ],
+    "RepoDigests": [],
+    "Parent": "",
+    "Comment": "buildkit.dockerfile.v0",
+    "Created": "2026-10-27T00:25:07.620929883Z",
+    "DockerVersion": "",
+    "Author": "",
+    "Config": {
+      "Hostname": "",
+      "Domainname": "",
+      "User": "10001:10001",
+      "AttachStdin": false,
+      "AttachStdout": false,
+      "AttachStderr": false,
+      "Tty": false,
+      "OpenStdin": false,
+      "StdinOnce": false,
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "NODE_VERSION=24.11.0",
+        "YARN_VERSION=1.22.22",
+        "NODE_ENV=production",
+        "TZ=UTC"
+      ],
+      "Cmd": [
+        "sleep",
+        "240"
+      ],
+      "ArgsEscaped": true,
+      "Image": "",
+      "Volumes": null,
+      "WorkingDir": "/work",
+      "Entrypoint": [
+        "docker-entrypoint.sh"
+      ],
+      "OnBuild": null,
+      "Labels": null
+    },
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Size": 260596457,
+    "GraphDriver": {
+      "Data": {
+        "LowerDir": "/var/lib/docker/overlay2/gz986yackff6zis2di0uhon0r/diff:/var/lib/docker/overlay2/ar700zsubh6ug045swl0n43hh/diff:/var/lib/docker/overlay2/habg66s4qclwkmcrbbun5d50y/diff:/var/lib/docker/overlay2/kkswyd7ayemy8e4yyiedeg0zb/diff:/var/lib/docker/overlay2/4ab505241c86cb7bfd1f5facd37e97318bf5e0d7e722a0b34181758f72cdeac0/diff:/var/lib/docker/overlay2/b03e0e2a09d930c8a5ac8a53dd74b278e8e1d0304ecef2ec72b82224c35363bf/diff:/var/lib/docker/overlay2/480d23f53af146c4846decb15821f66c4355ce9cac623b2f205474b1b7d07706/diff:/var/lib/docker/overlay2/abeb1a79cb1476f249a9a432c24ffe38c3e0856c53028e818a5fb419fa33995b/diff:/var/lib/docker/overlay2/d592d84934b01edc67df4137e42d000826e5f3c092f9875f1757e88bda0a60f8/diff",
+        "MergedDir": "/var/lib/docker/overlay2/rrae5b3z0e6qxw6fuud4cqoec/merged",
+        "UpperDir": "/var/lib/docker/overlay2/rrae5b3z0e6qxw6fuud4cqoec/diff",
+        "WorkDir": "/var/lib/docker/overlay2/rrae5b3z0e6qxw6fuud4cqoec/work"
+      },
+      "Name": "overlay2"
+    },
+    "RootFS": {
+      "Type": "layers",
+      "Layers": [
+        "sha256:b512279032aa717092385dda875fffdcd96e4a4ad384225152522ac7bd5340a8",
+        "sha256:78a2a08f97e746a17d6e205590c2dfc1d65761a3b0838296b328b45c21d4f84f",
+        "sha256:099631d6738a9f8de050f62239471f4741eef85b569191a339ddfb16d6de4064",
+        "sha256:ce107289cdc201d9ed189458c5d52af7019d35f6e4be2946add47f8e0afdda33",
+        "sha256:b2acfb346436b67bdf1277b32385ee53fc89eee0c8e8c0604b0e559ea83da9be",
+        "sha256:22425b9192f2ed6819ca1a745a71ce83951b5e843f7b86502257077d676b27c8",
+        "sha256:b8b0aba837719a91d6026e9c24c5c2c61f10a82bc057fa9e52fc6fd486318dae",
+        "sha256:cd265ac903a30a77bd0d048dce5918f5f48816d0ff70a9333a470dc51ad41329",
+        "sha256:648f0cc68efaebb6fabe5d9541d45c31111a99a854421316704e98cf09bf4315",
+        "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+      ]
+    },
+    "Metadata": {
+      "LastTagTime": "2026-10-27T00:25:08.092527829Z"
+    }
+  },
+  "G0Scoped": "PASS_SELECTED_PUBLIC_ROUTES_WITHOUT_PHP",
+  "clockStatus": "MEASURED_NODE_SQLITE_FIXED_WALL_PARITY_ONLY",
+  "clockDriftControl": "REJECTED_WRONG_WALL_TIME",
+  "procedure": "PASS",
+  "finishedAt": "2026-10-27T00:27:30.659Z"
+}

@@ -60,6 +60,8 @@ importers:
         specifier: workspace:*
         version: link:../contracts
 
+  packages/target-worker: {}
+
 packages:
 
   '@biomejs/biome@2.6.3':
