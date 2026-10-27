@@ -2,12 +2,6 @@ name: Isolated TS target worker
 
 on:
   workflow_dispatch:
-  # TEMPORARY exact-branch bootstrap; remove before final delivery.
-  pull_request:
-    branches: [main]
-    paths:
-      - packages/target-worker/**
-      - .github/workflows/ts-target-worker.yml
 
 permissions:
   contents: read
@@ -18,16 +12,14 @@ concurrency:
 
 jobs:
   isolated:
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/mmp-007-ts-target-worker')
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          # Branch checkout permits rerunning this bootstrap definition against
-          # the final manual-only source SHA; git HEAD below is the authority.
-          ref: ${{ github.head_ref || github.ref }}
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '24'

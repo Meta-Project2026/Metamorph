@@ -58,4 +58,4 @@ midnight/DST, registration and product acceptance remain NOT_RUN.
 
 See [proposed handoff](../../specs/008-ts-target-worker/interface-handoff.md) and
 [validation](../../specs/008-ts-target-worker/validation.md). Dedicated workflow
-is intended to finish manual-only. It does not expand ordinary Fast CI.
+is manual-only. It does not expand ordinary Fast CI.

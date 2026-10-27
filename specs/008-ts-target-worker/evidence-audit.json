@@ -1,0 +1,15 @@
+{
+  "method": "independent data reinspection by implementation author, not owner acceptance",
+  "sourceHead": "f612b9b642cf035f4797c1a64d59cc813a5f57ab",
+  "cases": 19,
+  "buildExitCodes": [
+    0,
+    0
+  ],
+  "unitSmokeExitCode": 0,
+  "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+  "artifactSha": "eae4bb89494aedb31daba63d70af11a9d891d1e1f27fe4e229d7f2e742b49b1d",
+  "imageId": "sha256:129c44883c63d1bb029d0b9425ee2c6ac546505d0c23fb2f9ae0fcbe6a01ad25",
+  "fixedMonotonicDeltaMs": 1201.983856,
+  "result": "PASS_SCOPED"
+}
