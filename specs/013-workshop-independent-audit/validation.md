@@ -68,3 +68,44 @@ at2e53fa8 completed SUCCESS for Node22 and24. These fast checks are not evidence
 for supplementary G2/G3. Final-head Fast CI and unchanged registered workshop
 regressions are linked in PR31 after the report commit. Existing public controls
 never count as execution of the seven new sampled scenarios.
+
+## Executed original checks on report-head a14429c
+
+[Fast CI40588301991](https://github.com/Meta-Project2026/Metamorph/actions/runs/40588301991)
+Node22/24: SUCCESS. Registered unchanged
+[public baseline40588295315](https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315)
+checked out `a14429ca9d5ac565dbb618e9f9c26297c9ead30b`.
+Frozen install/lint/typecheck/build exit0; actual Linux root65/65, reference56/56,
+differential78/78, target69/69, no skips. Own audit27/27 is local synthetic proof
+only, not a hosted private-audit claim.
+
+Original public MANIFEST proof: SUCCESS, G2/G3 PASS per scenario in both passes,
+34HTTP/40DB with exact initial/step IDs revalidated independently; finalizer
+containers0/volumes0/emergencyRemoved0. Job122486167150 (retained in attempt2 as
+122489128400). Artifact12773920415 ZIP SHA256 independently matches GitHub:
+`de1f84f1f3a01d0a243105efb8f097c076a00b63d03e9c083201aa2a0c02f855`.
+This is existing public parity, not supplemental coverage.
+
+Original regression job122486167588: ERROR for items-smoke, expected mismatch
+pilot regression PASS (G2 INCONCLUSIVE/0HTTP, G3 FAIL/1initial DB_SCHEMA+DB_STATE,
+G4 INCONCLUSIVE). Finalizer inventory0/0 only AFTER emergencyRemoved1, statusERROR;
+this does not establish normal cleanup success. One justified retry of only the
+failed job on the same SHA (122489125401) reproduced the same ERROR and emergency
+removal. Workflow overall FAILURE;30/30 Docker controls are NOT_ESTABLISHED for
+these runs. No comparator, test, quota, timing or other-owner code was weakened.
+Cause remains unresolved: public receipts do not reveal the private diagnostic,
+and raw logs were not retrieved. No claim is made that this predates this PR.
+
+Safe ZIP digests verified against GitHub: attempt1 artifact12771614054
+`f49ac3e644dff683fd7f8135de2f37248a3df2b81ecbb5fd1717ad7cc4cae523`;
+attempt2 artifact12773531413
+`fcb122c18a57131f9b3805738c829deb6e4b754432df323b47593b101046f325`.
+Structural receipts retained in [regression-evidence.json](regression-evidence.json).
+No private raw HTTP/DB/DDL/forms/stdout/stderr was downloaded.
+
+A prior regression dispatch40588260952 ran at2e53fa8 after a transient DNS push
+failure; it was cancelled and superseded by40588295315 after successful push.
+The final follow-up commit adds only this report/structural evidence. These Docker
+results apply specifically to a14429c; they are not relabeled as execution of a
+later documentation SHA. Final Fast CI is linked in PR31. The new audit remains
+NOT_RUN/AUDIT_PARTIAL; independent registration and review are still required.
