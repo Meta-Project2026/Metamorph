@@ -1,0 +1,88 @@
+name: Workshop real PHP TS parity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workshop-ts-parity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PILOT_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - name: Set public output directory
+        run: echo "WORKSHOP_PUBLIC_OUTPUT=$RUNNER_TEMP/workshop-public" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - run: test "$(git rev-parse HEAD)" = "$PILOT_HEAD_SHA" && git rev-parse HEAD
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+          pnpm --filter @metamorph/oracle test:reference
+          pnpm --filter @metamorph/differential test
+          node --test packages/target-worker/test/*.test.mjs
+      - name: Real PHP TS proof and isolated workshop controls
+        run: node packages/differential/src/workshop-pilot.mjs
+      - name: Independent final inventory
+        if: always()
+        run: mkdir -p "$WORKSHOP_PUBLIC_OUTPUT" && node packages/differential/src/workshop-finalizer.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workshop-public
+          path: |
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/summary.json
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/completion.json
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/error.json
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
+  regressions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PILOT_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - name: Set public output directory
+        run: echo "WORKSHOP_PUBLIC_OUTPUT=$RUNNER_TEMP/regressions-public" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - run: test "$(git rev-parse HEAD)" = "$PILOT_HEAD_SHA" && git rev-parse HEAD
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Original 30 Docker controls and exact old mismatch pilot
+        run: node packages/differential/src/workshop-regressions.mjs
+      - name: Independent final inventory
+        if: always()
+        run: mkdir -p "$WORKSHOP_PUBLIC_OUTPUT" && node packages/differential/src/workshop-finalizer.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workshop-regressions-public
+          path: |
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/regressions.json
+            ${{ env.WORKSHOP_PUBLIC_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7

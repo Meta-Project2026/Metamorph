@@ -1,10 +1,13 @@
 // Runs in a DIFFERENT container/PID namespace, never loads candidate JS.
 import { lstatSync, realpathSync } from "node:fs";
 import { request } from "node:http";
+import { createConnection } from "node:net";
 import { DatabaseSync } from "node:sqlite";
+import { profileById, requestPolicy, WORKSHOP_PROFILE } from "./profile.mjs";
 import { encode } from "./sqlite-value.mjs";
 
 const action = JSON.parse(process.argv[2]);
+const profile = profileById(action.profileId);
 const quote = (s) => `"${s.replaceAll('"', '""')}"`;
 if (action.kind === "readiness") {
   if (
@@ -15,71 +18,101 @@ if (action.kind === "readiness") {
     throw new Error("READINESS_IDENTITY");
   // Fixed read-only public route. Identity is supplied by the trusted controller,
   // echoed by the independent inspector, never accepted from candidate JSON.
-  const result = await new Promise((resolve) => {
-    let settled = false;
-    const finish = (value) => {
-      if (!settled) {
-        settled = true;
-        clearTimeout(deadline);
-        resolve(value);
-      }
-    };
-    const req = request(
-      {
-        host: "127.0.0.1",
-        port: 3000,
-        method: "GET",
-        path: "/items",
-        headers: { "x-request-id": action.requestId },
-      },
-      (res) => {
-        const chunks = [];
-        let size = 0;
-        res.on("data", (chunk) => {
-          size += chunk.length;
-          if (size > 256 * 1024) {
-            finish({ ready: false, reason: "WRONG_RESPONSE" });
-            res.destroy();
-          } else chunks.push(chunk);
+  const result =
+    profile === WORKSHOP_PROFILE
+      ? await new Promise((resolve) => {
+          let settled = false;
+          const socket = createConnection({ host: "127.0.0.1", port: 3000 });
+          const finish = (value) => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(timer);
+              socket.destroy();
+              resolve(value);
+            }
+          };
+          const timer = setTimeout(
+            () => finish({ ready: false, reason: "HTTP_TIMEOUT" }),
+            1500,
+          );
+          socket.once("connect", () =>
+            finish({ ready: true, reason: "SOCKET_READY" }),
+          );
+          socket.once("error", (e) =>
+            finish({
+              ready: false,
+              reason:
+                e.code === "ECONNREFUSED"
+                  ? "CONNECTION_REFUSED"
+                  : "MALFORMED_HTTP",
+            }),
+          );
+        })
+      : await new Promise((resolve) => {
+          let settled = false;
+          const finish = (value) => {
+            if (!settled) {
+              settled = true;
+              clearTimeout(deadline);
+              resolve(value);
+            }
+          };
+          const req = request(
+            {
+              host: "127.0.0.1",
+              port: 3000,
+              method: "GET",
+              path: "/items",
+              headers: { "x-request-id": action.requestId },
+            },
+            (res) => {
+              const chunks = [];
+              let size = 0;
+              res.on("data", (chunk) => {
+                size += chunk.length;
+                if (size > 256 * 1024) {
+                  finish({ ready: false, reason: "WRONG_RESPONSE" });
+                  res.destroy();
+                } else chunks.push(chunk);
+              });
+              res.on("error", () =>
+                finish({ ready: false, reason: "MALFORMED_HTTP" }),
+              );
+              res.on("end", () => {
+                let payload;
+                try {
+                  payload = JSON.parse(Buffer.concat(chunks).toString());
+                } catch {}
+                const ready =
+                  res.statusCode === 200 &&
+                  res.headers["x-request-id"] === action.requestId &&
+                  payload !== null &&
+                  typeof payload === "object" &&
+                  Array.isArray(payload.items);
+                finish({
+                  ready,
+                  reason: ready ? "HTTP_READY" : "WRONG_RESPONSE",
+                  status: res.statusCode,
+                });
+              });
+            },
+          );
+          // Absolute monotonic real timer also bounds a peer that trickles bytes forever.
+          const deadline = setTimeout(() => {
+            finish({ ready: false, reason: "HTTP_TIMEOUT" });
+            req.destroy();
+          }, 1500);
+          req.on("error", (error) =>
+            finish({
+              ready: false,
+              reason:
+                error.code === "ECONNREFUSED"
+                  ? "CONNECTION_REFUSED"
+                  : "MALFORMED_HTTP",
+            }),
+          );
+          req.end();
         });
-        res.on("error", () =>
-          finish({ ready: false, reason: "MALFORMED_HTTP" }),
-        );
-        res.on("end", () => {
-          let payload;
-          try {
-            payload = JSON.parse(Buffer.concat(chunks).toString());
-          } catch {}
-          const ready =
-            res.statusCode === 200 &&
-            res.headers["x-request-id"] === action.requestId &&
-            payload !== null &&
-            typeof payload === "object" &&
-            Array.isArray(payload.items);
-          finish({
-            ready,
-            reason: ready ? "HTTP_READY" : "WRONG_RESPONSE",
-            status: res.statusCode,
-          });
-        });
-      },
-    );
-    // Absolute monotonic real timer also bounds a peer that trickles bytes forever.
-    const deadline = setTimeout(() => {
-      finish({ ready: false, reason: "HTTP_TIMEOUT" });
-      req.destroy();
-    }, 1500);
-    req.on("error", (error) =>
-      finish({
-        ready: false,
-        reason:
-          error.code === "ECONNREFUSED"
-            ? "CONNECTION_REFUSED"
-            : "MALFORMED_HTTP",
-      }),
-    );
-    req.end();
-  });
   console.log(
     JSON.stringify({
       ...result,
@@ -90,11 +123,12 @@ if (action.kind === "readiness") {
     }),
   );
 } else if (action.kind === "http") {
-  if (
-    !/^(GET|POST)$/.test(action.method) ||
-    !/^\/[a-zA-Z0-9/?=&_-]*$/.test(action.path)
-  )
-    throw new Error("REQUEST");
+  const policy = requestPolicy(
+    profile,
+    action.method,
+    action.path,
+    action.body,
+  );
   const result = await new Promise((resolve, reject) => {
     const req = request(
       {
@@ -104,7 +138,7 @@ if (action.kind === "readiness") {
         path: action.path,
         headers: {
           "x-request-id": action.requestId,
-          "content-type": "application/json",
+          ...(policy.contentType ? { "content-type": policy.contentType } : {}),
         },
         timeout: 1500,
       },
