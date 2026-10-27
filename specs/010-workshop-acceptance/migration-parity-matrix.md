@@ -2,6 +2,10 @@
 
 This feature qualifies PHP reference observations, not a TS implementation.
 The source-bound corpus covers the three existing public scenarios only.
+Reference run40563424187 at1a4fca0 completed two full clean passes; see validation
+and the historical corpus for exact SHA and receipts. All reference replay,
+21 controls, clock, post-close packs and inventory checks passed. This statement
+does not change any absent TS-candidate gate below.
 
 | Requirement | MMP-009A reference work | Genuine TS migration status |
 |---|---|---|

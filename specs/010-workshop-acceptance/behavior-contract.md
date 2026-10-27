@@ -1,9 +1,10 @@
 # car-workshop reference behavior contract v1
 
 Scope: immutable public MANIFEST, sequential SQLite profile only. Refs19.
-Source inspection is complete; new exact-HEAD measured qualification is NOT_RUN
-at this preparation revision. The structural corpus and execution receipts will
-identify which observations have actually run. Do not derive parity from this file.
+Source inspection and two real full PHP replay passes completed at
+`1a4fca019e0a32c98549eccef22b9834d1e5305e` in manual run40563424187.
+The structural corpus records that exact historical HEAD. Below, source-only
+branches are distinguished from measured scenario observations. No TS parity.
 
 ## Normative provenance and requests — source inspected
 
@@ -42,7 +43,7 @@ IDs restart step-01 within each scenario. Two full passes mean6 resets,34 busine
 HTTP,6 bootstrap HTTP. The final capacity GET has the same bytes as bootstrap but
 is a distinct declared business step; do not subtract it from17.
 
-## Business semantics — source inspected, execution pending
+## Business semantics — source inspected
 
 All actions declare JSON UTF8 content-type. API dispatch checks trimmed query
 action before POST action. Booking/update/cancel reject non-POST in JSON; actual
@@ -91,8 +92,62 @@ does not override that application setting. Advancing clock/DST is NOT_RUN.
 
 ## Measurements and limits
 
-MMP-009A per-step HTTP status/JSON types, before/after typed state hashes,
-repeatability and cleanup are NOT_RUN until actual isolated receipts are added.
+Measured on both passes: all17 business responses per pass are valid UTF8 JSON,
+HTTP200, with stable `content-type: application/json; charset=utf-8` and no other
+captured stable header. A business rejection is not a transport-level4xx/5xx.
+No non-JSON body or transport error occurred in these34 requests. Other HTTP
+error branches/wrong methods are source-only NOT_RUN, not inferred coverage.
+
+| Action/outcome | Measured JSON shape (values stay private) |
+|---|---|
+| book accepted | success:boolean, appointment_id:string, message:string |
+| duplicate/capacity rejected | success:boolean, error_type:string, message:string |
+| empty book rejected | success:boolean, message:string; no error_type |
+| update/cancel accepted | success:boolean, message:string |
+| get_appointments | success:boolean, appointments:array; each item has all10 appointment columns plus mechanic_name/mechanic_specialty, every item scalar is string, including id/mechanic_id |
+| get_slots | success:boolean,date:string,mechanics:array; id/max_daily_slots/booked_count/available_slots are number; is_full:boolean; name/specialty/phone:string |
+
+Success booleans and rejection codes are checked privately against source-derived
+invariants: duplicate is DUPLICATE_CLIENT, fifth booking is MECHANIC_FULL; empty
+form has no error_type. Do not coerce the string IDs in appointments or stringify
+the numeric fields in slots. Empty appointments is `[]`, not null or an object.
+Captured Date/Server/Connection-type volatile wire headers stay private and do
+not enlarge the unchanged Oracle stable-header normalization policy.
+
+| Scenario / step IDs | Measured appointment rows after each step | Other verified transitions |
+|---|---|---|
+| business01..06 |1,1,1,1,0,0| Update changes date/mechanic only; joined list matches state; delete retains appointments sequence1 |
+| rejected01..05 |1,1,1,1,1| Duplicate and empty form leave full typed DB unchanged; lists have1 row |
+| capacity01..06 |1,2,3,4,4,4| Fifth insert rejected without state/sequence change; mechanic1 booked4/available0/full; others booked0/available4/not full |
+
+Each initial state has0 appointments,5 mechanics,1 sqlite_sequence row (mechanics5).
+After a successful booking, sequence includes appointments; its value stays1 for
+business/rejected and advances1..4 for capacity. Cells actually seen in business
+snapshots are integer/text; application JSON string types are a separate wire
+property. DDL/schema stay unchanged, and all created_at fields equal frozen UTC.
+NULL/real/blob/int64 extrema are NOT exercised by business rows.
+
+Source-derived message construction (not public golden observations): accepted
+booking combines mechanic name and date formatted F j,Y; duplicate combines that
+formatted date; capacity combines name, booked/max and date. Update combines new
+ISO date and mechanic name. Cancel uses a fixed deletion-success message. Empty
+form concatenates seven validation errors in source field order. Exact spelling,
+punctuation and JSON escaping remain normative upstream API source, while full
+raw response bytes are privately compared across passes. No message normalization.
+
+Corpus HTTP digest = SHA256(JSON.stringify({status,headers,bodyBase64})); headers
+are the accepted transport's stable observations. Snapshot digest = SHA256 of
+JSON.stringify(complete mapped typed snapshot), retaining DDL/sequence/multiplicity.
+Request digest = SHA256(JSON.stringify(immutable manifest request)). Pack indexes
+independently bind the corresponding raw HTTP/inspector/private observations.
+Initial/bootstrap/per-step HTTP and before/after hashes match across both passes.
+
+Replay inspections114 = 6 resets*(reset capture+explicit initial) +34*3
+(worker before+after+explicit post-step). One additional original synthetic mapping
+inspection is outside this114 and outside business coverage. Bootstrap HTTP6 and
+business HTTP34 are disjoint counters. Worker readiness probes/process controls
+are not business coverage.
+
 Synthetic mapping fixture covers int64 boundaries, finite real, blob/null,
 defaults/index/view/trigger/composite PK and duplicate-row multiplicity. Those
 are not automatically properties exercised by car-workshop business data.

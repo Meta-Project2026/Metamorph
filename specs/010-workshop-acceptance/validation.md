@@ -16,10 +16,44 @@ build, --filter @metamorph/oracle test:reference all exit0. Reference suite55:
 54 pass,1 existing POSIX-only skip on Windows. Acceptance CLI offline import
 smoke and git diff --check exit0. No additional dependencies/lockfile changes.
 
-Real MMP-009A Docker qualification: NOT_RUN at preparation. Existing historical
-MMP-006/008A results are context, not execution proof for this feature HEAD.
-Hosted run/job/SHA, actual corpus and final CI receipts will be recorded after
-execution. No business result/type inferred from source is labeled measured.
+Actual MMP-009A qualification:
+
+- [Run40563424187](https://github.com/Meta-Project2026/Metamorph/actions/runs/40563424187),
+  [job122398231244](https://github.com/Meta-Project2026/Metamorph/actions/runs/40563424187/job/122398231244),
+  event workflow_dispatch, exact source1a4fca019e0a32c98549eccef22b9834d1e5305e:
+  SUCCESS. Existing manual workflow unchanged; proof=reference selects the trusted
+  extended reference proof. Frozen install, root65 checks/build, all55 Linux
+  reference tests (38 existing+17 new, zero skips), actual proof exit0.
+- Two independent workers each scheduled exactly MANIFEST.map(s=>s.id):6 clean
+  resets,34 business HTTP,6 separate bootstrap,114 replay inspector captures,
+  plus1 original mapping inspection. Exact status/stable headers/raw body and
+  full before/after typed state repeat at every corresponding step. Actual
+  business cell types integer/text; synthetic fixture separately covers all5
+  supported SQLite cell types including int64 boundaries and finite real.
+- All21 controls effective:18 explicitly original synthetic mutations/fault
+  injections;3 actual isolated process exit/timeout/cancel. Concrete codes appear
+  in the allowlisted corpus. No synthetic control is counted as a PHP request.
+- Private owner-only packs sealed/verified after close and actual independent
+  Docker inventory containers0/volumes0. Evidence remains ephemeral runner-local.
+- Actual derived PHP image sha256:d1962f3bcb3ee1e7189371a2d00fdfdcc5bb3732f6d8bb736e6782eea5e6aafd.
+  Pinned source/API/config/license/base and inspector PHP7.4.33/SQLite3.34.1,
+  fixed UTC/real monotonic checks passed. Derived image reproducibility not claimed.
+- Public artifact12760774775, ZIP SHA256
+  5d3112a5218a3ee65c995fb6e1bbaf78045f3d7b967bb72a132390b41dc5559e.
+  Downloaded only public ZIP, asserted sole reference-summary.json entry, computed
+  ZIP SHA independently and matched GitHub digest; complete envelope/corpus
+  allowlist reconstruction compared for exact equality before copying corpus.
+- [Fast CI40563486235](https://github.com/Meta-Project2026/Metamorph/actions/runs/40563486235):
+  Node22 job122398441066 and Node24 job122398441560 SUCCESS at same source SHA.
+
+After that run, public serializer additionally checks corresponding pass integrity
+hashes itself (driver already compared actual observations). New mutation test
+rejects different repeat-pass hashes. Latest new tests18/18 exit0; final hosted
+reference suite will have56 tests. Committed corpus deliberately retains the
+historical1a4fca0 SHA, not a fabricated final HEAD. Final exact-HEAD CI/manual run
+receipts are recorded in PR20 after final push; no older-run-as-newer-run claim.
+Final local reference suite56:55 pass,1 existing Windows POSIX skip, exit0;
+latest lint and git diff --check exit0. Host Node24.21.0, pnpm11.25.0.
 
 Privacy: raw outside Git, owner-only POSIX packs, no raw download. Public artifact
 is existing reference-summary.json plus versioned allowlisted acceptanceCorpus.

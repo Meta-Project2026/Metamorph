@@ -441,6 +441,25 @@ export function publicCorpus(input) {
       }),
     };
   });
+  for (let s = 0; s < MANIFEST.length; s++) {
+    const first = passes[0].scenarios[s];
+    const second = passes[1].scenarios[s];
+    ensure(
+      first.initialSha256 === second.initialSha256 &&
+        first.bootstrapSha256 === second.bootstrapSha256,
+      "CORPUS_REPEATABILITY",
+    );
+    for (let i = 0; i < first.steps.length; i++) {
+      const a = first.steps[i],
+        b = second.steps[i];
+      ensure(
+        a.httpSha256 === b.httpSha256 &&
+          a.beforeSha256 === b.beforeSha256 &&
+          a.afterSha256 === b.afterSha256,
+        "CORPUS_REPEATABILITY",
+      );
+    }
+  }
   return {
     format: VERSION,
     headSha: input.headSha,

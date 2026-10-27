@@ -232,3 +232,11 @@ test("resource cleanup never deletes an unowned container", async () => {
   await assert.rejects(ledger.reap(), { code: "CLEANUP_ERROR" });
   assert.ok(!calls.some((args) => args[0] === "rm"));
 });
+
+test("public PASS cannot conceal different repeat-pass integrity receipts", () => {
+  for (const field of ["httpSha256", "beforeSha256", "afterSha256"]) {
+    const x = input();
+    x.passes[1].scenarios[0].steps[0][field] = "8".repeat(64);
+    assert.throws(() => publicCorpus(x), { code: "CORPUS_REPEATABILITY" });
+  }
+});
