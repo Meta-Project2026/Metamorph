@@ -1,6 +1,7 @@
 import { VerificationReportSchema } from "@metamorph/agent";
 import { GateResultSchema } from "@metamorph/contracts";
 import { MANIFEST } from "@metamorph/oracle";
+import { POLICY } from "../../target-worker/src/controller.mjs";
 import { check } from "./source.mjs";
 
 export const CODES = new Set([
@@ -164,14 +165,17 @@ export function aggregateAttempt({
   );
   check(pairs.length <= MANIFEST.length, "EVIDENCE_ERROR");
   const packIds = new Set();
+  const pairIds = new Set();
   for (const [i, p] of pairs.entries()) {
     check(
       p.attemptId === attemptId &&
         p.candidateSha === candidateSha &&
         p.scenarioId === MANIFEST[i].id &&
-        /^[a-f0-9-]{36}$/.test(p.pairId),
+        /^[a-f0-9-]{36}$/.test(p.pairId) &&
+        !pairIds.has(p.pairId),
       "EVIDENCE_ERROR",
     );
+    pairIds.add(p.pairId);
     check(
       ["VERIFIED_ZERO_RESOURCES", "CLEANUP_ERROR"].includes(p.cleanup),
       "EVIDENCE_ERROR",
@@ -223,14 +227,16 @@ export function aggregateAttempt({
   ];
   for (const gate of ["G1", "G2", "G3", "G4"]) {
     const entries = pairs
-      .map((p) =>
-        gate === "G1" ? p.build : p.gates?.find((g) => g.gate === gate),
-      )
-      .filter(Boolean);
-    const ids = entries.flatMap((g, i) =>
+      .map((pair) => ({
+        pair,
+        result:
+          gate === "G1" ? pair.build : pair.gates?.find((g) => g.gate === gate),
+      }))
+      .filter(({ result }) => result !== undefined);
+    const ids = entries.flatMap(({ pair, result }) =>
       gate === "G4"
-        ? g.executedTestIds.map((id) => `${pairs[i].scenarioId}:${id}`)
-        : g.executedTestIds,
+        ? result.executedTestIds.map((id) => `${pair.scenarioId}:${id}`)
+        : result.executedTestIds,
     );
     const expected = MANIFEST.flatMap((s) =>
       gate === "G1"
@@ -244,14 +250,18 @@ export function aggregateAttempt({
         ids.every((id) => expected.includes(id)),
       "EVIDENCE_ERROR",
     );
-    const codes = entries.flatMap((g) => g.findingCodes);
+    const codes = entries.flatMap(({ result }) => result.findingCodes);
     const complete = equal(ids, expected) && entries.length === 3;
     let verdict;
-    if (fatal || entries.some((g) => g.verdict === "ERROR")) {
+    if (fatal || entries.some(({ result }) => result.verdict === "ERROR")) {
       verdict = "ERROR";
       codes.push(fatal ?? "VERIFIER_ERROR");
-    } else if (entries.some((g) => g.verdict === "FAIL")) verdict = "FAIL";
-    else if (!complete || entries.some((g) => g.verdict !== "PASS")) {
+    } else if (entries.some(({ result }) => result.verdict === "FAIL"))
+      verdict = "FAIL";
+    else if (
+      !complete ||
+      entries.some(({ result }) => result.verdict !== "PASS")
+    ) {
       verdict = "INCONCLUSIVE";
       codes.push(
         gate === "G4"
@@ -326,7 +336,7 @@ export function publicAttempt(attempt) {
       pairId: p.pairId,
       packs: p.packs.map((pack) => ({ id: pack.id, sha256: pack.sha256 })),
       cleanup: p.cleanup,
-      targetLifetimeMs: 180000,
+      targetLifetimePolicyMs: POLICY.lifetimeMs,
       gates:
         p.gates?.map((g) => ({
           gate: g.gate,

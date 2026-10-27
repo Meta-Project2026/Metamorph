@@ -13,4 +13,11 @@
 
 Status: PARTIAL. Both workflow dispatch attempts returned404 because the new
 workflow is absent from the default branch. The unchecked real-proof tasks are
-NOT_RUN; see validation.md for the exact blocker and commands.
+NOT_RUN; see validation.md for the exact blocker and commands. A separate
+workflow-only registration [PR33](https://github.com/Meta-Project2026/Metamorph/pull/33)
+is open for independent review; it has not been merged or registered on main.
+
+- [x] Fix G4 pair identity, reject duplicate pair IDs and label the lifetime policy.
+- [x] Add synthetic partial-receipt, failure-precedence and policy-field tests.
+- [ ] Obtain independent review and owner-authorized workflow registration, then
+      execute the proof against the latest PR30 SHA.

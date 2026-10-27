@@ -64,3 +64,62 @@ fault stays ERROR even if emergency reaping ultimately reaches zero resources.
 
 No paid requests, guessed prices/model APIs, hidden inputs or held-out evidence.
 No G0/G4/product PASS, AI-generation claim, owner agreement, merge or issue closure.
+
+## 2026-10-28: independent review corrections
+
+Starting head: `192a6b330901267845c710ea37f4c627e25ed51e`.
+The independent [review](https://github.com/Meta-Project2026/Metamorph/pull/30#pullrequestreview-5674811853)
+identified G4 control-ID misattribution when an earlier pair lacks gate receipts.
+Before the fix, `pnpm --filter @metamorph/agent-real test` exited1 with15/19
+passing: the first-missing and middle-missing G4 cases failed, as did the new
+policy-field and duplicate-pair-identity controls. These are synthetic receipts;
+they do not establish that a real hidden audit or hosted pair ran.
+
+The aggregator now keeps each gate result attached to its originating pair when
+filtering, and rejects duplicate pair IDs as `EVIDENCE_ERROR`. Existing stale SHA,
+pack, scenario and coverage checks remain. Public output names the configured
+limit `targetLifetimePolicyMs`; it does not publish an invented elapsed time.
+Focused synthetic tests now cover both missing-pair positions, provenance,
+partial FAIL/ERROR precedence, cleanup failure, full17/20 coverage and unchanged
+G0/G4 INCONCLUSIVE semantics.
+
+The composition path, source pinning, abort/join, private packs, and workflow
+artifact selection were statically reviewed. A `summary.json` `PASS_SCOPED`
+alone does not establish completed hosted proof: the successful Actions job,
+matching HEAD, `finalizer.json` with zero inventory and artifact digest must also
+exist and be independently inspected. The independent finalizer is a later step;
+an absent or failed finalizer leaves the overall proof incomplete.
+
+Issue #32 workflow registration is proposed separately in
+[PR33](https://github.com/Meta-Project2026/Metamorph/pull/33), head
+`baa621f44e0cfc203b0a97be663e0c24fa8577e6`. It contains exactly the two unchanged
+manual workflows from the feature branches; YAML 1.2 parsing, exact source bytes,
+read-only permissions, exact-SHA checkout, public artifact path selection and
+finalizers were checked statically. This is not workflow execution or owner
+approval. At review, neither workflow was present on default main. Independent
+review and an owner-approved merge are still required before dispatch. The
+registration branch Fast CI [run40591121690](https://github.com/Meta-Project2026/Metamorph/actions/runs/40591121690)
+passed Node22/24 on the registration SHA; it did not run either Docker proof.
+
+Local correction checks on Windows, Node22.23.1/pnpm11.25.0:
+
+| Command | Exit | Result | Wall time |
+| --- | ---: | --- | ---: |
+| `pnpm install --frozen-lockfile` | 0 | PASS | 1.51 s |
+| `pnpm lint` | 0 | PASS | 1.79 s |
+| `pnpm typecheck` | 0 | PASS | 72.02 s |
+| `pnpm test` | 0 | 85/85 PASS, no skips | 46.34 s |
+| `pnpm build` | 0 | PASS | 30.64 s |
+| `pnpm --filter @metamorph/agent-real test` | 0 | 20/20 PASS, synthetic | 3.42 s |
+| `pnpm --filter @metamorph/oracle test:reference` | 0 | 55 PASS, 1 POSIX-only skip | 15.36 s |
+| `pnpm --filter @metamorph/target-worker test` | 0 | 69/69 PASS | 1.74 s |
+| `pnpm --filter @metamorph/differential test` | 0 | 77 PASS, 1 POSIX-only skip | 14.87 s |
+
+After tightening the malformed-receipt assertions to require `EVIDENCE_ERROR`,
+the focused suite again passed20/20 and lint plus the full root suite again
+passed85/85 in40.03 s combined. The pushed head's Node22/24 Fast CI is tracked
+in the PR; none of these checks executes the real candidate or PHP on this host.
+
+Actual Agent/PHP/TS proof, positive, negative/repair, runtime controls, final
+Docker inventory, pair/pack SHA receipts and artifact hashes remain **NOT_RUN**.
+AI_GENERATION_NOT_RUN, EXTERNAL_RETENTION_NOT_RUN and product NOT_ESTABLISHED.

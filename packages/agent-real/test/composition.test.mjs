@@ -155,6 +155,74 @@ test("synthetic full public coverage still cannot establish G0/G4 or Agent PASS"
   assert.equal(report.results[2].executedTestIds.length, 17);
   assert.equal(report.results[3].executedTestIds.length, 20);
 });
+test("synthetic G4 controls remain bound to their later scenario when the first pair has no gates", () => {
+  const a = attemptFixture();
+  a.pairs[0].gates = [];
+  const report = aggregateAttempt(a);
+  const g4 = report.results.find((gate) => gate.gate === "G4");
+  assert.equal(g4.verdict, "INCONCLUSIVE");
+  assert.deepEqual(
+    g4.executedTestIds,
+    MANIFEST.slice(1).flatMap((scenario) =>
+      expectedIds(scenario, "G4").map((id) => `${scenario.id}:${id}`),
+    ),
+  );
+  assert.equal(
+    report.results.find((gate) => gate.gate === "G2").verdict,
+    "INCONCLUSIVE",
+  );
+  assert.equal(
+    report.results.find((gate) => gate.gate === "G3").verdict,
+    "INCONCLUSIVE",
+  );
+});
+test("synthetic G4 controls do not shift when the middle pair has no gates", () => {
+  const a = attemptFixture();
+  a.pairs[1].gates = [];
+  const report = aggregateAttempt(a);
+  const g4 = report.results.find((gate) => gate.gate === "G4");
+  assert.equal(g4.verdict, "INCONCLUSIVE");
+  assert.deepEqual(
+    g4.executedTestIds,
+    [MANIFEST[0], MANIFEST[2]].flatMap((scenario) =>
+      expectedIds(scenario, "G4").map((id) => `${scenario.id}:${id}`),
+    ),
+  );
+});
+test("synthetic partial receipts preserve ERROR over FAIL without inventing coverage", () => {
+  const a = attemptFixture();
+  a.pairs[0].gates = [];
+  const fail = a.pairs[1].gates[0];
+  fail.verdict = "FAIL";
+  fail.findingCodes = ["HTTP_STATUS"];
+  const error = a.pairs[2].gates[0];
+  error.verdict = "ERROR";
+  error.findingCodes = ["VERIFIER_ERROR"];
+  const report = aggregateAttempt(a);
+  assert.equal(
+    report.results.find((gate) => gate.gate === "G2").verdict,
+    "ERROR",
+  );
+  assert.equal(
+    report.results.find((gate) => gate.gate === "G3").verdict,
+    "INCONCLUSIVE",
+  );
+  assert.equal(
+    report.results.find((gate) => gate.gate === "G4").verdict,
+    "INCONCLUSIVE",
+  );
+  assert.deepEqual(report.executedScenarioIds, [
+    MANIFEST[1].id,
+    MANIFEST[2].id,
+  ]);
+});
+test("synthetic public lifetime reports policy rather than measured duration", () => {
+  const result = publicAttempt(attemptFixture());
+  for (const pair of result.pairs) {
+    assert.equal(pair.targetLifetimePolicyMs, 180000);
+    assert.equal(Object.hasOwn(pair, "targetLifetimeMs"), false);
+  }
+});
 test("synthetic incomplete scenarios stay INCONCLUSIVE; no missing step becomes PASS", () => {
   const a = attemptFixture();
   a.pairs.pop();
@@ -178,6 +246,12 @@ test("synthetic stale evidence identity and reused pack IDs are rejected", () =>
       a.pairs[1].packs[0].id = a.pairs[0].packs[0].id;
     },
     (a) => {
+      a.pairs[1].pairId = a.pairs[0].pairId;
+    },
+    (a) => {
+      a.pairs[1].gates[1].executedTestIds = expectedIds(MANIFEST[0], "G3");
+    },
+    (a) => {
       a.pairs[1].gates[0].executedTestIds.pop();
     },
     (a) => {
@@ -186,7 +260,7 @@ test("synthetic stale evidence identity and reused pack IDs are rejected", () =>
   ]) {
     const a = attemptFixture();
     mutate(a);
-    assert.throws(() => aggregateAttempt(a));
+    assert.throws(() => aggregateAttempt(a), { code: "EVIDENCE_ERROR" });
   }
 });
 test("synthetic cleanup/volume fault remains ERROR despite passing comparisons", () => {

@@ -23,6 +23,8 @@ or absolute source/evidence paths cross the repair/public boundary.
 Safe auditor handshake: immutable candidateSha, fixed public source/manifest and
 runtime hashes, gate codes/IDs, coverage and pack-index hashes. This handoff does
 not request or reveal hidden tests, seeds, expected outputs or private audit packs.
+`targetLifetimePolicyMs` names the configured worker limit; it is not an elapsed
+duration. No duration is inferred from this field.
 The final workflow run's checked-out HEAD and artifact digest bind the hosted
 claim; local success and a PR do not establish owner agreement or product PASS.
 

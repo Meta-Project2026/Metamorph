@@ -23,6 +23,8 @@ on release. This assumes exclusive trusted host ownership, not a hostile host
 administrator. Each verification uses three fresh independent PHP/TS pairs with
 the immutable public MANIFEST. The unchanged Oracle compares initial DB before
 business HTTP. Target lifetime remains180s per pair, including build and resets.
+The public `targetLifetimePolicyMs` is the configured upper bound, not an
+observation of elapsed runtime; no measured duration is published.
 Cancellation combines Agent and per-operation signals; the driver joins pending
 verification after Agent timeout before recording final cleanup.
 
