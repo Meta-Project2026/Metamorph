@@ -1,0 +1,59 @@
+name: Agent real workshop composition
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-workshop-compose-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      AGENT_HEAD_SHA: ${{ github.sha }}
+      PILOT_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - name: Set safe output directories
+        run: |
+          echo "AGENT_PUBLIC_OUTPUT=$RUNNER_TEMP/agent-public" >> "$GITHUB_ENV"
+          echo "WORKSHOP_PUBLIC_OUTPUT=$RUNNER_TEMP/agent-public" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - name: Verify exact checked-out SHA
+        run: test "$(git rev-parse HEAD)" = "$AGENT_HEAD_SHA" && git rev-parse HEAD
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - name: Fast checks and original boundary regressions
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+          pnpm --filter @metamorph/oracle test:reference
+          pnpm --filter @metamorph/target-worker test
+          pnpm --filter @metamorph/differential test
+          pnpm --filter @metamorph/agent-real test
+      - name: Real Agent positive and negative repair proof
+        run: pnpm --filter @metamorph/agent-real proof
+      - name: Independent final inventory even after interruption
+        if: always()
+        run: mkdir -p "$AGENT_PUBLIC_OUTPUT" && node packages/differential/src/workshop-finalizer.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-workshop-public
+          path: |
+            ${{ env.AGENT_PUBLIC_OUTPUT }}/summary.json
+            ${{ env.AGENT_PUBLIC_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
