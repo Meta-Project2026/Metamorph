@@ -74,9 +74,33 @@ export function boundedCommand(
             stdoutBase64: stdout.toString("base64"),
             stderrBase64: stderr.toString("base64"),
           });
-          if (fault || code !== 0)
-            reject(new ReferenceWorkerError(fault ?? "WORKER_CRASH"));
-          else resolve({ stdout, stderr, elapsedMs });
+          if (fault || code !== 0) {
+            const kind = [
+              "exec",
+              "cp",
+              "run",
+              "pause",
+              "unpause",
+              "image",
+              "pull",
+              "build",
+              "start",
+              "create",
+              "ps",
+              "rm",
+            ].includes(args[0] ?? "")
+              ? args[0]?.toUpperCase()
+              : "PROCESS";
+            const parseError = stderr.toString().includes("PHP Parse error:");
+            reject(
+              new ReferenceWorkerError(
+                fault ??
+                  (parseError
+                    ? "PHP_CLIENT_PARSE_ERROR"
+                    : `COMMAND_${kind}_ERROR`),
+              ),
+            );
+          } else resolve({ stdout, stderr, elapsedMs });
         } catch {
           reject(new ReferenceWorkerError("EVIDENCE_WRITE_ERROR"));
         }

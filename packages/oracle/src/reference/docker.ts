@@ -300,6 +300,12 @@ export class DockerReferenceTransport {
     signal: AbortSignal,
   ): Promise<{ observation: HttpObservation; raw: unknown }> {
     ensure(this.app, "WORKER_NOT_RESET");
+    // Syntax-check original trusted client inside the sandbox before executing it.
+    await this.command(
+      ["exec", "-i", this.app, "php", "-l"],
+      signal,
+      Buffer.from(`<?php\n${client}`),
+    );
     const result = await this.command(
       [
         "exec",
