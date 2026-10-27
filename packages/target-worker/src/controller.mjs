@@ -1,6 +1,11 @@
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { performance } from "node:perf_hooks";
+import {
+  ITEMS_PROFILE,
+  isProfile,
+  requestPolicy,
+} from "../runtime/profile.mjs";
 import { sha256, validateBundle } from "./admission.mjs";
 import { isTrustedRuntime } from "./runtime-broker.mjs";
 
@@ -163,13 +168,14 @@ export class TargetWorker {
     runtime,
     bundle,
     clock = "real",
-    { trustedTest, limits = {} } = {},
+    { trustedTest, limits = {}, profile = ITEMS_PROFILE } = {},
   ) {
     if (
       (!isTrustedRuntime(runtime) &&
         typeof trustedTest?.command !== "function") ||
       !/^sha256:[a-f0-9]{64}$/.test(runtime?.imageId) ||
-      !["real", "fixed-experiment"].includes(clock)
+      !["real", "fixed-experiment"].includes(clock) ||
+      !isProfile(profile)
     )
       throw new WorkerError("ADMISSION_REJECTED: trusted runtime required");
     for (const [key, value] of Object.entries(limits)) {
@@ -189,6 +195,10 @@ export class TargetWorker {
         throw new WorkerError("ADMISSION_REJECTED: limits");
     }
     this.image = runtime.imageId;
+    Object.defineProperty(this, "profile", {
+      value: profile,
+      enumerable: true,
+    });
     this.provenance = runtime.provenance;
     this.bundle = validateBundle(bundle.files, bundle.candidateSha);
     this.clock = clock;
@@ -393,7 +403,25 @@ export class TargetWorker {
     this.track("volume", volume);
     requireSuccess(
       await this.cmd(
-        ["volume", "create", "--label", "metamorph.target-worker=true", volume],
+        [
+          "volume",
+          "create",
+          "--label",
+          "metamorph.target-worker=true",
+          ...(this.profile.stateMiB
+            ? [
+                "--driver",
+                "local",
+                "--opt",
+                "type=tmpfs",
+                "--opt",
+                "device=tmpfs",
+                "--opt",
+                `o=size=${this.profile.stateMiB}m,uid=10001,gid=10002,mode=0750,noexec,nosuid,nodev`,
+              ]
+            : []),
+          volume,
+        ],
         { signal },
       ),
     );
@@ -414,7 +442,7 @@ export class TargetWorker {
           "--detach",
           ...sandboxArgs(name),
           "--mount",
-          `type=volume,source=${volume},target=/state`,
+          `type=volume,source=${volume},target=/state${this.profile.stateMiB ? ",volume-nocopy" : ""}`,
           this.image,
         ],
         { signal },
@@ -568,6 +596,8 @@ export class TargetWorker {
     }
   }
   async observe(action, signal, timeoutMs) {
+    if (this.profile !== ITEMS_PROFILE)
+      action = { ...action, profileId: this.profile.id };
     const runtime = this.runtime;
     this.assertRuntime(runtime);
     const name = `${this.runId}-inspect-${randomUUID()}`;
@@ -633,15 +663,19 @@ export class TargetWorker {
     this.assertRuntime(runtime);
     return value;
   }
+  validRequest(method, path, body) {
+    try {
+      requestPolicy(this.profile ?? ITEMS_PROFILE, method, path, body);
+      return true;
+    } catch {
+      return false;
+    }
+  }
   request(stepId, method, path, body, signal) {
     return this.operation(async () => {
       if (
         !/^[A-Za-z0-9:_-]{1,100}$/.test(stepId) ||
-        !["GET", "POST"].includes(method) ||
-        typeof path !== "string" ||
-        !/^\/[a-zA-Z0-9/?=&_-]*$/.test(path) ||
-        (body !== undefined &&
-          (typeof body !== "string" || Buffer.byteLength(body) > 4096))
+        !TargetWorker.prototype.validRequest.call(this, method, path, body)
       )
         throw new WorkerError("ADMISSION_REJECTED: request");
       const requestId = randomUUID();
