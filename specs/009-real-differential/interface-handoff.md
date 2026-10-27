@@ -63,6 +63,13 @@ Target-owner next task (proposal only; no notification/approval implied):
    or foreign module edit is used to add that missing property. Until agreed,
    hard-quota isolation acceptance is BLOCKED; this exact original fixture pilot
    can only demonstrate observed bounded state and independent mismatch detection.
+4. Extend target trusted HTTP transport by explicit agreement: current controller
+   path admission excludes `.` (so `/api.php` cannot be requested), and its HTTP
+   inspector always sends Content-Type application/json whereas workshop manifest
+   POST bodies are form-urlencoded. The current real pilot skips business HTTP
+   after initial mismatch, so neither is bypassed. If a future compatible initial
+   DB reaches those requests, current target must reject with ADMISSION_REJECTED;
+   this bridge must not rewrite the route/body/content-type to hide that error.
 
 External private storage/encryption recipient is absent. Local raw packs survive
 worker cleanup and are destroyed with runner. EVIDENCE_RETENTION_NOT_CONFIGURED /

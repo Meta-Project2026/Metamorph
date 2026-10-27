@@ -10,6 +10,7 @@ import {
   compareSqlite,
   MANIFEST,
   snapshotSqlite,
+  verifyPair,
 } from "@metamorph/oracle";
 import { encode } from "../../target-worker/runtime/sqlite-value.mjs";
 import { POLICY, TargetWorker } from "../../target-worker/src/controller.mjs";
@@ -473,6 +474,39 @@ test("real adapter contract consumes provision public-initial then fresh schedul
   assert.equal(a.stats.requests, 6);
   await assert.rejects(a.reset(signal()), /RESET_SCHEDULE/);
   await a.close(signal());
+});
+test("unchanged verifyPair integrates adapter and skips HTTP on synthetic initial mismatch", async () => {
+  const w = fakeWorker();
+  const candidate = adapter(w);
+  await candidate.provision(signal());
+  let httpCalls = 0;
+  const reference = {
+    async reset() {},
+    async snapshot() {
+      return { format: "sqlite-logical-v1", schema: [], tables: [] };
+    },
+    async request() {
+      httpCalls++;
+      throw new Error("must skip");
+    },
+    async close() {},
+  };
+  const result = await verifyPair({
+    reference,
+    candidate,
+    scenarios: SCENARIOS,
+    artifactParent: scratch,
+    operationTimeoutMs: 10000,
+  });
+  assert.deepEqual(
+    result.gateResults.map((g) => g.verdict),
+    ["INCONCLUSIVE", "FAIL", "INCONCLUSIVE"],
+  );
+  assert.deepEqual(result.gateResults[1].executedTestIds, [
+    "workshop-business:initial",
+  ]);
+  assert.equal(httpCalls, 0);
+  assert.equal(candidate.stats.requests, 0);
 });
 for (const [name, invoke] of [
   [

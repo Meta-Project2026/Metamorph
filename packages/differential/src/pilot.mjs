@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  chmodSync,
   DockerReferenceTransport,
   dockerCommand,
   PhpReferenceWorker,
@@ -50,6 +51,7 @@ let targetRuntime;
 let result;
 let cleanup = "ERROR";
 let serial = 0;
+let phpCommandFailure = "NONE";
 const record = (kind, value) =>
   state.bridge.write(`bridge-${++serial}-${kind}`, value);
 try {
@@ -79,7 +81,13 @@ try {
   const originalCommand = dockerCommand(state.php);
   const phpCommand = async (args, ...rest) => {
     resources.track(args);
-    return originalCommand(args, ...rest);
+    try {
+      return await originalCommand(args, ...rest);
+    } catch (error) {
+      phpCommandFailure =
+        typeof error.code === "string" ? error.code : "PHP_COMMAND_ERROR";
+      throw error;
+    }
   };
   const signal = AbortSignal.timeout(12 * 60 * 1000);
   phase = "php-provision";
@@ -90,6 +98,9 @@ try {
     signal,
     evidence: state.php,
   });
+  // umask077 protects raw evidence, but the verified public OSS archive must be
+  // readable by sandbox UID65534 through its sole readonly file bind.
+  chmodSync(phpRuntime.archivePath, 0o444);
   transport = new DockerReferenceTransport(phpRuntime, phpCommand);
   const phpClock = await transport.inspectFixture(
     join(root, "packages/oracle/reference/fixture.sql"),
@@ -169,6 +180,8 @@ try {
   });
   phase = "retain-oracle";
   actual = retainOracle(result, state.oracleParent, state.bridge);
+  if (actual.gates.some((gate) => gate.verdict === "ERROR"))
+    failure = { code: "ORACLE_OPERATION_ERROR", phase: "verify-pair" };
   requireCheck(
     JSON.stringify(actual.manifest.scenarioIds) ===
       JSON.stringify(SCENARIOS.map((s) => s.id)) &&
@@ -317,6 +330,17 @@ try {
       "DIRTY_TARGET_RESET",
       "EVIDENCE_ERROR",
       "PILOT_ERROR",
+      "ORACLE_OPERATION_ERROR",
+      "COMMAND_EXEC_ERROR",
+      "COMMAND_RUN_ERROR",
+      "COMMAND_VOLUME_ERROR",
+      "COMMAND_IMAGE_ERROR",
+      "COMMAND_PAUSE_ERROR",
+      "COMMAND_UNPAUSE_ERROR",
+      "PHP_CLIENT_PARSE_ERROR",
+      "WORKER_ABORTED",
+      "WORKER_TIMEOUT",
+      "EVIDENCE_WRITE_ERROR",
       "STEP_IDENTITY",
       "RESET_SCHEDULE",
       "INCOMPLETE_SCENARIO",
@@ -339,6 +363,9 @@ try {
           target?.failure?.cleanupCode === "CLEANUP_ERROR"
             ? "CLEANUP_ERROR"
             : "NONE",
+        phpCommandCode: safeCodes.has(phpCommandFailure)
+          ? phpCommandFailure
+          : "PHP_COMMAND_ERROR",
         gates: result
           ? result.gateResults.map((gate) => ({
               gate: gate.gate,

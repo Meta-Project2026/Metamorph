@@ -65,6 +65,9 @@ observed state; no adversarial write-quota guarantee or general candidate isolat
 certification is claimed. A hard target state quota needs an owner-approved API.
 
 Private POSIX workspace is0700 outside checkout; pilot uses umask077. Existing
+verified public PHP source archive alone is explicitly0444 for sandbox UID65534;
+it contains public OSS source, never evidence. Its parent stays private and only
+the single readonly file is bound into PHP. Raw evidence remains0600.
 PrivateEvidence packs retain actual worker stdout/stderr, source/clock/identity,
 full HTTP/SQLite and actual Oracle publication. Oracle raw artifacts remain under
 a separate private parent; a bounded catalog copies their bytes into an atomic
