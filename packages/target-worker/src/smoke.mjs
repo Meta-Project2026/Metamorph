@@ -316,8 +316,48 @@ try {
         assert.equal(alive.status, 404);
         return worker.snapshot("must-fail");
       },
-      /OBSERVATION_ERROR/,
+      id === "corrupt-db" ? /RUNTIME_FAILED/ : /OBSERVATION_ERROR/,
+      id === "corrupt-db"
+        ? (evidence) => {
+            const execution = evidence.cleanup.findLast(
+              (entry) => entry.execution,
+            )?.execution;
+            assert.equal(execution?.exitCode, 1);
+            assert.match(execution.stderr, /ERR_SQLITE_ERROR/);
+          }
+        : undefined,
     );
+  await exercise(
+    "corrupt-db-independent-parser",
+    mutated(
+      original +
+        '\nserver.on("request", req => { if (req.url === "/corrupt-control") require("node:fs").writeFileSync("/state/target.sqlite", "corrupt"); });',
+    ),
+    async (worker) => {
+      assert.equal(
+        (
+          await worker.request(
+            "corrupt-public-control",
+            "GET",
+            "/corrupt-control",
+          )
+        ).status,
+        404,
+      );
+      return worker.snapshot("corrupt-independent");
+    },
+    /OBSERVATION_ERROR/,
+    (evidence) => {
+      assert.ok(
+        evidence.commands.some(
+          (receipt) =>
+            receipt.args.includes("/opt/worker/inspect.mjs") &&
+            receipt.exitCode === 1 &&
+            /ERR_SQLITE_ERROR/.test(receipt.stderr),
+        ),
+      );
+    },
+  );
   await exercise(
     "ignore-candidate-snapshot-endpoint",
     mutated(
@@ -501,10 +541,14 @@ try {
       signal: cancellation.signal,
       workerOptions: {
         trustedTest: {
-          command: (args, config) => {
-            if (args.includes("/opt/worker/launch.mjs"))
-              setTimeout(() => cancellation.abort(), 150);
-            return command(args, config);
+          command: async (args, config) => {
+            const receipt = await command(args, config);
+            if (
+              args.includes("/opt/worker/inspect.mjs") &&
+              JSON.parse(args.at(-1)).kind === "readiness"
+            )
+              cancellation.abort();
+            return receipt;
           },
         },
       },

@@ -1,0 +1,108 @@
+{
+  "checks": [
+    {
+      "exitCode": 0,
+      "elapsedMs": 1034,
+      "tail": [
+        "Scope: all 7 workspace projects",
+        "Already up to date",
+        "Done in 794ms using pnpm v11.25.0"
+      ],
+      "command": "pnpm install --frozen-lockfile"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 1439,
+      "tail": [
+        "$ biome check .",
+        "Checked 79 files in 190ms. No fixes applied."
+      ],
+      "command": "pnpm lint"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 51980,
+      "tail": [
+        "packages/target-worker typecheck$ tsc -p tsconfig.json --noEmit",
+        "packages/contracts typecheck$ tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json",
+        "packages/target-worker typecheck: Done",
+        "packages/contracts typecheck: Done",
+        "apps/server typecheck$ tsc -p tsconfig.json --noEmit",
+        "packages/agent typecheck$ tsc -p tsconfig.json --noEmit",
+        "packages/oracle typecheck$ tsc -p tsconfig.json --noEmit",
+        "packages/agent typecheck: Done",
+        "packages/oracle typecheck: Done",
+        "packages/integration typecheck$ tsc -p tsconfig.json --noEmit",
+        "apps/server typecheck: Done",
+        "packages/integration typecheck: Done"
+      ],
+      "command": "pnpm typecheck"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 30573,
+      "tail": [
+        "  duration_ms: 4.9582",
+        "  type: 'test'",
+        "  ...",
+        "1..65",
+        "# tests 65",
+        "# suites 0",
+        "# pass 65",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 5691.7914"
+      ],
+      "command": "pnpm test"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 23921,
+      "tail": [
+        "packages/target-worker build$ tsc -p tsconfig.json",
+        "packages/contracts build$ tsc -p tsconfig.json",
+        "packages/target-worker build: Done",
+        "packages/contracts build: Done",
+        "apps/server build$ tsc -p tsconfig.json",
+        "packages/agent build$ tsc -p tsconfig.json",
+        "packages/oracle build$ tsc -p tsconfig.json",
+        "packages/agent build: Done",
+        "packages/oracle build: Done",
+        "packages/integration build$ tsc -p tsconfig.json",
+        "apps/server build: Done",
+        "packages/integration build: Done"
+      ],
+      "command": "pnpm build"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 669,
+      "tail": [
+        "  duration_ms: 0.5632",
+        "  type: 'test'",
+        "  ...",
+        "1..32",
+        "# tests 32",
+        "# suites 0",
+        "# pass 32",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 512.7762"
+      ],
+      "command": "node --test packages/target-worker/test/*.test.mjs"
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 149,
+      "tail": [],
+      "command": "git diff --check"
+    }
+  ],
+  "node": "v22.23.1",
+  "pnpm": "11.25.0",
+  "sourceHead": "516f6e3642e039efcdfbcc290466e1eca4fd844e"
+}

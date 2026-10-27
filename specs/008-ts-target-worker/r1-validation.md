@@ -17,7 +17,7 @@ or host execution of candidate TS/JS. Authorized hosted manual workflow is used.
 | Errors | Candidate often ENVIRONMENT_ERROR | Receipt-based WorkerError.code; sticky cleanup failure priority |
 | Image trust | Arbitrary digest accepted | Host broker build/inspect/hash/toolchain capability; no crypto attestation |
 
-Local Node22.23.1 / pnpm11.25.0. Dedicated tests currently28/28 exit0;
+Local Node22.23.1 / pnpm11.25.0. Dedicated tests currently32/32 exit0;
 these include trusted CLI simulations and actual admission filesystem controls.
 They are not Docker replay. Final commands, exit statuses, source SHA, hosted
 run/job/artifact links, measured image/runtime versions and individual controls
@@ -43,3 +43,23 @@ injection/hung-daemon behavior is NOT_RUN; simulation receipts are not real faul
 Remaining NOT_RUN: full independent G0; PHP-TS G2/G3; held-out G4; benchmark
 registration; advancing-clock/DST; scenario concurrency; live Meta; shared API
 agreement. Original clock probe is preserved; new replay status pending.
+
+## First hosted replay (superseded, failure retained)
+
+[Run40432293154](https://github.com/Meta-Project2026/Metamorph/actions/runs/40432293154),
+[job121952638738](https://github.com/Meta-Project2026/Metamorph/actions/runs/40432293154/job/121952638738),
+checkout516f6e3642e039efcdfbcc290466e1eca4fd844e: boundary31/31, smoke exit1.
+15 completed controls and failing corrupt-db receipt were downloaded and read.
+Actual corrupt-db launch exits1 with ERR_SQLITE_ERROR ('file is not a database')
+during independent readiness GET /items; cleanupVerified=true. Former expectation
+of later OBSERVATION_ERROR was wrong for this earlier executed read. R1 now
+requires RUNTIME_FAILED plus exit1/ERR_SQLITE_ERROR for this original control,
+and adds corrupt-db-independent-parser: corrupt after readiness, require separate
+inspector exit1/ERR_SQLITE_ERROR and OBSERVATION_ERROR. No acceptance weakened.
+Malformed HTTP is independently reported as MALFORMED_HTTP in inspector receipt;
+raw parser stderr is no longer the decision source. Clocks/later controls were
+NOT_RUN in this failed attempt. Node24.11.0, SQLite3.50.4, TypeScript5.9.3,
+libfaketime0.9.10-2.1 measured; Docker28.0.4, host Node24.21.0. Actual image
+sha256:96ad221b47d9121ef5c8d915889c192431ec76ca4f4062c0630812a898ade2a6.
+[Fast CI40432293472](https://github.com/Meta-Project2026/Metamorph/actions/runs/40432293472)
+passed Node22/24 for that source only; final HEAD replay remains pending.

@@ -291,14 +291,20 @@ export class TargetWorker {
         return value;
       } catch (error) {
         this.state = "failed";
-        this.evidence.operationError = error.message.split(":")[0];
+        const failure =
+          error instanceof WorkerError
+            ? error
+            : new WorkerError("ENVIRONMENT_ERROR");
+        this.evidence.operationError = failure.code;
+        if (failure !== error)
+          this.evidence.operationDiagnostic = error.message;
         // Cleanup is mandatory even when volume/container creation only partly ran.
         try {
           await this.cleanupAll();
         } catch {
           throw new WorkerError("CLEANUP_ERROR");
         }
-        throw error;
+        throw failure;
       }
     })();
     this.active = pending;
@@ -502,6 +508,7 @@ export class TargetWorker {
       }
       this.evidence.readiness.push(result);
       this.assertRuntime(runtime);
+      if (this.now() >= until) throw new WorkerError("TIMEOUT");
       if (
         result.requestId !== requestId ||
         result.runtimeId !== runtime.id ||
@@ -518,6 +525,7 @@ export class TargetWorker {
           ).stdout,
         );
         this.assertRuntime(runtime);
+        if (this.now() >= until) throw new WorkerError("TIMEOUT");
         if (state.Running !== true) throw new WorkerError("RUNTIME_FAILED");
         return;
       }
@@ -538,7 +546,7 @@ export class TargetWorker {
         const cancel = () => {
           done();
           reject(
-            new Error(
+            new WorkerError(
               this.expired
                 ? "TIMEOUT"
                 : runtime.ended.signal.aborted

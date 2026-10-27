@@ -189,6 +189,7 @@ test("reset readiness allows immediate request; eight resets retain exactly one 
 
 for (const [name, options, code] of [
   ["never listener", { refusals: Infinity, advance: 6000 }, "TIMEOUT"],
+  ["late ready after startup deadline", { advance: 10001 }, "TIMEOUT"],
   [
     "wrong response",
     { probe: { ready: false, reason: "WRONG_RESPONSE" } },
