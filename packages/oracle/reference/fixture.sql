@@ -1,0 +1,11 @@
+CREATE TABLE typed (id INTEGER PRIMARY KEY AUTOINCREMENT, n INTEGER, r REAL, t TEXT DEFAULT 'default', b BLOB, nullable TEXT);
+CREATE INDEX typed_n ON typed(n);
+INSERT INTO typed(n,r,t,b,nullable) VALUES (9223372036854775807,1.25,'Пример',X'00ABFF',NULL),(-9223372036854775808,-2.5,'',X'',NULL);
+INSERT INTO typed(n) VALUES (0);
+DELETE FROM typed WHERE id=3;
+CREATE TABLE composite (a TEXT, b INTEGER, value TEXT, PRIMARY KEY(b,a));
+INSERT INTO composite VALUES ('z',-10,'first'),('a',2,'second'),(NULL,2,'nullable');
+CREATE TABLE multiset (value TEXT, n INTEGER);
+INSERT INTO multiset VALUES ('x',10),('x',-2),('x',10),(NULL,0);
+CREATE VIEW visible AS SELECT id,t FROM typed;
+CREATE TRIGGER typed_insert AFTER INSERT ON typed BEGIN UPDATE typed SET nullable='trigger' WHERE id=NEW.id; END;

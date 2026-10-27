@@ -15,7 +15,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "controls": "node test/run-controls.mjs"
+    "controls": "node test/run-controls.mjs",
+    "test:reference": "pnpm --filter @metamorph/oracle... build && node --test reference/reference.test.mjs",
+    "reference:proof": "node reference/proof.mjs"
   },
   "dependencies": {
     "@metamorph/contracts": "workspace:*"

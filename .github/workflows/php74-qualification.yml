@@ -1,7 +1,13 @@
-name: PHP 7.4 qualification
+name: PHP 7.4 Oracle manual proof
 
 on:
   workflow_dispatch:
+    inputs:
+      proof:
+        description: Reference worker or original qualification
+        type: choice
+        options: [reference, qualification]
+        default: reference
 
 permissions:
   contents: read
@@ -22,15 +28,43 @@ jobs:
           ref: ${{ github.sha }}
       - name: Validate trusted summary redaction and recipe
         run: node --test packages/oracle/probes/qualification.test.mjs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+      - name: Install frozen workspace
+        run: pnpm install --frozen-lockfile
+      - name: Preserve existing fast checks
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+      - name: Build and test reference broker
+        run: pnpm --filter @metamorph/oracle test:reference
       - name: Run bounded reference qualification
+        if: inputs.proof == 'qualification'
         env:
           QUALIFICATION_HEAD_SHA: ${{ github.sha }}
         run: node packages/oracle/probes/qualification.mjs
+      - name: Run stepwise reference and private retention proof
+        if: inputs.proof != 'qualification'
+        env:
+          REFERENCE_HEAD_SHA: ${{ github.sha }}
+        run: node packages/oracle/reference/proof.mjs
       - name: Publish sanitized structural summary only
-        if: always()
+        if: always() && inputs.proof == 'qualification'
         uses: actions/upload-artifact@v4
         with:
           name: php74-qualification-summary
           path: qualification-public/qualification-summary.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Publish allowlisted reference summary only
+        if: always() && inputs.proof != 'qualification'
+        uses: actions/upload-artifact@v4
+        with:
+          name: php74-reference-summary
+          path: reference-public/reference-summary.json
           if-no-files-found: error
           retention-days: 7

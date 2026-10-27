@@ -1,0 +1,226 @@
+// Trusted host proof; never loads upstream PHP, never opens its SQLite DB on host.
+
+import {
+  chmodSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { DatabaseSync } from "node:sqlite";
+import { fileURLToPath } from "node:url";
+import { compareHttp, compareSqlite, snapshotSqlite } from "../dist/index.js";
+import {
+  DockerReferenceTransport,
+  provisionRuntime,
+} from "../dist/reference/docker.js";
+import { PrivateEvidence } from "../dist/reference/evidence.js";
+import {
+  ensure,
+  MANIFEST,
+  MANIFEST_SHA256,
+  SOURCE,
+  stepId,
+} from "../dist/reference/manifest.js";
+import { dockerCommand } from "../dist/reference/process.js";
+import { publicSummary } from "../dist/reference/public.js";
+import { PhpReferenceWorker } from "../dist/reference/worker.js";
+
+const oracleRoot = fileURLToPath(new URL("..", import.meta.url));
+const publicRoot = resolve(oracleRoot, "../..");
+const output = resolve("reference-public");
+mkdirSync(output, { recursive: true });
+let phase = "private-storage";
+let worker;
+try {
+  ensure(process.platform !== "win32", "LINUX_REQUIRED");
+  const parent =
+    process.env.ORACLE_PRIVATE_PARENT ??
+    mkdtempSync(join(tmpdir(), "mmp-reference-private-"));
+  if (!process.env.ORACLE_PRIVATE_PARENT) chmodSync(parent, 0o700);
+  const schedule = MANIFEST.flatMap((s) => [s.id, s.id]);
+  const evidence = new PrivateEvidence(parent, publicRoot, {
+    source: SOURCE,
+    manifest: MANIFEST,
+    manifestSha256: MANIFEST_SHA256,
+    schedule,
+    headSha: process.env.REFERENCE_HEAD_SHA,
+    wallStart: new Date().toISOString(),
+  });
+  const directory = mkdtempSync(join(tmpdir(), "mmp-reference-source-"));
+  chmodSync(directory, 0o700);
+  const command = dockerCommand(evidence);
+  phase = "provision";
+  const signal = AbortSignal.timeout(12 * 60 * 1000);
+  const runtime = await provisionRuntime({
+    command,
+    directory,
+    oracleRoot,
+    signal,
+    evidence,
+  });
+  const transport = new DockerReferenceTransport(runtime, command);
+  phase = "mapping";
+  const sqlPath = join(oracleRoot, "reference", "fixture.sql");
+  const fixturePath = join(directory, "trusted-fixture.sqlite");
+  const db = new DatabaseSync(fixturePath);
+  try {
+    db.exec(readFileSync(sqlPath, "utf8"));
+  } finally {
+    db.close();
+  }
+  const fixture = await transport.inspectFixture(sqlPath, signal);
+  ensure(
+    compareSqlite(snapshotSqlite(fixturePath), fixture.snapshot).length === 0,
+    "MAPPING_MISMATCH",
+  );
+  evidence.write("mapping-control", {
+    snapshot: fixture.snapshot,
+    inspector: fixture.raw,
+    result: "EQUAL",
+  });
+  phase = "replay";
+  worker = new PhpReferenceWorker(transport, evidence, schedule);
+  let steps = 0;
+  const count = (snapshot) =>
+    snapshot.tables.find((t) => t.name === "appointments").rows.length;
+  const values = (snapshot) => {
+    const table = snapshot.tables.find((t) => t.name === "appointments");
+    return table.rows.map((row) =>
+      Object.fromEntries(
+        table.columns.map((name, i) => [name, row[i].value ?? null]),
+      ),
+    );
+  };
+  for (const scenario of MANIFEST) {
+    const observations = [];
+    for (let replay = 0; replay < 2; replay++) {
+      await worker.reset(signal);
+      const initial = await worker.snapshot(signal);
+      ensure(count(initial) === 0);
+      const current = [{ snapshot: initial }];
+      for (const [i, request] of scenario.requests.entries()) {
+        const before = current.at(-1).snapshot;
+        const http = await worker.requestStep(
+          scenario.id,
+          stepId(i),
+          request,
+          signal,
+        );
+        const snapshot = await worker.snapshot(signal);
+        const json = JSON.parse(Buffer.from(http.body).toString());
+        ensure(http.status === 200);
+        const rejection =
+          (scenario.id === "workshop-rejected" && [1, 3].includes(i)) ||
+          (scenario.id === "workshop-capacity" && i === 4);
+        if (request.method === "GET" || rejection)
+          ensure(compareSqlite(before, snapshot).length === 0);
+        if (rejection) ensure(json.success === false);
+        if (scenario.id === "workshop-rejected" && i === 1)
+          ensure(json.error_type === "DUPLICATE_CLIENT");
+        if (scenario.id === "workshop-capacity") {
+          ensure(count(snapshot) === Math.min(i + 1, 4));
+          if (i === 4) ensure(json.error_type === "MECHANIC_FULL");
+          if (i === 5)
+            ensure(
+              json.mechanics[0].booked_count === 4 &&
+                json.mechanics[0].is_full === true,
+            );
+        }
+        if (scenario.id === "workshop-business") {
+          ensure(count(snapshot) === (i >= 4 ? 0 : 1));
+          if (i <= 3)
+            ensure(
+              values(snapshot)[0].client_name === "Public Qualification 1",
+            );
+          if ([2, 3].includes(i))
+            ensure(
+              values(snapshot)[0].appointment_date === "2099-06-16" &&
+                values(snapshot)[0].mechanic_id === "2",
+            );
+          if (request.method === "POST") ensure(json.success === true);
+          if ([1, 3, 5].includes(i))
+            ensure(json.appointments.length === (i === 5 ? 0 : 1));
+          if (i === 3)
+            ensure(
+              json.appointments[0].appointment_date === "2099-06-16" &&
+                Number(json.appointments[0].mechanic_id) === 2,
+            );
+        }
+        if (scenario.id === "workshop-rejected") {
+          ensure(count(snapshot) === 1);
+          if (request.method === "GET") ensure(json.appointments.length === 1);
+        }
+        current.push({ http, snapshot });
+        steps++;
+      }
+      observations.push(current);
+    }
+    for (let i = 0; i < observations[0].length; i++) {
+      const a = observations[0][i];
+      const b = observations[1][i];
+      ensure(
+        compareSqlite(a.snapshot, b.snapshot).length === 0,
+        "REPLAY_DATABASE",
+      );
+      if (a.http)
+        ensure(
+          compareHttp(a.http, b.http).length === 0 &&
+            Buffer.from(a.http.body).equals(Buffer.from(b.http.body)),
+          "REPLAY_HTTP",
+        );
+    }
+  }
+  phase = "cleanup";
+  await worker.close(AbortSignal.timeout(15000));
+  worker = undefined;
+  evidence.write("completion", {
+    attempts: 6,
+    steps,
+    wallEnd: new Date().toISOString(),
+    cleanup: "COMPLETE",
+  });
+  phase = "retention-verification";
+  const packSha256 = evidence.seal();
+  ensure(
+    PrivateEvidence.verify(evidence.path, packSha256) > 34,
+    "EVIDENCE_INCOMPLETE",
+  );
+  const summary = publicSummary({
+    headSha: process.env.REFERENCE_HEAD_SHA,
+    imageId: runtime.imageId,
+    packSha256,
+    attempts: 6,
+    steps,
+    replayEqual: true,
+    mappingEqual: true,
+    privateVerified: true,
+  });
+  writeFileSync(
+    join(output, "reference-summary.json"),
+    `${JSON.stringify(summary, null, 2)}\n`,
+  );
+  console.log(
+    "Reference-only proof complete: 6 clean attempts, 34 steps; private pack verified after cleanup. External retention NOT_RUN.",
+  );
+} catch {
+  let cleanup = "NOT_REQUIRED";
+  if (worker) {
+    try {
+      await worker.close(AbortSignal.timeout(15000));
+      cleanup = "COMPLETE";
+    } catch {
+      cleanup = "ERROR";
+    }
+  }
+  writeFileSync(
+    join(output, "reference-summary.json"),
+    `${JSON.stringify({ format: "php74-reference-summary-v1", status: "ERROR", phase, cleanup, external: "EXTERNAL_RETENTION_NOT_RUN" }, null, 2)}\n`,
+  );
+  console.error(
+    `Reference-only proof ERROR in trusted phase: ${phase}; cleanup ${cleanup}. Raw diagnostics are private.`,
+  );
+  process.exitCode = 1;
+}
