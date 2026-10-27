@@ -7,4 +7,9 @@
 - [x] Strict public schema; privacy/mutation/coverage/error tests.
 - [x] Frozen install and original/own checks with actual statuses/counts.
 - [ ] Exact-final-head manual proof and artifact integrity verification.
-- [ ] Validation/handoff, commit/push/PR Refs24; independent review, no self-merge.
+- [x] Validation/handoff, commit/push/draft PR31 Refs24; independent review, no self-merge.
+
+Supplementary Docker items remain unchecked: two actual HTTP404 dispatch failures
+prove MANUAL_WORKFLOW_NOT_REGISTERED. No private sample was generated. See
+validation.md and registration-blocker.json; overall AUDIT_PARTIAL, never PASS.
+Final report-head Fast CI/original registered regression run are linked in PR31.

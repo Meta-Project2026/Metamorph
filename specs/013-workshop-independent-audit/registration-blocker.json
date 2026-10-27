@@ -1,0 +1,50 @@
+{
+  "format": "independent-workshop-audit-registration-v1",
+  "implementationHead": "2e53fa8b6b27b200880084dc266f3b25b54bc6e0",
+  "baseSha": "3de9d5ceef343536a5b56761deb805006fbd4b65",
+  "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+  "verdict": "AUDIT_PARTIAL",
+  "reason": "MANUAL_WORKFLOW_NOT_REGISTERED",
+  "dispatchAttempts": 2,
+  "httpStatus": 404,
+  "workflow": "workshop-independent-audit.yml",
+  "sampleGeneration": "NOT_RUN",
+  "families": [
+    {
+      "family": "duplicate-date-identity",
+      "scenarioCount": 2,
+      "declaredSteps": 16,
+      "execution": "NOT_RUN"
+    },
+    {
+      "family": "capacity-update-cancel",
+      "scenarioCount": 2,
+      "declaredSteps": 21,
+      "execution": "NOT_RUN"
+    },
+    {
+      "family": "admitted-validation",
+      "scenarioCount": 2,
+      "declaredSteps": 14,
+      "execution": "NOT_RUN"
+    },
+    {
+      "family": "ordering-types",
+      "scenarioCount": 1,
+      "declaredSteps": 8,
+      "execution": "NOT_RUN"
+    }
+  ],
+  "realControls": {
+    "positive": "NOT_RUN",
+    "negative": "NOT_RUN"
+  },
+  "auditG2": "NOT_RUN",
+  "auditG3": "NOT_RUN",
+  "auditCleanup": "NOT_RUN",
+  "canonicalG4": "INCONCLUSIVE",
+  "formalHeldOut": "HELDOUT_ISOLATION_NOT_PROVEN",
+  "auditorIndependence": "AUTHOR_CONTEXT_SHARED_REQUIRES_INDEPENDENT_REVIEW",
+  "product": "NOT_ESTABLISHED",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+}
