@@ -5,7 +5,8 @@
 - [x] Implement strict target adapter, raw transport validation and exact mapping.
 - [x] Original positive/mutated snapshot, identity/schedule/clock/cleanup controls.
 - [x] Implement real two-runtime pilot and private evidence/catalog/public allowlist.
-- [x] Add narrow own workflow with explicit PR-head checkout and no secret mounts.
+- [x] Add own workflow; R1 removes temporary PR bootstrap, leaving manual-only
+  `workflow_dispatch`, exact `github.sha` checkout and no secret mounts.
 - [x] Run required root checks and separate worker/bridge controls; record exit codes.
 - [x] Commit/push/open [PR18](https://github.com/Meta-Project2026/Metamorph/pull/18)
   with Refs17; no merge or issue closure.

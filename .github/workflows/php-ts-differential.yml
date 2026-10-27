@@ -2,9 +2,6 @@ name: Real PHP TS differential pilot
 
 on:
   workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches: [main]
 
 permissions:
   contents: read
@@ -15,16 +12,10 @@ concurrency:
 
 jobs:
   pilot:
-    # Temporary bootstrap only: no forks or other branch can execute the pilot.
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.head.repo.full_name == github.repository &&
-       github.event.pull_request.head.ref == 'feat/mmp-008a-real-differential-bridge' &&
-       github.event.pull_request.base.ref == 'main')
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      PILOT_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      PILOT_HEAD_SHA: ${{ github.sha }}
     steps:
       - name: Set isolated output directories
         run: |
@@ -33,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
       - name: Confirm exact source SHA
         run: test "$(git rev-parse HEAD)" = "$PILOT_HEAD_SHA" && git rev-parse HEAD
       - uses: actions/setup-node@v4

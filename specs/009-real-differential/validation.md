@@ -104,13 +104,36 @@ HTTP transport incompatibility is explicitly handed off: accepted target forbids
 `.` paths and forces JSON content-type; no fake /items readiness, route/body rewrite
 or target code changes. Future compatible workshop candidate needs owner agreement.
 
-Final documentation/receipt commit will trigger another exact-head pilot and CI.
-Their actual final SHA/URLs/results are recorded in the PR, without pretending an
-older run executed a newer commit. PR18 stays open for independent review.
+Final pre-R1 exact-head proof:
+[Docker run40441120508](https://github.com/Meta-Project2026/Metamorph/actions/runs/40441120508)
+/ [job121981447694](https://github.com/Meta-Project2026/Metamorph/actions/runs/40441120508/job/121981447694)
+executed `ed6b3123059c7c697a162a0aa4ae6b8bb9384d3f`: root65/65, bridge56/56,
+PHP38/38, target33/33; pilot and finalizer exit0, verified zero containers/volumes.
+G2 INCONCLUSIVE (0 HTTP comparisons), G3 FAIL (real initial DB_SCHEMA/DB_STATE),
+G4 INCONCLUSIVE (9 public controls). No synthetic PASS establishes PHP↔TS parity.
 
-No synthetic adapter PASS is represented as PHP↔TS parity. Real expected matrix
-has not yet been measured. Await actual G2/G3/G4 and executed IDs before reporting.
-Remaining checks/hosted CI/pilot/artifact URL/SHA will be recorded after execution.
+R1 supersedes the temporary PR bootstrap described in plan step8. Final workflow
+has only `workflow_dispatch`, no PR event/job condition, and uses `github.sha`
+for both PILOT_HEAD_SHA and checkout; exact source identity assertion remains.
+Permissions, concurrency, isolation, timeouts, finalizer and sanitized-only upload
+remain unchanged. Only workflow policy and validation/task documentation change;
+runtime source, workers, comparators, tests, lockfile and Fast CI are unchanged.
+`public-summary.json` remains the historical receipt for `0ff7d640ca2aeb0c2b5301d13ab93d1103cedf16`.
+The pre-R1 Docker proof establishes identical runtime source, not a Docker rerun
+on the R1 HEAD. R1 exact commit SHA, new Fast CI links and actual manual-dispatch
+result are recorded in the PR18 handoff after commit/push. If GitHub cannot
+dispatch this new workflow before default-branch registration, report
+`MANUAL_DISPATCH_NOT_REGISTERED_ON_DEFAULT_BRANCH` / Docker NOT_RUN; do not restore
+PR triggers. Post-merge dispatch requires a separate run; PR18 remains unmerged
+for independent review and Issue17 stays open.
+
+R1 local checks (2026-10-27): `pnpm lint`, `pnpm typecheck`, `pnpm test` (65/65,
+zero skips) and `pnpm build` each exited0. Installed PyYAML6.0.3 parsed the
+workflow and confirmed only the intended event/identity changes against pre-R1;
+all remaining parsed workflow structure is identical. `git diff --check` exited0;
+only the workflow, this validation and tasks.md changed. GitHub contents API for
+the workflow on `main` returned HTTP404; final dispatch outcome is tracked below
+in the PR handoff. No host Docker/PHP/TS fixture execution was performed for R1.
 
 Known boundary: target regular state volume lacks enforced hard byte quota;
 16MiB inspector admission is only a parser limit. Any DoD interpretation requiring
