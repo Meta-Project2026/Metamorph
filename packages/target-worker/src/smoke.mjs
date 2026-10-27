@@ -47,7 +47,7 @@ const body = (http) =>
   JSON.parse(Buffer.from(http.bodyBase64, "base64").toString());
 let image;
 let caseIndex = 0;
-async function exercise(id, bundle, operation, expectedError) {
+async function exercise(id, bundle, operation, expectedError, runtimeCheck) {
   const worker = new TargetWorker(image, bundle);
   let error = null;
   let cleanupError = null;
@@ -71,6 +71,7 @@ async function exercise(id, bundle, operation, expectedError) {
     });
   }
   if (cleanupError) throw new Error(`${id}: ${cleanupError}`);
+  if (runtimeCheck) runtimeCheck(worker.evidence);
   if (expectedError)
     assert.match(error ?? "UNEXPECTED_SUCCESS", expectedError, id);
   else assert.equal(error, null, `${id}: ${error}`);
@@ -194,7 +195,6 @@ try {
   for (const [id, source] of [
     ["bad-startup", 'throw new Error("original startup control");'],
     ["crash", "process.exit(7);"],
-    ["infinite-loop", "while (true) {}"],
     [
       "oom",
       "const chunks: number[][] = []; while (true) chunks.push(new Array(100000).fill(1));",
@@ -224,7 +224,49 @@ try {
         return worker.request("must-fail", "GET", "/items");
       },
       /ENVIRONMENT_ERROR|TIMEOUT/,
+      (evidence) => {
+        const execution = evidence.cleanup.at(-1).execution;
+        assert.notEqual(
+          execution.exitCode,
+          0,
+          `${id}: candidate unexpectedly exited successfully`,
+        );
+        if (id === "crash") assert.equal(execution.exitCode, 7);
+        if (id === "blocked-external-network")
+          assert.equal(execution.exitCode, 8);
+        if (id === "oom")
+          assert.match(
+            execution.stderr,
+            /heap out of memory|Allocation failed/,
+          );
+        if (id.startsWith("blocked-") && id !== "blocked-external-network")
+          assert.match(execution.stderr, /ERR_ACCESS_DENIED/);
+        if (id === "bad-startup")
+          assert.match(execution.stderr, /original startup control/);
+      },
     );
+  await exercise(
+    "infinite-loop-timeout",
+    mutated("while (true) {}"),
+    async (worker) => {
+      const timed = await worker.cmd(["wait", worker.runtime.name], {
+        timeoutMs: 750,
+      });
+      assert.equal(timed.timedOut, true);
+      await worker.kill();
+      throw new Error("TIMEOUT");
+    },
+    /TIMEOUT/,
+  );
+  await exercise("cancel-reap", bundle, async (worker) => {
+    const cancelled = await worker.cmd(
+      ["exec", worker.runtime.name, "sleep", "30"],
+      { signal: AbortSignal.timeout(200) },
+    );
+    assert.equal(cancelled.cancelled, true);
+    // Killing the CLI alone is insufficient; close below reaps the whole container.
+    return cancelled;
+  });
   for (const [id, injected] of [
     [
       "corrupt-db",
@@ -264,6 +306,28 @@ try {
       const db = await worker.snapshot("trusted");
       assert.equal(db.tables.find((t) => t.name === "items").rows.length, 1);
       return db;
+    },
+  );
+  await exercise(
+    "typed-sqlite",
+    mutated(
+      original +
+        "\ndb.exec(\"CREATE TABLE primitives(id INTEGER PRIMARY KEY, big INTEGER, bytes BLOB, fraction REAL, empty TEXT); INSERT INTO primitives VALUES(1,9223372036854775807,x'00ff',1.25,NULL)\");",
+    ),
+    async (worker) => {
+      await delay(300);
+      const snapshot = await worker.snapshot("typed");
+      assert.deepEqual(
+        snapshot.tables.find((t) => t.name === "primitives").rows[0],
+        [
+          { type: "integer", value: "1" },
+          { type: "integer", value: "9223372036854775807" },
+          { type: "blob", value: "00ff" },
+          { type: "real", value: 1.25 },
+          { type: "null" },
+        ],
+      );
+      return snapshot;
     },
   );
   for (const mode of ["real", "fixed-experiment"]) {

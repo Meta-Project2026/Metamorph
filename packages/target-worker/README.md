@@ -46,7 +46,8 @@ no migration-agent/provider output, PHP source or upstream fixtures were used.
 This does not establish a human-only/non-AI authorship claim. There are no live
 model calls. Node/dependencies and Debian retain licenses in the image; image
 build uses the official pinned Node digest, npm integrity lock (TypeScript
-Apache-2.0, Node types/undici-types MIT), libfaketime0.9.10-2 (GPL notice retained).
+Apache-2.0, Node types/undici-types MIT), libfaketime0.9.10-2.1 (GPL notice retained;
+[Debian package](https://packages.debian.org/bookworm/libfaketime)).
 The smoke records installed notices, exact image/runtime identities and versions.
 
 Clock experiment samples Date, Date.now, SQLite datetime/CURRENT_TIMESTAMP and

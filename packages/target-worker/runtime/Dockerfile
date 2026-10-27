@@ -4,7 +4,7 @@ WORKDIR /opt/toolchain
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts --no-audit --no-fund --omit=optional \
     && apt-get update \
-    && apt-get install -y --no-install-recommends libfaketime=0.9.10-2 \
+    && apt-get install -y --no-install-recommends libfaketime=0.9.10-2.1 \
     && rm -rf /var/lib/apt/lists/* /root/.npm \
     && mkdir -p /state /work /opt/worker \
     && chown 10001:10001 /state /work
