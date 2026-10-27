@@ -21,31 +21,49 @@ function name(value: unknown): string {
   );
   return value;
 }
+function metadataInteger(value: unknown): number {
+  ensure(
+    typeof value === "number" ||
+      (typeof value === "string" && /^(0|[1-9][0-9]*)$/.test(value)),
+    "COLUMN_METADATA",
+  );
+  const result = Number(value);
+  ensure(
+    Number.isSafeInteger(result) && result >= 0 && result <= 256,
+    "COLUMN_METADATA",
+  );
+  return result;
+}
 function cell(value: unknown): SqliteValue {
   const item = object(value, ["type", "value"]);
   switch (item.type) {
     case "null":
-      ensure(item.value === null);
+      ensure(item.value === null, "NULL_WIRE");
       return { type: "null" };
     case "integer": {
       ensure(
         typeof item.value === "string" &&
           /^-?(0|[1-9][0-9]*)$/.test(item.value),
+        "INTEGER_WIRE",
       );
       const n = BigInt(item.value);
       ensure(n >= -(1n << 63n) && n < 1n << 63n, "INTEGER_RANGE");
       return { type: "integer", value: item.value };
     }
     case "real":
-      ensure(typeof item.value === "number" && Number.isFinite(item.value));
+      ensure(
+        typeof item.value === "number" && Number.isFinite(item.value),
+        "REAL_WIRE",
+      );
       return { type: "real", value: item.value };
     case "text":
-      ensure(typeof item.value === "string");
+      ensure(typeof item.value === "string", "TEXT_WIRE");
       return { type: "text", value: item.value };
     case "blob":
       ensure(
         typeof item.value === "string" &&
           /^(?:[0-9A-Fa-f]{2})*$/.test(item.value),
+        "BLOB_WIRE",
       );
       return { type: "blob", value: item.value.toLowerCase() };
     default:
@@ -121,13 +139,17 @@ export function mapPhpSnapshot(raw: unknown): SqliteSnapshot {
           "hidden",
         ]);
         ensure(
-          c.cid === index &&
+          metadataInteger(c.cid) === index &&
             typeof c.type === "string" &&
-            [0, 1].includes(c.notnull as number),
+            [0, 1].includes(metadataInteger(c.notnull)),
+          "COLUMN_METADATA",
         );
-        ensure(c.dflt_value === null || typeof c.dflt_value === "string");
         ensure(
-          Number.isInteger(c.pk) && Number(c.pk) >= 0 && c.hidden === 0,
+          c.dflt_value === null || typeof c.dflt_value === "string",
+          "DEFAULT_METADATA",
+        );
+        ensure(
+          metadataInteger(c.pk) >= 0 && metadataInteger(c.hidden) === 0,
           "UNSUPPORTED_COLUMN",
         );
         if (Number(c.pk) > 0) keys.push({ index, rank: Number(c.pk) });

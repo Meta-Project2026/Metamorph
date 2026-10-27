@@ -1,5 +1,6 @@
 // Trusted host proof; never loads upstream PHP, never opens its SQLite DB on host.
 
+import { randomUUID } from "node:crypto";
 import {
   chmodSync,
   mkdirSync,
@@ -14,6 +15,7 @@ import { fileURLToPath } from "node:url";
 import { compareHttp, compareSqlite, snapshotSqlite } from "../dist/index.js";
 import {
   DockerReferenceTransport,
+  isolation,
   provisionRuntime,
 } from "../dist/reference/docker.js";
 import { PrivateEvidence } from "../dist/reference/evidence.js";
@@ -63,6 +65,54 @@ try {
     evidence,
   });
   const transport = new DockerReferenceTransport(runtime, command);
+  phase = "lifecycle-controls";
+  for (const kind of ["crash", "hang", "abort"]) {
+    const name = `mmp-control-${randomUUID()}`;
+    let rejected = false;
+    try {
+      await command(
+        [
+          "create",
+          ...isolation(name),
+          runtime.imageId,
+          "timeout",
+          "--signal=KILL",
+          "10",
+          "php",
+          "-r",
+          kind === "crash" ? "exit(7);" : "sleep(60);",
+        ],
+        signal,
+      );
+      const ac = new AbortController();
+      const timer =
+        kind === "abort" ? setTimeout(() => ac.abort(), 300) : undefined;
+      try {
+        await command(
+          ["start", "-ai", name],
+          kind === "abort" ? ac.signal : signal,
+          undefined,
+          kind === "hang" ? 300 : 5000,
+        );
+      } catch {
+        rejected = true;
+      } finally {
+        clearTimeout(timer);
+      }
+    } finally {
+      await command(["rm", "-f", name], AbortSignal.timeout(5000));
+      const remaining = await command(
+        ["ps", "-aq", "--filter", `name=^/${name}$`],
+        AbortSignal.timeout(5000),
+      );
+      ensure(!remaining.stdout.toString().trim(), "CLEANUP_ERROR");
+    }
+    ensure(rejected, "LIFECYCLE_CONTROL_ACCEPTED");
+    evidence.write(`lifecycle-${kind}`, {
+      expectedRejection: true,
+      residualContainers: 0,
+    });
+  }
   phase = "mapping";
   const sqlPath = join(oracleRoot, "reference", "fixture.sql");
   const fixturePath = join(directory, "trusted-fixture.sqlite");
@@ -219,6 +269,13 @@ try {
       "RUNTIME_MISMATCH",
       "CLOCK_PROVENANCE",
       "REFERENCE_INVALID",
+      "COLUMN_METADATA",
+      "DEFAULT_METADATA",
+      "NULL_WIRE",
+      "INTEGER_WIRE",
+      "REAL_WIRE",
+      "TEXT_WIRE",
+      "BLOB_WIRE",
       "SNAPSHOT_FIELDS",
       "UNSUPPORTED_COLUMN",
       "IMAGE_DIGEST",

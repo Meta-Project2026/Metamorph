@@ -110,6 +110,16 @@ test("legacy mapping equals core snapshot including defaults, DDL, bigint, blobs
   mutated.schema.reverse();
   assert.deepEqual(mapPhpSnapshot(mutated), expected);
 });
+test("legacy PRAGMA decimal metadata strings map without changing business value types", () => {
+  const wire = clone(legacy);
+  for (const table of wire.tables)
+    for (const c of table.columns)
+      for (const key of ["cid", "notnull", "pk", "hidden"])
+        c[key] = String(c[key]);
+  assert.deepEqual(mapPhpSnapshot(wire), expected);
+  wire.tables[0].columns[0].cid = "0x0";
+  assert.throws(() => mapPhpSnapshot(wire));
+});
 for (const [label, mutate] of [
   [
     "missing schema",
