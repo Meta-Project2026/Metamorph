@@ -33,7 +33,9 @@ try {
             check((int)$column['hidden'] === 0);
             $c = q($column['name']);
             $select[] = 'typeof(' . $c . ') AS ' . q('t' . $i);
-            $select[] = "CASE WHEN typeof($c)='blob' THEN hex($c) WHEN typeof($c)='integer' THEN CAST($c AS TEXT) ELSE $c END AS " . q('v' . $i);
+            // PDO 7.4 stringifies CASE real values. SQLite's alternate-form-2
+            // decimal preserves the binary64 value; cast ONLY cells tagged real.
+            $select[] = "CASE WHEN typeof($c)='blob' THEN hex($c) WHEN typeof($c)='integer' THEN CAST($c AS TEXT) WHEN typeof($c)='real' THEN printf('%!.26g',$c) ELSE $c END AS " . q('v' . $i);
             if ((int)$column['pk'] > 0) $order[(int)$column['pk']] = $c;
         }
         ksort($order);
@@ -44,7 +46,7 @@ try {
         $rows = [];
         foreach ($raw as $row) {
             $cells = [];
-            foreach ($columns as $i => $column) $cells[] = ['type' => $row['t' . $i], 'value' => $row['v' . $i]];
+            foreach ($columns as $i => $column) $cells[] = ['type' => $row['t' . $i], 'value' => $row['t' . $i] === 'real' ? (float)$row['v' . $i] : $row['v' . $i]];
             $rows[] = $cells;
         }
         if (!$order) usort($rows, function ($a, $b) { return strcmp(enc($a), enc($b)); });

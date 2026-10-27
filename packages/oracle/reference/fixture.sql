@@ -7,5 +7,7 @@ CREATE TABLE composite (a TEXT, b INTEGER, value TEXT, PRIMARY KEY(b,a));
 INSERT INTO composite VALUES ('z',-10,'first'),('a',2,'second'),(NULL,2,'nullable');
 CREATE TABLE multiset (value TEXT, n INTEGER);
 INSERT INTO multiset VALUES ('x',10),('x',-2),('x',10),(NULL,0);
+CREATE TABLE real_roundtrip (value REAL);
+INSERT INTO real_roundtrip VALUES (0.1),(1.2345678901234567),(1.0e-300),(1.0e300);
 CREATE VIEW visible AS SELECT id,t FROM typed;
 CREATE TRIGGER typed_insert AFTER INSERT ON typed BEGIN UPDATE typed SET nullable='trigger' WHERE id=NEW.id; END;
