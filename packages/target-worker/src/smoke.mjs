@@ -513,17 +513,41 @@ try {
     bundle,
     async (worker) => {
       const deadline = worker.endsAt;
-      for (let index = 0; index < 16; index++) {
-        await worker.reset(`budget-${index}`);
+      worker.evidence.aggregateResets = [];
+      for (let index = 0; index < 2; index++) {
+        const ready = await worker.reset(`budget-${index}`);
         assert.equal(worker.endsAt, deadline);
+        worker.evidence.aggregateResets.push({
+          runtimeId: ready.runtimeId,
+          scenarioId: ready.scenarioId,
+          deadline,
+          elapsedMs: worker.now() - worker.startedAt,
+        });
       }
+      // A real pending Docker wait uses the remaining *original* run budget.
+      // No client sleep or candidate Date patch can advance/renew this deadline.
+      await worker.cmd(["wait", worker.runtime.name], {
+        timeoutMs: worker.policy.lifetimeMs,
+      });
     },
     /TIMEOUT/,
     (evidence) => {
       assert.equal(evidence.operationError, "TIMEOUT");
+      assert.equal(evidence.aggregateResets.length, 2);
+      assert.equal(
+        evidence.aggregateResets[0].deadline,
+        evidence.aggregateResets[1].deadline,
+      );
+      assert.ok(
+        evidence.commands.some(
+          (receipt) =>
+            receipt.args[0] === "wait" &&
+            (receipt.timedOut || receipt.cancelled),
+        ),
+      );
       assert.equal(evidence.cleanupVerified, true);
     },
-    { workerOptions: { limits: { lifetimeMs: 12000 } } },
+    { workerOptions: { limits: { lifetimeMs: 20000 } } },
   );
   const cancellation = new AbortController();
   await exercise(

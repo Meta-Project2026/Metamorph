@@ -342,3 +342,28 @@ test("empty tracking sets never establish absence when Docker inventory has resi
   h.containers.clear();
   await assert.rejects(h.worker.close(), /CLEANUP_ERROR/);
 });
+
+test("inspector removal failure overrides observation and retains names for bounded retry", async () => {
+  let failRemoval = false;
+  const h = harness({
+    fail: (args) =>
+      failRemoval && args[0] === "rm" && args.at(-1).includes("-inspect-")
+        ? 1
+        : 0,
+  });
+  await h.worker.provision();
+  failRemoval = true;
+  await assert.rejects(
+    h.worker.request("cleanup-fault", "GET", "/items"),
+    /CLEANUP_ERROR/,
+  );
+  assert.equal(h.worker.evidence.cleanupVerified, false);
+  assert.equal(h.volumes.size, 0);
+  assert.ok(
+    [...h.worker.containers].some((name) => name.includes("-inspect-")),
+  );
+  failRemoval = false;
+  await assert.rejects(h.worker.close(), /CLEANUP_ERROR/);
+  assert.equal(h.containers.size + h.volumes.size, 0);
+  assert.equal(h.worker.evidence.cleanupVerified, false);
+});

@@ -520,7 +520,7 @@ export class TargetWorker {
           requireSuccess(
             await this.cmd(
               ["inspect", "--format", "{{json .State}}", runtime.id],
-              { signal },
+              { signal, timeoutMs: until - this.now() },
             ),
           ).stdout,
         );

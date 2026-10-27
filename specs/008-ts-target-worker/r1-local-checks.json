@@ -1,27 +1,28 @@
 {
+  "context": "pre-final-commit working tree checks; final exact-source hosted evidence is separate",
+  "pnpm": "11.25.0",
   "checks": [
     {
       "exitCode": 0,
-      "elapsedMs": 1034,
       "tail": [
         "Scope: all 7 workspace projects",
         "Already up to date",
-        "Done in 794ms using pnpm v11.25.0"
+        "Done in 816ms using pnpm v11.25.0"
       ],
-      "command": "pnpm install --frozen-lockfile"
+      "command": "pnpm install --frozen-lockfile",
+      "elapsedMs": 1036
     },
     {
       "exitCode": 0,
-      "elapsedMs": 1439,
       "tail": [
         "$ biome check .",
-        "Checked 79 files in 190ms. No fixes applied."
+        "Checked 79 files in 180ms. No fixes applied."
       ],
-      "command": "pnpm lint"
+      "command": "pnpm lint",
+      "elapsedMs": 1429
     },
     {
       "exitCode": 0,
-      "elapsedMs": 51980,
       "tail": [
         "packages/target-worker typecheck$ tsc -p tsconfig.json --noEmit",
         "packages/contracts typecheck$ tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json",
@@ -36,13 +37,13 @@
         "apps/server typecheck: Done",
         "packages/integration typecheck: Done"
       ],
-      "command": "pnpm typecheck"
+      "command": "pnpm typecheck",
+      "elapsedMs": 46302
     },
     {
       "exitCode": 0,
-      "elapsedMs": 30573,
       "tail": [
-        "  duration_ms: 4.9582",
+        "  duration_ms: 4.4712",
         "  type: 'test'",
         "  ...",
         "1..65",
@@ -53,56 +54,63 @@
         "# cancelled 0",
         "# skipped 0",
         "# todo 0",
-        "# duration_ms 5691.7914"
+        "# duration_ms 5516.3408"
       ],
-      "command": "pnpm test"
+      "command": "pnpm test",
+      "elapsedMs": 28174
     },
     {
       "exitCode": 0,
-      "elapsedMs": 23921,
       "tail": [
         "packages/target-worker build$ tsc -p tsconfig.json",
         "packages/contracts build$ tsc -p tsconfig.json",
-        "packages/target-worker build: Done",
         "packages/contracts build: Done",
         "apps/server build$ tsc -p tsconfig.json",
         "packages/agent build$ tsc -p tsconfig.json",
         "packages/oracle build$ tsc -p tsconfig.json",
+        "packages/target-worker build: Done",
         "packages/agent build: Done",
         "packages/oracle build: Done",
         "packages/integration build$ tsc -p tsconfig.json",
         "apps/server build: Done",
         "packages/integration build: Done"
       ],
-      "command": "pnpm build"
+      "command": "pnpm build",
+      "elapsedMs": 22101
     },
     {
       "exitCode": 0,
-      "elapsedMs": 669,
       "tail": [
-        "  duration_ms: 0.5632",
+        "  duration_ms: 1.8258",
         "  type: 'test'",
         "  ...",
-        "1..32",
-        "# tests 32",
+        "1..33",
+        "# tests 33",
         "# suites 0",
-        "# pass 32",
+        "# pass 33",
         "# fail 0",
         "# cancelled 0",
         "# skipped 0",
         "# todo 0",
-        "# duration_ms 512.7762"
+        "# duration_ms 500.4941"
       ],
-      "command": "node --test packages/target-worker/test/*.test.mjs"
+      "command": "node --test packages/target-worker/test/*.test.mjs",
+      "elapsedMs": 629
     },
     {
       "exitCode": 0,
-      "elapsedMs": 149,
-      "tail": [],
-      "command": "git diff --check"
+      "tail": [
+        "warning: in the working copy of 'specs/008-ts-target-worker/r1-local-checks.json', CRLF will be replaced by LF the next time Git touches it"
+      ],
+      "command": "git diff --check",
+      "elapsedMs": 118
     }
   ],
   "node": "v22.23.1",
-  "pnpm": "11.25.0",
-  "sourceHead": "516f6e3642e039efcdfbcc290466e1eca4fd844e"
+  "baseHead": "789068284a491e5f3e417dc1252aea9a4bf2a2cc",
+  "dirtyTrackedFiles": [
+    "packages/target-worker/src/controller.mjs",
+    "packages/target-worker/test/lifecycle.test.mjs",
+    "specs/008-ts-target-worker/r1-local-checks.json"
+  ]
 }
