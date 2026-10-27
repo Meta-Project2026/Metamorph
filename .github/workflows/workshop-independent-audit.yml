@@ -1,0 +1,64 @@
+name: Independent workshop sampled audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workshop-independent-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      AUDIT_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - name: Set public/private output directories
+        run: |
+          echo "AUDIT_PUBLIC_OUTPUT=$RUNNER_TEMP/mmp010b-public" >> "$GITHUB_ENV"
+          echo "AUDIT_LOG_ROOT=$RUNNER_TEMP/mmp010b-driver-private" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.sha }}
+      - run: test "$(git rev-parse HEAD)" = "$AUDIT_HEAD_SHA" && git rev-parse HEAD
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - name: Existing fast checks and independent original suites
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm build
+          pnpm --filter @metamorph/oracle test:reference
+          pnpm --filter @metamorph/differential test
+          node --test packages/target-worker/test/*.test.mjs
+          pnpm --filter @metamorph/workshop-audit test
+      - name: Freeze then execute private sampled audit in Docker
+        run: |
+          umask 077
+          mkdir -m 700 "$AUDIT_LOG_ROOT"
+          mkdir -p "$AUDIT_PUBLIC_OUTPUT"
+          node packages/workshop-audit/src/run.mjs > "$AUDIT_LOG_ROOT/driver.log" 2>&1
+      - name: Independent interrupted-job finalizer
+        if: always()
+        run: |
+          mkdir -p "$AUDIT_PUBLIC_OUTPUT"
+          node packages/workshop-audit/src/finalizer.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-workshop-audit-public
+          path: |
+            ${{ env.AUDIT_PUBLIC_OUTPUT }}/summary.json
+            ${{ env.AUDIT_PUBLIC_OUTPUT }}/error.json
+            ${{ env.AUDIT_PUBLIC_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
