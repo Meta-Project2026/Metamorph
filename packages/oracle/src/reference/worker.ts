@@ -32,6 +32,8 @@ export class PhpReferenceWorker implements WorkerAdapter {
   private busy = false;
   private failed = false;
   private closed = false;
+  private closing = false;
+  private completion: Promise<void> | undefined;
   private last: SqliteSnapshot | undefined;
   constructor(
     private readonly transport: ReferenceTransport,
@@ -44,10 +46,18 @@ export class PhpReferenceWorker implements WorkerAdapter {
         schedule.every((id) => MANIFEST.some((s) => s.id === id)),
       "SCENARIO_ID",
     );
+    this.schedule = Object.freeze([...schedule]);
   }
   private async exclusive<T>(operation: () => Promise<T>): Promise<T> {
-    ensure(!this.busy && !this.failed && !this.closed, "WORKER_STATE");
+    ensure(
+      !this.busy && !this.failed && !this.closed && !this.closing,
+      "WORKER_STATE",
+    );
     this.busy = true;
+    let complete: (() => void) | undefined;
+    this.completion = new Promise<void>((resolve) => {
+      complete = resolve;
+    });
     try {
       return await operation();
     } catch {
@@ -60,6 +70,8 @@ export class PhpReferenceWorker implements WorkerAdapter {
       throw new ReferenceWorkerError("REFERENCE_OPERATION_ERROR");
     } finally {
       this.busy = false;
+      complete?.();
+      this.completion = undefined;
     }
   }
   private async capture(signal: AbortSignal): Promise<Inspection> {
@@ -178,7 +190,8 @@ export class PhpReferenceWorker implements WorkerAdapter {
   }
   async close(_signal: AbortSignal): Promise<void> {
     // Cleanup uses its own bounds even if verifyPair's operation signal has expired.
-    ensure(!this.busy, "WORKER_BUSY");
+    this.closing = true;
+    await this.completion;
     await this.transport.close();
     this.closed = true;
   }

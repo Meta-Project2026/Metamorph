@@ -230,6 +230,8 @@ test("inspector envelope validates runtime and independently hashed legacy bytes
       extensions: ["PDO", "pdo_sqlite", "mbstring"],
       clockNoticeSha256:
         "6c361c87f8a9a7999ffab9924fabaaf499b372379cd8a7c19e7eca94d43df7ef",
+      clockPackageVersion: "0.9.8-9",
+      clockLibrarySha256: "a".repeat(64),
     },
   };
   assert.deepEqual(
@@ -388,6 +390,33 @@ test("cleanup failure is ERROR and never accepted as successful close", async ()
     w.request(MANIFEST[0].requests[0], signal()),
     /CLEANUP_ERROR/,
   );
+});
+test("close drains an aborted in-flight operation and the trusted reset schedule is copied", async () => {
+  const schedule = [MANIFEST[0].id];
+  const t = fake();
+  const w = create(t, schedule);
+  schedule[0] = "wrong";
+  await w.reset(signal());
+  const ac = new AbortController();
+  let entered;
+  const ready = new Promise((resolve) => {
+    entered = resolve;
+  });
+  t.http = async (_request, inputSignal) => {
+    entered();
+    return new Promise((_resolve, reject) =>
+      inputSignal.addEventListener("abort", () => reject(new Error("abort")), {
+        once: true,
+      }),
+    );
+  };
+  const request = w.request(MANIFEST[0].requests[0], ac.signal);
+  await ready;
+  ac.abort();
+  const close = w.close(signal());
+  await assert.rejects(request);
+  await close;
+  assert.ok(t.closed >= 1);
 });
 test("WorkerAdapter integrates with verifyPair without DTO changes (synthetic transport only)", async () => {
   const make = () => create();

@@ -21,6 +21,7 @@ import {
   ensure,
   MANIFEST,
   MANIFEST_SHA256,
+  ReferenceWorkerError,
   SOURCE,
   stepId,
 } from "../dist/reference/manifest.js";
@@ -205,7 +206,27 @@ try {
   console.log(
     "Reference-only proof complete: 6 clean attempts, 34 steps; private pack verified after cleanup. External retention NOT_RUN.",
   );
-} catch {
+} catch (error) {
+  const code =
+    error instanceof ReferenceWorkerError &&
+    new Set([
+      "MAPPING_MISMATCH",
+      "WORKER_CRASH",
+      "INSPECTOR_ADMIT",
+      "INSPECTOR_SCHEMA",
+      "INSPECTOR_CLOCK",
+      "INSPECTOR_VERSION",
+      "RUNTIME_MISMATCH",
+      "CLOCK_PROVENANCE",
+      "REFERENCE_INVALID",
+      "SNAPSHOT_FIELDS",
+      "UNSUPPORTED_COLUMN",
+      "IMAGE_DIGEST",
+      "REFERENCE_OPERATION_ERROR",
+      "CLEANUP_ERROR",
+    ]).has(error.code)
+      ? error.code
+      : "TRUSTED_ERROR";
   let cleanup = "NOT_REQUIRED";
   if (worker) {
     try {
@@ -217,10 +238,10 @@ try {
   }
   writeFileSync(
     join(output, "reference-summary.json"),
-    `${JSON.stringify({ format: "php74-reference-summary-v1", status: "ERROR", phase, cleanup, external: "EXTERNAL_RETENTION_NOT_RUN" }, null, 2)}\n`,
+    `${JSON.stringify({ format: "php74-reference-summary-v1", status: "ERROR", phase, code, cleanup, external: "EXTERNAL_RETENTION_NOT_RUN" }, null, 2)}\n`,
   );
   console.error(
-    `Reference-only proof ERROR in trusted phase: ${phase}; cleanup ${cleanup}. Raw diagnostics are private.`,
+    `Reference-only proof ERROR in trusted phase: ${phase}; code ${code}; cleanup ${cleanup}. Raw diagnostics are private.`,
   );
   process.exitCode = 1;
 }

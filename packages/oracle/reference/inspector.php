@@ -6,6 +6,7 @@ ini_set('log_errors', '1');
 function check($ok): void { if (!$ok) throw new RuntimeException('inspection-error'); }
 function enc($v): string { return json_encode($v, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION); }
 function q(string $n): string { check((bool)preg_match('/^[A-Za-z_][A-Za-z_0-9]*$/D', $n)); return '"' . $n . '"'; }
+$stage = 'INSPECTOR_ADMIT';
 try {
     $path = '/work/reference.sqlite';
     if (($argv[1] ?? '') === 'fixture') {
@@ -15,6 +16,7 @@ try {
     }
     check(is_file($path) && !is_link($path) && filesize($path) <= 8 * 1024 * 1024);
     foreach (glob('/work/*') as $file) check(is_file($file) && !is_link($file) && filesize($file) <= 8 * 1024 * 1024);
+    $stage = 'INSPECTOR_SCHEMA';
     $pdo = new PDO('sqlite:' . $path, null, null, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $pdo->exec('PRAGMA trusted_schema=OFF; PRAGMA query_only=ON; PRAGMA busy_timeout=250; BEGIN;');
     $schema = $pdo->query("SELECT type,name,tbl_name,sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%' OR name='sqlite_sequence' ORDER BY type,name")->fetchAll(PDO::FETCH_ASSOC);
@@ -50,11 +52,17 @@ try {
     }
     $pdo->exec('COMMIT;');
     $state = ['format' => 'php74-logical-v1', 'schema' => $schema, 'tables' => $tables];
+    $stage = 'INSPECTOR_CLOCK';
     $start = hrtime(true); usleep(50000); $elapsed = (hrtime(true) - $start) / 1000000;
     $runtime = ['php'=>PHP_VERSION, 'sqlite'=>$pdo->query('SELECT sqlite_version()')->fetchColumn(), 'extensions'=>get_loaded_extensions(),
         'phpUtc'=>gmdate('Y-m-d H:i:s'), 'sqliteUtc'=>$pdo->query("SELECT datetime('now')")->fetchColumn(), 'monotonicMs'=>$elapsed,
-        'clockNoticeSha256'=>hash_file('sha256','/usr/share/doc/libfaketime/copyright')];
+        'clockNoticeSha256'=>hash_file('sha256','/usr/share/doc/libfaketime/copyright'),
+        'clockPackageVersion'=>trim(shell_exec('dpkg-query -W -f=\'${Version}\' libfaketime')),
+        'clockLibrarySha256'=>hash_file('sha256','/usr/lib/x86_64-linux-gnu/faketime/libfaketime.so.1')];
+    $stage = 'INSPECTOR_VERSION';
     check(PHP_VERSION === '7.4.33' && $runtime['sqlite'] === '3.34.1');
+    check($runtime['clockPackageVersion'] === '0.9.8-9');
+    $stage = 'INSPECTOR_CLOCK';
     check($runtime['phpUtc'] === '2026-10-27 12:00:00' && $runtime['sqliteUtc'] === $runtime['phpUtc'] && $elapsed >= 40 && $elapsed < 2000);
     $output = enc(['stateBase64'=>base64_encode(enc($state)), 'legacySha256'=>hash('sha256',enc($state)), 'runtime'=>$runtime]);
     check(strlen($output) <= 8 * 1024 * 1024);
@@ -62,5 +70,6 @@ try {
 } catch (Throwable $error) {
     // Diagnostics remain on the broker's private stderr channel.
     file_put_contents('php://stderr', get_class($error) . ':' . $error->getMessage());
-    exit(1);
+    echo enc(['errorCode'=>$stage]);
+    exit(0); // A reported inspection ERROR is rejected by the trusted decoder.
 }

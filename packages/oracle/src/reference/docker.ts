@@ -126,7 +126,14 @@ export async function provisionRuntime(input: {
     sourceSha256: sha256(archive),
     baseImage: SOURCE.image,
   };
-  evidence.write("runtime", { ...runtime, source: SOURCE });
+  evidence.write("runtime", {
+    ...runtime,
+    source: SOURCE,
+    inspectorSha256: sha256(readFileSync(runtime.inspectorPath)),
+    dockerfileSha256: sha256(
+      readFileSync(join(oracleRoot, "probes", "Dockerfile")),
+    ),
+  });
   return runtime;
 }
 
@@ -165,6 +172,18 @@ export interface Inspection {
 export function decodeInspection(bytes: Uint8Array): Inspection {
   ensure(bytes.length <= 8 * 1024 * 1024, "SNAPSHOT_LIMIT");
   const raw = JSON.parse(Buffer.from(bytes).toString());
+  if (
+    raw &&
+    Object.keys(raw).join(",") === "errorCode" &&
+    [
+      "INSPECTOR_ADMIT",
+      "INSPECTOR_SCHEMA",
+      "INSPECTOR_CLOCK",
+      "INSPECTOR_VERSION",
+    ].includes(raw.errorCode)
+  ) {
+    ensure(false, raw.errorCode);
+  }
   ensure(
     raw &&
       Object.keys(raw).sort().join(",") === "legacySha256,runtime,stateBase64",
@@ -194,6 +213,11 @@ export function decodeInspection(bytes: Uint8Array): Inspection {
   ensure(
     raw.runtime.clockNoticeSha256 ===
       "6c361c87f8a9a7999ffab9924fabaaf499b372379cd8a7c19e7eca94d43df7ef",
+    "CLOCK_PROVENANCE",
+  );
+  ensure(
+    raw.runtime.clockPackageVersion === "0.9.8-9" &&
+      /^[a-f0-9]{64}$/.test(raw.runtime.clockLibrarySha256),
     "CLOCK_PROVENANCE",
   );
   ensure(typeof raw.stateBase64 === "string", "INSPECTOR_WIRE");
@@ -392,6 +416,17 @@ export class DockerReferenceTransport {
   }
   async close(): Promise<void> {
     let failed = false;
+    if (this.app) {
+      // Preserve server stdout/stderr through the private command channel before removal.
+      try {
+        await this.command(
+          ["exec", this.app, "cat", "/work/server.log"],
+          AbortSignal.timeout(5000),
+        );
+      } catch {
+        failed = true;
+      }
+    }
     for (const name of [...this.inspectors, ...(this.app ? [this.app] : [])]) {
       try {
         await this.remove(name);
