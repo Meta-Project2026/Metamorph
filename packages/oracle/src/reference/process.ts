@@ -88,6 +88,7 @@ export function boundedCommand(
               "create",
               "ps",
               "rm",
+              "volume",
             ].includes(args[0] ?? "")
               ? args[0]?.toUpperCase()
               : "PROCESS";

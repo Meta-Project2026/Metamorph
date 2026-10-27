@@ -236,6 +236,7 @@ export function decodeInspection(bytes: Uint8Array): Inspection {
 
 export class DockerReferenceTransport {
   private app: string | undefined;
+  private volume: string | undefined;
   private inspectors = new Set<string>();
   constructor(
     readonly runtime: Runtime,
@@ -258,14 +259,34 @@ export class DockerReferenceTransport {
     validateRuntime(this.runtime);
     await this.image(signal);
     const name = `mmp-reference-${randomUUID()}`;
+    const volume = `mmp-reference-state-${randomUUID()}`;
+    this.volume = volume;
+    await this.command(
+      [
+        "volume",
+        "create",
+        "--driver",
+        "local",
+        "--opt",
+        "type=tmpfs",
+        "--opt",
+        "device=tmpfs",
+        "--opt",
+        "o=size=8m,uid=65534,gid=65534,mode=0700,noexec,nosuid,nodev",
+        volume,
+      ],
+      signal,
+    );
     this.app = name;
-    const boot = `set -eu; mkdir /work/app /work/state; tar -xzf /input.tgz -C /work/app --strip-components=1 --no-same-owner --no-same-permissions; test "$(sha256sum /work/app/LICENSE | cut -d ' ' -f 1)" = '${SOURCE.licenseSha256}'; cd /work/app; exec env SQLITE_FILE=/work/state/reference.sqlite ${clock.join(" ").replace(`FAKETIME=${SOURCE.clock}`, `"FAKETIME=${SOURCE.clock}"`)} php -d display_errors=0 -d log_errors=1 -S 127.0.0.1:8080 -t /work/app > /work/server.log 2>&1`;
+    const boot = `set -eu; mkdir /work/app; tar -xzf /input.tgz -C /work/app --strip-components=1 --no-same-owner --no-same-permissions; test "$(sha256sum /work/app/LICENSE | cut -d ' ' -f 1)" = '${SOURCE.licenseSha256}'; cd /work/app; exec env SQLITE_FILE=/state/reference.sqlite ${clock.join(" ").replace(`FAKETIME=${SOURCE.clock}`, `"FAKETIME=${SOURCE.clock}"`)} php -d display_errors=0 -d log_errors=1 -S 127.0.0.1:8080 -t /work/app > /work/server.log 2>&1`;
     await this.command(
       [
         "run",
         "-d",
         ...isolation(name),
         ...bind(this.runtime.archivePath, "/input.tgz"),
+        "--mount",
+        `type=volume,src=${volume},dst=/state,volume-nocopy`,
         this.runtime.imageId,
         "timeout",
         "--signal=KILL",
@@ -322,22 +343,16 @@ export class DockerReferenceTransport {
     return decodeHttp(result.stdout);
   }
   async inspect(signal: AbortSignal): Promise<Inspection> {
-    ensure(this.app, "WORKER_NOT_RESET");
+    ensure(this.app && this.volume, "WORKER_NOT_RESET");
     await this.command(["pause", this.app], signal);
-    let copied: Uint8Array;
     try {
-      copied = (
-        await this.command(["cp", `${this.app}:/work/state/.`, "-"], signal)
-      ).stdout;
+      return await this.inspectVolume(signal);
     } finally {
       await this.command(["unpause", this.app], AbortSignal.timeout(5000));
     }
-    return this.inspectCopy(copied, signal);
   }
-  private async inspectCopy(
-    tar: Uint8Array,
-    signal: AbortSignal,
-  ): Promise<Inspection> {
+  private async inspectVolume(signal: AbortSignal): Promise<Inspection> {
+    ensure(this.volume, "WORKER_NOT_RESET");
     const name = `mmp-inspector-${randomUUID()}`;
     this.inspectors.add(name);
     try {
@@ -346,25 +361,22 @@ export class DockerReferenceTransport {
         [
           "run",
           "--rm",
-          "-i",
           ...isolation(name),
           ...bind(this.runtime.inspectorPath, "/inspector.php"),
+          "--mount",
+          `type=volume,src=${this.volume},dst=/state,readonly,volume-nocopy`,
           this.runtime.imageId,
           "timeout",
           "--signal=KILL",
           "12",
-          "sh",
-          "-c",
-          'set -eu; tar -xf - -C /work --no-same-owner --no-same-permissions; exec "$@"',
-          "sh",
           ...clock,
           "php",
           "-d",
           "memory_limit=64M",
           "/inspector.php",
+          "volume",
         ],
         signal,
-        tar,
       );
       return decodeInspection(result.stdout);
     } finally {
@@ -438,6 +450,30 @@ export class DockerReferenceTransport {
         await this.remove(name);
         this.inspectors.delete(name);
         if (name === this.app) this.app = undefined;
+      } catch {
+        failed = true;
+      }
+    }
+    if (this.volume) {
+      const volume = this.volume;
+      try {
+        const list = async () =>
+          (
+            await this.command(
+              ["volume", "ls", "-q", "--filter", `name=${volume}`],
+              AbortSignal.timeout(5000),
+            )
+          ).stdout
+            .toString()
+            .trim()
+            .split("\n");
+        if ((await list()).includes(volume))
+          await this.command(
+            ["volume", "rm", volume],
+            AbortSignal.timeout(5000),
+          );
+        ensure(!(await list()).includes(volume), "CLEANUP_ERROR");
+        this.volume = undefined;
       } catch {
         failed = true;
       }

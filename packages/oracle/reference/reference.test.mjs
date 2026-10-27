@@ -345,14 +345,19 @@ test("dirty reset is rejected and container cleanup is mandatory", async () => {
   const t = fake({
     inspect: async () => ({ ...inspect(), legacySha256: "0".repeat(64) }),
   });
-  await assert.rejects(create(t).reset(signal()));
+  await assert.rejects(create(t).reset(signal()), /DIRTY_RESET/);
   assert.equal(t.closed, 1);
 });
 test("request before reset and incomplete or exhausted reset schedule fail", async () => {
   await assert.rejects(create().request(MANIFEST[0].requests[0], signal()));
   const w = create();
   await w.reset(signal());
-  await assert.rejects(w.reset(signal()));
+  await assert.rejects(w.reset(signal()), /INCOMPLETE_SCENARIO/);
+  const complete = create();
+  await complete.reset(signal());
+  for (const request of MANIFEST[0].requests)
+    await complete.request(request, signal());
+  await assert.rejects(complete.reset(signal()), /RESET_SCHEDULE_EXHAUSTED/);
 });
 test("uncommanded DB change is rejected instead of cached away", async () => {
   let n = 0;
@@ -376,7 +381,10 @@ test("crash, aborted request and malformed observation poison the worker and cle
       return { ...http(), observation: { status: 999 } };
     };
     const s = reason === "abort" ? AbortSignal.abort() : signal();
-    await assert.rejects(w.request(MANIFEST[0].requests[0], s));
+    await assert.rejects(
+      w.request(MANIFEST[0].requests[0], s),
+      /REFERENCE_OPERATION_ERROR/,
+    );
     assert.equal(t.closed, 1);
     await assert.rejects(w.snapshot(signal()));
   }

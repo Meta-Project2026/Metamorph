@@ -9,6 +9,15 @@ function q(string $n): string { check((bool)preg_match('/^[A-Za-z_][A-Za-z_0-9]*
 $stage = 'INSPECTOR_ADMIT';
 try {
     $path = '/work/reference.sqlite';
+    if (($argv[1] ?? '') === 'volume') {
+        // App cgroup is frozen for this entire operation. Only this inspector
+        // sees the readonly DB volume; copy into independent bounded tmpfs.
+        foreach (glob('/state/*') as $file) {
+            check(in_array(basename($file), ['reference.sqlite','reference.sqlite-journal','reference.sqlite-wal','reference.sqlite-shm'], true));
+            check(is_file($file) && !is_link($file) && filesize($file) <= 8 * 1024 * 1024);
+            check(copy($file, '/work/' . basename($file)));
+        }
+    }
     if (($argv[1] ?? '') === 'fixture') {
         $fixture = new PDO('sqlite:' . $path);
         $fixture->exec(file_get_contents('/fixture.sql'));
