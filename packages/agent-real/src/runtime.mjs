@@ -37,7 +37,7 @@ import { check, isSourceSession } from "./source.mjs";
 export const MANIFEST_PIN =
   "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4";
 export const RECIPE_PIN =
-  "77f812f131f04073d0292b83e2d9ac2f8465e1c3eb82bff5cd5cf2aaf498a36c";
+  "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3";
 const readyEnvironments = new WeakSet();
 const frozenSource = JSON.stringify(SOURCE);
 const digest = (path) => sha256(readFileSync(path));
@@ -55,7 +55,10 @@ function policy(root) {
       WORKSHOP_PROFILE.stateMiB === 16,
     "ENVIRONMENT_ERROR",
   );
-  const directory = join(root, "packages/target-worker/runtime");
+  validateRuntimeRecipe(join(root, "packages/target-worker/runtime"));
+}
+
+export function validateRuntimeRecipe(directory) {
   const hashes = Object.fromEntries(
     readdirSync(directory)
       .filter(

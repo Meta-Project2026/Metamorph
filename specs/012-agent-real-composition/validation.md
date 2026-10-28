@@ -1,5 +1,53 @@
 # MMP-010A validation
 
+## 2026-10-28: registered workflow; first real hosted attempt
+
+Current main was refreshed as `de6a679c1b58195f4fc2ea10670504b59441f9dd`.
+PR #33 is merged at `84ac71602ddeedba39dde8eafb937ae32751dffa`;
+PR #35 is merged and Issue #25 closed. Workflow `398781710` is active on main.
+Its blob `3e798197914bd0227dd12ad9fc6ba5bbd5ec5641` is byte-identical to
+PR #30's workflow. The manual-only trigger, read-only permissions, exact checkout,
+40-minute bound, independent always-finalizer and two-file upload are preserved.
+
+Dispatch exited 0 and created [run 40682636983](https://github.com/Meta-Project2026/Metamorph/actions/runs/40682636983),
+[job 122796947020](https://github.com/Meta-Project2026/Metamorph/actions/runs/40682636983/job/122796947020),
+on `48932cd32700dc3487c764b0ce66b92420f7b56d`. The exact-checkout log confirms
+that SHA. Node 24.22.1 / pnpm 11.25.0: frozen install, lint, typecheck, root tests
+85/85, build, reference 56/56, target 69/69, differential 78/78 and agent-real
+20/20 passed with no skips. This branch did not inherit main's newer Fast CI YAML;
+these are the actual explicitly executed manual-workflow commands.
+
+The real proof step exited 1 with `ENVIRONMENT_ERROR` before runtime preparation:
+no images, attempts, HTTP/SQLite comparisons or runtime controls were produced.
+The agent-real recipe pin `77f812...` did not match the immutable runtime files'
+Git/LF recipe SHA `f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3`.
+The manifest pin and workshop profile match. A new regression reproduced the
+failure with a temporary Linux-checkout copy: 20/21 passed, 1 failed, exit 1.
+The fix changes only the composition's pin and extracts its existing byte-exact
+check for a test that also rejects a modified Dockerfile and CRLF bytes. No runtime
+normalization, protected worker/Oracle/fixture changes or reduced coverage.
+
+The independent finalizer succeeded: containers=0, volumes=0, emergencyRemoved=0.
+Public artifact `12812969324` contains exactly `summary.json` and `finalizer.json`;
+downloaded ZIP SHA-256 `a5ca6ad34afcfe3ba2d144da69d0ff1304af330678a65e38a153f6c131e66c28`
+matches the GitHub API artifact digest and upload log. A bounded public-log and
+artifact scan found no private-pack paths, raw HTTP fields, SQL/DDL or credentials.
+This is an environment/preflight ERROR, not a candidate FAIL or scoped PASS.
+Good/repair/G0-G4 execution and six runtime controls remain NOT_RUN for this run.
+AI_GENERATION_NOT_RUN; EXTERNAL_RETENTION_NOT_RUN; product NOT_ESTABLISHED.
+
+The recipe correction requires a new complete hosted proof on its pushed SHA.
+Later evidence is recorded below and in PR #30; no old run verifies a newer HEAD.
+
+Correction checks on Windows / Node 22.23.1 / pnpm 11.25.0 all exited 0:
+frozen install (1.51 s), lint (1.87 s), typecheck (67.40 s), root test 86/86 with
+no skips (42.63 s), build (28.39 s), focused agent-real 21/21 and diff check.
+Only agent-real runtime/test and this spec bundle changed. The protected Oracle,
+target-worker, differential, contracts and the manual workflow are identical to
+current main. No candidate PHP/TS was compiled or executed on this Windows host.
+
+## Historical local validation and pre-registration attempts
+
 Base main: `3de9d5ceef343536a5b56761deb805006fbd4b65`.
 Isolated branch: `feat/mmp-010a-real-agent-composition`.
 Local platform: Windows, Node22.23.1, pnpm11.25.0. Docker is unavailable locally;
@@ -22,7 +70,7 @@ is open, Refs #23. Fast CI was queued as
 Its result is independent of Docker/Oracle acceptance. Final PR-head Fast CI is
 linked in the PR checks; no code changes are hidden in this reporting update.
 
-## PARTIAL: hosted execution blocker
+## Historical hosted blocker, resolved by the successful dispatch above
 
 Hosted real Agent positive/repair proof: **NOT_RUN**.
 Hosted runtime failure controls, final Docker inventory and raw/public artifact
@@ -120,6 +168,6 @@ the focused suite again passed20/20 and lint plus the full root suite again
 passed85/85 in40.03 s combined. The pushed head's Node22/24 Fast CI is tracked
 in the PR; none of these checks executes the real candidate or PHP on this host.
 
-Actual Agent/PHP/TS proof, positive, negative/repair, runtime controls, final
-Docker inventory, pair/pack SHA receipts and artifact hashes remain **NOT_RUN**.
+At that review, actual Agent/PHP/TS proof, positive, negative/repair, runtime
+controls, final inventory, pair/pack SHA receipts and artifact hashes were NOT_RUN.
 AI_GENERATION_NOT_RUN, EXTERNAL_RETENTION_NOT_RUN and product NOT_ESTABLISHED.

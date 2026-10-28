@@ -11,13 +11,13 @@
 - [x] Commit, push, [PR30](https://github.com/Meta-Project2026/Metamorph/pull/30)
       Refs #23; no merge or issue closure.
 
-Status: PARTIAL. Both workflow dispatch attempts returned404 because the new
-workflow is absent from the default branch. The unchecked real-proof tasks are
-NOT_RUN; see validation.md for the exact blocker and commands. A separate
-workflow-only registration [PR33](https://github.com/Meta-Project2026/Metamorph/pull/33)
-is open for independent review; it has not been merged or registered on main.
+Status: PARTIAL. Registration PR #33 is merged and dispatch is available.
+The first real hosted run failed before runtime preparation with ENVIRONMENT_ERROR
+because the composition's recipe pin did not match the unchanged Git/LF files.
+The unchecked proof tasks remain NOT_RUN; see validation.md for exact receipts.
 
 - [x] Fix G4 pair identity, reject duplicate pair IDs and label the lifetime policy.
 - [x] Add synthetic partial-receipt, failure-precedence and policy-field tests.
-- [ ] Obtain independent review and owner-authorized workflow registration, then
-      execute the proof against the latest PR30 SHA.
+- [x] Verify merged workflow registration and successfully dispatch PR #30.
+- [x] Reproduce the recipe-pin defect and add byte-mutation/CRLF rejection tests.
+- [ ] Execute a complete hosted proof against the corrected current PR #30 SHA.

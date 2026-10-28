@@ -1,7 +1,7 @@
 // Original synthetic boundary controls. No candidate TS/PHP runs on the host.
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
-import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { link, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -22,6 +22,7 @@ import {
   bindCancellation,
   buildReceipt,
   RealVerifier,
+  validateRuntimeRecipe,
 } from "../src/runtime.mjs";
 import { createSourceSession, DEFECT, replayProvider } from "../src/source.mjs";
 
@@ -42,6 +43,38 @@ async function source(t) {
   return createSourceSession(parent);
 }
 const proposal = [{ path: "src/main.ts", content: "export const value = 1;" }];
+
+test("runtime recipe admits the Linux checkout bytes and rejects Dockerfile mutation or CRLF", async (t) => {
+  const recipe = mkdtempSync(join(tmpdir(), "agent-real-recipe-"));
+  t.after(() => rm(recipe, { recursive: true, force: true }));
+  const original = fileURLToPath(
+    new URL("../../target-worker/runtime", import.meta.url),
+  );
+  for (const name of readdirSync(original)) {
+    if (
+      /\.mjs$/.test(name) ||
+      ["Dockerfile", "package.json", "package-lock.json"].includes(name)
+    )
+      // Model a fresh Linux checkout only in this temporary test copy.
+      writeFileSync(
+        join(recipe, name),
+        readFileSync(join(original, name), "utf8").replaceAll("\r\n", "\n"),
+      );
+  }
+  validateRuntimeRecipe(recipe);
+  const dockerfile = join(recipe, "Dockerfile");
+  const contents = readFileSync(dockerfile, "utf8");
+  for (const mutated of [
+    `${contents}\n# changed recipe\n`,
+    contents.replaceAll("\n", "\r\n"),
+  ]) {
+    writeFileSync(dockerfile, mutated);
+    assert.throws(() => validateRuntimeRecipe(recipe), {
+      code: "ENVIRONMENT_ERROR",
+    });
+  }
+});
+
 function attemptFixture() {
   const attemptId = randomUUID(),
     candidateSha = "a".repeat(64);
