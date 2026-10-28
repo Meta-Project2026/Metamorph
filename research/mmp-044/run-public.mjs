@@ -29,6 +29,7 @@ import { git, root, verifyPins } from "./config.mjs";
 import { CASES_SHA, errorCode, runSchedule, summarize } from "./driver.mjs";
 import { atomic, finalize } from "./finalize.mjs";
 
+if (process.argv.includes("--validate-imports")) process.exit(0);
 process.umask(0o077);
 const output = resolve(
   process.env.MMP044_OUTPUT ?? join(tmpdir(), "mmp044-public"),
@@ -45,7 +46,6 @@ const signal = abort.signal;
 let parent,
   evidence,
   resources,
-      diagnostics: () => lastCommandFailure,
   serial = 0,
   results = [],
   config,
@@ -94,20 +94,36 @@ try {
   // Never reap a generic worker/provenance prefix belonging to another job.
   resources.names.prefixes = [];
   resources.persist();
-  const rawCommand = dockerCommand({ write: (id, value) => {
-    evidence.write(id, value);
-    if (value.exitCode !== 0 || value.fault) {
-      const stderr = Buffer.from(value.stderrBase64 ?? "", "base64").toString();
-      const rules = [
-        ["DOCKER_MOUNT_PERMISSION", /permission denied|operation not permitted/i],
-        ["DOCKER_MISSING_RESOURCE", /no such (?:file|container|volume)|not found/i],
-        ["DOCKER_INVALID_MOUNT", /invalid mount|invalid argument/i],
-        ["PHP_PARSE_ERROR", /PHP Parse error:/],
-        ["DOCKER_DAEMON_ERROR", /Error response from daemon:/],
-      ];
-      lastCommandFailure = { exitCode: value.exitCode, fault: value.fault, category: rules.find((r) => r[1].test(stderr))?.[0] ?? "COMMAND_FAILED" };
-    }
-  } });
+  const rawCommand = dockerCommand({
+    write: (id, value) => {
+      evidence.write(id, value);
+      if (value.exitCode !== 0 || value.fault) {
+        const stderr = Buffer.from(
+          value.stderrBase64 ?? "",
+          "base64",
+        ).toString();
+        const rules = [
+          [
+            "DOCKER_MOUNT_PERMISSION",
+            /permission denied|operation not permitted/i,
+          ],
+          [
+            "DOCKER_MISSING_RESOURCE",
+            /no such (?:file|container|volume)|not found/i,
+          ],
+          ["DOCKER_INVALID_MOUNT", /invalid mount|invalid argument/i],
+          ["PHP_PARSE_ERROR", /PHP Parse error:/],
+          ["DOCKER_DAEMON_ERROR", /Error response from daemon:/],
+        ];
+        lastCommandFailure = {
+          exitCode: value.exitCode,
+          fault: value.fault,
+          category:
+            rules.find((r) => r[1].test(stderr))?.[0] ?? "COMMAND_FAILED",
+        };
+      }
+    },
+  });
   const tracked = async (args, ...rest) => {
     resources.track(args);
     const receipt = await rawCommand(args, ...rest);
@@ -173,6 +189,7 @@ try {
         target,
         php,
         resources,
+        diagnostics: () => lastCommandFailure,
         identity: (identity) => ({
           runtimeId: identity.runtimeId,
           volume: target.runtime.volume,

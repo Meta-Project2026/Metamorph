@@ -1,5 +1,6 @@
 // Synthetic host-driver fault tests. These are never PHP/TS Docker proof.
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
@@ -19,6 +20,12 @@ import { cleanupInventory } from "./finalize.mjs";
 
 const bytes = readFileSync(join(root, CASES_PATH));
 const corpus = validateCorpus(bytes);
+test("real CLI entrypoint parses and resolves imports without executing workers", () => {
+  execFileSync(process.execPath, [
+    join(root, "research/mmp-044/run-public.mjs"),
+    "--validate-imports",
+  ]);
+});
 const clone = (v) => structuredClone(v);
 const scenario = corpus.cases[0];
 const requestId = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
