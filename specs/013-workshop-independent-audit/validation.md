@@ -1,5 +1,12 @@
 # Validation
 
+Current status (2026-10-28 docs sync): **HARNESS_EXECUTED=SUCCESS;
+MIGRATION_AUDIT=AUDIT_FAIL**. The final hosted record below applies to executable
+SHA `b142201c07df45d4c10b470ba4f6f8e6b32d9b82`, not to this later docs-only commit.
+Earlier NOT_RUN/registration statements are historical stage snapshots.
+
+## Historical implementation and initial local validation
+
 Base `3de9d5ceef343536a5b56761deb805006fbd4b65`, fresh origin/main. Branch
 `feat/mmp-010b-independent-workshop-audit`; independent managed worktree.
 Issue24 and its coordination comment inspected. No other-owner files edited.
@@ -37,7 +44,7 @@ Archive/API/config/LICENSE bytes read and SHA256 checked against accepted pins.
 Lockfile change is only the12-line workspace importer; no dependency resolutions
 or other-owner code changed. Parallel PR30 observed; no messages or data sent.
 
-## Observed registration blocker — partial delivery
+## Historical registration blocker - partial delivery
 
 [Draft PR31](https://github.com/Meta-Project2026/Metamorph/pull/31) created immediately
 following push. Two dispatch attempts on implementation2e53fa8 returned HTTP404:
@@ -69,7 +76,7 @@ for supplementary G2/G3. Final-head Fast CI and unchanged registered workshop
 regressions are linked in PR31 after the report commit. Existing public controls
 never count as execution of the seven new sampled scenarios.
 
-## Executed original checks on report-head a14429c
+## Historical original checks on report-head a14429c
 
 [Fast CI40588301991](https://github.com/Meta-Project2026/Metamorph/actions/runs/40588301991)
 Node22/24: SUCCESS. Registered unchanged
@@ -110,7 +117,7 @@ results apply specifically to a14429c; they are not relabeled as execution of a
 later documentation SHA. Final Fast CI is linked in PR31. The new audit remains
 NOT_RUN/AUDIT_PARTIAL; independent registration and review are still required.
 
-## Review-fix validation (2026-10-28; current status overrides historical blocker)
+## Historical review-fix validation (2026-10-28; before hosted authorization)
 
 Read entire CHANGES_REQUESTED review5675008255 and both inline comments; Issue24,
 Issue32 and Issue34 plus PR30 latest48932cd. Started clean in existing dedicated
@@ -179,7 +186,7 @@ proven, external recoverable raw retentionNOT_RUN. Request independent review of
 code and registration reconciliation; no owner acceptance is inferred.
 
 
-## Hosted follow-up 2026-10-28: actual failure, no sampled PASS
+## Historical first hosted follow-up (2026-10-28): PROVISION_ERROR
 
 The human owner explicitly authorized corrected feature-ref dispatch without
 waiting for default-branch byte parity. The former task-level policy block is
@@ -203,3 +210,71 @@ sealed partial indexes. Windows audit53PASS/1POSIXskip of54, exit0. This diagnos
 change is not a claimed provision fix; next proof must use its new exact HEAD.
 G0 NOT_RUN, G4 INCONCLUSIVE, product NOT_ESTABLISHED, EXTERNAL_RETENTION_NOT_RUN.
 Baseline34 remains separate, cause unknown, not rerun or attributed here.
+
+
+## Final hosted record - 2026-10-28 (review 5676478621 docs sync)
+
+**HARNESS_EXECUTED=SUCCESS; MIGRATION_AUDIT=AUDIT_FAIL.** Actions job SUCCESS
+means the auditor completed execution and publication; it does not establish
+successful PHP-to-TS migration parity. This record supersedes the historical
+NOT_RUN/blocker statements above without changing their original provenance.
+
+Executed source SHA: `b142201c07df45d4c10b470ba4f6f8e6b32d9b82`.
+[Run 40608788918](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918),
+[job 122554892789](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918/job/122554892789),
+[public artifact 12781924203](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918/artifacts/12781924203).
+Independent [review 5676478621](https://github.com/Meta-Project2026/Metamorph/pull/31#pullrequestreview-5676478621)
+verified the actual job logs, public JSON bytes/digests and scoped failure.
+
+| Hosted check | Observed result at the executed source SHA |
+| --- | --- |
+| Frozen install, lint, typecheck, build | exit 0 |
+| Root / reference / differential / target tests | 65/65 / 56/56 / 78/78 / 69/69 PASS |
+| Linux audit tests | 54/54 PASS, 0 FAIL, 0 SKIP |
+| Sampled coverage, excluding both public controls | 7 pairs, 59 HTTP, 66 SQLite comparisons |
+| Sampled scenario verdicts | 6 PASS; audit-validation-2 AUDIT_FAIL (G2/G3 FAIL) |
+| Real positive control | CONTROL_PASS; G2/G3 PASS; 6 HTTP / 7 DB |
+| Real corrupted-status negative control | CONTROL_PASS; expected G2/G3 FAIL, HTTP_STATUS; 6 HTTP / 7 DB |
+| All nine pair cleanup receipts | VERIFIED_ZERO_RESOURCES |
+| Independent finalizer | CLEANUP_PASS; containers=0, volumes=0, emergencyRemoved=0 |
+
+The only public difference-code set for `audit-validation-2` is
+`HTTP_JSON_MISSING`, `HTTP_JSON_VALUE`, `HTTP_JSON_LENGTH`, `DB_STATE`.
+These are observed comparison differences, not a root-cause classification.
+Independent public-safe diagnosis is tracked in [Issue #44](https://github.com/Meta-Project2026/Metamorph/issues/44).
+Do not infer a candidate defect versus evaluator/transport cause without that
+separate evidence; do not disclose/reconstruct private examples or expected
+answers, repair this frozen candidate from them, or resample to obtain PASS.
+
+Artifact ZIP SHA-256, independently downloaded and matched to GitHub:
+`e51c466b385ef1d9c43d1e68395171a858222696ffc561a4efd6883a828cc763`.
+Exactly two public JSON files were present:
+
+- `summary.json`: `9fa9c07f137cb9da65a55877586d5906c7189c09fb299a4d66b3cddac504e36e`.
+- `finalizer.json`: `082500e07bd52cd797bca28077b5857c147a866c2d3c5b124051b777a91321c8`.
+
+No error.json was uploaded for this completed execution. The trusted executed
+code and structural publication attest three verified private indexes per pair
+(27 total), plus global provenance. The public artifact exposes nine bridge-pack
+commitments and provenance; independent review did not inspect private raw pack
+bytes. Hash commitments are not recoverable external retention. No private
+inputs, expected outputs, seed, raw HTTP/DB/DDL, paths or logs are included here.
+See [hosted-proof.json](hosted-proof.json) for the documentation-only current
+status and the intact historical first-run record.
+
+Historical run 40608027232 at953fd14 remains PROVISION_ERROR before sampled
+execution, cause NOT_ESTABLISHED. Its verified partial indexes and cleanup0/0/0
+are not erased or relabeled fixed/flaky by the later completed execution.
+The older items-smoke/emergency-cleanup baseline stays separately in
+[Issue #34](https://github.com/Meta-Project2026/Metamorph/issues/34).
+
+G0=NOT_RUN, canonical G4=INCONCLUSIVE, product=NOT_ESTABLISHED,
+HELDOUT_ISOLATION_NOT_PROVEN, EXTERNAL_RETENTION_NOT_RUN remain unchanged.
+Unsupported filtered/search stays BLOCKED_TRANSPORT_POLICY. Independent owner
+acceptance/merge disposition is separate from tool execution and audit verdict.
+
+This synchronization changes documentation only. The new documentation commit
+was not executed by run40608788918: proof remains bound to the original source
+SHA above. Executable files, tests, workflows, corpus, verifier/comparator and
+candidate are unchanged relative to that SHA. No closed-sample rerun, runtime
+checks, merge or issue closure is performed for this documentation update.

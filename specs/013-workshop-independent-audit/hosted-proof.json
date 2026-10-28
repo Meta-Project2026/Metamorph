@@ -1,18 +1,26 @@
 {
-  "status": "HOSTED_AUDIT_ERROR",
-  "sourceSha": "953fd144de14ae6e1c5c12cb8d029df8677f369f",
-  "runId": 40608027232,
-  "jobId": 122552328147,
-  "artifactId": 12780879472,
-  "zipSha256": "389fd919c75f2536b1d214efedceeaf8dc2b10445ad4c0c20de9c94cc259029c",
+  "format": "independent-workshop-audit-documentation-status-v2",
+  "recordedDate": "2026-10-28",
+  "reviewId": 5676478621,
+  "documentationOnlyUpdate": true,
+  "sourceSha": "b142201c07df45d4c10b470ba4f6f8e6b32d9b82",
+  "proofAttribution": "ORIGINAL_EXECUTABLE_SHA_ONLY",
+  "status": "HOSTED_PROOF_EXECUTED",
+  "harnessStatus": "SUCCESS",
+  "migrationAudit": "AUDIT_FAIL",
+  "runId": 40608788918,
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918",
+  "jobId": 122554892789,
+  "artifactId": 12781924203,
+  "zipSha256": "e51c466b385ef1d9c43d1e68395171a858222696ffc561a4efd6883a828cc763",
   "zipIndependentlyDownloadedAndMatched": true,
   "files": {
-    "error.json": "35c2c08dafe62e9bade326572e3da2f173c14c0bf831a04d04e160eae65a1370",
-    "finalizer.json": "79bfdca0e393b6a91a9f5a10695d71bde6cb79c8df80b6dc5cbf0f3ad62e123e"
+    "summary.json": "9fa9c07f137cb9da65a55877586d5906c7189c09fb299a4d66b3cddac504e36e",
+    "finalizer.json": "082500e07bd52cd797bca28077b5857c147a866c2d3c5b124051b777a91321c8"
   },
   "linuxTests": {
     "audit": {
-      "pass": 52,
+      "pass": 54,
       "fail": 0,
       "skip": 0
     },
@@ -21,44 +29,131 @@
     "target": 69,
     "differential": 78
   },
-  "phase": "public-controls",
-  "pairId": "audit-public-positive",
-  "primaryCode": "PROVISION_ERROR",
-  "catalog": "INCOMPLETE",
-  "pairPacks": [
-    {
-      "type": "php",
-      "entries": 2,
-      "sha256": "7b39c6bb5fddcfa138c22a7077ba2651f3cd16d480b26e9989ee8b63d138307c"
+  "sampled": {
+    "pairs": 7,
+    "http": 59,
+    "sqlite": 66,
+    "passed": 6,
+    "failed": 1,
+    "failedScenarioId": "audit-validation-2",
+    "failedGates": [
+      "G2",
+      "G3"
+    ],
+    "differenceCodes": [
+      "HTTP_JSON_MISSING",
+      "HTTP_JSON_VALUE",
+      "HTTP_JSON_LENGTH",
+      "DB_STATE"
+    ]
+  },
+  "controls": {
+    "positive": {
+      "status": "CONTROL_PASS",
+      "G2": "PASS",
+      "G3": "PASS",
+      "http": 6,
+      "sqlite": 7
     },
-    {
-      "type": "bridge",
-      "entries": 6,
-      "sha256": "84f07606c995db3aa91684e0735fabbe582de5af6a18c8f2268761f7b7d58085"
-    },
-    {
-      "type": "oracle",
-      "entries": 3,
-      "sha256": "6ed65b8ebad5600ae8971135c59936c10cf31a7c417b9c104dda6a3c2dec6b4d"
+    "negative": {
+      "status": "CONTROL_PASS",
+      "G2": "FAIL",
+      "G3": "FAIL",
+      "differenceCodes": [
+        "HTTP_STATUS"
+      ],
+      "http": 6,
+      "sqlite": 7
     }
-  ],
-  "provenanceSha256": "de5f58ddaff0e748cde8001b8253565e2191cd5e84415a26580c102ede99ed57",
+  },
   "finalizer": {
+    "status": "CLEANUP_PASS",
     "containers": 0,
     "volumes": 0,
-    "emergencyRemoved": 0,
-    "status": "CLEANUP_PASS"
+    "emergencyRemoved": 0
   },
-  "positiveControl": "ERROR",
-  "negativeControl": "NOT_RUN",
-  "sampledScenariosExecuted": 0,
-  "sampledHttp": 0,
-  "sampledDb": 0,
-  "cause": "NOT_ESTABLISHED",
-  "ownerAuthorizedFeatureRefDispatchWithoutByteParity": true,
-  "registrationFollowupPr": 43,
+  "privateEvidence": {
+    "assertedPairIndexCount": 27,
+    "publicBridgeCommitmentCount": 9,
+    "independentPrivateRawInspection": "NOT_RUN",
+    "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+  },
+  "followUp": {
+    "issue": 44,
+    "url": "https://github.com/Meta-Project2026/Metamorph/issues/44",
+    "rootCause": "NOT_ESTABLISHED",
+    "scope": "SEPARATE_PUBLIC_SAFE_TRIAGE"
+  },
+  "separateBaselineIssue": 34,
   "G0": "NOT_RUN",
   "G4": "INCONCLUSIVE",
   "product": "NOT_ESTABLISHED",
-  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+  "formalHeldOut": "HELDOUT_ISOLATION_NOT_PROVEN",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+  "historicalRuns": [
+    {
+      "status": "HOSTED_AUDIT_ERROR",
+      "sourceSha": "953fd144de14ae6e1c5c12cb8d029df8677f369f",
+      "runId": 40608027232,
+      "jobId": 122552328147,
+      "artifactId": 12780879472,
+      "zipSha256": "389fd919c75f2536b1d214efedceeaf8dc2b10445ad4c0c20de9c94cc259029c",
+      "zipIndependentlyDownloadedAndMatched": true,
+      "files": {
+        "error.json": "35c2c08dafe62e9bade326572e3da2f173c14c0bf831a04d04e160eae65a1370",
+        "finalizer.json": "79bfdca0e393b6a91a9f5a10695d71bde6cb79c8df80b6dc5cbf0f3ad62e123e"
+      },
+      "linuxTests": {
+        "audit": {
+          "pass": 52,
+          "fail": 0,
+          "skip": 0
+        },
+        "root": 65,
+        "reference": 56,
+        "target": 69,
+        "differential": 78
+      },
+      "phase": "public-controls",
+      "pairId": "audit-public-positive",
+      "primaryCode": "PROVISION_ERROR",
+      "catalog": "INCOMPLETE",
+      "pairPacks": [
+        {
+          "type": "php",
+          "entries": 2,
+          "sha256": "7b39c6bb5fddcfa138c22a7077ba2651f3cd16d480b26e9989ee8b63d138307c"
+        },
+        {
+          "type": "bridge",
+          "entries": 6,
+          "sha256": "84f07606c995db3aa91684e0735fabbe582de5af6a18c8f2268761f7b7d58085"
+        },
+        {
+          "type": "oracle",
+          "entries": 3,
+          "sha256": "6ed65b8ebad5600ae8971135c59936c10cf31a7c417b9c104dda6a3c2dec6b4d"
+        }
+      ],
+      "provenanceSha256": "de5f58ddaff0e748cde8001b8253565e2191cd5e84415a26580c102ede99ed57",
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0,
+        "status": "CLEANUP_PASS"
+      },
+      "positiveControl": "ERROR",
+      "negativeControl": "NOT_RUN",
+      "sampledScenariosExecuted": 0,
+      "sampledHttp": 0,
+      "sampledDb": 0,
+      "cause": "NOT_ESTABLISHED",
+      "ownerAuthorizedFeatureRefDispatchWithoutByteParity": true,
+      "registrationFollowupPr": 43,
+      "G0": "NOT_RUN",
+      "G4": "INCONCLUSIVE",
+      "product": "NOT_ESTABLISHED",
+      "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+    }
+  ]
 }

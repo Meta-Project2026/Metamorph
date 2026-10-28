@@ -1,5 +1,10 @@
 # Audit trust boundary and handoff
 
+Current handoff (2026-10-28): HARNESS_EXECUTED=SUCCESS;
+MIGRATION_AUDIT=AUDIT_FAIL at b142201c07df45d4c10b470ba4f6f8e6b32d9b82.
+The final dated handoff below supersedes historical launch/status notes; it does
+not attribute that runtime proof to this later docs-only commit.
+
 New trusted wrappers accept only evaluator-owned bounded scenarios using existing
 WORKSHOP_PROFILE. They do not modify/inherit/bypass the original MANIFEST-only
 PhpReferenceWorker or TargetOracleAdapter. Readonly reuse of strict target mapping,
@@ -53,7 +58,7 @@ OSS: unchanged pinned MIT car-workshop source/license validated by existing
 transport; TS fixture retains full notice. Audit code is original task work and
 reuses repository trusted utilities; Node/TypeScript dependencies retain notices.
 
-## PR31 review fixes (2026-10-28)
+## Historical PR31 review fixes (2026-10-28; before hosted authorization)
 
 PairRegistry now registers a pair before construction and retains each returned
 PHP/bridge/oracle pack immediately. Registry JSON is atomic0600 in its0700 private
@@ -97,7 +102,7 @@ before dispatch under this task's exact-byte precondition. No existing workflow
 or registration PR is changed here. Only YAML SHA/policy is sent to Issue32.
 
 
-## Hosted launch authorization and bounded failure diagnosis
+## Historical launch authorization and first-run diagnosis (before run40608788918)
 
 The human owner explicitly permits corrected feature-ref dispatch without main
 byte parity. Registration-only43 remains separate, no self-merge. At953fd14,
@@ -110,3 +115,47 @@ A failure pair now adds detailCode from a fixed trusted-code allowlist; unknown
 values become ADAPTER_OPERATION_ERROR. The primary stage code remains unchanged.
 No message/path/stack/data is copied. No worker/comparator/source/corpus change.
 Next dispatch must bind the new exact commit; no runtime fix/PASS inferred.
+
+
+## Final hosted handoff - 2026-10-28 (review 5676478621 docs sync)
+
+Executable proof source is `b142201c07df45d4c10b470ba4f6f8e6b32d9b82`.
+[Run40608788918](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918),
+[job122554892789](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918/job/122554892789)
+and [public artifact12781924203](https://github.com/Meta-Project2026/Metamorph/actions/runs/40608788918/artifacts/12781924203)
+were independently verified in review5676478621. Linux audit54/54 passed, no skips.
+All7sampled pairs executed59HTTP/66SQLite comparisons, excluding the two real
+controls. Positive G2/G3 PASS and corrupted-status negative G2/G3 FAIL behaved
+correctly (both CONTROL_PASS), each6HTTP/7DB. Six sampled scenarios passed;
+`audit-validation-2` is AUDIT_FAIL, G2/G3 FAIL with only public codes
+HTTP_JSON_MISSING, HTTP_JSON_VALUE, HTTP_JSON_LENGTH, DB_STATE.
+**Actions job SUCCESS means auditor execution/publication; migration AUDIT_FAIL
+means observed non-equivalence. No passing-migration/product acceptance follows.**
+
+All nine pair receipts state VERIFIED_ZERO_RESOURCES. Independent finalizer:
+CLEANUP_PASS, containers=0, volumes=0, emergencyRemoved=0. ZIP SHA-256:
+`e51c466b385ef1d9c43d1e68395171a858222696ffc561a4efd6883a828cc763`.
+Only summary.json/finalizer.json were uploaded; their exact hashes and the
+historical first run are in [validation.md](validation.md) and the
+[documentation status](hosted-proof.json). The executed trusted code asserts27
+private pair indexes plus provenance; public commitments do not expose private
+raw bytes or establish external recoverable retention. No private input, seed,
+expected response, raw observation, path or log is transferred in this handoff.
+
+Further independent public-safe diagnosis is tracked in
+[Issue #44](https://github.com/Meta-Project2026/Metamorph/issues/44). Root cause
+(candidate behavior versus evaluator/transport) remains NOT_ESTABLISHED. No
+private-sample reconstruction, candidate repair from hidden feedback, comparator
+changes or reruns of the closed selection to seek PASS are authorized here.
+Historical run40608027232 at953fd14 remains PROVISION_ERROR, cause unknown;
+items-smoke baseline #34 remains a separate unresolved issue.
+
+G0=NOT_RUN, canonical G4=INCONCLUSIVE, product=NOT_ESTABLISHED,
+HELDOUT_ISOLATION_NOT_PROVEN and EXTERNAL_RETENTION_NOT_RUN are unchanged.
+Filtered/search coverage remains BLOCKED_TRANSPORT_POLICY.
+
+This is documentation-only synchronization. Executable files, tests, YAML,
+corpus, verifier/comparator and candidate remain byte-identical to b142201c.
+Run40608788918 was not executed on the later documentation SHA. No new audit
+or runtime tests, merge or issue closure are performed. Independent ChatGPT
+review of this docs delta and its code-blob equality is requested.
