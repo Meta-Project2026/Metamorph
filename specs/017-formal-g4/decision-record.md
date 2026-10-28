@@ -7,6 +7,17 @@ Scope: this directory only. No approval, appointment, benchmark registration,
 implementation permission, first-run authorization or G4 receipt exists in this
 record. Publishing/merging this PR does not silently ratify root governance.
 
+## Owner-reported joint local-first decision and fixed retention policy
+
+The requester explicitly stated on 2026-10-28 that **both Vladimir and Ilia agreed**
+to the [local-first architecture direction](local-first-decision.md) and **finally
+approved 180 days of evidence retention plus an independently verified day-90
+restore**. Record this as **JOINT_OWNER_AGREEMENT_REPORTED**, rather than
+PENDING_POLICY_DECISION. It does **not** fabricate Ilia's independently authenticated
+GitHub signature or an approved concrete media/keys/custody implementation; PR #53
+still requests that signed confirmation. D1 and the remaining D4 service/admin/
+key/recovery choices are not automatically complete, and no hidden run is admitted.
+
 ## Required decision gate
 
 Choose exactly one path by explicit statements from both owners:
@@ -38,7 +49,7 @@ boundaries, not per-PR checksum recertification or new Fast CI rituals.
 | D1 | Accept protocol, threat model, storage, checklist and five-slice plan | Both owners identify document version/PR commit and accept scope/limits | PENDING |
 | D2 | Choose one independence path above | Both owners name profile, exposure/conflict statements, C/E/R/principals and administrator trust; reviewer eligibility attested | PENDING; no appointments |
 | D3 | Register benchmark and G0 completeness | Both owners accept source/license, version, unseen private pool, mandatory public/hidden scenarios/units, unsupported boundaries and selection policy | NOT_RUN; no benchmark chosen here |
-| D4 | Storage policy: 180-day minimum, hold extension, two encrypted failure domains, independent key recovery, day-90 restore and verified deletion | Both owners approve concrete store/key services, access/recovery principals, quotas/deadlines and documented expiry policy | PENDING; EXTERNAL_RETENTION_NOT_RUN |
+| D4 | **APPROVED:** local-first default, two independently custodied encrypted physical copies; **180-day minimum** for complete/partial evidence and mandatory independent **day-90 exact-byte restore check**. Hold extension/verified deletion remain controls, not bypasses | Both-owner agreement **reported by requester** 2026-10-28; authenticated Ilia acknowledgment and concrete media/key/service principals, quotas, expiry and recovery workflow still need a separately verified record | **POLICY_SUBSET_RATIFIED_BY_OWNER_REPORT; AUTHENTICATED_SECOND_OWNER_RECEIPT_PENDING; IMPLEMENTATION/EXTERNAL_RETENTION_NOT_RUN** |
 | D5 | One invocation + at most one classified technical retry; no retries for terminal behavioral FAIL; fresh versions after repair/leak/semantic changes | Both owners accept attempt/finality/invalidation rules and bounded run limits before registration | PENDING |
 | D6 | Authorize implementation and settle integration dependencies | Both owners accept scoped PR #31 auditor disposition, #26/#34 prerequisites for reused paths, future shared-change proposals and public synthetic qualification evidence | PENDING; no code authorized by this record |
 | D7 | Authorize first formal run and later acceptance | Separate both-owner exact-epoch/candidate/implementation/budget permission before dispatch; R's review and both-owner acceptance/refusal after evidence | NOT_RUN |

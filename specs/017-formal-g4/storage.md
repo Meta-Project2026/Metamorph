@@ -6,6 +6,23 @@ the reviewed implementation. **EXTERNAL_RETENTION_NOT_RUN** remains the current
 status. This document specifies future requirements; no storage was configured
 or private bytes read for MMP-038.
 
+## Local-first direction and finalized retention schedule
+
+The [local-first architecture direction](local-first-decision.md) makes cloud
+providers **optional**, not mandatory for any migration or Oracle operation.
+For formal G4, a locally administered encrypted primary medium and a physically
+separate offline encrypted backup may satisfy the proposed two-failure-domain
+requirement **only if** independent physical/admin custody, witnessed immutable
+commitments, access denial, key recovery, exact-byte restore and required retention
+are demonstrated. Two directories, co-located writable disks or copies controlled
+by the candidate-author administrator do not establish independence. Where
+local media cannot meet the chosen independence profile, formal G4 is BLOCKED or
+requires an explicitly approved stronger custodian/storage option. The requester
+reports **both owners' agreement** to the local-first direction and fixed **180-day
+minimum retention / independent day-90 restore**. A separate authenticated
+second-owner GitHub receipt and exact physical-media/key/custody implementation
+remain outstanding. This does not establish secure storage or G4 evidence.
+
 ## Canonical raw pack and integrity
 
 One run root indexes the frozen registration, selection and all attempts/pairs.
@@ -62,9 +79,12 @@ using that retention path; this proposal does not fix or bypass them.
    key in repo/workflow/candidate/model context. Record ciphertext identity and
    private plaintext manifest root, algorithm/key version and authenticated
    metadata binding run/epoch/attempt.
-5. Upload to owner-restricted storage outside runner temp and public GitHub
-   artifacts. Obtain immutable object/version, length/hash and durable completion
-   receipts; verify the remote bytes. Never overwrite the object on retry.
+5. Transfer to owner-restricted, durably retained storage **outside runner temp**
+   and public GitHub artifacts. Encrypted local/offline media under independent
+   custody can qualify; a remote/cloud upload is optional. Obtain the durable
+   medium and immutable-version identity, length/hash and completion receipt;
+   independently verify the retained bytes. Never overwrite an earlier version
+   on retry.
 6. R or an eligible recovery delegate restores from the durable copy into a new
    restricted environment after application workers have been destroyed. Verify
    decrypt/authentication, every exact plaintext file/index/root and full expected
@@ -89,12 +109,22 @@ GitHub artifact holding only summary/finalizer JSON are not raw retention.
 
 ## Storage, access and recovery policy
 
-Proposed initial policy, requiring both-owner selection/acceptance:
+**Owner-reported finalized policy subset (2026-10-28):** local-first storage is
+the default; complete and partial/failed sealed G4 evidence must be retained for
+**at least 180 calendar days** after the terminal run/attempt receipt and an
+**independent exact-byte restore and full index verification must execute by day
+90**. This is not optional or a future suggestion. Record test date, identity,
+prior witnessed commitment, exact recovery outcome and every discrepancy. A
+missing or failed test cannot count as verified retention or G4_PASS.
+
+The following specific implementation, custody and deletion controls still
+require documented selection, test evidence and authenticated owner admission:
 
 - Retain complete encrypted run material and all failed attempts for **180 days
   from terminal receipt**, extended while an acceptance dispute or incident is
-  open. Record the actual expiry timestamp per run. This is a proposed minimum,
-  not an assertion of an existing legal retention obligation.
+  open. Record the actual expiry timestamp per run. The **180-day minimum is now
+  an agreed project policy as reported by the requester**, not an assertion of
+  an externally imposed legal retention obligation.
 - Maintain two verified encrypted copies in separate failure domains, with
   immutable version retention for that period. A second directory on the same
   disposable runner is not a second durable copy.
@@ -109,8 +139,9 @@ Proposed initial policy, requiring both-owner selection/acceptance:
 - Select the concrete store, encryption/key service, recovery principal, backup
   location, quotas and deadlines before IMPLEMENTATION_READY. Test recovery with
   synthetic data before any hidden ingestion and with the actual retained pack
-  before acceptance. Repeat a recovery check at day 90 for retained evidence;
-  keep any failed check as an append-only availability incident.
+  before acceptance. **Perform and independently attest a full restore by day
+  90** of the 180-day retention interval; keep a missed or failed check as an
+  append-only availability incident and disallow an unsupported G4_PASS.
 - At expiry, both owners authorize deletion only after R confirms no hold.
   Record affected object/key versions and verification that all retained copies,
   snapshots and recovery replicas were deleted or cryptographically erased under
