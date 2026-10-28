@@ -37,7 +37,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Host driver tests (synthetic, no parity claim)
-        run: node --test research/mmp-044/driver.test.mjs
+        run: |
+          node research/mmp-044/check.mjs
+          node --test research/mmp-044/driver.test.mjs
       - name: Fixed public PHP/TS experiment
         run: node research/mmp-044/run-public.mjs
       - name: Independent exact-ledger finalizer

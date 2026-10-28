@@ -84,7 +84,6 @@ export async function cleanupInventory(
       );
   const before = { containers: await list(false), volumes: await list(true) };
   const count = before.containers.length + before.volumes.length;
-  history.emergencyRemoved += count;
   history.normalCleanupError ||= count > 0;
   save(history); // Persist before removals; final zero cannot erase emergency history.
   for (const [kind, entries] of [
@@ -105,6 +104,10 @@ export async function cleanupInventory(
     }
   }
   const after = { containers: await list(false), volumes: await list(true) };
+  history.emergencyRemoved +=
+    before.containers.filter((n) => !after.containers.includes(n)).length +
+    before.volumes.filter((n) => !after.volumes.includes(n)).length;
+  save(history);
   if (after.containers.length || after.volumes.length) {
     history.normalCleanupError = true;
     save(history);

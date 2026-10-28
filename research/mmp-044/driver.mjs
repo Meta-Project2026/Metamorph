@@ -344,18 +344,28 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
         : "ERROR";
     try {
       const before = await pair.resources.inventory();
+      let reapFailed = false;
       if (before.containers.length || before.volumes.length) {
-        receipt.emergencyRemoved =
+        receipt.emergencyAttempted =
           before.containers.length + before.volumes.length;
-        await pair.resources.reap();
+        try {
+          await pair.resources.reap();
+        } catch {
+          reapFailed = true;
+        }
       }
       const inventory = await pair.resources.inventory();
+      receipt.emergencyRemoved =
+        before.containers.filter((n) => !inventory.containers.includes(n))
+          .length +
+        before.volumes.filter((n) => !inventory.volumes.includes(n)).length;
       receipt.inventory = {
         containers: inventory.containers.length,
         volumes: inventory.volumes.length,
       };
       requireCheck(
-        !receipt.emergencyRemoved &&
+        !receipt.emergencyAttempted &&
+          !reapFailed &&
           !inventory.containers.length &&
           !inventory.volumes.length &&
           receipt.normalCleanup === "PASS",

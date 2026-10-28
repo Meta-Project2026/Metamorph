@@ -10,6 +10,7 @@ From an exact committed Linux amd64 checkout on a disposable Docker host:
 ```sh
 pnpm install --frozen-lockfile
 pnpm build
+node research/mmp-044/check.mjs
 node --test research/mmp-044/driver.test.mjs
 export MMP044_HEAD_SHA="$(git rev-parse HEAD)"
 export MMP044_WORKDIR="$(mktemp -d /tmp/mmp044-job-XXXXXXXX)"

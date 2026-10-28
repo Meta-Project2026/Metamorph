@@ -477,6 +477,7 @@ test("independent finalizer rejects global prefixes and reports removal failure"
     }),
   );
   assert.equal(failed.status, "ERROR");
+  assert.equal(failed.emergencyRemoved, 0);
   assert.equal(failed.inventory.containers, 1);
 });
 test("public HTTP projection validates raw-vs-mapped bytes and drops all message/seed fields", () => {
