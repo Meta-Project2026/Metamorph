@@ -3,24 +3,36 @@ import { chmodSync, mkdirSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
-import { DockerReferenceTransport, provisionRuntime } from "../../packages/oracle/dist/reference/docker.js";
-import { PrivateEvidence } from "../../packages/oracle/dist/reference/evidence.js";
-import { dockerCommand } from "../../packages/oracle/dist/reference/process.js";
-import { SOURCE } from "../../packages/oracle/dist/reference/manifest.js";
 import { validateTargetClock } from "../../packages/differential/src/clock.mjs";
 import { atomicJson } from "../../packages/differential/src/private-run.mjs";
 import { Resources } from "../../packages/differential/src/resources.mjs";
-import { requireCheck, strictJson } from "../../packages/differential/src/strict.mjs";
-import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
-import { FIXED_ENV, requireSuccess, TargetWorker } from "../../packages/target-worker/src/controller.mjs";
-import { buildTrustedRuntime } from "../../packages/target-worker/src/runtime-broker.mjs";
+import {
+  requireCheck,
+  strictJson,
+} from "../../packages/differential/src/strict.mjs";
+import {
+  DockerReferenceTransport,
+  provisionRuntime,
+} from "../../packages/oracle/dist/reference/docker.js";
+import { PrivateEvidence } from "../../packages/oracle/dist/reference/evidence.js";
+import { SOURCE } from "../../packages/oracle/dist/reference/manifest.js";
+import { dockerCommand } from "../../packages/oracle/dist/reference/process.js";
 import { WORKSHOP_PROFILE } from "../../packages/target-worker/runtime/profile.mjs";
+import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
+import {
+  FIXED_ENV,
+  requireSuccess,
+  TargetWorker,
+} from "../../packages/target-worker/src/controller.mjs";
+import { buildTrustedRuntime } from "../../packages/target-worker/src/runtime-broker.mjs";
 import { git, root, verifyPins } from "./config.mjs";
 import { CASES_SHA, errorCode, runSchedule, summarize } from "./driver.mjs";
-import { finalize } from "./finalize.mjs";
+import { atomic, finalize } from "./finalize.mjs";
 
 process.umask(0o077);
-const output = resolve(process.env.MMP044_OUTPUT ?? join(tmpdir(), "mmp044-public"));
+const output = resolve(
+  process.env.MMP044_OUTPUT ?? join(tmpdir(), "mmp044-public"),
+);
 mkdirSync(output, { recursive: true });
 const headSha = git("rev-parse", "HEAD").toString().trim();
 const start = performance.now();
@@ -30,19 +42,52 @@ process.on("SIGINT", stop);
 process.on("SIGTERM", stop);
 const timeout = setTimeout(stop, 20 * 60 * 1000);
 const signal = abort.signal;
-let parent, evidence, resources, serial = 0, results = [], config, runtimeIdentity, failure, cleanup;
-const record = (kind, value) => evidence.write(`entry-${++serial}-${kind.replaceAll(/[^a-z0-9-]/g, "-")}`, value);
+let parent,
+  evidence,
+  resources,
+  serial = 0,
+  results = [],
+  config,
+  runtimeIdentity,
+  failure,
+  cleanup;
+const cleanupHistory = { normalCleanupError: false, emergencyRemoved: 0 };
+const record = (kind, value) =>
+  evidence.write(
+    `entry-${++serial}-${kind.replaceAll(/[^a-z0-9-]/g, "-")}`,
+    value,
+  );
 try {
   // A Windows preflight deliberately cannot produce runtime success.
   config = verifyPins({ strictCheckout: process.platform === "linux" });
-  requireCheck(process.platform === "linux" && process.arch === "x64", "LINUX_REQUIRED");
-  requireCheck(headSha === process.env.MMP044_HEAD_SHA && /^[a-f0-9]{40}$/.test(headSha), "HEAD_IDENTITY");
-  git("diff", "--exit-code", "HEAD", "--", "research/mmp-044", "packages/oracle", "packages/target-worker", "packages/differential");
+  requireCheck(
+    process.platform === "linux" && process.arch === "x64",
+    "LINUX_REQUIRED",
+  );
+  requireCheck(
+    headSha === process.env.MMP044_HEAD_SHA && /^[a-f0-9]{40}$/.test(headSha),
+    "HEAD_IDENTITY",
+  );
+  git(
+    "diff",
+    "--exit-code",
+    "HEAD",
+    "--",
+    "research/mmp-044",
+    "packages/oracle",
+    "packages/target-worker",
+    "packages/differential",
+  );
   signal.throwIfAborted();
-  parent = process.env.MMP044_PARENT ?? mkdtempSync(join(tmpdir(), "mmp044-private-"));
+  parent =
+    process.env.MMP044_PARENT ?? mkdtempSync(join(tmpdir(), "mmp044-private-"));
   if (process.env.MMP044_PARENT) mkdirSync(parent, { mode: 0o700 });
   chmodSync(parent, 0o700);
-  evidence = new PrivateEvidence(parent, root, { headSha, casesSha256: CASES_SHA, designation: "PUBLIC_INDEPENDENT_REPRO" });
+  evidence = new PrivateEvidence(parent, root, {
+    headSha,
+    casesSha256: CASES_SHA,
+    designation: "PUBLIC_INDEPENDENT_REPRO",
+  });
   resources = new Resources(join(parent, "resources.json"), record);
   // Never reap a generic worker/provenance prefix belonging to another job.
   resources.names.prefixes = [];
@@ -52,62 +97,173 @@ try {
     resources.track(args);
     const receipt = await rawCommand(args, ...rest);
     // Preserve strict inspector stdout parsing in addition to its original decoder.
-    if (args.includes("/inspector.php") && args[0] === "run") strictJson(receipt.stdout.toString());
+    if (args.includes("/inspector.php") && args[0] === "run")
+      strictJson(receipt.stdout.toString());
     return receipt;
   };
   const directory = mkdtempSync(join(parent, "source-"));
-  const phpRuntime = await provisionRuntime({ command: tracked, directory, oracleRoot: join(root, "packages/oracle"), signal, evidence });
+  const phpRuntime = await provisionRuntime({
+    command: tracked,
+    directory,
+    oracleRoot: join(root, "packages/oracle"),
+    signal,
+    evidence,
+  });
   // Existing broker joins its bounded build/provenance/cleanup before returning.
   // Cancellation is checked after joining; no new operation starts on a late result.
-  const runtime = await buildTrustedRuntime((name, receipt) => record("runtime", { name, receipt }));
+  const runtime = await buildTrustedRuntime((name, receipt) => {
+    const at = receipt.args?.indexOf("--name") ?? -1;
+    const owned =
+      at >= 0
+        ? receipt.args[at + 1]
+        : name === "provenance-cleanup.json"
+          ? receipt.args?.at(-1)
+          : null;
+    if (owned && /^mmp007-provenance-[a-f0-9-]{36}$/.test(owned)) {
+      resources.names.brokerContainers = [
+        ...new Set([...(resources.names.brokerContainers ?? []), owned]),
+      ];
+      resources.persist();
+    }
+    record("runtime", { name, receipt });
+  });
   signal.throwIfAborted();
-  requireCheck(runtime.provenance.recipeSha === config.pins.targetRecipeSha256, "PIN_MISMATCH");
-  const bundle = await admitDirectory(join(root, "packages/target-worker/fixtures/workshop"), config.pins.candidateSha256);
+  requireCheck(
+    runtime.provenance.recipeSha === config.pins.targetRecipeSha256,
+    "PIN_MISMATCH",
+  );
+  const bundle = await admitDirectory(
+    join(root, "packages/target-worker/fixtures/workshop"),
+    config.pins.candidateSha256,
+  );
   runtimeIdentity = {
-    phpImageId: phpRuntime.imageId, phpBaseImage: phpRuntime.baseImage,
-    sourceSha256: phpRuntime.sourceSha256, targetImageId: runtime.imageId,
-    recipeSha256: runtime.provenance.recipeSha, targetNode: runtime.provenance.measured.node,
+    phpImageId: phpRuntime.imageId,
+    phpBaseImage: phpRuntime.baseImage,
+    sourceSha256: phpRuntime.sourceSha256,
+    targetImageId: runtime.imageId,
+    recipeSha256: runtime.provenance.recipeSha,
+    targetNode: runtime.provenance.measured.node,
     targetSqlite: runtime.provenance.measured.sqlite,
   };
-  results = await runSchedule(config.corpus, async () => {
-    // Ledger exists and ownership is persisted before either provision operation.
-    const target = new TargetWorker(runtime, bundle, "fixed-experiment", { profile: WORKSHOP_PROFILE });
-    resources.target(target.runId);
-    const php = new DockerReferenceTransport(phpRuntime, tracked);
-    return {
-      target, php, resources,
-      identity: (identity) => ({ runtimeId: identity.runtimeId, volume: target.runtime.volume }),
-      cleanupVerified: () => target.evidence.cleanupVerified === true,
-      clock: async (workSignal) => {
-        const receipt = requireSuccess(await target.cmd(["exec", ...FIXED_ENV, target.runtime.name, "node", "/opt/worker/clock.mjs"], { signal: workSignal }));
-        const clock = strictJson(receipt.stdout);
-        validateTargetClock(clock);
-        record("clock", clock);
-      },
-    };
-  }, signal, (id, kind, value) => record(`${id}-${kind}`, value));
+  results = await runSchedule(
+    config.corpus,
+    async () => {
+      // Ledger exists and ownership is persisted before either provision operation.
+      const target = new TargetWorker(runtime, bundle, "fixed-experiment", {
+        profile: WORKSHOP_PROFILE,
+      });
+      resources.target(target.runId);
+      const php = new DockerReferenceTransport(phpRuntime, tracked);
+      return {
+        target,
+        php,
+        resources,
+        identity: (identity) => ({
+          runtimeId: identity.runtimeId,
+          volume: target.runtime.volume,
+        }),
+        cleanupVerified: () => target.evidence.cleanupVerified === true,
+        clock: async (workSignal) => {
+          const receipt = requireSuccess(
+            await target.cmd(
+              [
+                "exec",
+                ...FIXED_ENV,
+                target.runtime.name,
+                "node",
+                "/opt/worker/clock.mjs",
+              ],
+              { signal: workSignal },
+            ),
+          );
+          const clock = strictJson(receipt.stdout);
+          validateTargetClock(clock);
+          record("clock", clock);
+          return {
+            fixedUtc: clock.before.date,
+            monotonicDeltaMs: clock.monotonicDeltaMs,
+            node: clock.node,
+            sqlite: clock.sqlite,
+          };
+        },
+      };
+    },
+    signal,
+    (id, kind, value) => {
+      if (kind === "case-receipt") {
+        cleanupHistory.normalCleanupError ||=
+          value.normalCleanup !== "PASS" ||
+          value.emergencyRemoved > 0 ||
+          value.errorCode === "CLEANUP_ERROR";
+        cleanupHistory.emergencyRemoved += value.emergencyRemoved;
+        atomic(join(parent, "cleanup-history.json"), cleanupHistory);
+      }
+      record(`${id}-${kind}`, value);
+    },
+  );
 } catch (error) {
-  failure = errorCode(error);
+  failure = signal.aborted ? "ABORTED" : errorCode(error);
 } finally {
   clearTimeout(timeout);
   process.removeListener("SIGINT", stop);
   process.removeListener("SIGTERM", stop);
-  try { if (parent) cleanup = await finalize(parent, record); }
-  catch { cleanup = { status: "ERROR", emergencyRemoved: null, inventory: null }; }
+  try {
+    if (parent) cleanup = await finalize(parent, record);
+  } catch {
+    cleanup = { status: "ERROR", emergencyRemoved: null, inventory: null };
+  }
 }
 let summary;
 if (config) summary = summarize(config.corpus, results);
-else summary = { classification: "NOT_ESTABLISHED", harness: "ERROR", parity: "INCONCLUSIVE", cases: [], coverage: { http: 0, sqlite: 0, completedPairs: 0 }, gates: { G0: "INCONCLUSIVE", G1: "NOT_RUN", G2: "NOT_RUN", G3: "NOT_RUN", G4: "INCONCLUSIVE" }, product: "NOT_ESTABLISHED" };
-if (failure || cleanup?.status !== "PASS") { summary.harness = "ERROR"; summary.parity = "INCONCLUSIVE"; }
+else
+  summary = {
+    classification: "NOT_ESTABLISHED",
+    harness: "ERROR",
+    parity: "INCONCLUSIVE",
+    cases: [],
+    coverage: { http: 0, sqlite: 0, completedPairs: 0 },
+    gates: {
+      G0: "INCONCLUSIVE",
+      G1: "NOT_RUN",
+      G2: "NOT_RUN",
+      G3: "NOT_RUN",
+      G4: "INCONCLUSIVE",
+    },
+    product: "NOT_ESTABLISHED",
+  };
+if (failure || cleanup?.status !== "PASS") {
+  summary.harness = "ERROR";
+  summary.parity = "INCONCLUSIVE";
+}
 Object.assign(summary, {
-  designation: "PUBLIC_INDEPENDENT_REPRO", headSha, casesSha256: CASES_SHA,
-  candidateSha256: config?.pins.candidateSha256, sourceCommit: SOURCE.commit,
-  manifestSha256: config?.pins.manifestSha256, normalizationVersion: "oracle-exact-v1",
-  runtime: runtimeIdentity ?? null, runtimeExecution: results.length ? "STARTED" : "DOCKER_NOT_RUN",
-  errorCode: failure ?? null, cleanup: cleanup ?? { status: "NOT_RUN", inventory: null, emergencyRemoved: null },
+  designation: "PUBLIC_INDEPENDENT_REPRO",
+  headSha,
+  casesSha256: CASES_SHA,
+  candidateSha256: config?.pins.candidateSha256,
+  sourceCommit: SOURCE.commit,
+  manifestSha256: config?.pins.manifestSha256,
+  normalizationVersion: "oracle-exact-v1",
+  runtime: runtimeIdentity ?? null,
+  runtimeExecution: results.length ? "STARTED" : "DOCKER_NOT_RUN",
+  errorCode: failure ?? null,
+  cleanup: cleanup ?? {
+    status: "NOT_RUN",
+    inventory: null,
+    emergencyRemoved: null,
+  },
   durationMs: Math.round(performance.now() - start),
 });
-if (evidence) { const index = evidence.seal(); PrivateEvidence.verify(evidence.path, index); }
+if (evidence) {
+  const index = evidence.seal();
+  PrivateEvidence.verify(evidence.path, index);
+}
 atomicJson(join(output, "summary.json"), summary, 0o644);
-console.log(JSON.stringify({ harness: summary.harness, classification: summary.classification, coverage: summary.coverage, errorCode: summary.errorCode }));
+console.log(
+  JSON.stringify({
+    harness: summary.harness,
+    classification: summary.classification,
+    coverage: summary.coverage,
+    errorCode: summary.errorCode,
+  }),
+);
 if (summary.harness !== "SUCCESS") process.exitCode = 1;
