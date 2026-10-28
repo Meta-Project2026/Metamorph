@@ -15,7 +15,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "demo": "node dist/demo.js"
+    "demo": "node dist/demo.js",
+    "test": "node --test test/*.test.mjs",
+    "meta:preflight": "node dist/meta-cli.js preflight",
+    "live:probe": "node dist/meta-cli.js probe"
   },
   "dependencies": {
     "@metamorph/contracts": "workspace:*",
