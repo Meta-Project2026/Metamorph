@@ -37,3 +37,5 @@ jobs:
         run: pnpm --filter @metamorph/target-worker test
       - name: Differential tests
         run: pnpm --filter @metamorph/differential test
+      - name: PHP qualification sanitizer and recipe tests
+        run: node --test packages/oracle/probes/qualification.test.mjs
