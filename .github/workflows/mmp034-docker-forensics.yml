@@ -1,0 +1,69 @@
+name: MMP-034 manual public Docker forensics
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mmp034-forensics-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  original-items-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        revision:
+          - { index: 0, sha: d133e65be24d939d86b9e43a83e4ba8770ecffd9 }
+          - { index: 1, sha: a14429ca9d5ac565dbb618e9f9c26297c9ead30b }
+        repetition: [1, 2]
+    env:
+      MMP034_SOURCE_SHA: ${{ matrix.revision.sha }}
+      MMP034_ATTEMPT_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.revision.index }}-${{ matrix.repetition }}
+      MMP034_SOURCE_DIR: ${{ github.workspace }}/historical
+    steps:
+      - name: Set allowlisted public directory
+        run: echo "MMP034_OUTPUT=$RUNNER_TEMP/mmp034-public" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          path: diagnostic
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          path: historical
+          ref: ${{ matrix.revision.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: historical/package.json
+      - name: Original regression setup
+        working-directory: historical
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+      - name: Diagnostic privacy contract
+        run: node --test diagnostic/research/mmp-034/diagnose.test.mjs
+      - name: Original unmodified 30-case public smoke
+        run: node diagnostic/research/mmp-034/diagnose.mjs
+      - name: Independent finalizer (emergency removal is ERROR)
+        if: always()
+        run: node diagnostic/research/mmp-034/diagnose.mjs finalize
+      - name: Only schema-validated receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmp034-${{ matrix.revision.index }}-${{ matrix.repetition }}
+          path: |
+            ${{ env.MMP034_OUTPUT }}/attempt.json
+            ${{ env.MMP034_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7

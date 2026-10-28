@@ -1,0 +1,794 @@
+{
+  "run": {
+    "id": 40753497017,
+    "run_attempt": 1,
+    "head_sha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-28T19:20:59Z",
+    "run_started_at": "2026-10-28T19:20:59Z",
+    "updated_at": "2026-10-28T19:35:04Z",
+    "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017"
+  },
+  "jobs": [
+    {
+      "id": 123046127685,
+      "name": "original-items-only (0, d133e65be24d939d86b9e43a83e4ba8770ecffd9, 2)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T19:21:02Z",
+      "completed_at": "2026-10-28T19:28:00Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046127685",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-28T19:21:03Z",
+          "completed_at": "2026-10-28T19:21:04Z"
+        },
+        {
+          "name": "Set allowlisted public directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-28T19:21:04Z",
+          "completed_at": "2026-10-28T19:21:04Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-28T19:21:04Z",
+          "completed_at": "2026-10-28T19:21:06Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-28T19:21:06Z",
+          "completed_at": "2026-10-28T19:21:07Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-28T19:21:07Z",
+          "completed_at": "2026-10-28T19:21:08Z"
+        },
+        {
+          "name": "Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-28T19:21:08Z",
+          "completed_at": "2026-10-28T19:21:09Z"
+        },
+        {
+          "name": "Original regression setup",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-28T19:21:09Z",
+          "completed_at": "2026-10-28T19:21:29Z"
+        },
+        {
+          "name": "Diagnostic privacy contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-28T19:21:29Z",
+          "completed_at": "2026-10-28T19:21:29Z"
+        },
+        {
+          "name": "Original unmodified 30-case public smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-28T19:21:29Z",
+          "completed_at": "2026-10-28T19:27:57Z"
+        },
+        {
+          "name": "Independent finalizer (emergency removal is ERROR)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-28T19:27:57Z",
+          "completed_at": "2026-10-28T19:27:57Z"
+        },
+        {
+          "name": "Only schema-validated receipts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-28T19:27:57Z",
+          "completed_at": "2026-10-28T19:27:58Z"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-28T19:27:58Z",
+          "completed_at": "2026-10-28T19:27:58Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-28T19:27:58Z",
+          "completed_at": "2026-10-28T19:27:58Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-28T19:27:58Z",
+          "completed_at": "2026-10-28T19:27:58Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-28T19:27:58Z",
+          "completed_at": "2026-10-28T19:27:59Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-28T19:27:59Z",
+          "completed_at": "2026-10-28T19:27:59Z"
+        }
+      ]
+    },
+    {
+      "id": 123046128425,
+      "name": "original-items-only (1, a14429ca9d5ac565dbb618e9f9c26297c9ead30b, 2)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T19:28:22Z",
+      "completed_at": "2026-10-28T19:33:34Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128425",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-28T19:28:22Z",
+          "completed_at": "2026-10-28T19:28:24Z"
+        },
+        {
+          "name": "Set allowlisted public directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-28T19:28:24Z",
+          "completed_at": "2026-10-28T19:28:24Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-28T19:28:24Z",
+          "completed_at": "2026-10-28T19:28:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-28T19:28:25Z",
+          "completed_at": "2026-10-28T19:28:27Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-28T19:28:27Z",
+          "completed_at": "2026-10-28T19:28:27Z"
+        },
+        {
+          "name": "Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-28T19:28:27Z",
+          "completed_at": "2026-10-28T19:28:28Z"
+        },
+        {
+          "name": "Original regression setup",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-28T19:28:28Z",
+          "completed_at": "2026-10-28T19:28:42Z"
+        },
+        {
+          "name": "Diagnostic privacy contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-28T19:28:42Z",
+          "completed_at": "2026-10-28T19:28:42Z"
+        },
+        {
+          "name": "Original unmodified 30-case public smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-28T19:28:42Z",
+          "completed_at": "2026-10-28T19:33:31Z"
+        },
+        {
+          "name": "Independent finalizer (emergency removal is ERROR)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-28T19:33:31Z",
+          "completed_at": "2026-10-28T19:33:31Z"
+        },
+        {
+          "name": "Only schema-validated receipts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-28T19:33:31Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-28T19:33:32Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-28T19:33:32Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-28T19:33:32Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-28T19:33:32Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-28T19:33:32Z",
+          "completed_at": "2026-10-28T19:33:32Z"
+        }
+      ]
+    },
+    {
+      "id": 123046128517,
+      "name": "original-items-only (0, d133e65be24d939d86b9e43a83e4ba8770ecffd9, 1)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T19:21:03Z",
+      "completed_at": "2026-10-28T19:28:20Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128517",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-28T19:21:03Z",
+          "completed_at": "2026-10-28T19:21:05Z"
+        },
+        {
+          "name": "Set allowlisted public directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-28T19:21:05Z",
+          "completed_at": "2026-10-28T19:21:05Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-28T19:21:05Z",
+          "completed_at": "2026-10-28T19:21:07Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-28T19:21:07Z",
+          "completed_at": "2026-10-28T19:21:08Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-28T19:21:08Z",
+          "completed_at": "2026-10-28T19:21:08Z"
+        },
+        {
+          "name": "Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-28T19:21:08Z",
+          "completed_at": "2026-10-28T19:21:10Z"
+        },
+        {
+          "name": "Original regression setup",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-28T19:21:10Z",
+          "completed_at": "2026-10-28T19:21:29Z"
+        },
+        {
+          "name": "Diagnostic privacy contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-28T19:21:29Z",
+          "completed_at": "2026-10-28T19:21:29Z"
+        },
+        {
+          "name": "Original unmodified 30-case public smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-28T19:21:29Z",
+          "completed_at": "2026-10-28T19:28:16Z"
+        },
+        {
+          "name": "Independent finalizer (emergency removal is ERROR)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-28T19:28:16Z",
+          "completed_at": "2026-10-28T19:28:16Z"
+        },
+        {
+          "name": "Only schema-validated receipts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-28T19:28:16Z",
+          "completed_at": "2026-10-28T19:28:17Z"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-28T19:28:17Z",
+          "completed_at": "2026-10-28T19:28:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-28T19:28:17Z",
+          "completed_at": "2026-10-28T19:28:18Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-28T19:28:18Z",
+          "completed_at": "2026-10-28T19:28:18Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-28T19:28:18Z",
+          "completed_at": "2026-10-28T19:28:18Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-28T19:28:18Z",
+          "completed_at": "2026-10-28T19:28:18Z"
+        }
+      ]
+    },
+    {
+      "id": 123046128746,
+      "name": "original-items-only (1, a14429ca9d5ac565dbb618e9f9c26297c9ead30b, 1)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T19:28:02Z",
+      "completed_at": "2026-10-28T19:35:03Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128746",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-28T19:28:03Z",
+          "completed_at": "2026-10-28T19:28:04Z"
+        },
+        {
+          "name": "Set allowlisted public directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-28T19:28:04Z",
+          "completed_at": "2026-10-28T19:28:04Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-28T19:28:04Z",
+          "completed_at": "2026-10-28T19:28:05Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-28T19:28:05Z",
+          "completed_at": "2026-10-28T19:28:06Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-28T19:28:06Z",
+          "completed_at": "2026-10-28T19:28:07Z"
+        },
+        {
+          "name": "Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-28T19:28:07Z",
+          "completed_at": "2026-10-28T19:28:08Z"
+        },
+        {
+          "name": "Original regression setup",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-28T19:28:08Z",
+          "completed_at": "2026-10-28T19:28:27Z"
+        },
+        {
+          "name": "Diagnostic privacy contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-28T19:28:27Z",
+          "completed_at": "2026-10-28T19:28:28Z"
+        },
+        {
+          "name": "Original unmodified 30-case public smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-28T19:28:28Z",
+          "completed_at": "2026-10-28T19:34:59Z"
+        },
+        {
+          "name": "Independent finalizer (emergency removal is ERROR)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-28T19:34:59Z",
+          "completed_at": "2026-10-28T19:34:59Z"
+        },
+        {
+          "name": "Only schema-validated receipts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-28T19:34:59Z",
+          "completed_at": "2026-10-28T19:35:00Z"
+        },
+        {
+          "name": "Post Run pnpm/action-setup@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-28T19:35:00Z",
+          "completed_at": "2026-10-28T19:35:00Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-28T19:35:00Z",
+          "completed_at": "2026-10-28T19:35:00Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-28T19:35:00Z",
+          "completed_at": "2026-10-28T19:35:00Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-28T19:35:00Z",
+          "completed_at": "2026-10-28T19:35:01Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-28T19:35:01Z",
+          "completed_at": "2026-10-28T19:35:01Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12846575028,
+      "name": "mmp034-1-1",
+      "size_in_bytes": 766,
+      "expired": false,
+      "created_at": "2026-10-28T19:35:00Z",
+      "updated_at": "2026-10-28T19:35:00Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12846575028/zip",
+      "files": [
+        {
+          "path": "receipts/40753497017-1-1-1/attempt.json",
+          "sha256": "98bb37c543cce0469575b0f8f7a01189019642cfc4c60210594bde317277bb17",
+          "receipt": {
+            "attemptId": "40753497017-1-1-1",
+            "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "status": "PASS",
+            "childExit": 0,
+            "childSignal": null,
+            "childTimedOut": false,
+            "elapsedMs": 391270,
+            "completedCases": 30,
+            "firstUncompletedCase": null,
+            "failedCaseReceiptPresent": false,
+            "operationCode": null,
+            "caseCode": null,
+            "cleanupCode": null,
+            "commands": [],
+            "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+            "imageId": "sha256:32f295b663a081edd9771d23b23966fd9a2b5387a194b22e219a2f3c9f794489"
+          }
+        },
+        {
+          "path": "receipts/40753497017-1-1-1/finalizer.json",
+          "sha256": "5a0cf831596d1c263a71aaf37f177e1d688e7acaf069c70d9bb533511ecc0916",
+          "receipt": {
+            "attemptId": "40753497017-1-1-1",
+            "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "status": "PASS",
+            "before": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "after": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "commandError": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 12846085649,
+      "name": "mmp034-1-2",
+      "size_in_bytes": 768,
+      "expired": false,
+      "created_at": "2026-10-28T19:33:32Z",
+      "updated_at": "2026-10-28T19:33:32Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12846085649/zip",
+      "files": [
+        {
+          "path": "receipts/40753497017-1-1-2/attempt.json",
+          "sha256": "3fd7599e81eed1dd173b68eb9d46e937720173fef12caa50c1a5b2c19c52d7b5",
+          "receipt": {
+            "attemptId": "40753497017-1-1-2",
+            "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "status": "PASS",
+            "childExit": 0,
+            "childSignal": null,
+            "childTimedOut": false,
+            "elapsedMs": 288501,
+            "completedCases": 30,
+            "firstUncompletedCase": null,
+            "failedCaseReceiptPresent": false,
+            "operationCode": null,
+            "caseCode": null,
+            "cleanupCode": null,
+            "commands": [],
+            "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+            "imageId": "sha256:bacd2d12f00dcac8bc3fd9818c0ece1f1986ea6a4241ad3302318144ec1d7a36"
+          }
+        },
+        {
+          "path": "receipts/40753497017-1-1-2/finalizer.json",
+          "sha256": "86c2349b791233a2322a53e52d297bc40c1cd2f27c2507e3eba4af9fcb1041e7",
+          "receipt": {
+            "attemptId": "40753497017-1-1-2",
+            "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "status": "PASS",
+            "before": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "after": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "commandError": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 12845491820,
+      "name": "mmp034-0-1",
+      "size_in_bytes": 770,
+      "expired": false,
+      "created_at": "2026-10-28T19:28:17Z",
+      "updated_at": "2026-10-28T19:28:17Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12845491820/zip",
+      "files": [
+        {
+          "path": "receipts/40753497017-1-0-1/attempt.json",
+          "sha256": "63b63255443be286b959b7e752f49f0a76e702225704487b85197d48f542f901",
+          "receipt": {
+            "attemptId": "40753497017-1-0-1",
+            "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "status": "PASS",
+            "childExit": 0,
+            "childSignal": null,
+            "childTimedOut": false,
+            "elapsedMs": 407263,
+            "completedCases": 30,
+            "firstUncompletedCase": null,
+            "failedCaseReceiptPresent": false,
+            "operationCode": null,
+            "caseCode": null,
+            "cleanupCode": null,
+            "commands": [],
+            "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+            "imageId": "sha256:2d1de69fcf87d7e14d640a8620b1871a89e67db751b47190209e7562237f3439"
+          }
+        },
+        {
+          "path": "receipts/40753497017-1-0-1/finalizer.json",
+          "sha256": "175b1c2f5128dc031577d562129d16e7c15b51007a06d1862b93f726262c4008",
+          "receipt": {
+            "attemptId": "40753497017-1-0-1",
+            "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "status": "PASS",
+            "before": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "after": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "commandError": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 12844782605,
+      "name": "mmp034-0-2",
+      "size_in_bytes": 768,
+      "expired": false,
+      "created_at": "2026-10-28T19:27:58Z",
+      "updated_at": "2026-10-28T19:27:58Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12844782605/zip",
+      "files": [
+        {
+          "path": "receipts/40753497017-1-0-2/attempt.json",
+          "sha256": "0617a182c87adbc9e9e1c36982b10aada0b43972ca623c07185a5d33f566cf0c",
+          "receipt": {
+            "attemptId": "40753497017-1-0-2",
+            "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "status": "PASS",
+            "childExit": 0,
+            "childSignal": null,
+            "childTimedOut": false,
+            "elapsedMs": 387820,
+            "completedCases": 30,
+            "firstUncompletedCase": null,
+            "failedCaseReceiptPresent": false,
+            "operationCode": null,
+            "caseCode": null,
+            "cleanupCode": null,
+            "commands": [],
+            "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+            "imageId": "sha256:f9b91b46ae54c8c10b4dab59a92a9c0779aacde9bf5503313fb8bd48ec8ff434"
+          }
+        },
+        {
+          "path": "receipts/40753497017-1-0-2/finalizer.json",
+          "sha256": "ce19336d36e37014929205179328d45faa3d03fb0a8fc7df470f5f9c88b4b08f",
+          "receipt": {
+            "attemptId": "40753497017-1-0-2",
+            "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "status": "PASS",
+            "before": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "after": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "commandError": false
+          }
+        }
+      ]
+    }
+  ]
+}

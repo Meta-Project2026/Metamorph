@@ -1,0 +1,203 @@
+{
+  "format": "mmp034-public-summary-v1",
+  "date": "2026-10-28",
+  "baseSha": "1aa36b8f4ab7a6f1d8f291d8751856ed51274685",
+  "branch": "Vladimir/mmp-034-items-smoke-cleanup",
+  "result": "ROOT_CAUSE_NOT_ESTABLISHED",
+  "rootCause": "NOT_ESTABLISHED",
+  "historical": {
+    "runId": 40588295315,
+    "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+    "attempts": [
+      1,
+      2
+    ],
+    "itemsSmoke": "ERROR",
+    "negativeProcedure": "PASS",
+    "negativeG3": "FAIL",
+    "normalCleanup": "ERROR",
+    "emergencyRemovedPerAttempt": 1,
+    "afterFinalizer": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "firstFailedCase": null,
+    "primaryCode": null,
+    "lifecycleStage": null,
+    "childExit": null,
+    "childSignal": null,
+    "survivorRole": null
+  },
+  "newExecution": {
+    "realDocker": "EXECUTED",
+    "plannedAttempts": 4,
+    "completedAttempts": 4,
+    "matrix": [
+      {
+        "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+        "repetitions": 2,
+        "status": "PASS",
+        "passedRepetitions": 2,
+        "casesPerRepetition": 30,
+        "emergencyRemovedPerRepetition": 0
+      },
+      {
+        "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+        "repetitions": 2,
+        "status": "PASS",
+        "passedRepetitions": 2,
+        "casesPerRepetition": 30,
+        "emergencyRemovedPerRepetition": 0
+      }
+    ],
+    "localDockerExecutable": "UNAVAILABLE",
+    "manualWorkflow": "BRANCH_DISPATCH_SUCCEEDED_NO_MERGE",
+    "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+    "runId": 40753497017,
+    "runStatus": "success",
+    "reproduction": "FAILURE_NOT_REPRODUCED_IN_FOUR_STANDALONE_RUNS",
+    "totalExecutedCaseInstances": 120,
+    "attempts": [
+      {
+        "attemptId": "40753497017-1-0-1",
+        "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+        "status": "PASS",
+        "cases": 30,
+        "childExit": 0,
+        "childSignal": null,
+        "childTimedOut": false,
+        "elapsedMs": 407263,
+        "finalizerStatus": "PASS",
+        "emergencyRemoved": 0,
+        "artifactId": 12845491820
+      },
+      {
+        "attemptId": "40753497017-1-0-2",
+        "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+        "status": "PASS",
+        "cases": 30,
+        "childExit": 0,
+        "childSignal": null,
+        "childTimedOut": false,
+        "elapsedMs": 387820,
+        "finalizerStatus": "PASS",
+        "emergencyRemoved": 0,
+        "artifactId": 12844782605
+      },
+      {
+        "attemptId": "40753497017-1-1-1",
+        "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+        "status": "PASS",
+        "cases": 30,
+        "childExit": 0,
+        "childSignal": null,
+        "childTimedOut": false,
+        "elapsedMs": 391270,
+        "finalizerStatus": "PASS",
+        "emergencyRemoved": 0,
+        "artifactId": 12846575028
+      },
+      {
+        "attemptId": "40753497017-1-1-2",
+        "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+        "status": "PASS",
+        "cases": 30,
+        "childExit": 0,
+        "childSignal": null,
+        "childTimedOut": false,
+        "elapsedMs": 288501,
+        "finalizerStatus": "PASS",
+        "emergencyRemoved": 0,
+        "artifactId": 12846085649
+      }
+    ]
+  },
+  "localChecks": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "node --test research/mmp-034/diagnose.test.mjs",
+      "exitCode": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "status": "PASS"
+    }
+  ],
+  "testCounts": {
+    "diagnostic": {
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    },
+    "targetWorker": {
+      "pass": 69,
+      "fail": 0,
+      "skip": 0
+    },
+    "differential": {
+      "pass": 77,
+      "fail": 0,
+      "skip": 1
+    }
+  },
+  "localSkipCode": "POSIX_PERMISSION_CATALOG_TEST_WINDOWS_SKIP",
+  "productionFix": "NONE",
+  "baselinePatchedDockerComparison": "NOT_RUN",
+  "protectedFilesChanged": false,
+  "privateDiagnosticsPublished": false,
+  "formalG4": "NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "historicalPR31": "AUDIT_FAIL",
+  "hostedPrCi": {
+    "runId": 40753507299,
+    "headSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+    "node22": "PASS",
+    "node24": "PASS"
+  },
+  "independentReview": "REQUESTED_IN_PR_BODY_NOT_COMPLETED",
+  "preExecutionError": {
+    "classification": "WORKFLOW_VALIDATION_ERROR",
+    "runId": 40753383891,
+    "headSha": "a42e9ce5a44b895ab85584db24d85f88412b9af5",
+    "dispatchHttpStatus": 422,
+    "dockerAttemptsExecuted": 0,
+    "correctedAtSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc"
+  },
+  "pullRequest": "https://github.com/Meta-Project2026/Metamorph/pull/58"
+}

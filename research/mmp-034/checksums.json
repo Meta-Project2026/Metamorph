@@ -1,0 +1,18 @@
+{
+  "research/mmp-034/diagnose.mjs": "df738b3c423b765de074d56cbd9e5af071f3533279cc3095de95fa39262361f1",
+  "research/mmp-034/diagnose.test.mjs": "ba7e8968c61af02da6f7c572bc4a4eee4dfa3b752e9103e2dc6c6f5677b6813b",
+  "research/mmp-034/historical-evidence.json": "adbcbe703db97837d5f0a1655fb768b25e65a92a9bfac45aaa2d5014d87b5dee",
+  "research/mmp-034/incident-review.md": "96b6ef96846116bb77f3babf87e8f58bd23dfef1f25276cf84052aced46bcbc0",
+  "research/mmp-034/new-execution.json": "36855a5535d22b75c86828fc46a67cf43aba0eb016c07854cf49067eb4e9e4c6",
+  "research/mmp-034/public-summary.json": "8a1dff084581f75246f12269329bca07334d2bb5fb8287d38f30a52e157c0b1f",
+  "research/mmp-034/receipts/40753497017-1-0-1/attempt.json": "63b63255443be286b959b7e752f49f0a76e702225704487b85197d48f542f901",
+  "research/mmp-034/receipts/40753497017-1-0-1/finalizer.json": "175b1c2f5128dc031577d562129d16e7c15b51007a06d1862b93f726262c4008",
+  "research/mmp-034/receipts/40753497017-1-0-2/attempt.json": "0617a182c87adbc9e9e1c36982b10aada0b43972ca623c07185a5d33f566cf0c",
+  "research/mmp-034/receipts/40753497017-1-0-2/finalizer.json": "ce19336d36e37014929205179328d45faa3d03fb0a8fc7df470f5f9c88b4b08f",
+  "research/mmp-034/receipts/40753497017-1-1-1/attempt.json": "98bb37c543cce0469575b0f8f7a01189019642cfc4c60210594bde317277bb17",
+  "research/mmp-034/receipts/40753497017-1-1-1/finalizer.json": "5a0cf831596d1c263a71aaf37f177e1d688e7acaf069c70d9bb533511ecc0916",
+  "research/mmp-034/receipts/40753497017-1-1-2/attempt.json": "3fd7599e81eed1dd173b68eb9d46e937720173fef12caa50c1a5b2c19c52d7b5",
+  "research/mmp-034/receipts/40753497017-1-1-2/finalizer.json": "86c2349b791233a2322a53e52d297bc40c1cd2f27c2507e3eba4af9fcb1041e7",
+  "research/mmp-034/source-identities.json": "8df494e11fcaa04cfce8956d90a5deed1a48d5cf7963233ed8acbc424e93f54f",
+  ".github/workflows/mmp034-docker-forensics.yml": "6469848ad09d8c031ced07554112b9e4dcc7dbaa6f1c84e806c68aa8ad34da77"
+}
