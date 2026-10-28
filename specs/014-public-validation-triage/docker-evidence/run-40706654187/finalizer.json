@@ -1,0 +1,11 @@
+{
+  "status": "ERROR",
+  "normalCleanup": "ERROR",
+  "emergencyRemoved": 0,
+  "inventory": {
+    "containers": 0,
+    "volumes": 0
+  },
+  "inventoryScope": "EXACT_JOB_LEDGER",
+  "headSha": "36f5a4c2817f681da44ab3c7d7bef141b651a963"
+}

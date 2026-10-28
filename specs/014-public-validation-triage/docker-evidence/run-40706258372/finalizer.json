@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "normalCleanup": "PASS",
+  "emergencyRemoved": 0,
+  "inventory": {
+    "containers": 0,
+    "volumes": 0
+  },
+  "inventoryScope": "EXACT_JOB_LEDGER",
+  "headSha": "238058f83a31480290addf93df0e3db5c306e68e"
+}
