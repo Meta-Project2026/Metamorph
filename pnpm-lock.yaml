@@ -36,6 +36,24 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
 
+  packages/agent-real:
+    dependencies:
+      '@metamorph/agent':
+        specifier: workspace:*
+        version: link:../agent
+      '@metamorph/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@metamorph/differential':
+        specifier: workspace:*
+        version: link:../differential
+      '@metamorph/oracle':
+        specifier: workspace:*
+        version: link:../oracle
+      '@metamorph/target-worker':
+        specifier: workspace:*
+        version: link:../target-worker
+
   packages/contracts:
     dependencies:
       zod:
