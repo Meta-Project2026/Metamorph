@@ -1,0 +1,113 @@
+// Explicit Linux Docker entrypoint. No model, private audit, or high-level manifest adapter.
+import { chmodSync, mkdirSync, mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { performance } from "node:perf_hooks";
+import { DockerReferenceTransport, provisionRuntime } from "../../packages/oracle/dist/reference/docker.js";
+import { PrivateEvidence } from "../../packages/oracle/dist/reference/evidence.js";
+import { dockerCommand } from "../../packages/oracle/dist/reference/process.js";
+import { SOURCE } from "../../packages/oracle/dist/reference/manifest.js";
+import { validateTargetClock } from "../../packages/differential/src/clock.mjs";
+import { atomicJson } from "../../packages/differential/src/private-run.mjs";
+import { Resources } from "../../packages/differential/src/resources.mjs";
+import { requireCheck, strictJson } from "../../packages/differential/src/strict.mjs";
+import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
+import { FIXED_ENV, requireSuccess, TargetWorker } from "../../packages/target-worker/src/controller.mjs";
+import { buildTrustedRuntime } from "../../packages/target-worker/src/runtime-broker.mjs";
+import { WORKSHOP_PROFILE } from "../../packages/target-worker/runtime/profile.mjs";
+import { git, root, verifyPins } from "./config.mjs";
+import { CASES_SHA, errorCode, runSchedule, summarize } from "./driver.mjs";
+import { finalize } from "./finalize.mjs";
+
+process.umask(0o077);
+const output = resolve(process.env.MMP044_OUTPUT ?? join(tmpdir(), "mmp044-public"));
+mkdirSync(output, { recursive: true });
+const headSha = git("rev-parse", "HEAD").toString().trim();
+const start = performance.now();
+const abort = new AbortController();
+const stop = () => abort.abort();
+process.on("SIGINT", stop);
+process.on("SIGTERM", stop);
+const timeout = setTimeout(stop, 20 * 60 * 1000);
+const signal = abort.signal;
+let parent, evidence, resources, serial = 0, results = [], config, runtimeIdentity, failure, cleanup;
+const record = (kind, value) => evidence.write(`entry-${++serial}-${kind.replaceAll(/[^a-z0-9-]/g, "-")}`, value);
+try {
+  // A Windows preflight deliberately cannot produce runtime success.
+  config = verifyPins({ strictCheckout: process.platform === "linux" });
+  requireCheck(process.platform === "linux" && process.arch === "x64", "LINUX_REQUIRED");
+  requireCheck(headSha === process.env.MMP044_HEAD_SHA && /^[a-f0-9]{40}$/.test(headSha), "HEAD_IDENTITY");
+  git("diff", "--exit-code", "HEAD", "--", "research/mmp-044", "packages/oracle", "packages/target-worker", "packages/differential");
+  signal.throwIfAborted();
+  parent = process.env.MMP044_PARENT ?? mkdtempSync(join(tmpdir(), "mmp044-private-"));
+  if (process.env.MMP044_PARENT) mkdirSync(parent, { mode: 0o700 });
+  chmodSync(parent, 0o700);
+  evidence = new PrivateEvidence(parent, root, { headSha, casesSha256: CASES_SHA, designation: "PUBLIC_INDEPENDENT_REPRO" });
+  resources = new Resources(join(parent, "resources.json"), record);
+  // Never reap a generic worker/provenance prefix belonging to another job.
+  resources.names.prefixes = [];
+  resources.persist();
+  const rawCommand = dockerCommand(evidence);
+  const tracked = async (args, ...rest) => {
+    resources.track(args);
+    const receipt = await rawCommand(args, ...rest);
+    // Preserve strict inspector stdout parsing in addition to its original decoder.
+    if (args.includes("/inspector.php") && args[0] === "run") strictJson(receipt.stdout.toString());
+    return receipt;
+  };
+  const directory = mkdtempSync(join(parent, "source-"));
+  const phpRuntime = await provisionRuntime({ command: tracked, directory, oracleRoot: join(root, "packages/oracle"), signal, evidence });
+  // Existing broker joins its bounded build/provenance/cleanup before returning.
+  // Cancellation is checked after joining; no new operation starts on a late result.
+  const runtime = await buildTrustedRuntime((name, receipt) => record("runtime", { name, receipt }));
+  signal.throwIfAborted();
+  requireCheck(runtime.provenance.recipeSha === config.pins.targetRecipeSha256, "PIN_MISMATCH");
+  const bundle = await admitDirectory(join(root, "packages/target-worker/fixtures/workshop"), config.pins.candidateSha256);
+  runtimeIdentity = {
+    phpImageId: phpRuntime.imageId, phpBaseImage: phpRuntime.baseImage,
+    sourceSha256: phpRuntime.sourceSha256, targetImageId: runtime.imageId,
+    recipeSha256: runtime.provenance.recipeSha, targetNode: runtime.provenance.measured.node,
+    targetSqlite: runtime.provenance.measured.sqlite,
+  };
+  results = await runSchedule(config.corpus, async () => {
+    // Ledger exists and ownership is persisted before either provision operation.
+    const target = new TargetWorker(runtime, bundle, "fixed-experiment", { profile: WORKSHOP_PROFILE });
+    resources.target(target.runId);
+    const php = new DockerReferenceTransport(phpRuntime, tracked);
+    return {
+      target, php, resources,
+      identity: (identity) => ({ runtimeId: identity.runtimeId, volume: target.runtime.volume }),
+      cleanupVerified: () => target.evidence.cleanupVerified === true,
+      clock: async (workSignal) => {
+        const receipt = requireSuccess(await target.cmd(["exec", ...FIXED_ENV, target.runtime.name, "node", "/opt/worker/clock.mjs"], { signal: workSignal }));
+        const clock = strictJson(receipt.stdout);
+        validateTargetClock(clock);
+        record("clock", clock);
+      },
+    };
+  }, signal, (id, kind, value) => record(`${id}-${kind}`, value));
+} catch (error) {
+  failure = errorCode(error);
+} finally {
+  clearTimeout(timeout);
+  process.removeListener("SIGINT", stop);
+  process.removeListener("SIGTERM", stop);
+  try { if (parent) cleanup = await finalize(parent, record); }
+  catch { cleanup = { status: "ERROR", emergencyRemoved: null, inventory: null }; }
+}
+let summary;
+if (config) summary = summarize(config.corpus, results);
+else summary = { classification: "NOT_ESTABLISHED", harness: "ERROR", parity: "INCONCLUSIVE", cases: [], coverage: { http: 0, sqlite: 0, completedPairs: 0 }, gates: { G0: "INCONCLUSIVE", G1: "NOT_RUN", G2: "NOT_RUN", G3: "NOT_RUN", G4: "INCONCLUSIVE" }, product: "NOT_ESTABLISHED" };
+if (failure || cleanup?.status !== "PASS") { summary.harness = "ERROR"; summary.parity = "INCONCLUSIVE"; }
+Object.assign(summary, {
+  designation: "PUBLIC_INDEPENDENT_REPRO", headSha, casesSha256: CASES_SHA,
+  candidateSha256: config?.pins.candidateSha256, sourceCommit: SOURCE.commit,
+  manifestSha256: config?.pins.manifestSha256, normalizationVersion: "oracle-exact-v1",
+  runtime: runtimeIdentity ?? null, runtimeExecution: results.length ? "STARTED" : "DOCKER_NOT_RUN",
+  errorCode: failure ?? null, cleanup: cleanup ?? { status: "NOT_RUN", inventory: null, emergencyRemoved: null },
+  durationMs: Math.round(performance.now() - start),
+});
+if (evidence) { const index = evidence.seal(); PrivateEvidence.verify(evidence.path, index); }
+atomicJson(join(output, "summary.json"), summary, 0o644);
+console.log(JSON.stringify({ harness: summary.harness, classification: summary.classification, coverage: summary.coverage, errorCode: summary.errorCode }));
+if (summary.harness !== "SUCCESS") process.exitCode = 1;

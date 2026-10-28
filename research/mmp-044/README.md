@@ -1,0 +1,60 @@
+# Public Docker reproduction driver
+
+Refs #44. This is an executable continuation of the unchanged PR #45 public
+preregistration, not the private evaluator or a candidate fix. The frozen corpus
+is 14 fresh pairs, 38 HTTP and 52 full SQLite comparisons. Bootstrap and the
+deliberate copied-status negative control are outside those totals.
+
+From an exact committed Linux amd64 checkout on a disposable Docker host:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm build
+node --test research/mmp-044/driver.test.mjs
+export MMP044_HEAD_SHA="$(git rev-parse HEAD)"
+export MMP044_PARENT="$(mktemp -u -d /tmp/mmp044-private-XXXXXXXX)"
+export MMP044_OUTPUT="$(mktemp -d /tmp/mmp044-public-XXXXXXXX)"
+node research/mmp-044/run-public.mjs
+node research/mmp-044/finalize.mjs
+sha256sum "$MMP044_OUTPUT/summary.json" "$MMP044_OUTPUT/finalizer.json"
+```
+
+The parent must not already exist. No PHP or admitted TS executes on the host.
+The manual-only workflow supplies those variables without secrets or custom
+code inputs. It checks out `github.sha`, uses Node 24 and frozen dependencies,
+joins bounded work, and runs the independent finalizer even after failure.
+Default worker lifetime/operation/reset/state bounds are unchanged. The host
+work deadline is 20 minutes plus independent cleanup; the original runtime
+broker does not accept cancellation, so its bounded build is joined before
+acting on an abort. The outer workflow limit is 30 minutes.
+
+Only `summary.json` and `finalizer.json` may be uploaded, for seven days. Raw
+HTTP/DB/server/build receipts stay in a new 0700/0600 host evidence pack outside
+the repository. No existing audit directory or PR #31 artifact is accessed.
+The summary exposes original comparator codes and SHA-256 commitments to full
+mapped observations, never forecasts as runtime observations. Full raw receipts
+are not automatically made public. A bounded public evidence projection and
+independent cause review are required before a confirmed causal classification;
+the driver conservatively emits `NOT_ESTABLISHED` pending that review.
+
+Exit 0 means complete harness execution with valid positive/negative controls
+and clean resources; `parity` may still be `FAIL`. Missing steps, wrong identities,
+bad initial state, clock faults and emergency cleanup are `ERROR`. On ordinary
+candidate mismatch the remaining fixed schedule continues. G0/G4 remain
+INCONCLUSIVE, product NOT_ESTABLISHED, and the private AUDIT_FAIL is unchanged.
+
+The exact job ledger is created before provision and tracks PHP names and target
+run prefixes. The finalizer restores only that ledger and never removes foreign
+containers/volumes by a generic label or prefix. The existing runtime broker
+also removes its own short-lived provenance container in its internal finally.
+
+If this workflow path is absent on the default branch, registration must be
+reviewed and merged in a separate PR before dispatching the feature ref:
+
+```sh
+gh workflow run mmp044-public-docker.yml --repo Meta-Project2026/Metamorph --ref feat/mmp-044-public-docker-proof
+```
+
+No self-merge or direct push to main is part of delivery. A green Fast CI job is
+technical validation only. See the separate execution report for actual checks,
+dispatch state and exact counts.
