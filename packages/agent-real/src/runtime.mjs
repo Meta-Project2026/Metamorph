@@ -27,6 +27,7 @@ import { WORKSHOP_PROFILE } from "../../target-worker/runtime/profile.mjs";
 import { sha256 } from "../../target-worker/src/admission.mjs";
 import {
   FIXED_ENV,
+  POLICY,
   requireSuccess,
   TargetWorker,
 } from "../../target-worker/src/controller.mjs";
@@ -268,6 +269,15 @@ export function buildReceipt(worker, scenarioId) {
   return { ...result, verdict: "PASS", findingCodes: [] };
 }
 
+export function validateTargetBudget(worker) {
+  check(
+    Number.isFinite(worker.startedAt) &&
+      worker.policy.lifetimeMs === POLICY.lifetimeMs &&
+      worker.endsAt === worker.startedAt + POLICY.lifetimeMs,
+    "ENVIRONMENT_ERROR",
+  );
+}
+
 async function runPair(context, lease, attemptId, scenario, signal) {
   const { bundle } = lease;
   const pairId = randomUUID();
@@ -338,7 +348,7 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       basename(result.evidenceDirectory),
     );
     signal.throwIfAborted();
-    check(worker.endsAt - worker.startedAt === 180000, "ENVIRONMENT_ERROR");
+    validateTargetBudget(worker);
   } catch (error) {
     failure = signal.aborted ? "CANCELLED" : safeCode(error);
     record("failure", {

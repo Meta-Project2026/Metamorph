@@ -46,6 +46,43 @@ Only agent-real runtime/test and this spec bundle changed. The protected Oracle,
 target-worker, differential, contracts and the manual workflow are identical to
 current main. No candidate PHP/TS was compiled or executed on this Windows host.
 
+## 2026-10-28: corrected recipe; partial real execution and deadline regression
+
+[Run 40683761588](https://github.com/Meta-Project2026/Metamorph/actions/runs/40683761588),
+[job 122800789791](https://github.com/Meta-Project2026/Metamorph/actions/runs/40683761588/job/122800789791),
+checked out `d254711d69a82d56b711253fe075acec9133e146` exactly. Node 24.21.0 /
+pnpm 11.25.0: frozen install, lint, typecheck, root 86/86, build, reference 56/56,
+target 69/69, differential 78/78, agent-real 21/21, all exit 0, no skips.
+
+Known-good executed one full real attempt: G1/G2/G3 PASS, 17 HTTP / 20 SQLite;
+candidate `34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334`;
+three fresh pairs and six private-pack hashes. Agent / G0 / G4 INCONCLUSIVE.
+The public cancellation mutant
+`1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121`
+observed G2/G3 FAIL in the business pair (`HTTP_JSON_LENGTH`, `DB_STATE`). After
+the rejected-input pair completed, a composition ENVIRONMENT_ERROR ended the
+attempt at 11 HTTP / 13 SQLite. Aggregate G1-G4 remained ERROR; repair-after was
+NOT_RUN. The driver exited 1 / EVIDENCE_ERROR. Actual totals: 28 HTTP / 33 SQLite,
+five pairs / ten packs. No complete negative attempt or successful repair claim.
+
+All six original controls actually ran: REAL_DOCKER / PASS. Normal completion
+and independent finalizer both verified containers=0, volumes=0, emergencyRemoved=0.
+Public artifact `12813588783` contains only the two allowlisted JSON files. Its
+ZIP SHA-256 `58d158fa17ccb0caf142d351456b0323a1571ac827c6bb8a7c3b96022a65475c`
+matches the GitHub API digest and upload log. Bounded leak-pattern scans were clear.
+Offline replay paidCalls=0, spend=0, tokens=null; product NOT_ESTABLISHED.
+
+A deterministic regression proves the deadline assertion can reject correct
+fractional monotonic timestamps: `(90000.000003 + 180000) - 90000.000003` equals
+`180000.00000000003`. Before correction focused tests were 21/22 PASS, exit 1;
+after correction 22/22 PASS, exit 0. The composition now checks finite start time,
+the unchanged exact POLICY lifetime, and equality to the same deadline addition
+used by TargetWorker. It introduces no tolerance, measured-duration claim or
+extra budget. The protected controller and its original deadline stay unchanged.
+A fresh complete hosted run on the corrected pushed SHA is still required.
+Post-correction local lint and diff check exited 0; root tests passed 87/87 with
+no skips in 36.12 s, exit 0. The focused suite passed 22/22, exit 0.
+
 ## Historical local validation and pre-registration attempts
 
 Base main: `3de9d5ceef343536a5b56761deb805006fbd4b65`.

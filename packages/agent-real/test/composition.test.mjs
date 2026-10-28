@@ -23,6 +23,7 @@ import {
   buildReceipt,
   RealVerifier,
   validateRuntimeRecipe,
+  validateTargetBudget,
 } from "../src/runtime.mjs";
 import { createSourceSession, DEFECT, replayProvider } from "../src/source.mjs";
 
@@ -73,6 +74,26 @@ test("runtime recipe admits the Linux checkout bytes and rejects Dockerfile muta
       code: "ENVIRONMENT_ERROR",
     });
   }
+});
+
+test("synthetic fractional clock preserves the exact deadline and rejects budget changes", () => {
+  const startedAt = 90000.000003;
+  const worker = {
+    startedAt,
+    endsAt: startedAt + 180000,
+    policy: { lifetimeMs: 180000 },
+  };
+  assert.notEqual(worker.endsAt - worker.startedAt, 180000);
+  validateTargetBudget(worker);
+  for (const mutated of [
+    { ...worker, endsAt: worker.endsAt + 1 },
+    { ...worker, policy: { lifetimeMs: 180001 } },
+    { ...worker, startedAt: Number.NaN },
+    { ...worker, endsAt: Number.POSITIVE_INFINITY },
+  ])
+    assert.throws(() => validateTargetBudget(mutated), {
+      code: "ENVIRONMENT_ERROR",
+    });
 });
 
 function attemptFixture() {

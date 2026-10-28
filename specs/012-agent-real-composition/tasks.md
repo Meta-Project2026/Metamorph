@@ -12,12 +12,13 @@
       Refs #23; no merge or issue closure.
 
 Status: PARTIAL. Registration PR #33 is merged and dispatch is available.
-The first real hosted run failed before runtime preparation with ENVIRONMENT_ERROR
-because the composition's recipe pin did not match the unchanged Git/LF files.
-The unchecked proof tasks remain NOT_RUN; see validation.md for exact receipts.
+After the recipe-pin correction, known-good completed 17/20 with G1/G2/G3 PASS
+and all six Docker controls passed. Negative execution stopped at 11/13 with a
+composition deadline ERROR. Repair-after is NOT_RUN; see validation.md.
 
 - [x] Fix G4 pair identity, reject duplicate pair IDs and label the lifetime policy.
 - [x] Add synthetic partial-receipt, failure-precedence and policy-field tests.
 - [x] Verify merged workflow registration and successfully dispatch PR #30.
 - [x] Reproduce the recipe-pin defect and add byte-mutation/CRLF rejection tests.
+- [x] Reproduce fractional-clock deadline rejection and preserve the exact policy.
 - [ ] Execute a complete hosted proof against the corrected current PR #30 SHA.
