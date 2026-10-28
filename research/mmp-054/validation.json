@@ -1,0 +1,162 @@
+{
+  "format": "mmp054-local-validation-v1",
+  "date": "2026-10-28",
+  "authority": "Implementer-recorded local validation; independent review PENDING",
+  "baseSha": "bcf8275cb2673abbda7a340e25f8c8d5b01198bb",
+  "sourceState": "Additive staged implementation on base commit; exact tested script identities below",
+  "testedScripts": {
+    "check.mjs": "638361c8ca36c46b3d90ecbad58295d9f41d178a2fe6c6dc06707d2a2c448069",
+    "docker-gateway.mjs": "8172ffaea27100e836631ff54fef603a91353fb3a358a37fe6e47c43bc76d380",
+    "driver.test.mjs": "a6111936af6d2e6be9bbdb26aa692f0d14d9915e966ec8cb330ae46c3dd3587d",
+    "lib.mjs": "f026d3e6ce4e691dcc99736572614222fe539e704c7b70efa496b85296b0379b",
+    "network.mjs": "c3f72237001ea8b0257de86b68bd735dad7e5af463db044b1d3c80d648b133fc",
+    "offline-preload.mjs": "458125e7957195703f5adbc113eb6582cbaa6de0249b6be6df4c5ed2306a3a1f",
+    "prepare.mjs": "adf35021c016c625888e611ba29ad5b39d15524326dc5b52330f0f79559668e1",
+    "run-offline.mjs": "852f7a8cce41100a22aa7b44b8d4a2f319ac456bce6268ee138d02bd092fa275",
+    "verify.mjs": "ebfa9ac220cd2130941ed4a21119bc40bf2960eee3523794e535eee38b8501f0"
+  },
+  "testedScriptIndexSha256": "3910149f430cb7da427b85c960e411bfa2a3c358c0d7addf38b76ee4dda3467c",
+  "runner": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v22.23.1",
+    "pnpm": "11.25.0",
+    "dockerObserved": "Docker Desktop 29.9.2, desktop-linux, linux/amd64; version inspection only"
+  },
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "files": 137
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "tests": 148,
+      "passed": 148,
+      "failed": 0
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0
+    },
+    {
+      "command": "node --test research/mmp-049/driver.test.mjs",
+      "exitCode": 0,
+      "tests": 13,
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "command": "node research/mmp-054/check.mjs",
+      "exitCode": 0,
+      "scripts": 9
+    },
+    {
+      "command": "node --test research/mmp-054/driver.test.mjs",
+      "exitCode": 0,
+      "tests": 53,
+      "passed": 53,
+      "failed": 0,
+      "logSha256": "2cf49219e52e87ec1dfdc3785dcbc80fc4b678d65873da90eb258abee28d5615"
+    },
+    {
+      "command": "pnpm install --offline --frozen-lockfile",
+      "exitCode": 0,
+      "scope": "Prepared Windows workspace only; NOT offline Docker proof",
+      "dependencyTreeBeforeAndAfter": "95b6543695c020f373ddd8014348193fda2e85ba311e18471fc502e27cebc126"
+    },
+    {
+      "command": "node research/mmp-054/run-offline.mjs --run /missing-bundle /missing-output bcf8275cb2673abbda7a340e25f8c8d5b01198bb",
+      "exitCode": 1,
+      "classification": "EXPECTED_PLATFORM_REJECTION; no runtime started"
+    }
+  ],
+  "correctedValidationFailure": "Fresh-process preload test initially failed on Windows with ERR_UNSUPPORTED_ESM_URL_SCHEME; --import now receives a file URL; final 53/53 pass.",
+  "protectedFiles": {
+    "packages/oracle/src/runner.ts": {
+      "sha256": "87a9c4528402937d1be54a70a8903dc3ff025c3270b4a1eae93e404028aab94b",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/differential/src/private-run.mjs": {
+      "sha256": "446818ed62ecd82fd083e6ee0eceaa8cd98158f3e7d5ac301a909a47889189b7",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/target-worker/src/controller.mjs": {
+      "sha256": "9dfbedd4ea2e94fbe73e00f071e50b4cb47c20e3e9d612697d1e3a580a08a6ac",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/target-worker/src/smoke.mjs": {
+      "sha256": "528d8ba148cba49f97c146adb6012bb97c550be34e7281ee35f3cea39ee3f78a",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    ".github/workflows/workshop-ts-parity.yml": {
+      "sha256": "8a206014770e0162979382cd76528c2bf6ff49d4f4dcb4e5119610c7af69e635",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/differential/src/workshop-regressions.mjs": {
+      "sha256": "748f88cabc679c6e41e1722269b00c82557d25f41044fbc452606ecd87ee648a",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/differential/src/resources.mjs": {
+      "sha256": "6797224733c5af71a5fc7728e3be3cad37b687464d52566f9e13d8aa37804b19",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "research/mmp-044/finalize.mjs": {
+      "sha256": "6707370f156947faea1da7047b6a2bddf0e46bf247c8145afd3cc9c24892b305",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "research/mmp-049/finalize.mjs": {
+      "sha256": "2cd0e1d73a2fad91920955039eadf4c34ad17d39edb6b4d2965cdc9dc2498fc7",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/agent-real/src/runtime.mjs": {
+      "sha256": "195b427fbb44c969c155d81ca598c2d69ee993653116e9f894af2bd0fdca17bc",
+      "comparison": "IDENTICAL_TO_BASE"
+    },
+    "packages/oracle/reference/acceptance-resources.mjs": {
+      "sha256": "f476d3ba387f81ad8f21c869d2c99c0f422c7bdc7961ae23073488703ec45885",
+      "comparison": "IDENTICAL_TO_BASE"
+    }
+  },
+  "pinnedCandidateIdentities": {
+    "version": "workshop-compat-v1",
+    "path": "packages/target-worker/fixtures/workshop-compat-v1",
+    "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+    "baselinePath": "packages/target-worker/fixtures/workshop",
+    "baselineSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+    "status": "PUBLIC_COMPATIBILITY_CANDIDATE_REQUIRES_INDEPENDENT_REVIEW",
+    "sharedPolicyReplacement": false,
+    "license": "MIT; full upstream notice retained byte-for-byte in src/schema.ts"
+  },
+  "offlineProof": "OFFLINE_PROOF_NOT_RUN",
+  "networkIsolation": "OFFLINE_NETWORK_ISOLATION_NOT_PROVEN",
+  "linuxPreparation": "NOT_RUN",
+  "observedMmp054RuntimeCoverage": {
+    "pairs": 0,
+    "http": 0,
+    "sqlite": 0,
+    "agentPairs": 0
+  },
+  "missingRequirements": [
+    "Separate manual milestone authorization",
+    "Prepared exact-SHA Linux amd64 environment with native local Docker/containerd in the same network-denied context",
+    "Actual host/daemon/worker network-denial controls",
+    "Full unchanged public schedule, deterministic repair, image identities and independent zero-resource finalizer",
+    "Independent ChatGPT review"
+  ],
+  "localLlm": "LOCAL_LLM_GENERATION_NOT_RUN",
+  "remoteAi": "NOT_RUN",
+  "paidCalls": 0,
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED"
+}
