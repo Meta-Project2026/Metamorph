@@ -1,7 +1,9 @@
 # MMP-026: local evidence retention validation
 
 Refs #26. Base: `1aa36b8f4ab7a6f1d8f291d8751856ed51274685` (freshly fetched `origin/main`).
-Branch: `fix/mmp-026-complete-private-evidence`. Implementation HEAD will be recorded after commit; hosted proof is pending.
+Branch: `fix/mmp-026-complete-private-evidence`. Implementation HEAD: `f0692a21cb43c397f0e9afe5e0199b69f9a4ed2a`.
+The follow-up validation commit changes documentation only; its final HEAD is recorded
+in [PR #59](https://github.com/Meta-Project2026/Metamorph/pull/59).
 
 ## Scope and root causes
 
@@ -85,8 +87,52 @@ fault-injection cases. Final review-amended Windows checks also completed with e
 `pnpm lint` (138 files), `pnpm typecheck`, focused
 `node --test packages/differential/test/evidence.test.mjs` (0 PASS, 0 FAIL,
 45 POSIX SKIP), and `pnpm --filter @metamorph/differential test`
-(77 PASS, 0 FAIL, 45 POSIX SKIP). Primary Linux 117/117 proof: **NOT_RUN**, pending existing
-Fast CI. No workflow change or private/Docker test is requested.
+(77 PASS, 0 FAIL, 45 POSIX SKIP). Primary Linux 117/117 proof: **PASS**, measured below. No workflow or
+private/Docker test was introduced.
+
+## Hosted Linux proof
+
+[Fast CI run 40755125807](https://github.com/Meta-Project2026/Metamorph/actions/runs/40755125807),
+2026-10-28, Ubuntu 24.04.5, completed SUCCESS for both jobs:
+
+- [Node 22.23.4, job 123051887467](https://github.com/Meta-Project2026/Metamorph/actions/runs/40755125807/job/123051887467).
+- [Node 24.22.1, job 123051886691](https://github.com/Meta-Project2026/Metamorph/actions/runs/40755125807/job/123051886691).
+
+The pull_request workflow checked out merge
+`d66dd82f01c40a4c27ce9308c2f335c764aef48c`, explicitly logged as merging
+implementation HEAD `f0692a21cb43c397f0e9afe5e0199b69f9a4ed2a` into base
+`1aa36b8f4ab7a6f1d8f291d8751856ed51274685`.
+Both jobs used pnpm 11.25.0. All commands below completed with exit 0 in each job:
+
+| Actual workflow command | Node 22 | Node 24 |
+| --- | --- | --- |
+| `pnpm install --frozen-lockfile` | PASS | PASS |
+| `pnpm lint` | PASS, 138 files | PASS, 138 files |
+| `pnpm typecheck` | PASS | PASS |
+| `pnpm test` | 148 PASS / 0 FAIL / 0 SKIP | 148 PASS / 0 FAIL / 0 SKIP |
+| `pnpm build` | PASS | PASS |
+| `pnpm --filter @metamorph/oracle test:reference` | 56 PASS / 0 FAIL / 0 SKIP | 56 PASS / 0 FAIL / 0 SKIP |
+| `pnpm --filter @metamorph/target-worker test` | 69 PASS / 0 FAIL / 0 SKIP | 69 PASS / 0 FAIL / 0 SKIP |
+| `pnpm --filter @metamorph/differential test` | 122 PASS / 0 FAIL / 0 SKIP | 122 PASS / 0 FAIL / 0 SKIP |
+| `node --test packages/oracle/probes/qualification.test.mjs` | 2 PASS / 0 FAIL / 0 SKIP | 2 PASS / 0 FAIL / 0 SKIP |
+
+The differential glob actually executed all **45/45 focused cases**, including
+`full MANIFEST 3 scenarios / 17 requests retains 117/117 exact files under umask 022`.
+Measured assertions: 3 scenarios, 17 requests, 117 raw files, 117 distinct catalog
+entries, 17 HTTP and 20 DB executed IDs, exact bytes/size/hash for every retained
+record, exact sealed index and closed adapters. No PRIVATE_FILE or
+PRIVATE_PERMISSIONS occurred on the positive path. Real foreign-owner chown and
+all three failed-diff writer controls passed without skips. Complete FAIL retains
+117 files without changing FAIL; both post-catalog fault controls reject success.
+
+The separate focused command was run on Windows (explicit 45 POSIX skips).
+A separate Linux focused-only invocation is NOT_RUN; Linux execution of the same
+45 cases is proven within the existing differential command, without CI edits.
+Only public synthetic test names/counts and run IDs are retained here; no raw
+HTTP/SQLite observations, private packs or hidden material are committed.
+
+Disposition: **READY_FOR_INDEPENDENT_CHATGPT_REVIEW** for Issue #26 implementation.
+PR remains open; independent acceptance and owner coordination are not claimed.
 
 ## Review and limits
 
