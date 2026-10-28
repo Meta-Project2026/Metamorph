@@ -26,6 +26,7 @@ jobs:
         run: |
           test "$(git rev-parse HEAD)" = "$MMP049_HEAD_SHA"
           echo "MMP049_PROBE_PARENT=$RUNNER_TEMP/mmp049-probe" >> "$GITHUB_ENV"
+          echo "MMP049_PROOF_PARENT=$RUNNER_TEMP/mmp049-proof" >> "$GITHUB_ENV"
           echo "MMP049_OUTPUT=$RUNNER_TEMP/mmp049-public" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
@@ -33,21 +34,24 @@ jobs:
       - uses: pnpm/action-setup@v4
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - name: Public host driver boundary checks
+        run: |
+          node research/mmp-049/check.mjs
+          node --test research/mmp-049/driver.test.mjs
       - name: Measure pinned public language boundaries in isolation
         run: node research/mmp-049/probe.mjs
-      - name: Independent probe finalizer
+      - name: Real corrected candidate compatibility proof
+        run: node research/mmp-049/run-proof.mjs
+      - name: Independent stage finalizers
         if: always()
-        env:
-          MMP044_PARENT: ${{ env.MMP049_PROBE_PARENT }}
-          MMP044_OUTPUT: ${{ env.MMP049_OUTPUT }}
-          MMP044_HEAD_SHA: ${{ github.sha }}
-        run: node research/mmp-044/finalize.mjs
+        run: node research/mmp-049/finalize.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mmp049-public
           path: |
             ${{ env.MMP049_OUTPUT }}/semantics.json
+            ${{ env.MMP049_OUTPUT }}/summary.json
             ${{ env.MMP049_OUTPUT }}/finalizer.json
           if-no-files-found: error
           retention-days: 7

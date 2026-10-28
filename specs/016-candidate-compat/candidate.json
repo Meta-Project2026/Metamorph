@@ -1,0 +1,10 @@
+{
+  "version": "workshop-compat-v1",
+  "path": "packages/target-worker/fixtures/workshop-compat-v1",
+  "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+  "baselinePath": "packages/target-worker/fixtures/workshop",
+  "baselineSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+  "status": "PUBLIC_COMPATIBILITY_CANDIDATE_REQUIRES_INDEPENDENT_REVIEW",
+  "sharedPolicyReplacement": false,
+  "license": "MIT; full upstream notice retained byte-for-byte in src/schema.ts"
+}
