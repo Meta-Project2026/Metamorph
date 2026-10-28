@@ -1,0 +1,21 @@
+{
+  "name": "@metamorph/evidence-retention",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./boundary": {
+      "types": "./dist/boundary.d.ts",
+      "import": "./dist/boundary.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@metamorph/oracle": "workspace:*"
+  }
+}
