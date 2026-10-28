@@ -11,6 +11,9 @@ dispatch, or establish a gate verdict. Root governance remains
 - [Protocol](protocol.md): roles, registration, freeze, real execution, finality.
 - [Threat model](threat-model.md): assets, trust limits and auditable mitigations.
 - [Private storage](storage.md): complete raw packs, integrity, recovery, deletion.
+- [Local-first direction](local-first-decision.md): locally executable engine,
+  optional cloud adapters and independent encrypted physical backups; requester
+  agrees with the direction, exact second-owner policy approval is pending.
 - [Acceptance checklist](checklist.md): protocol readiness, first-run admission,
   executed acceptance and outcome table.
 - [Owner decision record](decision-record.md): explicit alternatives and pending
