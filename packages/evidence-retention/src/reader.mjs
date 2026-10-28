@@ -64,7 +64,7 @@ export function readConfigured(configPath) {
       const grant = config.grantPath
         ? canonical(restrictedFile(config.grantPath, 16_384))
         : null;
-      const receipt = restore({
+      return restore({
         witness,
         storageWitness,
         trust,
@@ -76,21 +76,24 @@ export function readConfigured(configPath) {
         purpose: config.purpose,
         grant,
         revoked: config.revoked,
-      });
-      const output = new Directory(dirname(config.receiptPath));
-      try {
-        output.publish(
-          basename(config.receiptPath),
-          bytes(signed(receipt, signingKey)),
-        );
-      } finally {
-        output.close();
-      }
-      return publicSummary({
-        runId: frozen.catalog.identity.runId,
-        status: receipt.status,
-        packCount: receipt.packCount,
-        commitment: frozen.commitment,
+        recoveryAuthority: config.recoveryAuthority,
+        complete: (receipt) => {
+          const output = new Directory(dirname(config.receiptPath));
+          try {
+            output.publish(
+              basename(config.receiptPath),
+              bytes(signed(receipt, signingKey)),
+            );
+          } finally {
+            output.close();
+          }
+          return publicSummary({
+            runId: frozen.catalog.identity.runId,
+            status: receipt.status,
+            packCount: receipt.packCount,
+            commitment: frozen.commitment,
+          });
+        },
       });
     } finally {
       privateKey.fill(0);

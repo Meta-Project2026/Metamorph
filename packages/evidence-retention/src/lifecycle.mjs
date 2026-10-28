@@ -1,3 +1,4 @@
+import { anchor } from "./authority.mjs";
 import {
   check,
   DAY,
@@ -7,14 +8,27 @@ import {
   id,
   timestamp,
 } from "./core.mjs";
-import { authenticated, keyId, verifyCatalogWitness } from "./crypto.mjs";
+import {
+  authenticated,
+  keyId,
+  signed,
+  verifyCatalogWitness,
+} from "./crypto.mjs";
 import { planBody } from "./deletion.mjs";
 import { Journal } from "./journal.mjs";
+import {
+  eventValidator,
+  PRIVILEGED,
+  policyContext,
+  reduced,
+  validateRestore,
+} from "./policy-events.mjs";
 
 /** UTC calendar deadlines. The caller of the synthetic simulation can pass a
  * deterministic test time. Real deployment requires a trusted external clock
  * and independently witnessed journal high-water marks; local root can lie. */
 export class RetentionLedger {
+  #signer;
   constructor({
     journalRoot,
     witness,
@@ -24,6 +38,8 @@ export class RetentionLedger {
     ownerPublicKeys,
     reviewerPublicKey,
     deletionWitnessKeys = null,
+    anchorRoot,
+    authorityPrivateKey = null,
     now = new Date().toISOString(),
   }) {
     const frozen = verifyCatalogWitness(
@@ -75,51 +91,109 @@ export class RetentionLedger {
       90 * DAY;
     this.windowStart = this.terminal + DAY90_WINDOW_START * DAY;
     this.expiry = this.terminal + 180 * DAY;
+    this.context = policyContext({
+      witness,
+      storageWitness,
+      trust,
+      readerPublicKey,
+      ownerPublicKeys,
+      reviewerPublicKey,
+      deletionWitnessKeys,
+    });
+    this.anchorRoot = anchorRoot;
+    this.#signer = authorityPrivateKey;
+    if (this.#signer)
+      check(
+        keyId(this.#signer) === keyId(trust.witnessPublicKey),
+        "EVENT_AUTHORITY",
+      );
     this.journal = new Journal(
       journalRoot,
       frozen.catalog.admission.maxJournalBytes,
+      eventValidator(this.context),
     );
-    const policy = {
-      type: "RETENTION_POLICY",
-      witnessSha256: trust.witnessSha256,
-      storageWitnessSha256: trust.storageWitnessSha256,
-      terminalReceiptAt: this.identity.terminalReceiptAt,
-      minimumRetainUntil: new Date(this.expiry).toISOString(),
-      day90DueAt: new Date(this.due).toISOString(),
-      day90WindowOpensAt: new Date(this.windowStart).toISOString(),
-    };
-    if (!this.journal.rows.length) {
-      check(timestamp(now) >= this.terminal, "TIME");
-      this.journal.reserve();
-      this.journal.append(policy, now);
-    } else check(equal(this.journal.rows[0].payload, policy), "POLICY_CHANGED");
+    try {
+      const policy = {
+        type: "RETENTION_POLICY",
+        contextSha256: digest(this.context),
+        witnessSha256: trust.witnessSha256,
+        storageWitnessSha256: trust.storageWitnessSha256,
+        terminalReceiptAt: this.identity.terminalReceiptAt,
+        minimumRetainUntil: new Date(this.expiry).toISOString(),
+        day90DueAt: new Date(this.due).toISOString(),
+        day90WindowOpensAt: new Date(this.windowStart).toISOString(),
+      };
+      if (!this.journal.rows.length) {
+        check(timestamp(now) >= this.terminal, "TIME");
+        this.journal.reserve();
+        this.#commit(policy, now);
+      } else {
+        const { authorization: _a, ...stored } = this.journal.rows[0].payload;
+        check(equal(stored, policy), "POLICY_CHANGED");
+        this.journal.withLock(() =>
+          anchor(this.anchorRoot, this.context, this.journal),
+        );
+      }
+    } catch (error) {
+      this.journal.close();
+      throw error;
+    }
   }
   append(payload, now) {
+    return this.#write(payload, now, false);
+  }
+  #commit(payload, now) {
+    return this.#write(payload, now, true);
+  }
+  #write(payload, now = new Date().toISOString(), privileged = false) {
+    check(this.#signer, "EVENT_AUTHORITY");
     this.journal.reserve();
-    return this.journal.append(payload, now);
+    return this.journal.withLock(() => {
+      this.journal.assertCurrent();
+      if (this.journal.rows.length)
+        anchor(this.anchorRoot, this.context, this.journal);
+      const count = this.journal.rows.length;
+      if (privileged && PRIVILEGED.has(payload.type)) {
+        check(this.#signer, "EVENT_AUTHORITY");
+        payload = {
+          ...payload,
+          authorization: signed(
+            {
+              format: "mmp-policy-event-v1",
+              contextSha256: digest(this.context),
+              previous: this.journal.checkpoint(),
+              at: now,
+              payloadSha256: digest(payload),
+            },
+            this.#signer,
+          ),
+        };
+      }
+      let failure, result;
+      try {
+        result = this.journal.append(payload, now);
+      } catch (e) {
+        failure = e;
+      }
+      if (this.journal.rows.length === count + 1) {
+        try {
+          anchor(this.anchorRoot, this.context, this.journal, this.#signer);
+        } catch (e) {
+          if (!failure) failure = e;
+          else
+            Object.defineProperty(failure, "secondaryErrors", {
+              value: [...(failure.secondaryErrors ?? []), e],
+              configurable: true,
+            });
+        }
+      }
+      if (failure) throw failure;
+      return result;
+    });
   }
   state() {
-    const holds = new Set();
-    const immediate = new Set();
-    const day90 = new Set();
-    const revoked = new Set();
-    let incident = false;
-    for (const { payload: p } of this.journal.rows) {
-      if (p.type === "HOLD_ADD") holds.add(p.holdId);
-      if (p.type === "HOLD_RELEASE") holds.delete(p.holdId);
-      if (p.type === "INCIDENT") incident = true;
-      if (p.type === "GRANT_REVOKED") revoked.add(p.grantId);
-      if (p.type === "RESTORE_RECEIPT") {
-        if (p.purpose === "IMMEDIATE") immediate.add(p.domainId);
-        if (
-          p.purpose === "DAY90" &&
-          timestamp(p.restoredAt) >= this.windowStart &&
-          timestamp(p.restoredAt) <= this.due
-        )
-          day90.add(p.domainId);
-      }
-    }
-    return { holds, immediate, day90, revoked, incident };
+    this.journal.revalidate();
+    return reduced(this.context, this.journal.rows);
   }
   status(now = new Date().toISOString()) {
     // Persist every calendar observation; a restart cannot reset clock high water.
@@ -163,6 +237,7 @@ export class RetentionLedger {
       }));
   }
   recordRestore(record, now = new Date().toISOString()) {
+    validateRestore(this.context, record, now);
     const p = authenticated(record, this.readerPublicKey, digest(record));
     const expected = this.versions
       .filter((r) => r.domainId === p.domainId)
@@ -187,9 +262,10 @@ export class RetentionLedger {
         timestamp(p.at) <= timestamp(now),
       "RESTORE_RECEIPT",
     );
-    this.append(
+    this.#commit(
       {
         type: "RESTORE_RECEIPT",
+        record,
         receiptSha256: digest(record),
         domainId: p.domainId,
         purpose: p.purpose,
@@ -231,11 +307,11 @@ export class RetentionLedger {
     id(holdId);
     this.ownerApproval(approvals, "RELEASE_HOLD", now, { holdId });
     check(this.state().holds.has(holdId), "HOLD");
-    this.append({ type: "HOLD_RELEASE", holdId }, now);
+    this.#commit({ type: "HOLD_RELEASE", holdId, approvals }, now);
   }
   revoke(grantId, now = new Date().toISOString()) {
     id(grantId);
-    this.append({ type: "GRANT_REVOKED", grantId }, now);
+    this.#commit({ type: "GRANT_REVOKED", grantId }, now);
   }
   deletionPlan(approvals, reviewRecord, now = new Date().toISOString()) {
     try {
@@ -268,8 +344,14 @@ export class RetentionLedger {
         witnessSha256: this.trust.witnessSha256,
         storageWitnessSha256: this.trust.storageWitnessSha256,
       };
-      this.append(
-        { type: "DELETION_AUTHORIZED", planSha256: digest(plan) },
+      this.#commit(
+        {
+          type: "DELETION_AUTHORIZED",
+          planSha256: digest(plan),
+          plan,
+          approvals,
+          reviewRecord,
+        },
         now,
       );
       return { ...plan, journalCheckpoint: this.journal.checkpoint() };
@@ -315,7 +397,15 @@ export class RetentionLedger {
         "DELETION_UNVERIFIED",
       );
     }
-    this.append({ type: "DELETION_VERIFIED", planSha256: digest(plan) }, now);
+    this.#commit(
+      {
+        type: "DELETION_VERIFIED",
+        planSha256: digest(plan),
+        plan,
+        receipts: signedReceipts,
+      },
+      now,
+    );
     return "SYNTHETIC_DELETION_VERIFIED";
   }
   close() {

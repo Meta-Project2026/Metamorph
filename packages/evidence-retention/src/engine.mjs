@@ -1,5 +1,6 @@
 import { isAbsolute, relative, sep } from "node:path";
 import { PrivateEvidence } from "@metamorph/oracle";
+import { withRecoveryAuthority } from "./authority.mjs";
 import { archive, inspect, openArchive } from "./catalog.mjs";
 import {
   admission,
@@ -7,6 +8,7 @@ import {
   check,
   DAY,
   DAY90_WINDOW_START,
+  digest,
   equal,
   id,
   opaque,
@@ -21,6 +23,7 @@ import {
   signed,
   verifyCatalogWitness,
 } from "./crypto.mjs";
+import { policyContext } from "./policy-events.mjs";
 import { Directory } from "./secure-fs.mjs";
 import { pair } from "./store.mjs";
 
@@ -188,7 +191,7 @@ export function witnessStorage({
     signingPrivateKey,
   );
 }
-function delegation(frozen, principal, grant, trust, now, revoked) {
+function delegation(frozen, principal, grant, trust, now, revoked, purpose) {
   const recipient = frozen.recipients.find((r) => r.principal === principal);
   check(recipient, "ACCESS_DENIED");
   if (recipient.role !== "RECOVERY") return;
@@ -198,6 +201,8 @@ function delegation(frozen, principal, grant, trust, now, revoked) {
     p.format === "mmp-evidence-recovery-grant-v1" &&
       p.action === "RECOVER" &&
       p.witnessRef === frozen.catalog.identity.witnessRef &&
+      p.identitySha256 === digest(frozen.catalog.identity) &&
+      p.purpose === purpose &&
       p.principal === principal &&
       timestamp(p.notBefore) <= timestamp(now) &&
       timestamp(p.expiresAt) >= timestamp(now) &&
@@ -206,7 +211,33 @@ function delegation(frozen, principal, grant, trust, now, revoked) {
   );
   id(p.grantId);
 }
-export function restore({
+export function restore(args) {
+  const f = verifyCatalogWitness(
+    args.witness,
+    args.trust.witnessPublicKey,
+    args.trust.witnessSha256,
+  );
+  const recipient = f.recipients.find((r) => r.principal === args.principal);
+  if (recipient?.role !== "RECOVERY") return restoreCore(args);
+  const c = args.recoveryAuthority?.context;
+  check(c, "RECOVERY_AUTHORITY_UNAVAILABLE");
+  const expected = policyContext({
+    witness: args.witness,
+    storageWitness: args.storageWitness,
+    trust: args.trust,
+    readerPublicKey: c.readerPublicKey,
+    ownerPublicKeys: c.ownerPublicKeys,
+    reviewerPublicKey: c.reviewerPublicKey,
+    deletionWitnessKeys: c.deletionWitnessKeys,
+  });
+  return withRecoveryAuthority(args.recoveryAuthority, expected, (state) =>
+    restoreCore({
+      ...args,
+      revoked: [...state.revoked, ...(args.revoked ?? [])],
+    }),
+  );
+}
+function restoreCore({
   witness,
   storageWitness,
   trust,
@@ -219,6 +250,7 @@ export function restore({
   now = new Date().toISOString(),
   grant = null,
   revoked = [],
+  complete = (receipt) => receipt,
 }) {
   journal.reserve();
   try {
@@ -251,7 +283,7 @@ export function restore({
       timestamp(now) >= timestamp(frozen.catalog.teardown.finalizedAt),
       "TEARDOWN",
     );
-    delegation(frozen, principal, grant, trust, now, revoked);
+    delegation(frozen, principal, grant, trust, now, revoked, purpose);
     const budget = admission(frozen.catalog.admission);
     const receipts = storage.versions.filter(
       (r) => r.domainId === store.config.domainId,
@@ -318,16 +350,17 @@ export function restore({
       parent.finish(stageName, finalName);
       journal.append(
         {
-          type: "RESTORE_VERIFIED",
+          type: "RESTORE_CHECKED_AUDIT",
           domainId: store.config.domainId,
           purpose,
           manifestSha256: frozen.manifestSha256,
         },
         now,
       );
-      return {
+      return complete({
         format: "mmp-evidence-restore-v1",
         status: "SIMULATED_RESTORED",
+        identitySha256: digest(frozen.catalog.identity),
         purpose,
         witnessSha256: trust.witnessSha256,
         storageWitnessSha256: trust.storageWitnessSha256,
@@ -339,7 +372,7 @@ export function restore({
         fileCount: frozen.catalog.packs.reduce((n, p) => n + p.files.length, 0),
         restoredName: finalName,
         versions: receipts.map((r) => r.versionId),
-      };
+      });
     } catch (error) {
       // Failed staging and prior versions deliberately survive for restricted
       // incident review. No automatic recursive cleanup of sole evidence.

@@ -19,6 +19,7 @@ export function verifyDeletionState(journal, authority, permit, now) {
     "DELETION_PLAN_REQUIRED",
   );
   journal.verify(permit.journalCheckpoint);
+  journal.revalidate();
   const first = journal.rows[0]?.payload;
   check(
     first?.type === "RETENTION_POLICY" &&

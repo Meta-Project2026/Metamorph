@@ -90,6 +90,9 @@ function review(f, at) {
 function authority(f) {
   return {
     ledgerRoot: f.dirs.policy,
+    policyContext: f.context(),
+    anchorRoot: f.dirs["authority-anchor"],
+    anchorIdentity: f.authority().anchorIdentity,
     terminalReceiptAt: f.input.identity.terminalReceiptAt,
     witnessRef: f.input.identity.witnessRef,
     witnessSha256: f.trust.witnessSha256,
@@ -206,7 +209,7 @@ test(
       const approvals = approval(f, "DELETE", at);
       const reviewRecord = review(f, at);
       const plan = ledger.deletionPlan(approvals, reviewRecord, at);
-      const other = new Journal(f.dirs.policy);
+      const other = f.policyJournal();
       try {
         other.append({ type: "HOLD_ADD", holdId: "concurrent-hold" }, at);
       } finally {

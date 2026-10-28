@@ -133,8 +133,10 @@ export function admission(value) {
     value.maxPackBytes + archiveOverhead + LIMITS.header + 28;
   const maxStorageBytes =
     2 *
-    (value.maxTotalBytes +
-      value.maxPacks * (archiveOverhead + LIMITS.header + 28 + 4096));
+      (value.maxTotalBytes +
+        value.maxPacks * (archiveOverhead + LIMITS.header + 28 + 4096)) +
+    value.maxJournalBytes +
+    LIMITS.journal;
   const workingSetBound =
     4 * (value.maxPackBytes + archiveOverhead + LIMITS.header) +
     value.maxJournalBytes;
@@ -149,6 +151,7 @@ export function admission(value) {
     workingSetBound,
     rootCatalogMaxBytes,
     archiveOverhead,
+    maxAuthorityBytes: value.maxJournalBytes + LIMITS.journal,
   });
 }
 export function publicSummary({ runId, status, packCount, commitment }) {

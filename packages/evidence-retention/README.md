@@ -51,6 +51,12 @@ never prints them. Do not copy its mock administration model into real custody.
    `witnessPublicKeyPath`, `witnessSha256`, `storageWitnessSha256`, `store`,
    `principal`, `privateKeyPath`, `signingKeyPath`, `destinationParent`,
    `journalRoot`, `receiptPath`, `purpose: IMMEDIATE|DAY90` and `revoked: []`.
+   RECOVERY principals additionally require `recoveryAuthority` with format
+   `mmp-live-policy-authority-v1`, pinned live `journalRoot`/`anchorRoot`,
+   `anchorIdentity` (device/inode strings) and authenticated `context`. The
+   context is derived with `policyContext()` from the frozen witnesses and
+   separately pinned reader/owner/reviewer public keys. No authority signing key
+   is passed to a reader. Ordinary READER access does not require a recovery grant.
    See `readerConfig()` in the fixture for exact construction. Files are 0600
    inside existing absolute canonical 0700 directories. A new config/receipt is
    used for each restore. Writer-supplied replacements for these trust anchors
@@ -69,10 +75,23 @@ never prints them. Do not copy its mock administration model into real custody.
    here, not a claim that real equipment was erased.
 
 Recovery uses a separately wrapped RSA recipient and an unexpired witness-signed
-RECOVER grant bound to the witness/principal. A reader-administered revocation
-list denies revoked grants. The ledger records revocation; the trusted operator
-must supply its current independently witnessed state to reader configuration.
+RECOVER grant bound to the witness, full identity hash, principal and purpose.
+The reader freshly validates the signed policy journal against a separately
+administered append-only signed high-water directory under the common lock.
+An old config with `revoked: []` cannot override a later authoritative revocation.
+The legacy list can only add denials. Missing/stale/substituted authority fails
+closed before decrypt. The lock remains held through plaintext and signed receipt
+publication; revoke either commits before access (denied) or retries after access
+finishes. It cannot commit concurrently inside that interval.
 No LLM/repository secret is a recovery delegate. There is no rekey/downgrade API.
+
+Policy writers pass `anchorRoot` and `authorityPrivateKey` to RetentionLedger,
+outside Git/candidate/reader configuration. Every privileged policy event has a
+scoped authority signature bound to its prior checkpoint. RESTORE_RECEIPT also
+retains the full signed reader receipt; HOLD_RELEASE and deletion events retain
+their owner/reviewer/custodian proofs. Generic append cannot mint these events.
+All proofs are revalidated on ingest, restart, state reduction and deletion.
+See [B1/B2 remediation evidence](../../research/mmp-055/v1/security-remediation.md).
 
 For grouped attempts, 180-day expiry uses the latest terminal receipt and day90
 uses the earliest deadline. A common day89-to-day90 window must exist; attempts

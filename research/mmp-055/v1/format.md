@@ -1,5 +1,11 @@
 # MMP-055 v1 — format, bounds and trust
 
+The [B1/B2 remediation](security-remediation.md) supersedes the original cached
+revocation handoff: policy events now retain independently verified signed proofs,
+and recovery/deletion require the live signed high-water source under the mutation
+lock. Readers never receive the authority signer. Original crypto/container and
+180d/day89–90 meanings below remain unchanged.
+
 ## Receipt handshake for #56
 
 `ReceiptIdentityV1` in `packages/evidence-retention/src/boundary.ts` is an additive

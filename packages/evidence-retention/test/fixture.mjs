@@ -5,6 +5,7 @@ import {
   chmodSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   writeFileSync,
@@ -20,11 +21,13 @@ import {
   verifyPair,
 } from "@metamorph/oracle";
 import { retainOracle } from "../../differential/src/oracle-retention.mjs";
+import { directoryIdentity } from "../src/authority.mjs";
 import { bytes, digest, sha } from "../src/core.mjs";
 import { signed, witnessCatalog } from "../src/crypto.mjs";
 import { publish, restore, witnessStorage } from "../src/engine.mjs";
 import { Journal } from "../src/journal.mjs";
 import { RetentionLedger } from "../src/lifecycle.mjs";
+import { eventValidator, policyContext } from "../src/policy-events.mjs";
 import { LocalStore } from "../src/store.mjs";
 
 export const POSIX = {
@@ -131,6 +134,7 @@ export async function fixture(t, options = {}) {
     "restore",
     "witness",
     "policy",
+    "authority-anchor",
   ]) {
     dirs[name] = join(scratch, name);
     mkdirSync(dirs[name], { mode: 0o700 });
@@ -296,29 +300,49 @@ export async function fixture(t, options = {}) {
         privateKey: k.reader.privateKey,
         destinationParent: dirs.restore,
         journal,
+        recoveryAuthority:
+          changes.principal === "escrow" ? f.authority() : undefined,
         ...changes,
       });
     } finally {
       journal.close();
     }
   };
-  f.ledger = (at = now()) =>
-    new RetentionLedger({
+  f.policyOptions = (at = now()) => ({
+    journalRoot: dirs.policy,
+    witness: f.witness,
+    storageWitness: f.storageWitness,
+    trust: f.trust,
+    readerPublicKey: k.receipt.publicKey,
+    ownerPublicKeys: [k.owner1.publicKey, k.owner2.publicKey],
+    reviewerPublicKey: k.reviewer.publicKey,
+    deletionWitnessKeys: {
+      primary: k.primaryCustodian.publicKey,
+      secondary: k.secondaryCustodian.publicKey,
+      escrow: k.escrowCustodian.publicKey,
+      snapshots: k.snapshotCustodian.publicKey,
+    },
+    now: at,
+    anchorRoot: dirs["authority-anchor"],
+    authorityPrivateKey: k.witness.privateKey,
+  });
+  f.context = () => policyContext(f.policyOptions());
+  f.ledger = (at = now()) => new RetentionLedger(f.policyOptions(at));
+  f.policyJournal = () =>
+    new Journal(dirs.policy, undefined, eventValidator(f.context()));
+  f.authority = () => {
+    if (!readdirSync(dirs.policy).length) {
+      const ledger = f.ledger();
+      ledger.close();
+    }
+    return {
+      format: "mmp-live-policy-authority-v1",
       journalRoot: dirs.policy,
-      witness: f.witness,
-      storageWitness: f.storageWitness,
-      trust: f.trust,
-      readerPublicKey: k.receipt.publicKey,
-      ownerPublicKeys: [k.owner1.publicKey, k.owner2.publicKey],
-      reviewerPublicKey: k.reviewer.publicKey,
-      deletionWitnessKeys: {
-        primary: k.primaryCustodian.publicKey,
-        secondary: k.secondaryCustodian.publicKey,
-        escrow: k.escrowCustodian.publicKey,
-        snapshots: k.snapshotCustodian.publicKey,
-      },
-      now: at,
-    });
+      anchorRoot: dirs["authority-anchor"],
+      anchorIdentity: directoryIdentity(dirs["authority-anchor"]),
+      context: f.context(),
+    };
+  };
   f.freeze();
   if (options.publish !== false) f.publish();
   return f;
@@ -354,6 +378,8 @@ export function readerConfig(f, domain = 0, changes = {}) {
     receiptPath: join(root, `receipt-${suffix}.json`),
     purpose: "IMMEDIATE",
     revoked: [],
+    recoveryAuthority:
+      changes.principal === "escrow" ? f.authority() : undefined,
     ...changes,
   };
   const configPath = join(root, `config-${suffix}.json`);

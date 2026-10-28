@@ -1,3 +1,4 @@
+import { anchor } from "./authority.mjs";
 import {
   bytes,
   canonical,
@@ -16,6 +17,7 @@ import {
 import { authenticated, keyId } from "./crypto.mjs";
 import { verifyDeletionState } from "./deletion.mjs";
 import { Journal } from "./journal.mjs";
+import { eventValidator } from "./policy-events.mjs";
 import { Directory } from "./secure-fs.mjs";
 
 /** Functional local-disk adapter. Deliberately restricted to synthetic data:
@@ -150,10 +152,26 @@ export class LocalStore {
       "DELETION_UNAUTHORIZED",
     );
     check(authority.ledgerRoot && authorization.plan, "DELETION_PLAN_REQUIRED");
-    const ledger = new Journal(authority.ledgerRoot);
+    check(authority.policyContext, "DELETION_POLICY");
+    const ledger = new Journal(
+      authority.ledgerRoot,
+      LIMITS.journal,
+      eventValidator(authority.policyContext),
+    );
     try {
       return ledger.withLock(() => {
         verifyDeletionState(ledger, authority, authorization.plan, now);
+        check(
+          authority.anchorRoot && authority.anchorIdentity,
+          "DELETION_POLICY",
+        );
+        anchor(
+          authority.anchorRoot,
+          authority.policyContext,
+          ledger,
+          null,
+          authority.anchorIdentity,
+        );
         this.get(expected);
         const version = this.dir.child(expected.versionId);
         try {

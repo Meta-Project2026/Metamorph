@@ -1,5 +1,10 @@
 # Executed synthetic validation — 2026-10-29 local
 
+Historical implementation validation below is retained. The subsequent blocking
+B1/B2 review and current before/after evidence are in
+[security-remediation.md](security-remediation.md) and `security-test-output.txt`;
+use the exact final-head PR receipt for hosted CI/independent acceptance status.
+
 BASE_SHA: `cb707bb3481ec115460b26ca0da4356a1b47a3ad`.
 Branch: `Vladimir/mmp-055-encrypted-local-evidence`.
 Scope: new package and original synthetic fixtures, additive root unit-test entry

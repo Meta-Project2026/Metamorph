@@ -9,12 +9,15 @@ import {
   LIMITS,
   timestamp,
 } from "./core.mjs";
+import { PRIVILEGED } from "./policy-events.mjs";
 import { Directory } from "./secure-fs.mjs";
 
 /** Append-only API, not WORM against its owner/root. External signed checkpoints
  * detect rollback/substitution; real independently administered journal pending. */
 export class Journal {
-  constructor(path, maxBytes = LIMITS.journal) {
+  #validator;
+  constructor(path, maxBytes = LIMITS.journal, validator = null) {
+    this.#validator = validator;
     this.dir = new Directory(path);
     this.maxBytes = maxBytes;
     this.rows = [];
@@ -45,6 +48,7 @@ export class Journal {
             "JOURNAL_TAMPERED",
           );
           this.lastAt = row.at;
+          this.validate(row.payload, row.at, this.rows);
           this.rows.push(row);
         }
       });
@@ -55,6 +59,18 @@ export class Journal {
   }
   names() {
     return this.dir.names().filter((name) => name !== "mutation.lock");
+  }
+  validate(payload, at, previous) {
+    check(!PRIVILEGED.has(payload.type) || this.#validator, "EVENT_AUTHORITY");
+    this.#validator?.(payload, at, previous);
+  }
+  revalidate() {
+    this.assertCurrent();
+    const prior = [];
+    for (const row of this.rows) {
+      this.validate(row.payload, row.at, prior);
+      prior.push(row);
+    }
   }
   /** Synchronous cooperating-writer lock. A crash leaves a stale lock and fails
    * closed; removing it requires separately witnessed operator recovery. */
@@ -137,6 +153,7 @@ export class Journal {
         payload,
       };
       const data = bytes(row);
+      this.validate(row.payload, row.at, this.rows);
       check(
         data.length <= 4096 && this.total + data.length <= this.maxBytes,
         "JOURNAL_BUDGET",

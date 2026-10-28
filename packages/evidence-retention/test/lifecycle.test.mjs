@@ -34,6 +34,9 @@ function recordBoth(f, ledger, purpose, at = now()) {
 function deletionStores(f) {
   const deletionAuthority = {
     ledgerRoot: f.dirs.policy,
+    policyContext: f.context(),
+    anchorRoot: f.dirs["authority-anchor"],
+    anchorIdentity: f.authority().anchorIdentity,
     terminalReceiptAt: f.input.identity.terminalReceiptAt,
     witnessRef: f.input.identity.witnessRef,
     witnessSha256: f.trust.witnessSha256,
