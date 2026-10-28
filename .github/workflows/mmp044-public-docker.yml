@@ -2,6 +2,12 @@ name: MMP-044 public Docker reproduction
 
 on:
   workflow_dispatch:
+    inputs:
+      proof:
+        description: Explicit public experiment selection
+        type: choice
+        options: [frozen-public-repro, mmp049-compatibility]
+        default: frozen-public-repro
 
 permissions:
   contents: read
@@ -11,7 +17,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  candidate-compatibility:
+    if: inputs.proof == 'mmp049-compatibility'
+    uses: ./.github/workflows/mmp049-candidate-compat.yml
+
   public-proof:
+    if: inputs.proof != 'mmp049-compatibility'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:

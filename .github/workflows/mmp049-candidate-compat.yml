@@ -2,6 +2,7 @@ name: MMP-049 candidate compatibility
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
