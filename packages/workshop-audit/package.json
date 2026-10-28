@@ -1,0 +1,15 @@
+{
+  "name": "@metamorph/workshop-audit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "audit:isolated": "node src/run.mjs"
+  },
+  "dependencies": {
+    "@metamorph/oracle": "workspace:*",
+    "@metamorph/differential": "workspace:*",
+    "@metamorph/target-worker": "workspace:*"
+  }
+}

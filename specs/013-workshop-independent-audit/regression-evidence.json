@@ -1,0 +1,96 @@
+{
+  "format": "workshop-audit-existing-regressions-v1",
+  "scope": "EXISTING_PUBLIC_BASELINE_ONLY",
+  "checkedHead": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315",
+  "supplementarySampledAudit": "NOT_RUN",
+  "proof": {
+    "status": "PASS_PUBLIC_MANIFEST_ONLY",
+    "httpComparisons": 34,
+    "dbComparisons": 40,
+    "finalizer": {
+      "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0,
+      "status": "PASS"
+    },
+    "artifactId": 12773920415,
+    "artifactSha256": "de1f84f1f3a01d0a243105efb8f097c076a00b63d03e9c083201aa2a0c02f855"
+  },
+  "regressionAttempts": [
+    {
+      "attempt": 1,
+      "results": [
+        {
+          "id": "items-smoke",
+          "status": "ERROR"
+        },
+        {
+          "id": "original-mismatch-pilot",
+          "status": "PASS",
+          "G2": "INCONCLUSIVE",
+          "G3": "FAIL",
+          "G4": "INCONCLUSIVE",
+          "httpComparisons": 0,
+          "initialDbComparisons": 1,
+          "differenceCodes": [
+            "DB_SCHEMA",
+            "DB_STATE"
+          ],
+          "cleanup": "VERIFIED_ZERO_RESOURCES"
+        }
+      ],
+      "finalizer": {
+        "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 1,
+        "status": "ERROR"
+      },
+      "artifactId": 12771614054,
+      "artifactSha256": "f49ac3e644dff683fd7f8135de2f37248a3df2b81ecbb5fd1717ad7cc4cae523"
+    },
+    {
+      "attempt": 2,
+      "results": [
+        {
+          "id": "items-smoke",
+          "status": "ERROR"
+        },
+        {
+          "id": "original-mismatch-pilot",
+          "status": "PASS",
+          "G2": "INCONCLUSIVE",
+          "G3": "FAIL",
+          "G4": "INCONCLUSIVE",
+          "httpComparisons": 0,
+          "initialDbComparisons": 1,
+          "differenceCodes": [
+            "DB_SCHEMA",
+            "DB_STATE"
+          ],
+          "cleanup": "VERIFIED_ZERO_RESOURCES"
+        }
+      ],
+      "finalizer": {
+        "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 1,
+        "status": "ERROR"
+      },
+      "artifactId": 12773531413,
+      "artifactSha256": "fcb122c18a57131f9b3805738c829deb6e4b754432df323b47593b101046f325"
+    }
+  ],
+  "canonicalG4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+}
