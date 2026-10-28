@@ -1,0 +1,18 @@
+{
+  "attemptId": "40753497017-1-1-1",
+  "sourceSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+  "status": "PASS",
+  "childExit": 0,
+  "childSignal": null,
+  "childTimedOut": false,
+  "elapsedMs": 391270,
+  "completedCases": 30,
+  "firstUncompletedCase": null,
+  "failedCaseReceiptPresent": false,
+  "operationCode": null,
+  "caseCode": null,
+  "cleanupCode": null,
+  "commands": [],
+  "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "imageId": "sha256:32f295b663a081edd9771d23b23966fd9a2b5387a194b22e219a2f3c9f794489"
+}

@@ -1,0 +1,15 @@
+{
+  "attemptId": "40753497017-1-0-1",
+  "sourceSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+  "status": "PASS",
+  "before": {
+    "containers": 0,
+    "volumes": 0
+  },
+  "after": {
+    "containers": 0,
+    "volumes": 0
+  },
+  "emergencyRemoved": 0,
+  "commandError": false
+}

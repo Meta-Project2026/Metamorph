@@ -38,7 +38,8 @@ lengths/SHA-256 and allowlisted projections. No ZIP or raw job log is retained.
 [source-identities.json](source-identities.json) contains exact Git object IDs,
 runtime file SHA-256 and the runtime broker's sorted-hash-map recipe digest.
 [public-summary.json](public-summary.json) separates historical observations from
-this execution. [checksums.json](checksums.json) hashes retained evidence files;
+this execution. [new-execution.json](new-execution.json) records the new controlled
+run, jobs, artifact URLs and validated receipts. [checksums.json](checksums.json) hashes retained evidence files;
 the Git commit identifies the report and diagnostic sources without self-hashes.
 
 ### Historical run/job/receipt links
@@ -214,11 +215,63 @@ first causal failure. Failures before a numbered receipt or after all 30 cases
 is no inference from public receipt absence to successful cleanup. The finalizer
 separately emits before/after counts and never turns emergency removal into PASS.
 
-Current machine has no `docker` executable. The new workflow also requires normal
-GitHub default-branch registration before dispatch can be relied on; this PR must
-not be self-merged to acquire it. New Docker attempts are **NOT_RUN**, not failed
-reproductions. Registration/dispatch evidence and the final status are recorded
-in `public-summary.json` and the PR after publication.
+Current machine has no `docker` executable. The hosted branch workflow was
+nevertheless dispatchable without merging or editing an existing workflow.
+The first definition at `a42e9ce5a44b895ab85584db24d85f88412b9af5` had an invalid
+job-level `runner.temp` expression: [validation run 40753383891](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753383891)
+failed and the dispatch API returned HTTP 422 before any Docker job ran.
+This pre-execution configuration **ERROR** is retained; it is not a smoke result
+or a consumed Docker repetition. Commit
+`c86bce6e5d70f264d2b236d6654582e5b553a7fc` moved that directory setup into a
+shell step and the **single** successful dispatch created
+[run 40753497017](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017).
+That immutable driver/workflow commit checks out each separate historical SHA;
+the current PR head can subsequently contain evidence-only documentation updates.
+No merge, private G4 execution or post-outcome retry was used to obtain the run.
+
+## 5.1 Completed controlled replay (new evidence)
+
+Final outcome: **ROOT_CAUSE_NOT_ESTABLISHED**. The fixed four-attempt experiment
+completed successfully on 2026-10-28. No extra Docker repetition or rerun followed
+these observations. This is **FAILURE_NOT_REPRODUCED_IN_FOUR_STANDALONE_RUNS**,
+not a root-cause finding, fix verification or proof of flakiness.
+
+| Immutable attempt | Exact source | Cases / exit | Smoke duration | Normal before / after inventory | Emergency removed | Public artifact |
+| --- | --- | --- | --- | --- | --- | --- |
+| `40753497017-1-0-1` | `d133e65be24d939d86b9e43a83e4ba8770ecffd9` | 30 / 0 | 407.263 s | 0 containers / 0 volumes, both | 0 | [12845491820](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/artifacts/12845491820) |
+| `40753497017-1-0-2` | `d133e65be24d939d86b9e43a83e4ba8770ecffd9` | 30 / 0 | 387.820 s | 0 containers / 0 volumes, both | 0 | [12844782605](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/artifacts/12844782605) |
+| `40753497017-1-1-1` | `a14429ca9d5ac565dbb618e9f9c26297c9ead30b` | 30 / 0 | 391.270 s | 0 containers / 0 volumes, both | 0 | [12846575028](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/artifacts/12846575028) |
+| `40753497017-1-1-2` | `a14429ca9d5ac565dbb618e9f9c26297c9ead30b` | 30 / 0 | 288.501 s | 0 containers / 0 volumes, both | 0 | [12846085649](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/artifacts/12846085649) |
+
+All eight public receipt files were independently revalidated against the strict
+schema before local retention; exact received bytes and SHA-256 are preserved
+under `receipts/` and in the evidence index. No raw child log, HTTP body, SQLite,
+input, stderr/stdout or uncontrolled exception was retrieved from these workers.
+The diagnostic tests also passed in each hosted job. Exact job intervals,
+step metadata and runtime image IDs are in `new-execution.json`.
+
+| Revision / repetition | Dedicated hosted job |
+| --- | --- |
+| Green / 1 | [123046128517](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128517) |
+| Green / 2 | [123046127685](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046127685) |
+| Suspect / 1 | [123046128746](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128746) |
+| Suspect / 2 | [123046128425](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753497017/job/123046128425) |
+
+All measured recipe digests equal the preregistered
+`f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3`.
+The runtime broker verifies actual Node 24.11.0 / SQLite 3.50.4 /
+TypeScript 5.9.3 / libfaketime 0.9.10-2.1 provenance before the suite.
+Actual historical regression-daemon/image identities remain unavailable; matching
+recipe and passing broker admission do not reconstruct that environment.
+
+The implementation/environment/race alternatives in the hypothesis matrix are
+still unfalsified. A deterministic defect that necessarily breaks these four
+standalone executions was not observed. The historical dual-child wrapper and
+later mismatch pilot were intentionally not re-executed in this public-items-only
+experiment; their interactions and coarse-summary validation branch remain
+outside its coverage. The absence of a new failed case leaves historical first
+cause, stage, command and survivor identity unknown. No worker remediation is
+justified by these green results. The original two ERROR attempts are unchanged.
 
 ## 6. Changes, verification and owner choices
 
@@ -230,18 +283,26 @@ tests verify leak rejection, incomplete-smoke rejection, missing-inventory
 handling and sticky emergency-cleanup ERROR. They are diagnostic boundary tests,
 not a regression test proving the incident fixed.
 
-Standard available commands and exact local outcomes are recorded separately in
-`public-summary.json`; hosted PR CI is inspected after push. Green Fast CI or the
-new sanitizer tests cannot resolve this incident.
+All seven requested standard commands exited 0 locally, as did the four new
+diagnostic tests and `git diff --check`. The target-worker suite passed 69/69;
+differential passed 77, failed 0, with 1 existing POSIX-permission catalog test
+skipped on Windows. Root lint's configured include list excludes research files;
+the two new diagnostic JavaScript files were additionally checked/formatted with
+an isolated Biome configuration, without changing the repository's CI/config.
+Hosted [Fast CI 40753507299](https://github.com/Meta-Project2026/Metamorph/actions/runs/40753507299)
+passed on the exact diagnostic SHA `c86bce6e5d70f264d2b236d6654582e5b553a7fc`,
+Node 22 and 24. Green Fast CI or the sanitizer tests cannot resolve this incident.
 
 Explicit next owner/reviewer choices:
 
 1. Independently review this report, sanitizer, bounded workflow and public
    artifact boundary. Independent ChatGPT review is requested on the PR; no
    review completion, assignment or notification is implied by that request.
-2. If accepted, register the new manual workflow through owner-controlled merge
-   or a separate exact-byte registration PR. Preserve the fixed four-attempt
-   matrix; do not keep retrying until green. Never merge this PR automatically.
+2. Decide whether to retain the additive manual workflow on main after review;
+   the branch dispatch itself did not require a bootstrap merge. Preserve the
+   recorded four-attempt matrix and all observations. A different diagnostic
+   experiment needs a separately fixed question/budget; do not retry until green.
+   Never merge this PR automatically.
 3. Inspect only sanitized new receipts in public/model context. An authorized
    human may inspect raw original-public diagnostics inside the trusted ephemeral
    runner if needed; never import hidden logs or use an AI to inspect them.
