@@ -16,9 +16,11 @@ jobs:
     timeout-minutes: 30
     env:
       MMP044_HEAD_SHA: ${{ github.sha }}
-      MMP044_PARENT: ${{ runner.temp }}/mmp044-private
-      MMP044_OUTPUT: ${{ runner.temp }}/mmp044-public
     steps:
+      - name: Set private and allowlisted public directories
+        run: |
+          echo "MMP044_PARENT=$RUNNER_TEMP/mmp044-private" >> "$GITHUB_ENV"
+          echo "MMP044_OUTPUT=$RUNNER_TEMP/mmp044-public" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
