@@ -1,0 +1,18 @@
+{
+  "scope": "STATIC_PUBLIC_SOURCE_ONLY",
+  "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "members": {
+    "api.php": {
+      "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77",
+      "lines": 360
+    },
+    "config.php": {
+      "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd",
+      "lines": 124
+    },
+    "LICENSE": {
+      "sha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+      "lines": 21
+    }
+  }
+}

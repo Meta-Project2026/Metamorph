@@ -1,0 +1,793 @@
+{
+  "designation": "PUBLIC_INDEPENDENT_REPRO",
+  "version": 1,
+  "preregisteredOn": "2026-10-28",
+  "clockUtc": "2026-10-27 12:00:00",
+  "predictionsAre": "STATIC_NOT_OBSERVED",
+  "initialState": "Independent clean PHP and TS states; PHP bootstrap BOOTSTRAP precedes initial inspection; zero appointment rows and no appointments sqlite_sequence row.",
+  "httpPrediction": "Every application response here is predicted HTTP 200, content-type application/json; charset=utf-8. See hypotheses.md for JSON shapes.",
+  "cases": [
+    {
+      "id": "public-good-lifecycle",
+      "hypothesis": "H1",
+      "rationale": "Ordinary create/read/update/delete/create with fresh state; deletion must not rewind AUTOINCREMENT.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=update_appointment",
+          "body": "id=1&appointment_date=2099-08-19&mechanic_id=2"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=cancel_appointment",
+          "body": "id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Maple+044&address=44+Open+Research+Lane&phone=%2B15550440002&car_license=OPEN-044-B&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "2"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "2"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "2"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-empty-form",
+      "hypothesis": "H2",
+      "rationale": "All fields omitted: accumulated validation messages, no insert.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": ""
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-zero-name",
+      "hypothesis": "H2",
+      "rationale": "Literal zero tests PHP empty semantics explicitly mirrored by TS.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=0&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Client Name is required."
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Client Name is required."
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-ascii-padding",
+      "hypothesis": "H3",
+      "rationale": "Leading/trailing ASCII spaces should trim; interior ASCII engine space is allowed.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=++Public+Cedar+044++&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=++ENG+044+A++&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-phone-letter",
+      "hypothesis": "H4",
+      "rationale": "An ordinary forbidden letter is a validation rejection, not a comparator negative control.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B1555A440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Valid Phone number is required (must contain only numbers/phone symbols)."
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Valid Phone number is required (must contain only numbers/phone symbols)."
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-engine-nbsp",
+      "hypothesis": "H5",
+      "rationale": "One interior U+00A0 probes differing public PCRE/ECMAScript whitespace classes, with otherwise valid ASCII fields.",
+      "predictedParity": "DIVERGE",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENG%C2%A0044A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Car Engine Number is required (alphanumeric)."
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-phone-nbsp",
+      "hypothesis": "H5",
+      "rationale": "One interior U+00A0 in an otherwise valid-length phone isolates the second public whitespace regex.",
+      "predictedParity": "DIVERGE",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B1555%C2%A0440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Valid Phone number is required (must contain only numbers/phone symbols)."
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-exponent-mechanic",
+      "hypothesis": "H6",
+      "rationale": "Scientific notation 1e1 separates numeric-string integer conversion (10) from parseInt prefix (1).",
+      "predictedParity": "DIVERGE",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1e1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Selected mechanic does not exist."
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-invalid-calendar",
+      "hypothesis": "H7",
+      "rationale": "2099 is not a leap year; invalid POST date remains within requestPolicy.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-02-29&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "A valid Appointment Date (YYYY-MM-DD) is required."
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "A valid Appointment Date (YYYY-MM-DD) is required."
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-past-date",
+      "hypothesis": "H7",
+      "rationale": "Fixed reference clock is 2026-10-27; a valid 2020 date must be rejected.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2020-05-17&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Appointment date cannot be in the past."
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Appointment date cannot be in the past."
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-missing-mechanic",
+      "hypothesis": "H8",
+      "rationale": "Positive integer 77 is absent from the five public seeds; early transaction exit must leave state unchanged.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=77"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Selected mechanic does not exist."
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null,
+            "message": "Selected mechanic does not exist."
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-reject-before-insert",
+      "hypothesis": "H9",
+      "rationale": "A rejected request then a valid insert verifies no lost appointment id or sequence advancement.",
+      "predictedParity": "MATCH",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=bad&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": false,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": false,
+            "rows": 0,
+            "sequence": null
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": null
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-exponent-cancel",
+      "hypothesis": "H6",
+      "rationale": "After ordinary id 1 insertion, cancel 1e1 should target missing id 10 in PHP and id 1 in TS.",
+      "predictedParity": "DIVERGE",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=cancel_appointment",
+          "body": "id=1e1"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 0,
+            "sequence": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "public-exponent-update",
+      "hypothesis": "H6",
+      "rationale": "After ordinary id 1 insertion, update id 1e1 separates not-found rejection from update of id 1.",
+      "predictedParity": "DIVERGE",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api.php?action=book",
+          "body": "client_name=Public+Cedar+044&address=44+Open+Research+Lane&phone=%2B15550440001&car_license=OPEN-044-A&car_engine=ENGINE-044-A&appointment_date=2099-08-18&mechanic_id=1"
+        },
+        {
+          "method": "POST",
+          "path": "/api.php?action=update_appointment",
+          "body": "id=1e1&appointment_date=2099-08-19&mechanic_id=2"
+        },
+        {
+          "method": "GET",
+          "path": "/api.php?action=get_appointments"
+        }
+      ],
+      "expected": [
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": false,
+            "rows": 1,
+            "sequence": "1",
+            "message": "Appointment not found."
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        },
+        {
+          "php": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          },
+          "ts": {
+            "success": true,
+            "rows": 1,
+            "sequence": "1"
+          }
+        }
+      ]
+    }
+  ]
+}
