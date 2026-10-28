@@ -1,0 +1,64 @@
+{
+  "status": "HOSTED_AUDIT_ERROR",
+  "sourceSha": "953fd144de14ae6e1c5c12cb8d029df8677f369f",
+  "runId": 40608027232,
+  "jobId": 122552328147,
+  "artifactId": 12780879472,
+  "zipSha256": "389fd919c75f2536b1d214efedceeaf8dc2b10445ad4c0c20de9c94cc259029c",
+  "zipIndependentlyDownloadedAndMatched": true,
+  "files": {
+    "error.json": "35c2c08dafe62e9bade326572e3da2f173c14c0bf831a04d04e160eae65a1370",
+    "finalizer.json": "79bfdca0e393b6a91a9f5a10695d71bde6cb79c8df80b6dc5cbf0f3ad62e123e"
+  },
+  "linuxTests": {
+    "audit": {
+      "pass": 52,
+      "fail": 0,
+      "skip": 0
+    },
+    "root": 65,
+    "reference": 56,
+    "target": 69,
+    "differential": 78
+  },
+  "phase": "public-controls",
+  "pairId": "audit-public-positive",
+  "primaryCode": "PROVISION_ERROR",
+  "catalog": "INCOMPLETE",
+  "pairPacks": [
+    {
+      "type": "php",
+      "entries": 2,
+      "sha256": "7b39c6bb5fddcfa138c22a7077ba2651f3cd16d480b26e9989ee8b63d138307c"
+    },
+    {
+      "type": "bridge",
+      "entries": 6,
+      "sha256": "84f07606c995db3aa91684e0735fabbe582de5af6a18c8f2268761f7b7d58085"
+    },
+    {
+      "type": "oracle",
+      "entries": 3,
+      "sha256": "6ed65b8ebad5600ae8971135c59936c10cf31a7c417b9c104dda6a3c2dec6b4d"
+    }
+  ],
+  "provenanceSha256": "de5f58ddaff0e748cde8001b8253565e2191cd5e84415a26580c102ede99ed57",
+  "finalizer": {
+    "containers": 0,
+    "volumes": 0,
+    "emergencyRemoved": 0,
+    "status": "CLEANUP_PASS"
+  },
+  "positiveControl": "ERROR",
+  "negativeControl": "NOT_RUN",
+  "sampledScenariosExecuted": 0,
+  "sampledHttp": 0,
+  "sampledDb": 0,
+  "cause": "NOT_ESTABLISHED",
+  "ownerAuthorizedFeatureRefDispatchWithoutByteParity": true,
+  "registrationFollowupPr": 43,
+  "G0": "NOT_RUN",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+}

@@ -463,3 +463,36 @@ test("safe error publication failure reports one fixed code with no repeated thr
   assert.deepEqual(r.receipt.secondaryCodes, ["EVIDENCE_PROVENANCE_ERROR"]);
   assert.ok(!JSON.stringify(r).includes(CANARY));
 });
+
+test("provision detail code survives sealing while raw and unknown reasons stay private", async (t) => {
+  for (const [originalCode, expected] of [
+    ["ENVIRONMENT_ERROR", "ENVIRONMENT_ERROR"],
+    ["RESET_IDENTITY", "RESET_IDENTITY"],
+    [CANARY, "ADAPTER_OPERATION_ERROR"],
+  ]) {
+    const { registry } = fixture(t);
+    const pair = registry.open("audit-public-positive");
+    pair.create();
+    await assert.rejects(
+      pair.step(
+        "provision",
+        async () => {
+          throw Object.assign(Error(CANARY), { code: originalCode });
+        },
+        AbortSignal.timeout(1000),
+      ),
+    );
+    await pair.finish();
+    const receipt = safeFailureReceipt({
+      headSha: head,
+      phase: "public-controls",
+      pairs: registry.publicState(),
+      cleanup: pair.cleanup,
+    });
+    assert.equal(receipt.code, "PROVISION_ERROR");
+    assert.equal(receipt.pairs[0].detailCode, expected);
+    assert.equal(receipt.pairs[0].status, "FINALIZED_PRIVATE_ERROR");
+    assert.ok(receipt.pairs[0].packs.every((p) => p.status === "VERIFIED"));
+    assert.ok(!JSON.stringify(receipt).includes(CANARY));
+  }
+});

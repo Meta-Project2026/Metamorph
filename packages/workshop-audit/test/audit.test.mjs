@@ -448,3 +448,46 @@ test("unchanged verifyPair discriminates equal/mutated ad hoc synthetic transpor
     rmSync(scratch, { recursive: true, force: true });
   }
 });
+
+test("target provision exposes only fixed reason codes and keeps diagnostics private", async () => {
+  for (const [originalCode, expected] of [
+    ["ENVIRONMENT_ERROR", "ENVIRONMENT_ERROR"],
+    ["BUILD_FAILED", "BUILD_FAILED"],
+    ["PUBLIC_DEV_CONTROL_PRIVATE_CANARY", "ADAPTER_OPERATION_ERROR"],
+  ]) {
+    const worker = Object.create(TargetWorker.prototype);
+    const records = [];
+    Object.assign(worker, {
+      profile: WORKSHOP_PROFILE,
+      bundle: { candidateSha: WORKSHOP_CANDIDATE_SHA },
+      image: `sha256:${h}`,
+      provenance: { imageId: `sha256:${h}` },
+      runId: "mmp007-00000000-0000-0000-0000-000000000001",
+      evidence: { commands: [], cleanupVerified: true },
+      provision: async () => {
+        throw Object.assign(Error("PUBLIC_DEV_CONTROL_PRIVATE_CANARY"), {
+          code: originalCode,
+        });
+      },
+      close: async () => {},
+    });
+    const target = new AuditTarget(
+      worker,
+      scenario,
+      (kind, value) => {
+        records.push({ kind, value });
+      },
+      { inventory: async () => ({ containers: [], volumes: [] }) },
+    );
+    await assert.rejects(target.provision(signal()), (error) => {
+      assert.equal(error.code, expected);
+      assert.equal(error.message, "AUDIT_ADAPTER_ERROR");
+      return true;
+    });
+    assert.equal(target.failed, true);
+    assert.ok(
+      JSON.stringify(records).includes("PUBLIC_DEV_CONTROL_PRIVATE_CANARY"),
+    );
+    await target.close();
+  }
+});

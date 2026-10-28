@@ -30,3 +30,14 @@ Issue32 is now closed via independently reviewed registration PR33. Its old YAML
 bytes still differ from the corrected branch (only cancellation policy). The
 historical404 blocker above is superseded by WORKFLOW_REGISTRATION_BYTES_MISMATCH.
 Current outcome: CODE_FIX_PUSHED / HOSTED_PROOF_BLOCKED, not Issue24 complete.
+
+
+## Hosted follow-up authorization supersedes the earlier dispatch precondition
+
+- [x] Human explicitly permits corrected feature-ref workflow despite main drift.
+- [x] New exact953fd14 hosted audit tests:52PASS/0FAIL/0SKIP on Linux.
+- [x] Real run40608027232 inspected: first positive PROVISION_ERROR, no samples executed.
+- [x] Public ZIP downloaded/hash matched; partial indexes verified; finalizer0/0/emergency0.
+- [x] Bounded safe detail-code propagation with two new synthetic tests (54total).
+- [ ] New exact-head hosted proof after diagnostic change; no provision fix claimed.
+- [ ] Two successful real controls,7sampled pairs/59HTTP/66DB and independent acceptance.

@@ -24,6 +24,7 @@ import {
   TargetWorker,
 } from "../../target-worker/src/controller.mjs";
 import { digest } from "./corpus.mjs";
+import { safeDetailCode } from "./errors.mjs";
 
 export const stepId = (n) => `step-${String(n + 1).padStart(2, "0")}`;
 function schedule(scenario) {
@@ -80,7 +81,9 @@ class Ordered {
         } catch {
           throw Error("CLEANUP_ERROR");
         }
-        throw Error("AUDIT_ADAPTER_ERROR");
+        throw Object.assign(Error("AUDIT_ADAPTER_ERROR"), {
+          code: safeDetailCode(e.code),
+        });
       });
     this.pending = active;
     try {

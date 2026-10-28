@@ -14,6 +14,7 @@ import { PrivateEvidence } from "@metamorph/oracle";
 import { atomicJson } from "../../differential/src/private-run.mjs";
 import { requireCheck } from "../../differential/src/strict.mjs";
 import { DECLARED } from "./corpus.mjs";
+import { safeDetailCode } from "./errors.mjs";
 
 const IDS = new Set([
   "audit-public-positive",
@@ -452,6 +453,9 @@ class Pair {
       id: this.id,
       status: this.done ? this.status : "FINALIZED_PRIVATE_ERROR",
       primaryCode: this.primary?.code ?? null,
+      detailCode: this.primary
+        ? safeDetailCode(this.primary.detail.code)
+        : null,
       secondaryCodes: [...new Set(this.secondary.map((e) => e.code))],
       cleanup: this.cleanup,
       catalog: this.catalogStatus,

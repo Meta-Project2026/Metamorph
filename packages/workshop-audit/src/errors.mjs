@@ -46,6 +46,47 @@ const codes = new Set([
 ]);
 const hash = (x) => typeof x === "string" && /^[a-f0-9]{64}$/.test(x);
 export const safeCode = (x) => (codes.has(x) ? x : "EVALUATOR_ERROR");
+// Trusted operation codes only; never promote exception messages/diagnostics.
+const detailCodes = new Set([
+  "ADMISSION_REJECTED",
+  "BUILD_FAILED",
+  "RUNTIME_FAILED",
+  "TIMEOUT",
+  "CANCELLED",
+  "OBSERVATION_ERROR",
+  "CLEANUP_ERROR",
+  "ENVIRONMENT_ERROR",
+  "RESET_FIELDS",
+  "RESET_IDENTITY",
+  "STALE_RUNTIME",
+  "INSPECTOR_RECEIPT",
+  "INSPECTOR_ACTION",
+  "INSPECTOR_MOUNT",
+  "SNAPSHOT_RECEIPT",
+  "HTTP_RECEIPT",
+  "DIRTY_TARGET_RESET",
+  "UNCOMMANDED_TARGET_WRITE",
+  "SCENARIO_BINDING",
+  "STEP_BINDING",
+  "DB_WIRE",
+  "DB_FORMAT",
+  "DB_IDENTITY",
+  "DB_SCHEMA",
+  "DB_SCHEMA_ORDER",
+  "DB_MISSING_TABLE",
+  "DB_TABLE",
+  "DB_COLUMN",
+  "WIRE_DUPLICATE_KEY",
+  "WIRE_JSON",
+  "BOOTSTRAP",
+  "DIRTY_REFERENCE_RESET",
+  "UNCOMMANDED_REFERENCE_WRITE",
+  "AGGREGATE_TIMEOUT",
+  "ADAPTER_OPERATION_ERROR",
+]);
+export const safeDetailCode = (value) =>
+  detailCodes.has(value) ? value : "ADAPTER_OPERATION_ERROR";
+
 function failureReceipt({
   headSha,
   phase,
@@ -84,6 +125,7 @@ function failureReceipt({
             ? p.status
             : "FINALIZED_PRIVATE_ERROR",
         primaryCode: p.primaryCode === null ? null : safeCode(p.primaryCode),
+        detailCode: p.detailCode === null ? null : safeDetailCode(p.detailCode),
         secondaryCodes: Array.isArray(p.secondaryCodes)
           ? [...new Set(p.secondaryCodes.map(safeCode))]
           : ["EVALUATOR_ERROR"],

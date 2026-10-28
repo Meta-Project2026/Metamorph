@@ -177,3 +177,29 @@ Final delivery status: CODE_FIX_PUSHED / HOSTED_AUDIT_NOT_RUN; canonicalG4 remai
 INCONCLUSIVE, G0NOT_RUN, productNOT_ESTABLISHED, formal held-out isolation not
 proven, external recoverable raw retentionNOT_RUN. Request independent review of
 code and registration reconciliation; no owner acceptance is inferred.
+
+
+## Hosted follow-up 2026-10-28: actual failure, no sampled PASS
+
+The human owner explicitly authorized corrected feature-ref dispatch without
+waiting for default-branch byte parity. The former task-level policy block is
+superseded for this execution; registration-only PR43 is a separate reconciliation.
+Manual run40608027232/job122552328147 actually checked out953fd144de14ae6e1c5c12cb8d029df8677f369f.
+Linux original suites passed65/56/69/78 and all52audit tests passed, no skips.
+Actual Docker phase failed at first public positive pair PROVISION_ERROR.
+No negative control or sampled scenario executed. Cause is not yet established.
+All three available partial pair packs and global provenance verified; catalog
+INCOMPLETE. Finalizer CLEANUP_PASS: containers0/volumes0/emergencyRemoved0.
+Public ZIP independently downloaded and SHA matched GitHub; only error.json and
+finalizer.json, no summary. Exact public digests/counts are in hosted-proof.json.
+No private log/sample/seed/raw response or path was downloaded or published.
+
+Bounded diagnosis adds a fixed allowlisted detailCode to failure pairs; stage code
+and primary/secondary semantics are retained. Audit adapters retain recognized
+trusted error codes while their message remains AUDIT_ADAPTER_ERROR; unknown
+codes become ADAPTER_OPERATION_ERROR. No exception text enters public receipts.
+Two additional synthetic tests cover known/unknown canary code propagation and
+sealed partial indexes. Windows audit53PASS/1POSIXskip of54, exit0. This diagnostic
+change is not a claimed provision fix; next proof must use its new exact HEAD.
+G0 NOT_RUN, G4 INCONCLUSIVE, product NOT_ESTABLISHED, EXTERNAL_RETENTION_NOT_RUN.
+Baseline34 remains separate, cause unknown, not rerun or attributed here.

@@ -95,3 +95,18 @@ remain an explicit command before Docker. Registration33 merged the older true
 version; corrected bytes require separately reviewed reconciliation with main
 before dispatch under this task's exact-byte precondition. No existing workflow
 or registration PR is changed here. Only YAML SHA/policy is sent to Issue32.
+
+
+## Hosted launch authorization and bounded failure diagnosis
+
+The human owner explicitly permits corrected feature-ref dispatch without main
+byte parity. Registration-only43 remains separate, no self-merge. At953fd14,
+run40608027232 actually passed52Linux audit tests but first public pair failed
+PROVISION_ERROR before sampled execution. Private partial PHP/bridge/oracle and
+provenance indexes verified; public finalizer0/0/emergencyRemoved0. See safe
+hosted-proof.json for commitments. Raw private diagnostics were not retrieved.
+
+A failure pair now adds detailCode from a fixed trusted-code allowlist; unknown
+values become ADAPTER_OPERATION_ERROR. The primary stage code remains unchanged.
+No message/path/stack/data is copied. No worker/comparator/source/corpus change.
+Next dispatch must bind the new exact commit; no runtime fix/PASS inferred.
