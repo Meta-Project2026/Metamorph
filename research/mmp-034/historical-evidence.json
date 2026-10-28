@@ -1,0 +1,1583 @@
+{
+  "classification": "HISTORICAL_PUBLIC_EVIDENCE",
+  "runs": [
+    {
+      "id": 40572153508,
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6",
+      "head_branch": "feat/mmp-008b-ilia-workshop-target",
+      "path": ".github/workflows/workshop-ts-parity.yml",
+      "created_at": "2026-10-27T19:46:44Z",
+      "run_started_at": "2026-10-27T19:46:44Z",
+      "updated_at": "2026-10-27T19:53:58Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40572153508",
+      "attempts": [
+        {
+          "attempt": 1,
+          "jobs": [
+            {
+              "id": 122428907476,
+              "name": "proof",
+              "conclusion": "success",
+              "started_at": "2026-10-27T19:46:47Z",
+              "completed_at": "2026-10-27T19:52:08Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40572153508/job/122428907476",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T19:46:48Z",
+                  "completed_at": "2026-10-27T19:46:50Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T19:46:50Z",
+                  "completed_at": "2026-10-27T19:46:50Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T19:46:50Z",
+                  "completed_at": "2026-10-27T19:46:51Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T19:46:51Z",
+                  "completed_at": "2026-10-27T19:46:51Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T19:46:51Z",
+                  "completed_at": "2026-10-27T19:46:55Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T19:46:55Z",
+                  "completed_at": "2026-10-27T19:46:56Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T19:46:56Z",
+                  "completed_at": "2026-10-27T19:46:59Z"
+                },
+                {
+                  "name": "Run pnpm lint",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T19:46:59Z",
+                  "completed_at": "2026-10-27T19:48:10Z"
+                },
+                {
+                  "name": "Real PHP TS proof and isolated workshop controls",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T19:48:10Z",
+                  "completed_at": "2026-10-27T19:52:03Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T19:52:03Z",
+                  "completed_at": "2026-10-27T19:52:03Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T19:52:03Z",
+                  "completed_at": "2026-10-27T19:52:05Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T19:52:05Z",
+                  "completed_at": "2026-10-27T19:52:05Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T19:52:05Z",
+                  "completed_at": "2026-10-27T19:52:05Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T19:52:05Z",
+                  "completed_at": "2026-10-27T19:52:05Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T19:52:05Z",
+                  "completed_at": "2026-10-27T19:52:05Z"
+                }
+              ]
+            },
+            {
+              "id": 122428907657,
+              "name": "regressions",
+              "conclusion": "success",
+              "started_at": "2026-10-27T19:46:47Z",
+              "completed_at": "2026-10-27T19:53:58Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40572153508/job/122428907657",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T19:46:48Z",
+                  "completed_at": "2026-10-27T19:46:50Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T19:46:50Z",
+                  "completed_at": "2026-10-27T19:46:50Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T19:46:50Z",
+                  "completed_at": "2026-10-27T19:46:51Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T19:46:51Z",
+                  "completed_at": "2026-10-27T19:46:51Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T19:46:51Z",
+                  "completed_at": "2026-10-27T19:46:54Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T19:46:54Z",
+                  "completed_at": "2026-10-27T19:46:56Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T19:46:56Z",
+                  "completed_at": "2026-10-27T19:46:59Z"
+                },
+                {
+                  "name": "Run pnpm build",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T19:46:59Z",
+                  "completed_at": "2026-10-27T19:47:14Z"
+                },
+                {
+                  "name": "Original 30 Docker controls and exact old mismatch pilot",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T19:47:14Z",
+                  "completed_at": "2026-10-27T19:53:53Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T19:53:53Z",
+                  "completed_at": "2026-10-27T19:53:53Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T19:53:53Z",
+                  "completed_at": "2026-10-27T19:53:55Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T19:53:55Z",
+                  "completed_at": "2026-10-27T19:53:55Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T19:53:55Z",
+                  "completed_at": "2026-10-27T19:53:55Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T19:53:55Z",
+                  "completed_at": "2026-10-27T19:53:55Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T19:53:55Z",
+                  "completed_at": "2026-10-27T19:53:55Z"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40573606009,
+      "run_attempt": 1,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+      "head_branch": "feat/mmp-008b-ilia-workshop-target",
+      "path": ".github/workflows/workshop-ts-parity.yml",
+      "created_at": "2026-10-27T19:56:38Z",
+      "run_started_at": "2026-10-27T19:56:38Z",
+      "updated_at": "2026-10-27T20:04:03Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40573606009",
+      "attempts": [
+        {
+          "attempt": 1,
+          "jobs": [
+            {
+              "id": 122434032210,
+              "name": "proof",
+              "conclusion": "success",
+              "started_at": "2026-10-27T19:56:42Z",
+              "completed_at": "2026-10-27T20:00:46Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40573606009/job/122434032210",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T19:56:42Z",
+                  "completed_at": "2026-10-27T19:56:44Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T19:56:44Z",
+                  "completed_at": "2026-10-27T19:56:44Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T19:56:44Z",
+                  "completed_at": "2026-10-27T19:56:47Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T19:56:47Z",
+                  "completed_at": "2026-10-27T19:56:47Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T19:56:47Z",
+                  "completed_at": "2026-10-27T19:56:50Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T19:56:50Z",
+                  "completed_at": "2026-10-27T19:56:51Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T19:56:51Z",
+                  "completed_at": "2026-10-27T19:56:53Z"
+                },
+                {
+                  "name": "Run pnpm lint",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T19:56:53Z",
+                  "completed_at": "2026-10-27T19:57:45Z"
+                },
+                {
+                  "name": "Real PHP TS proof and isolated workshop controls",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T19:57:45Z",
+                  "completed_at": "2026-10-27T20:00:41Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T20:00:41Z",
+                  "completed_at": "2026-10-27T20:00:41Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T20:00:41Z",
+                  "completed_at": "2026-10-27T20:00:42Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T20:00:42Z",
+                  "completed_at": "2026-10-27T20:00:42Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T20:00:42Z",
+                  "completed_at": "2026-10-27T20:00:43Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T20:00:43Z",
+                  "completed_at": "2026-10-27T20:00:43Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T20:00:43Z",
+                  "completed_at": "2026-10-27T20:00:43Z"
+                }
+              ]
+            },
+            {
+              "id": 122434032771,
+              "name": "regressions",
+              "conclusion": "success",
+              "started_at": "2026-10-27T19:56:41Z",
+              "completed_at": "2026-10-27T20:04:02Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40573606009/job/122434032771",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T19:56:42Z",
+                  "completed_at": "2026-10-27T19:56:44Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T19:56:44Z",
+                  "completed_at": "2026-10-27T19:56:44Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T19:56:44Z",
+                  "completed_at": "2026-10-27T19:56:45Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T19:56:45Z",
+                  "completed_at": "2026-10-27T19:56:45Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T19:56:45Z",
+                  "completed_at": "2026-10-27T19:56:45Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T19:56:45Z",
+                  "completed_at": "2026-10-27T19:56:47Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T19:56:47Z",
+                  "completed_at": "2026-10-27T19:56:49Z"
+                },
+                {
+                  "name": "Run pnpm build",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T19:56:49Z",
+                  "completed_at": "2026-10-27T19:57:06Z"
+                },
+                {
+                  "name": "Original 30 Docker controls and exact old mismatch pilot",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T19:57:06Z",
+                  "completed_at": "2026-10-27T20:03:58Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T20:03:58Z",
+                  "completed_at": "2026-10-27T20:03:58Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T20:03:58Z",
+                  "completed_at": "2026-10-27T20:03:59Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T20:03:59Z",
+                  "completed_at": "2026-10-27T20:03:59Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T20:03:59Z",
+                  "completed_at": "2026-10-27T20:03:59Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T20:03:59Z",
+                  "completed_at": "2026-10-27T20:04:00Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T20:04:00Z",
+                  "completed_at": "2026-10-27T20:04:00Z"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40588295315,
+      "run_attempt": 2,
+      "event": "workflow_dispatch",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+      "head_branch": "feat/mmp-010b-independent-workshop-audit",
+      "path": ".github/workflows/workshop-ts-parity.yml",
+      "created_at": "2026-10-27T21:37:17Z",
+      "run_started_at": "2026-10-27T21:44:47Z",
+      "updated_at": "2026-10-27T21:46:55Z",
+      "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315",
+      "attempts": [
+        {
+          "attempt": 1,
+          "jobs": [
+            {
+              "id": 122486167150,
+              "name": "proof",
+              "conclusion": "success",
+              "started_at": "2026-10-27T21:38:39Z",
+              "completed_at": "2026-10-27T21:44:20Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315/job/122486167150",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T21:38:40Z",
+                  "completed_at": "2026-10-27T21:38:41Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T21:38:41Z",
+                  "completed_at": "2026-10-27T21:38:41Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T21:38:41Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:43Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T21:38:43Z",
+                  "completed_at": "2026-10-27T21:38:46Z"
+                },
+                {
+                  "name": "Run pnpm lint",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T21:38:46Z",
+                  "completed_at": "2026-10-27T21:40:10Z"
+                },
+                {
+                  "name": "Real PHP TS proof and isolated workshop controls",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T21:40:10Z",
+                  "completed_at": "2026-10-27T21:44:16Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T21:44:16Z",
+                  "completed_at": "2026-10-27T21:44:16Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T21:44:16Z",
+                  "completed_at": "2026-10-27T21:44:17Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T21:44:17Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                }
+              ]
+            },
+            {
+              "id": 122486167588,
+              "name": "regressions",
+              "conclusion": "failure",
+              "started_at": "2026-10-27T21:38:40Z",
+              "completed_at": "2026-10-27T21:43:28Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315/job/122486167588",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T21:38:40Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:43Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T21:38:43Z",
+                  "completed_at": "2026-10-27T21:38:43Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T21:38:43Z",
+                  "completed_at": "2026-10-27T21:38:44Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T21:38:44Z",
+                  "completed_at": "2026-10-27T21:38:45Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T21:38:45Z",
+                  "completed_at": "2026-10-27T21:38:47Z"
+                },
+                {
+                  "name": "Run pnpm build",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T21:38:47Z",
+                  "completed_at": "2026-10-27T21:39:00Z"
+                },
+                {
+                  "name": "Original 30 Docker controls and exact old mismatch pilot",
+                  "status": "completed",
+                  "conclusion": "failure",
+                  "number": 9,
+                  "started_at": "2026-10-27T21:39:00Z",
+                  "completed_at": "2026-10-27T21:43:24Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "failure",
+                  "number": 10,
+                  "started_at": "2026-10-27T21:43:24Z",
+                  "completed_at": "2026-10-27T21:43:25Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T21:43:25Z",
+                  "completed_at": "2026-10-27T21:43:26Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T21:43:26Z",
+                  "completed_at": "2026-10-27T21:43:26Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "skipped",
+                  "number": 21,
+                  "started_at": "2026-10-27T21:43:26Z",
+                  "completed_at": "2026-10-27T21:43:26Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T21:43:26Z",
+                  "completed_at": "2026-10-27T21:43:26Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T21:43:26Z",
+                  "completed_at": "2026-10-27T21:43:26Z"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "attempt": 2,
+          "jobs": [
+            {
+              "id": 122489125401,
+              "name": "regressions",
+              "conclusion": "failure",
+              "started_at": "2026-10-27T21:44:51Z",
+              "completed_at": "2026-10-27T21:46:55Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315/job/122489125401",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T21:44:52Z",
+                  "completed_at": "2026-10-27T21:44:55Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T21:44:55Z",
+                  "completed_at": "2026-10-27T21:44:55Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T21:44:55Z",
+                  "completed_at": "2026-10-27T21:44:57Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T21:44:57Z",
+                  "completed_at": "2026-10-27T21:44:57Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T21:44:57Z",
+                  "completed_at": "2026-10-27T21:44:58Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T21:44:58Z",
+                  "completed_at": "2026-10-27T21:45:00Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T21:45:00Z",
+                  "completed_at": "2026-10-27T21:45:03Z"
+                },
+                {
+                  "name": "Run pnpm build",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T21:45:03Z",
+                  "completed_at": "2026-10-27T21:45:17Z"
+                },
+                {
+                  "name": "Original 30 Docker controls and exact old mismatch pilot",
+                  "status": "completed",
+                  "conclusion": "failure",
+                  "number": 9,
+                  "started_at": "2026-10-27T21:45:17Z",
+                  "completed_at": "2026-10-27T21:46:51Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "failure",
+                  "number": 10,
+                  "started_at": "2026-10-27T21:46:51Z",
+                  "completed_at": "2026-10-27T21:46:51Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T21:46:51Z",
+                  "completed_at": "2026-10-27T21:46:53Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T21:46:53Z",
+                  "completed_at": "2026-10-27T21:46:53Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "skipped",
+                  "number": 21,
+                  "started_at": "2026-10-27T21:46:53Z",
+                  "completed_at": "2026-10-27T21:46:53Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T21:46:53Z",
+                  "completed_at": "2026-10-27T21:46:53Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T21:46:53Z",
+                  "completed_at": "2026-10-27T21:46:53Z"
+                }
+              ]
+            },
+            {
+              "id": 122489128400,
+              "name": "proof",
+              "conclusion": "success",
+              "started_at": "2026-10-27T21:38:39Z",
+              "completed_at": "2026-10-27T21:44:20Z",
+              "html_url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40588295315/job/122489128400",
+              "labels": [
+                "ubuntu-24.04"
+              ],
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 1,
+                  "started_at": "2026-10-27T21:38:40Z",
+                  "completed_at": "2026-10-27T21:38:41Z"
+                },
+                {
+                  "name": "Set public output directory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 2,
+                  "started_at": "2026-10-27T21:38:41Z",
+                  "completed_at": "2026-10-27T21:38:41Z"
+                },
+                {
+                  "name": "Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 3,
+                  "started_at": "2026-10-27T21:38:41Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run test \"$(git rev-parse HEAD)\" = \"$PILOT_HEAD_SHA\" && git rev-parse HEAD",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 4,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 5,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:42Z"
+                },
+                {
+                  "name": "Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 6,
+                  "started_at": "2026-10-27T21:38:42Z",
+                  "completed_at": "2026-10-27T21:38:43Z"
+                },
+                {
+                  "name": "Run pnpm install --frozen-lockfile",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 7,
+                  "started_at": "2026-10-27T21:38:43Z",
+                  "completed_at": "2026-10-27T21:38:46Z"
+                },
+                {
+                  "name": "Run pnpm lint",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 8,
+                  "started_at": "2026-10-27T21:38:46Z",
+                  "completed_at": "2026-10-27T21:40:10Z"
+                },
+                {
+                  "name": "Real PHP TS proof and isolated workshop controls",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 9,
+                  "started_at": "2026-10-27T21:40:10Z",
+                  "completed_at": "2026-10-27T21:44:16Z"
+                },
+                {
+                  "name": "Independent final inventory",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 10,
+                  "started_at": "2026-10-27T21:44:16Z",
+                  "completed_at": "2026-10-27T21:44:16Z"
+                },
+                {
+                  "name": "Run actions/upload-artifact@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 11,
+                  "started_at": "2026-10-27T21:44:16Z",
+                  "completed_at": "2026-10-27T21:44:17Z"
+                },
+                {
+                  "name": "Post Run pnpm/action-setup@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 20,
+                  "started_at": "2026-10-27T21:44:17Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Post Run actions/setup-node@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 21,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Post Run actions/checkout@v4",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 22,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success",
+                  "number": 23,
+                  "started_at": "2026-10-27T21:44:18Z",
+                  "completed_at": "2026-10-27T21:44:18Z"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12765733186,
+      "name": "workshop-regressions-public",
+      "size_in_bytes": 704,
+      "expired": false,
+      "created_at": "2026-10-27T19:53:54Z",
+      "updated_at": "2026-10-27T19:53:54Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12765733186/zip",
+      "runId": 40572153508,
+      "files": [
+        {
+          "name": "regressions.json",
+          "sha256": "5afc9f9273d5a8e200131c7fac99bdf080d219b1e9b1bace05d3517cc1fe774c",
+          "bytes": 590,
+          "allowlisted": {
+            "headSha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6",
+            "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+            "results": [
+              {
+                "id": "items-smoke",
+                "status": "PASS",
+                "cases": 30,
+                "cleanup": "VERIFIED_ZERO_RESOURCES"
+              },
+              {
+                "id": "original-mismatch-pilot",
+                "status": "PASS",
+                "cleanup": "VERIFIED_ZERO_RESOURCES",
+                "G2": "INCONCLUSIVE",
+                "G3": "FAIL",
+                "G4": "INCONCLUSIVE",
+                "httpComparisons": 0,
+                "initialDbComparisons": 1,
+                "differenceCodes": [
+                  "DB_SCHEMA",
+                  "DB_STATE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "cc6e317561e9c7455099d16924c609fd49ca0c9e618d14bd90f9aad42286d45c",
+          "bytes": 165,
+          "allowlisted": {
+            "headSha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12765538339,
+      "name": "workshop-public",
+      "size_in_bytes": 2755,
+      "expired": false,
+      "created_at": "2026-10-27T19:52:04Z",
+      "updated_at": "2026-10-27T19:52:04Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12765538339/zip",
+      "runId": 40572153508,
+      "files": [
+        {
+          "name": "completion.json",
+          "sha256": "e9e6abd92b7f385919726475e889bd542ea35560cafbadea2cc1034e78c72930",
+          "bytes": 271,
+          "allowlisted": {
+            "headSha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6"
+          }
+        },
+        {
+          "name": "summary.json",
+          "sha256": "d1c65bb494a7d49e779e43077b4571b8bb5b6bc9d4a45a72206e496c5145b592",
+          "bytes": 12726,
+          "allowlisted": {
+            "headSha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6",
+            "publicHttpComparisons": 34,
+            "publicDbComparisons": 40,
+            "phpImage": "sha256:52835f75d888b7ac786e92108bd8ffcd7fa2ba11c4a67aa1c65706346ab9f0ad",
+            "targetImage": "sha256:1b3c208cc896732cca7c653278b5e7391e5e4ae932ad77121783b2e16780ebed"
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "cc6e317561e9c7455099d16924c609fd49ca0c9e618d14bd90f9aad42286d45c",
+          "bytes": 165,
+          "allowlisted": {
+            "headSha": "d15daefdcde0c2678ee72f8ccc707f15cdfa7ae6",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12766646351,
+      "name": "workshop-public",
+      "size_in_bytes": 2761,
+      "expired": false,
+      "created_at": "2026-10-27T20:00:42Z",
+      "updated_at": "2026-10-27T20:00:42Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12766646351/zip",
+      "runId": 40573606009,
+      "files": [
+        {
+          "name": "summary.json",
+          "sha256": "a669fd495ec0cde8d43eaf139897ae930b6e7ac61ad8512abd0e72df6c928e8d",
+          "bytes": 12726,
+          "allowlisted": {
+            "headSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "publicHttpComparisons": 34,
+            "publicDbComparisons": 40,
+            "phpImage": "sha256:bda7f2b9c63cbf6ca4902161a8a419efdf555e92f4e1249ca4356dfb9ec3f0a5",
+            "targetImage": "sha256:81bd856e55d25dce97ee3642af5b0f9252117e018061b050f3d94bae90710a02"
+          }
+        },
+        {
+          "name": "completion.json",
+          "sha256": "90911971b8bcab9cf4df36ff28a6e56137502703a94953e5160119d787e7d946",
+          "bytes": 271,
+          "allowlisted": {
+            "headSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9"
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "f9ea13dc393326c7fc6a01e8f8065a59c42d903a48951ad80b6a3829f74c059a",
+          "bytes": 165,
+          "allowlisted": {
+            "headSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12765664928,
+      "name": "workshop-regressions-public",
+      "size_in_bytes": 709,
+      "expired": false,
+      "created_at": "2026-10-27T20:03:59Z",
+      "updated_at": "2026-10-27T20:03:59Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12765664928/zip",
+      "runId": 40573606009,
+      "files": [
+        {
+          "name": "regressions.json",
+          "sha256": "d73a1dd57deb4ffa133bf6699a043eb163436a87b0e7007ee7cbcf4ba29bf7d3",
+          "bytes": 590,
+          "allowlisted": {
+            "headSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+            "results": [
+              {
+                "id": "items-smoke",
+                "status": "PASS",
+                "cases": 30,
+                "cleanup": "VERIFIED_ZERO_RESOURCES"
+              },
+              {
+                "id": "original-mismatch-pilot",
+                "status": "PASS",
+                "cleanup": "VERIFIED_ZERO_RESOURCES",
+                "G2": "INCONCLUSIVE",
+                "G3": "FAIL",
+                "G4": "INCONCLUSIVE",
+                "httpComparisons": 0,
+                "initialDbComparisons": 1,
+                "differenceCodes": [
+                  "DB_SCHEMA",
+                  "DB_STATE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "f9ea13dc393326c7fc6a01e8f8065a59c42d903a48951ad80b6a3829f74c059a",
+          "bytes": 165,
+          "allowlisted": {
+            "headSha": "d133e65be24d939d86b9e43a83e4ba8770ecffd9",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12773920415,
+      "name": "workshop-public",
+      "size_in_bytes": 2766,
+      "expired": false,
+      "created_at": "2026-10-27T21:44:17Z",
+      "updated_at": "2026-10-27T21:44:17Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12773920415/zip",
+      "runId": 40588295315,
+      "files": [
+        {
+          "name": "summary.json",
+          "sha256": "2285907c2fa5a8d1cd16745b5769a619dced140b8f72f52b171ef652e366520f",
+          "bytes": 12726,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "publicHttpComparisons": 34,
+            "publicDbComparisons": 40,
+            "phpImage": "sha256:f8ff9b6834d89d77127b4621473d76db16b56ca051a494612cdfb2e98efb1f2d",
+            "targetImage": "sha256:6b1eaf2537de953b37a36034088bf59b5404e2d35a539a8439968549dba970e6"
+          }
+        },
+        {
+          "name": "completion.json",
+          "sha256": "e7fcaa5bc53a9b75a577b7228d16965421ac2c936776cbd239f13872560dce2c",
+          "bytes": 271,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b"
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "b3b4af2a4cbdb447325909a6adf8a07bf43a64afb05e77420191cda7a559e7ba",
+          "bytes": 165,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12773531413,
+      "name": "workshop-regressions-public",
+      "size_in_bytes": 705,
+      "expired": false,
+      "created_at": "2026-10-27T21:46:52Z",
+      "updated_at": "2026-10-27T21:46:52Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12773531413/zip",
+      "runId": 40588295315,
+      "files": [
+        {
+          "name": "regressions.json",
+          "sha256": "b3cb3112b58d2bf125cad698d66183ac21086bf07141fba7b388d90219a2d09c",
+          "bytes": 528,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+            "results": [
+              {
+                "id": "items-smoke",
+                "status": "ERROR"
+              },
+              {
+                "id": "original-mismatch-pilot",
+                "status": "PASS",
+                "cleanup": "VERIFIED_ZERO_RESOURCES",
+                "G2": "INCONCLUSIVE",
+                "G3": "FAIL",
+                "G4": "INCONCLUSIVE",
+                "httpComparisons": 0,
+                "initialDbComparisons": 1,
+                "differenceCodes": [
+                  "DB_SCHEMA",
+                  "DB_STATE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "b372215e1af3ba1d6302f715fc358e72df3e98be6e96d8379adedf49540a1f99",
+          "bytes": 166,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 1,
+            "status": "ERROR"
+          }
+        }
+      ]
+    },
+    {
+      "id": 12771614054,
+      "name": "workshop-regressions-public",
+      "size_in_bytes": 705,
+      "expired": false,
+      "created_at": "2026-10-27T21:43:25Z",
+      "updated_at": "2026-10-27T21:43:25Z",
+      "archive_download_url": "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/artifacts/12771614054/zip",
+      "runId": 40588295315,
+      "files": [
+        {
+          "name": "regressions.json",
+          "sha256": "b3cb3112b58d2bf125cad698d66183ac21086bf07141fba7b388d90219a2d09c",
+          "bytes": 528,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "externalRetention": "EXTERNAL_RETENTION_NOT_RUN",
+            "results": [
+              {
+                "id": "items-smoke",
+                "status": "ERROR"
+              },
+              {
+                "id": "original-mismatch-pilot",
+                "status": "PASS",
+                "cleanup": "VERIFIED_ZERO_RESOURCES",
+                "G2": "INCONCLUSIVE",
+                "G3": "FAIL",
+                "G4": "INCONCLUSIVE",
+                "httpComparisons": 0,
+                "initialDbComparisons": 1,
+                "differenceCodes": [
+                  "DB_SCHEMA",
+                  "DB_STATE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "finalizer.json",
+          "sha256": "b372215e1af3ba1d6302f715fc358e72df3e98be6e96d8379adedf49540a1f99",
+          "bytes": 166,
+          "allowlisted": {
+            "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 1,
+            "status": "ERROR"
+          }
+        }
+      ]
+    }
+  ],
+  "jobLogAllowlist": [
+    {
+      "jobId": 122428907657,
+      "versions": {
+        "runnerVersion": [
+          "2.338.0"
+        ],
+        "node": [
+          "v24.21.0"
+        ]
+      },
+      "facts": {
+        "itemsPass": true,
+        "itemsError": false,
+        "negativePass": true,
+        "finalizerError": false,
+        "zeroNormalCleanup": true,
+        "jobTimeoutNotice": false,
+        "cancellationNotice": false
+      }
+    },
+    {
+      "jobId": 122434032771,
+      "versions": {
+        "runnerVersion": [
+          "2.338.0"
+        ],
+        "node": [
+          "v24.21.0"
+        ]
+      },
+      "facts": {
+        "itemsPass": true,
+        "itemsError": false,
+        "negativePass": true,
+        "finalizerError": false,
+        "zeroNormalCleanup": true,
+        "jobTimeoutNotice": false,
+        "cancellationNotice": false
+      }
+    },
+    {
+      "jobId": 122486167588,
+      "versions": {
+        "runnerVersion": [
+          "2.338.0"
+        ],
+        "node": [
+          "v24.21.0"
+        ]
+      },
+      "facts": {
+        "itemsPass": false,
+        "itemsError": true,
+        "negativePass": true,
+        "finalizerError": true,
+        "zeroNormalCleanup": false,
+        "jobTimeoutNotice": false,
+        "cancellationNotice": false
+      }
+    },
+    {
+      "jobId": 122489125401,
+      "versions": {
+        "runnerVersion": [
+          "2.338.0"
+        ],
+        "node": [
+          "v24.21.0"
+        ]
+      },
+      "facts": {
+        "itemsPass": false,
+        "itemsError": true,
+        "negativePass": true,
+        "finalizerError": true,
+        "zeroNormalCleanup": false,
+        "jobTimeoutNotice": false,
+        "cancellationNotice": false
+      }
+    }
+  ]
+}
