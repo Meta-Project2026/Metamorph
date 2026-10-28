@@ -1,5 +1,5 @@
 // Explicit Linux Docker entrypoint. No model, private audit, or high-level manifest adapter.
-import { chmodSync, mkdirSync, mkdtempSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -140,6 +140,10 @@ try {
     signal,
     evidence,
   });
+  // provisionRuntime's create mode is subject to our 077 umask. The verified
+  // public OSS archive must be readable by uid 65534 through its readonly bind.
+  chmodSync(phpRuntime.archivePath, 0o444);
+  requireCheck((statSync(phpRuntime.archivePath).mode & 0o777) === 0o444, "PROVENANCE_MISMATCH");
   // Existing broker joins its bounded build/provenance/cleanup before returning.
   // Cancellation is checked after joining; no new operation starts on a late result.
   const runtime = await buildTrustedRuntime((name, receipt) => {
