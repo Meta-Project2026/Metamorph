@@ -1,0 +1,1567 @@
+{
+  "classification": "NOT_ESTABLISHED",
+  "classificationReview": "INDEPENDENT_PUBLIC_EVIDENCE_REVIEW_REQUIRED",
+  "harness": "SUCCESS",
+  "parity": "FAIL",
+  "controls": {
+    "positive": "PASS",
+    "negative": "PASS"
+  },
+  "coverage": {
+    "plannedPairs": 14,
+    "plannedHttp": 38,
+    "plannedSqlite": 52,
+    "completedPairs": 14,
+    "http": 38,
+    "sqlite": 52
+  },
+  "gates": {
+    "G0": "INCONCLUSIVE",
+    "G1": "PASS",
+    "G2": "FAIL",
+    "G3": "FAIL",
+    "G4": "INCONCLUSIVE"
+  },
+  "product": "NOT_ESTABLISHED",
+  "privateAudit": "UNCHANGED",
+  "cases": [
+    {
+      "scenarioId": "public-good-lifecycle",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+            "candidateSha256": "109bb6f4f9e2997a87e925c7ffa35ff279a4ccd9bd3904f6aedbd896bc11c96b"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+            "candidateSha256": "13cc29675a0b1d04bb57778b0f6aa67302efdd556d3a5780977e665735c5525d"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-3",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "97d095abb156c5f3a90ee96d0c8fd426080dacde9094d5e36a1a2137fed5e63e",
+            "candidateSha256": "dd1d2c29d3a0939585340adb544c4de530d76310034285c616bf3eccd073838f"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89",
+            "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+          }
+        },
+        {
+          "stepId": "step-4",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f9f30b445c3161d52a3ded8895e2199b6e752d9610ed7813e4ac75532fba6660",
+            "candidateSha256": "6633d3127ae3e78080b66b03c2328480b46885c664eea27269ab233096fa7a63"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89",
+            "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+          }
+        },
+        {
+          "stepId": "step-5",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+            "candidateSha256": "eb040fcf26c9494a416bc27f2dbf847a9160e7edd9129551c334babb13901866"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+            "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+          }
+        },
+        {
+          "stepId": "step-6",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "b2cee6db789719834ad735c44b49a55460d126a867ceb9f8acdb7a8eb2c796c8"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+            "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+          }
+        },
+        {
+          "stepId": "step-7",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "fcd5bb044db5f11051ca56ff236e2a684f61d12e1f7a5e4e44da3bbb8eea5395",
+            "candidateSha256": "316500e2d83acc9f293ab330ec0babb8ef3982610da42db3b6d615f106176fc4"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292",
+            "candidateSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+          }
+        },
+        {
+          "stepId": "step-8",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "e593182e5e387afec8aa1e8b0449f635d4f3228c7058eedfb0cb191f656a0682",
+            "candidateSha256": "45ac3ad0e9d3651d86c296c3f4f34c651328b21396ea1a25e048617d464b5346"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292",
+            "candidateSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+          }
+        }
+      ],
+      "executedHttp": 8,
+      "executedSqlite": 9,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 21244,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.077923,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.394462,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "negativeControl": {
+        "status": "PASS",
+        "codes": [
+          "HTTP_STATUS"
+        ]
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-empty-form",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "b2bff7bbff8c379f78cbc7680c2134858d1a9fd4caf7aaf089fd97e4af34041b",
+            "candidateSha256": "1db461a2678abba017c6f4ecd1a4cb2b49aebde6303cd8fb4bc8a6534072056e"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "ae79cb127774e8d872cf28ccb6178ca39f8cde59bc93343e592dd981ff1d5bdd"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15239,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.077256,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.281303,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-zero-name",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "250e15fa4b39b20c0eb48b8ed1721cc4d358cfd087ff1ac82d827eea1033c390",
+            "candidateSha256": "29198b42fc6f24b2c59b7d76b878667ca84006898db9d9e24df2ea4324ca0198"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "a51ef5053755927937c5c293f59170ef273dffff336aab672bbcec433f7d9cd4"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15134,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.075111,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.347032,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-ascii-padding",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+            "candidateSha256": "e5be095cc2cb836f3d5b41e18432f36b3ec592ba7f8a1def60ecc84594d598cb"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413",
+            "candidateSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "5656ac02813ba2f7db68ab36443502acad88bca6de721c738ae2a19a5e3f589d",
+            "candidateSha256": "a7078cc33001ca22421212d0ad714a2ec502d83c7c5be285f8d87f30129cd07b"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413",
+            "candidateSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15094,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.077575,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.551241,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-phone-letter",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+            "candidateSha256": "5c6f12cd6af4987043fe17d3c10fa31f0aad230f55a70163429f34ab5a8aed45"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "e7f77833828baa72d929b44875deb8ab3f2b8c7e5a6a3d5fd2b6a669cdde5620"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15041,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.080155,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.356728,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-engine-nbsp",
+      "status": "FAIL",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_MISSING",
+              "HTTP_JSON_VALUE"
+            ],
+            "referenceSha256": "4392fc3bc3861ed781ac824227696d30cab6ee1416b0ee6a2a17bc99ad8a55e4",
+            "candidateSha256": "05819caea2698fec5a64a72edc7c5ea8a67efc4a74a38944641d3d885ea01b05"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "7ed16abc349faa01277cdf4047b96bbe1044d45f4c4d6d9ba9c7085e9b778a6d"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_LENGTH"
+            ],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "c5e98767eff9e6888b394e155c55804161547daddfa8cf156933dcc9f3895442"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "7ed16abc349faa01277cdf4047b96bbe1044d45f4c4d6d9ba9c7085e9b778a6d"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": {
+        "kind": "HTTP",
+        "stepId": "step-1",
+        "codes": [
+          "HTTP_JSON_MISSING",
+          "HTTP_JSON_VALUE"
+        ]
+      },
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15074,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.076804,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.4124510000001,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-phone-nbsp",
+      "status": "FAIL",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_MISSING",
+              "HTTP_JSON_VALUE"
+            ],
+            "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+            "candidateSha256": "a30285b2701b6dfe620640dacee32bac3bbcaeac2b6846c2ae2a92c54400ce67"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "3c98e26aae3528bf8d1aa5029ff89067249203d10ac95c6fdc2805e9c7f578ac"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_LENGTH"
+            ],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "0bf071a404a199f7332a3670bc7510df8c3d159ac83b23fdbcb252ca306a0135"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "3c98e26aae3528bf8d1aa5029ff89067249203d10ac95c6fdc2805e9c7f578ac"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": {
+        "kind": "HTTP",
+        "stepId": "step-1",
+        "codes": [
+          "HTTP_JSON_MISSING",
+          "HTTP_JSON_VALUE"
+        ]
+      },
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15156,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.077466,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.403259,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-exponent-mechanic",
+      "status": "FAIL",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_MISSING",
+              "HTTP_JSON_VALUE"
+            ],
+            "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+            "candidateSha256": "5bdf7cce025a16f862ca77d517d4b4e6cabc48bf0922174fc3b7ff86cf6f5ef7"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_LENGTH"
+            ],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "d058ed55579af64d4adbc4fef42bf8e7fcf13cf1de8d2c0dd48eea8efb997c66"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": {
+        "kind": "HTTP",
+        "stepId": "step-1",
+        "codes": [
+          "HTTP_JSON_MISSING",
+          "HTTP_JSON_VALUE"
+        ]
+      },
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 14958,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.0757,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.318415,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-invalid-calendar",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "4202cb19a79e87982062d6b40ab52a924409689e8425da9dd2cff29d6df6a3a5",
+            "candidateSha256": "e4e9d8cef87c1f00401fde1955d2363a3f7427122445c34ae3a9962a7b181793"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "18cacf8436832b75bec98ab7ddae03ad2df0f0b5fbc954f539d30792682df1fd"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15084,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.074258,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.3785229999999,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-past-date",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "444443aeaefb96ff3ecebe8e4960e22afdcd0c10a829847f8795a2aa4b2c34c5",
+            "candidateSha256": "8e3216668b4a4de78bde6808577caf876876caa400c6f4f125b9d681735c5d00"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "2a5f6affee3394f5127335ac592efdbe04cd29f33b530390c69bc2ae2515067a"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15160,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.082127,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.380564,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-missing-mechanic",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+            "candidateSha256": "3206106e6d2ff943f2d00be0e95d0b75697f6939e49a2a7a9fae754c76236792"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "68eacc13f2d794721eb0dced1dbd40b909c8a4cdbf87e5e9592abe9c52815d5f"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        }
+      ],
+      "executedHttp": 2,
+      "executedSqlite": 3,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15248,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.077951,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.297313,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "status": "PASS",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+            "candidateSha256": "6252906f64490e3c0324f6a448ca81aad8972dc9895ea30e4ee8f81744e2c898"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+            "candidateSha256": "ba8b0738631eb0076cead5bdc2d7874fb4477e796c28108f0134083334762f0d"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          }
+        },
+        {
+          "stepId": "step-3",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+            "candidateSha256": "ad11da288eda46a221f392bf1906743c28d52c2d240b5552c80fc05c4739d37b"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-4",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+            "candidateSha256": "0c0e2bad10dc75d230523be74abbe9de14da15329de9de703a301ed2cb69ffc2"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        }
+      ],
+      "executedHttp": 4,
+      "executedSqlite": 5,
+      "firstDifference": null,
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 16724,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.078147,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.408179,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "status": "FAIL",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+            "candidateSha256": "f6606ad6d5714fd5206da493674e130a7bd49d25e133ab8a628b1cd7b26bfbe5"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+            "candidateSha256": "6cf37086241f81cd6488511df8047fc21ccc403a86c9fb68edc4bde626dcd0e4"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+          }
+        },
+        {
+          "stepId": "step-3",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_LENGTH"
+            ],
+            "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+            "candidateSha256": "d25c6db1db697da03e08f64f2b6f7609bd2d1d3b0277b9c947e3dea1df5e4324"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+          }
+        }
+      ],
+      "executedHttp": 3,
+      "executedSqlite": 4,
+      "firstDifference": {
+        "kind": "SQLITE",
+        "stepId": "step-2",
+        "codes": [
+          "DB_STATE"
+        ]
+      },
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15901,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.074436,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.280939,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "status": "FAIL",
+      "bootstrap": "PASS",
+      "g1": "PASS",
+      "initial": {
+        "status": "PASS",
+        "codes": [],
+        "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+        "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "steps": [
+        {
+          "stepId": "step-1",
+          "http": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+            "candidateSha256": "73c56ee49f3517e70dc4582a859d1600232eecfd3fab4f0a3dac8a22224c3a9d"
+          },
+          "db": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+          }
+        },
+        {
+          "stepId": "step-2",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_VALUE"
+            ],
+            "referenceSha256": "f090a24dc702a0d410c9528da4266ea38d4aba0ac6dae087f51de3d1888db412",
+            "candidateSha256": "94a276da522e71345c499ed53cb52124274c8407426fd1e181134206b69b232b"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+          }
+        },
+        {
+          "stepId": "step-3",
+          "http": {
+            "status": "FAIL",
+            "codes": [
+              "HTTP_JSON_VALUE"
+            ],
+            "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+            "candidateSha256": "8919da8001ff67f187a70f0bf961cc120fa2b6db7e8b6ec0af3bef79e325cb1c"
+          },
+          "db": {
+            "status": "FAIL",
+            "codes": [
+              "DB_STATE"
+            ],
+            "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+            "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+          }
+        }
+      ],
+      "executedHttp": 3,
+      "executedSqlite": 4,
+      "firstDifference": {
+        "kind": "HTTP",
+        "stepId": "step-2",
+        "codes": [
+          "HTTP_JSON_VALUE"
+        ]
+      },
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "durationMs": 15816,
+      "referenceRuntime": {
+        "php": "7.4.33",
+        "sqlite": "3.34.1",
+        "fixedUtc": "2026-10-27 12:00:00",
+        "monotonicMs": 50.079001,
+        "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+      },
+      "targetClock": {
+        "fixedUtc": "2026-10-27T12:00:00.000Z",
+        "monotonicDeltaMs": 1201.25416,
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "semantics": {
+          "reference": {
+            "php": "7.4.33",
+            "pcre": "10.35 2020-05-09",
+            "integer": 10,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": false,
+            "engineMatch": false
+          },
+          "candidateLanguage": {
+            "node": "v24.11.0",
+            "integer": 1,
+            "phoneHex": "2b31353535c2a0343430303031",
+            "engineHex": "454e47c2a030343441",
+            "phoneMatch": true,
+            "engineMatch": true
+          },
+          "scope": "FIXED_PUBLIC_OPERATOR_DIAGNOSTICS"
+        }
+      },
+      "closeErrors": [
+        null,
+        null
+      ]
+    }
+  ],
+  "designation": "PUBLIC_INDEPENDENT_REPRO",
+  "headSha": "daf2c9e4799251f898426ecebc4fe79511bce1a8",
+  "casesSha256": "5e3b588003de33d36f37cc2dadc848d0dfebc44fdd2c0a9aaed65e84f240f496",
+  "candidateSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+  "sourceCommit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "normalizationVersion": "oracle-exact-v1",
+  "runtime": {
+    "phpImageId": "sha256:3a81fc939beb2c6228fe4b72e5733218fc6ae486851aac693aed8916b0b8df0a",
+    "phpBaseImage": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "sourceSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "targetImageId": "sha256:5b2b3a76c274551ea6ceb00f310effb95b04fb5bbc2b37c538fea123a9849a5c",
+    "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+    "targetNode": "v24.11.0",
+    "targetSqlite": "3.50.4"
+  },
+  "runtimeExecution": "STARTED",
+  "errorCode": null,
+  "commandFailure": null,
+  "cleanup": {
+    "status": "PASS",
+    "normalCleanup": "PASS",
+    "emergencyRemoved": 0,
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "inventoryScope": "EXACT_JOB_LEDGER"
+  },
+  "durationMs": 240426,
+  "publicEvidence": {
+    "status": "ALLOWLIST_VERIFIED",
+    "records": 76
+  }
+}

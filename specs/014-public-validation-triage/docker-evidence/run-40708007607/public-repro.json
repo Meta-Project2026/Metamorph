@@ -1,0 +1,1643 @@
+{
+  "designation": "PUBLIC_INDEPENDENT_REPRO",
+  "headSha": "daf2c9e4799251f898426ecebc4fe79511bce1a8",
+  "casesSha256": "5e3b588003de33d36f37cc2dadc848d0dfebc44fdd2c0a9aaed65e84f240f496",
+  "projection": "PUBLIC_NUMERIC_IDS_DATES_COUNTS_ONLY_NO_MESSAGES_OR_SEED_IDENTITIES",
+  "records": [
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "cb17388ad62b498b5eebb7d38ac94b0417d2dcc5d6965f25688f0bfc24257d84",
+      "rawCandidateSha256": "e4ffcfc2dfaaafc80f73e21d515e38b0d161ff3b029b032cc87474c725c52d38"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "08b83f7563caf73324ae142f828a6b872b08b55cf5626e1c585a6711e54c65f2",
+      "rawCandidateSha256": "f43bb0383a2f1e76db3cf2a8abb400c4e6fcf02cbbff4379f168b04bcc9f5d1f"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "877c984ad89f912c9e675e257bf5b6659039132a8e795b2c49b1f2b592ea0932",
+      "rawCandidateSha256": "1eb67cd0097d78804188fe6a5a1e06e245707cba531ea5b5417241b332f85130"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "8cad4ef3383087fb8fd134296a1c7fe987e2127d3f3eaea13dcc31323daa0e5c",
+      "rawCandidateSha256": "6571b7a5b21e4496558cd8012e7a8cecf2a3a142218ac0a5e68008c3e0b72333"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-3",
+      "kind": "http",
+      "requestSha256": "2c0a2721ffd7adc873e6560b4257d5bf2224bd71c6c5001a30be7b8fb13b72bf",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "f8f93e0f09290f80db7fc2948f15dc72933ca0f4a0f5435dae907c9788daf908"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "f8f93e0f09290f80db7fc2948f15dc72933ca0f4a0f5435dae907c9788daf908"
+      },
+      "rawReferenceSha256": "612c9397378c2521c5bebf0f18126142a2ab6146f9e9463072bfde29ccb6f82b",
+      "rawCandidateSha256": "87a7a0a913697ad9f25d5003d1a1aec80d0e22dff024a52cc8aea4d84751709b"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-3",
+      "kind": "db",
+      "requestSha256": "2c0a2721ffd7adc873e6560b4257d5bf2224bd71c6c5001a30be7b8fb13b72bf",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "rawReferenceSha256": "bea53cf3a66072a2e50704a3339d9a51bdcd445cf2fb67d7a1cc95810711dd2e",
+      "rawCandidateSha256": "1f501b0147898fe2faba2345501dfb02c4e9979d4934d255a81bf5aaba7e2088"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-4",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "2e1fd31529f43db5612e8d0950514d7c5e1bc792f40ab47895f1a15ba46810bf",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "2e1fd31529f43db5612e8d0950514d7c5e1bc792f40ab47895f1a15ba46810bf",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "35407a10540ee7558f0b6b79d6fdfd5fa3efbecd68956b3f2ba339a9581396b9",
+      "rawCandidateSha256": "4360dbb1050205a86438d12679fb3d01b35219f464a4fb25268ba411066018b8"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-4",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "rawReferenceSha256": "b97db5d265050c86d3b615abebde3966068d3601323c9bb7c0b9266a07fe8ccb",
+      "rawCandidateSha256": "49833accab51789ea1e6c1bc0940b7a4d63d4a7eb2d02bb5d616de81097ac9de"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-5",
+      "kind": "http",
+      "requestSha256": "849e7d17e09837643a96973ee14aa128ff17417cec3fb4585caecc4652180bc3",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "cb442b6a0b0f26a8dbbd4dd51939cdbb1fb982a90416e02ababd1e4237c09319"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "cb442b6a0b0f26a8dbbd4dd51939cdbb1fb982a90416e02ababd1e4237c09319"
+      },
+      "rawReferenceSha256": "bf6d75f55fd32f9f05450d5fe128d949e090b6db5d859042385455d34cc40201",
+      "rawCandidateSha256": "6fa89e7154c77a2cadf6a0665488119d8909375a7b3e21f3a57cfb747a8d4ce3"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-5",
+      "kind": "db",
+      "requestSha256": "849e7d17e09837643a96973ee14aa128ff17417cec3fb4585caecc4652180bc3",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "rawReferenceSha256": "17c693ab4e1f9bd523f070081a4a6872ce4191c90165941d39af8015d0ffaf87",
+      "rawCandidateSha256": "30921577fbc4d528b3a140c31c9e07a8b0d22a6eb69ee6fef870b9c6593dbf7b"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-6",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "aaff71d9f5d273c113ee7a3e46e675ec6dada2636074ff9c6aa0925b8e89bfcf"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-6",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "rawReferenceSha256": "6d5931ae17a34a1d0cbddb57db31c5a2b5a458475f010d74a57010812743aa69",
+      "rawCandidateSha256": "db6e9c94ccfd75f15e5fb6dda664120e4c909374fff5ac6f74a9d0875bac86aa"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-7",
+      "kind": "http",
+      "requestSha256": "f7cccc29855d35b919e1f7534ed55ebdef191850bbe5586216588237d1b09b83",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1196f141d2a02ba4e9acf24bbad215c290305920836f132da4f4f4e1a03bc4ae",
+        "appointmentId": "2"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1196f141d2a02ba4e9acf24bbad215c290305920836f132da4f4f4e1a03bc4ae",
+        "appointmentId": "2"
+      },
+      "rawReferenceSha256": "5639a9b55319b0b7f4868d22f1e4be0fdfa1b389fc08f5a4dbcad95f0e6943e3",
+      "rawCandidateSha256": "1d2eebf142fff67d519bb8d602619a473b8bfc44b7aedd1c8d4e045f3892923a"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-7",
+      "kind": "db",
+      "requestSha256": "f7cccc29855d35b919e1f7534ed55ebdef191850bbe5586216588237d1b09b83",
+      "reference": {
+        "appointments": [
+          {
+            "id": "2",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "2",
+        "fullSnapshotSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "2",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "2",
+        "fullSnapshotSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+      },
+      "rawReferenceSha256": "431aa604d568e88adc176a94519dff6d3aed19947c01de6ce4834a0355dd2b38",
+      "rawCandidateSha256": "2b7ee8d5052aa07e54afd94d584f03cac5a01542c8bf7e3b390d4da7b190a8c8"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-8",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "c1d76211c12d2550a949d84aefdd0c2adf8fa730e53153b58833208d0e187238",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "c1d76211c12d2550a949d84aefdd0c2adf8fa730e53153b58833208d0e187238",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "4efae95f5b65145ac00e6d318b71b75ea174c75648031d78d96c50a4a644afcf",
+      "rawCandidateSha256": "ec1eca43bd519b10270df21f261316c502746925a7b5dc9b5905e2883bb2f45d"
+    },
+    {
+      "scenarioId": "public-good-lifecycle",
+      "stepId": "step-8",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "2",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "2",
+        "fullSnapshotSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "2",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "2",
+        "fullSnapshotSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+      },
+      "rawReferenceSha256": "725ae5ac98532b22fdba48c2685153442317e9214c6cda138b98a89e42b7a147",
+      "rawCandidateSha256": "5ab6cd159c08d8d144734dc64f813dacc6b0f60a1c71c545c97fcdb730b762a6"
+    },
+    {
+      "scenarioId": "public-empty-form",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "ea89e4459a3ac36083f063e0f0cc9ac13af2af8b2879dc175069992ea3877bd4",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "873d3196d2ced05cd04de4789e481aad4ba2936cb7dd0363af3862b7c787d242"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "873d3196d2ced05cd04de4789e481aad4ba2936cb7dd0363af3862b7c787d242"
+      },
+      "rawReferenceSha256": "2f58a6aaa959eac7adb289273da2d7e02d9351fdee77b4c4b2853c792168379e",
+      "rawCandidateSha256": "49b2b6e778bd22a64635710815b20538c13fc632c1ac7a86390cbd788a59a47e"
+    },
+    {
+      "scenarioId": "public-empty-form",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "ea89e4459a3ac36083f063e0f0cc9ac13af2af8b2879dc175069992ea3877bd4",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "f8ce4d8181eace6483a9142aa9aba9a9b68484a77b649ed48468d19664d58723",
+      "rawCandidateSha256": "123cd45ec98e6a16ddd44df13f92de85a0410defebb2dce2cd68b8daa5ffa047"
+    },
+    {
+      "scenarioId": "public-empty-form",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "6252a93d59671c4a76f40a871bb1bdd616eef0c2123dc1f05c0ba351a4956ce4"
+    },
+    {
+      "scenarioId": "public-empty-form",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "a6aebd24b4624e97776c691a0209131c57fbdc7b1d38d403e1b770c74ea5e070",
+      "rawCandidateSha256": "cacf2d691ceba7ea8d307b448fc3eb6b83ef2c29131bc5a1e2da6d00be9091f6"
+    },
+    {
+      "scenarioId": "public-zero-name",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "b63b5c77d3c7fd135b9e4409bd79322aa1d522e40b2500e200b485c365c348a3",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "e6faad10a6427c549cd84da1f669efb46d321cb715c22fc118ed731c6610bf9b"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "e6faad10a6427c549cd84da1f669efb46d321cb715c22fc118ed731c6610bf9b"
+      },
+      "rawReferenceSha256": "c32dcec0fe9b2b53f58b7d6e803605bc942f300cf46239c77ba475b5140b3b01",
+      "rawCandidateSha256": "153a176d33204cf8f057a02374befa829d16ab93f184bddcd24c635006ad8f3f"
+    },
+    {
+      "scenarioId": "public-zero-name",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "b63b5c77d3c7fd135b9e4409bd79322aa1d522e40b2500e200b485c365c348a3",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "ac305ee9fcc58837a0eae62365e4ba1d0da66059a8331fed0224096ba8ff236d",
+      "rawCandidateSha256": "b23440c2d439c0904dffe62eb023ab700949c0a8697d8636b9ed9bfffc061a28"
+    },
+    {
+      "scenarioId": "public-zero-name",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "12d1ff905440d6936c803d4b6a7ee4d2d6c3cde67da12f42ce50a485a106a860"
+    },
+    {
+      "scenarioId": "public-zero-name",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "688b44ef0c8bc3974cc2e150fe34b426b388c072a4b03e6a9f932d6ee641c188",
+      "rawCandidateSha256": "4ba4b848595791f8aeb59f02fdc5c207fec31e123f72179bdec6c9c58b5dcb96"
+    },
+    {
+      "scenarioId": "public-ascii-padding",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "f76bcaed15c98afc290db5f29dc545d213f2d86dc0a487a5520cdd4732434d49",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "cb17388ad62b498b5eebb7d38ac94b0417d2dcc5d6965f25688f0bfc24257d84",
+      "rawCandidateSha256": "b10bab765521069bffbf2621147744df862eaf3b3675e8a02bd2bcb8363dc677"
+    },
+    {
+      "scenarioId": "public-ascii-padding",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "f76bcaed15c98afc290db5f29dc545d213f2d86dc0a487a5520cdd4732434d49",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+      },
+      "rawReferenceSha256": "44c53f878d5642538bb48afa73fd2b248847a8e9a9b4429e45da4471cafe12db",
+      "rawCandidateSha256": "80e7e1d44c8aa3cd0ba758735ae23b563e386897fecba33404ce314f76816520"
+    },
+    {
+      "scenarioId": "public-ascii-padding",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "00429addfc5238b82e3b6895ab7178e8c130d5a066381d797e345bf1c03c5c5e",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "00429addfc5238b82e3b6895ab7178e8c130d5a066381d797e345bf1c03c5c5e",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "dea0bbf2d6c6bc187d1b0976e99d49b4ca2639a2cee9deaa53539b466dcf9b07",
+      "rawCandidateSha256": "940182239975f96e457617c0565f643e34efcf57dfd1f5b3296f5c954595b224"
+    },
+    {
+      "scenarioId": "public-ascii-padding",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+      },
+      "rawReferenceSha256": "6e63aa6db6f56416f9c217bbacd42e7b9c87e52b02905f14fdfd29f5e6f00c1f",
+      "rawCandidateSha256": "645bbfc0b077dc2015509a28991364239070dc58311eca17cca4756e1166ad24"
+    },
+    {
+      "scenarioId": "public-phone-letter",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "e98733ad1488186beeae35aaf185a3cf2a699bd52bf22a07e866e7678356defb",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "45d1f2b9646dcb725207b9a4003dfeebef58ec37593d9557db4779649f61db83"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "45d1f2b9646dcb725207b9a4003dfeebef58ec37593d9557db4779649f61db83"
+      },
+      "rawReferenceSha256": "b6e8ea6665b32eb4d37cc7fe65cf7530716c55a42132f8af8fd8ef30cf36e174",
+      "rawCandidateSha256": "dfacfcc50a7aed5927d8f25612f940832600c303368c916a68d2cc56af01ff45"
+    },
+    {
+      "scenarioId": "public-phone-letter",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "e98733ad1488186beeae35aaf185a3cf2a699bd52bf22a07e866e7678356defb",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "593142f4c8650ad4df907acb625b4d1f599261c4932579b0b024ff6c94b550d1",
+      "rawCandidateSha256": "58d2cc17f5573541f493a5a9302b5c5945d1f9f4094e13b883df9b7ac34095ab"
+    },
+    {
+      "scenarioId": "public-phone-letter",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "9c72b54cfa0fb01ae5e208258f867b0e58ee9a870b2ff39e7d7118e31ab0e82e"
+    },
+    {
+      "scenarioId": "public-phone-letter",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "2ff371255f91edd9a965a980c7408d8e9161c77f3dafba5e0b864b9072563b8a",
+      "rawCandidateSha256": "8dc3650bda61305dcf9bf440fcc4bc56ba1507fbbe2075fc40685b7ec444a14c"
+    },
+    {
+      "scenarioId": "public-engine-nbsp",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "f4625102635e1bc4b6ada5abd553d0e515f370007fe70982b180572e586faae3",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "b34ab8399290f64d718c5161ec31dc11edea6c6a2b00d66b8aa0ed66c4579450"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "0ecf8168cc24367c1e4b06d41f145c86d142de31279e5ce360ead3e5dc6462f8",
+      "rawCandidateSha256": "ccbdb2550244403773a2d2fae9076490d870e7aebb63dd6004d71ee4df2738e9"
+    },
+    {
+      "scenarioId": "public-engine-nbsp",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "f4625102635e1bc4b6ada5abd553d0e515f370007fe70982b180572e586faae3",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "7ed16abc349faa01277cdf4047b96bbe1044d45f4c4d6d9ba9c7085e9b778a6d"
+      },
+      "rawReferenceSha256": "25476d89002aa27c082d2b8ee4b8587e8608fb5bb1e7432c33a3334b4d1adec7",
+      "rawCandidateSha256": "9435a67d49240aec6fddc5b8063cb064e1463132f1df5cd0691dd9ef46798a45"
+    },
+    {
+      "scenarioId": "public-engine-nbsp",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "396e1658384e4b6a54d9759fcf7358560f823a378e55a901560ebc13c20dcba7",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "aca09a115bbb9fbfac2609cf97c62d5c4c234c35f43f33326023e5a88ec6a0b4"
+    },
+    {
+      "scenarioId": "public-engine-nbsp",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "7ed16abc349faa01277cdf4047b96bbe1044d45f4c4d6d9ba9c7085e9b778a6d"
+      },
+      "rawReferenceSha256": "2545b15ad3af5f93db4cdd626b0d8124e68b0adc9d0f2845f78c2708c863e7f9",
+      "rawCandidateSha256": "2cc663fef5d7bd19fcf2b28b5075f345ad94dfb12b40e9e926ffb07742386d6d"
+    },
+    {
+      "scenarioId": "public-phone-nbsp",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "c0b6e30cd3914a9dc6766710e8446757fa8437c8ceaaf31ddeefeec060de21ea",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "45d1f2b9646dcb725207b9a4003dfeebef58ec37593d9557db4779649f61db83"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "b6e8ea6665b32eb4d37cc7fe65cf7530716c55a42132f8af8fd8ef30cf36e174",
+      "rawCandidateSha256": "d7c4424df7b18ffcfbd756cc99e081c1de356ec6938d14c986ad3c68d21b5c71"
+    },
+    {
+      "scenarioId": "public-phone-nbsp",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "c0b6e30cd3914a9dc6766710e8446757fa8437c8ceaaf31ddeefeec060de21ea",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "3c98e26aae3528bf8d1aa5029ff89067249203d10ac95c6fdc2805e9c7f578ac"
+      },
+      "rawReferenceSha256": "63219d1c72e306ffc834874a853523c5c83f5a49b6efd71075baddeddd269d80",
+      "rawCandidateSha256": "43ae37dbb93032c353b17fab651b79434a5be7442f69799e1e142a79f61a1e31"
+    },
+    {
+      "scenarioId": "public-phone-nbsp",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "7b99379986fd77b999f243a0d6fba1dddb05778a1b3b962f6a1e99dc4e59f5cc",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "f5dadc653bf6a3bc9ffbc793e6ca013230a508ffe611e5f028bd05d451c90a81"
+    },
+    {
+      "scenarioId": "public-phone-nbsp",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "3c98e26aae3528bf8d1aa5029ff89067249203d10ac95c6fdc2805e9c7f578ac"
+      },
+      "rawReferenceSha256": "cd872d706043a2610e6a2373f2c4bc9b4265b79725800ca3bed85797251ab94d",
+      "rawCandidateSha256": "7406abc412719f03de7e9232c49e134fdbef53fcfa319ee8b0803ae765387ba3"
+    },
+    {
+      "scenarioId": "public-exponent-mechanic",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "3ba1dc94f39c13f9e66f61a463e3d75e07b7bdba27c83f19b832483f2c72aaba",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "ece94cba3749a6bd6f92272fb8506699436abddb6cb9ee1a8e20ac42b13d2934"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "03b3412a3e6b44bbb65b5645880bcb9f4692a8f42e18e52889739e5ef04ff673",
+      "rawCandidateSha256": "49c42149de0038195b94cb595ecb5e5edf415ce3338e52835a0cc1ce95dc59e9"
+    },
+    {
+      "scenarioId": "public-exponent-mechanic",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "3ba1dc94f39c13f9e66f61a463e3d75e07b7bdba27c83f19b832483f2c72aaba",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "325dfa9d5cf9702acb52a3154f2c7cd27169033a19b1acb0df9d5acecda01550",
+      "rawCandidateSha256": "68641de7b09ea783015b5079c6bec3f46a24c8add413e5c96677970f7258dab6"
+    },
+    {
+      "scenarioId": "public-exponent-mechanic",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "0870726f81cd1a06e4a44d646c718e05fdf769b3903bc8b19f47c41aadf3c479"
+    },
+    {
+      "scenarioId": "public-exponent-mechanic",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "8983d2e8cca36926ebdfbe7cdfe6660e2165c7de6c92f8c9279e747acb353b69",
+      "rawCandidateSha256": "fa42a9899d17b24869e68b448d0c42628fac2953cc558194311e7b476c02d7da"
+    },
+    {
+      "scenarioId": "public-invalid-calendar",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "c738ba06a6f0b10fadbee55fa21afcc4024b335b0797bf6e466c25c4b334ea67",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "2a0136afd8fa21bc65f13f96529032e90ab8a00d74c9249124f0bfe4db8fcf3b"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "2a0136afd8fa21bc65f13f96529032e90ab8a00d74c9249124f0bfe4db8fcf3b"
+      },
+      "rawReferenceSha256": "6403f72f7e5789b5afff602e2141b5a49047c3eb2ff61fceca61605d19a23d80",
+      "rawCandidateSha256": "f5149208727047b6db2324694747c8d548155a8374f30047f9320c6d31c41c78"
+    },
+    {
+      "scenarioId": "public-invalid-calendar",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "c738ba06a6f0b10fadbee55fa21afcc4024b335b0797bf6e466c25c4b334ea67",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "a6ae0aaee605832e057e358b5381464afb7b4e9c939d44815d2dfdc4ef975d72",
+      "rawCandidateSha256": "7ac6d7584cc96299058527250c399bd3fab86e6c8f0093bf08ff8599bc29ce92"
+    },
+    {
+      "scenarioId": "public-invalid-calendar",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "60934e66be09222d709d6c84ef2c5934557c41541854ea2acb30e90a5de1f87d"
+    },
+    {
+      "scenarioId": "public-invalid-calendar",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "8056b5425267505b2850ced2ca74e9bdff9b7c44b14a8418ae18fbc2e5ef603a",
+      "rawCandidateSha256": "b612c8e13ea513c41e3c2264a91bdd19f487277fb19c7b5af26d14db6bd1890e"
+    },
+    {
+      "scenarioId": "public-past-date",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "e4a25e15825cf2ea185c17884a14bf7e35d3e1ef13121fa735ffcb52bb9197df",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "3d40b34c4d431b1a676da2e82853ed90d1496e3e997ef791735f0bb2087aec29"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "3d40b34c4d431b1a676da2e82853ed90d1496e3e997ef791735f0bb2087aec29"
+      },
+      "rawReferenceSha256": "4862b54c7490fa2642dc275f0dfe992c6a7989da314880f79f8d9776882a04bc",
+      "rawCandidateSha256": "1cbafa7068b7aa81976327f2da288e30ce8bb4c26ec367f42d5a88d8460d716e"
+    },
+    {
+      "scenarioId": "public-past-date",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "e4a25e15825cf2ea185c17884a14bf7e35d3e1ef13121fa735ffcb52bb9197df",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "985431ed01ff914bf0ade0b8e0b4458adb8107456dc82a406048be09942ae7a4",
+      "rawCandidateSha256": "fdae20c3fa96866deb76fb59c1208da01c489a379408e08ef020a3fd6f6793ba"
+    },
+    {
+      "scenarioId": "public-past-date",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "73454b0ea4bd3c3d40ea680ce5beaa8bae85564134d95eeb8567ae71555bf664"
+    },
+    {
+      "scenarioId": "public-past-date",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "6d642c3ec4e12ab0d51bf868a528114902c7d68f13ddfbb015eb4f6faa4b4f44",
+      "rawCandidateSha256": "67ddf6e2eb103899118d4ff8117530b3e88064768886f10dd2d4039d001b0e21"
+    },
+    {
+      "scenarioId": "public-missing-mechanic",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "d8b585dc1f61732927b99b42636c08618d9b3bbdf3255fbc67f8f99fbfc29f39",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "ece94cba3749a6bd6f92272fb8506699436abddb6cb9ee1a8e20ac42b13d2934"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "ece94cba3749a6bd6f92272fb8506699436abddb6cb9ee1a8e20ac42b13d2934"
+      },
+      "rawReferenceSha256": "03b3412a3e6b44bbb65b5645880bcb9f4692a8f42e18e52889739e5ef04ff673",
+      "rawCandidateSha256": "e3c728846371a51be5d8fd23f49a9b3af1a46d69fec4ac32ee46c73c2695ffe4"
+    },
+    {
+      "scenarioId": "public-missing-mechanic",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "d8b585dc1f61732927b99b42636c08618d9b3bbdf3255fbc67f8f99fbfc29f39",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "e771bf246dced50d6ce2c66f4794821ee290b8e20b808c7edfaa9740e3f05eaf",
+      "rawCandidateSha256": "f9efa09c8969e843f08e60865d087a0783cf38ec73f9af636c1211fff5ba9b81"
+    },
+    {
+      "scenarioId": "public-missing-mechanic",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "8fb73b7ef1387263af7d7f416fc2f0e199b986e55d9c5622bc5b77075718623e"
+    },
+    {
+      "scenarioId": "public-missing-mechanic",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "8631159a69e6cf4aa23a7327b72d5e1bd74a1fccd6906659740ce40bd4ea4d6a",
+      "rawCandidateSha256": "7ece944f91bbbfdd84791554ebe5881e66a527a79e0a21e5b6fdcbfc57b815a4"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "71e5db2b45a8a804888c94881f4b3d3fd8dedc563ed0dadee00183078d1f6fde",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "45d1f2b9646dcb725207b9a4003dfeebef58ec37593d9557db4779649f61db83"
+      },
+      "candidate": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "45d1f2b9646dcb725207b9a4003dfeebef58ec37593d9557db4779649f61db83"
+      },
+      "rawReferenceSha256": "b6e8ea6665b32eb4d37cc7fe65cf7530716c55a42132f8af8fd8ef30cf36e174",
+      "rawCandidateSha256": "02decf52a6925de1ec83c8d1b8f04a7465e565c261d18ef1143a4949c6547f56"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "71e5db2b45a8a804888c94881f4b3d3fd8dedc563ed0dadee00183078d1f6fde",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "a33fbe6aa9ffb790afd13e6952f72226b18c4a785c9b15e921b21b23510a0bd3",
+      "rawCandidateSha256": "90b6b3e5182a85559fd62ce4371560e3f60391125105c49b0a340917796da413"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "5cfaa5464fe9a95b42054a8b017fbca2bcd260e5c4563b33ccc664885b88daa8",
+      "rawCandidateSha256": "5f31bf671b5d6f70999f6e88bb0dd65e5c24e54d838058cc2be21c3997206125"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": null,
+        "fullSnapshotSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+      },
+      "rawReferenceSha256": "6e57ae9ee8710c62e8c1a37ab364e75e5650347fcccc490af9714a7dfee8604f",
+      "rawCandidateSha256": "131e1ecffb4aa6e61023c36e63e2cb162fc2a178b835c253ef7d86f4260b7a49"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-3",
+      "kind": "http",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "cb17388ad62b498b5eebb7d38ac94b0417d2dcc5d6965f25688f0bfc24257d84",
+      "rawCandidateSha256": "022c0addfa29eb3eed216c7ae89eea53cb959a79d0ae664c302e0bd6d6c33ff5"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-3",
+      "kind": "db",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "a750d2323f344146327b2d5fc97e39a744a14427d1e2ade74974aa81429f83dc",
+      "rawCandidateSha256": "97b1c311dfd38bcf32c6fcf0af8fea9c84267926bbb535ee111b1d6305b02f03"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-4",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "877c984ad89f912c9e675e257bf5b6659039132a8e795b2c49b1f2b592ea0932",
+      "rawCandidateSha256": "fd247b46607326efb88395d29be55426f3f3e133778f4430b22189520656319c"
+    },
+    {
+      "scenarioId": "public-reject-before-insert",
+      "stepId": "step-4",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "69e22975e233ebe38f7789185ba959f3c80212ad3804d17ca1e58b943c410be8",
+      "rawCandidateSha256": "d3a5f5003dfcb1539b364541cdde98e28900c6040b58bc530f59d0324a67896b"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "cb17388ad62b498b5eebb7d38ac94b0417d2dcc5d6965f25688f0bfc24257d84",
+      "rawCandidateSha256": "682d86fd53b62718a523aa7de469be7a39b11d8476b91084178d8ba51472cf6c"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "72d069004ad44757e3eb6132a1982a1eb1ccd09840b9f78ec16a4936f0db2d57",
+      "rawCandidateSha256": "3538f9ebd83f5a259413a6bfdc77964442f19969992030b6bc24bee7d7c94f66"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "d7e057a3b271665c059e262c5a9cc6926e6d45b03c19aa747247cb0f796453d3",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "cb442b6a0b0f26a8dbbd4dd51939cdbb1fb982a90416e02ababd1e4237c09319"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "cb442b6a0b0f26a8dbbd4dd51939cdbb1fb982a90416e02ababd1e4237c09319"
+      },
+      "rawReferenceSha256": "bf6d75f55fd32f9f05450d5fe128d949e090b6db5d859042385455d34cc40201",
+      "rawCandidateSha256": "1d800c814974471bed8bf19c8ba725b9cbd2e7ee3cd7abf01d0c381cd8c5b528"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "d7e057a3b271665c059e262c5a9cc6926e6d45b03c19aa747247cb0f796453d3",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "rawReferenceSha256": "f1085329d17f45f5d7903a54c3365124e2996b72ce9c23a68fe3d1c688caf4a3",
+      "rawCandidateSha256": "e178f2e9a4f050e047aa624041d3041fa239f6ea14e3c867fcfb46e2b37a8e30"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-3",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "5d3c0cce98365a9fb328aa9d81ea565de95efeefcfafe2af4bb5f307959fb5a9",
+        "appointmentCount": 0
+      },
+      "rawReferenceSha256": "877c984ad89f912c9e675e257bf5b6659039132a8e795b2c49b1f2b592ea0932",
+      "rawCandidateSha256": "bfa272a1de052a2f29999db35717cd3c18857a32c4e5021dce2290c7e0621d69"
+    },
+    {
+      "scenarioId": "public-exponent-cancel",
+      "stepId": "step-3",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+      },
+      "rawReferenceSha256": "d8d39b597e2ce0424ccf51845027d99ba14cae1c29395e0dbd48060fe5e1e9e3",
+      "rawCandidateSha256": "959356e318a001c731ae3f59c8e69cb9e290d4a7342220501b16830b55baaad5"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-1",
+      "kind": "http",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "e4bd0e87ae3b67231b8fd4fa5e9b5910bdbd6d079465eb40601a7263c8b59e4a",
+        "appointmentId": "1"
+      },
+      "rawReferenceSha256": "cb17388ad62b498b5eebb7d38ac94b0417d2dcc5d6965f25688f0bfc24257d84",
+      "rawCandidateSha256": "c45d36899797e3ba4fa3a9984fb58355213303bea0ba537f31516240d6d4858c"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-1",
+      "kind": "db",
+      "requestSha256": "d30a395ef3effe36878c34b0297d7ee84e873c01e6e4e2be98a252914fc7c686",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "rawReferenceSha256": "2c3044381a36ea207732b29669b17b4c5de10694d235d9cd372ab70f0d1c4130",
+      "rawCandidateSha256": "5b2e793f7f59870c1285ea70cd750bdf25fafdda195604bfed4e03a468d026a7"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-2",
+      "kind": "http",
+      "requestSha256": "b966f2152181d203f691b2ff00eef6bb6fa4feecd877fba298989b8d262b62ff",
+      "reference": {
+        "status": 200,
+        "success": false,
+        "bodySha256": "b911c1c9d9f0a6f73cd281599fdd3e3c735c20f95165c4757863a87795070363"
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "f8f93e0f09290f80db7fc2948f15dc72933ca0f4a0f5435dae907c9788daf908"
+      },
+      "rawReferenceSha256": "e5cbf81f7950de923641f45a8ffc407ebc3bdc650fdb7476185e160e5418178c",
+      "rawCandidateSha256": "dc7b8c693e6df5791800e517f45816c639cdb7b4770acc5855635717b1640316"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-2",
+      "kind": "db",
+      "requestSha256": "b966f2152181d203f691b2ff00eef6bb6fa4feecd877fba298989b8d262b62ff",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "rawReferenceSha256": "c4ead229d16df385b6fff5323c83a7728b9816747b0b6effefddac22f6c8c49c",
+      "rawCandidateSha256": "7199a3cb6babaade963259c7c571b8959fafd5bfa4b0c7ba842f5e920f854d33"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-3",
+      "kind": "http",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "1dadf519905304d68dc403cf6c97250d70af4c0761c44ceddeea98e737a18bb0",
+        "appointmentCount": 1
+      },
+      "candidate": {
+        "status": 200,
+        "success": true,
+        "bodySha256": "2e1fd31529f43db5612e8d0950514d7c5e1bc792f40ab47895f1a15ba46810bf",
+        "appointmentCount": 1
+      },
+      "rawReferenceSha256": "877c984ad89f912c9e675e257bf5b6659039132a8e795b2c49b1f2b592ea0932",
+      "rawCandidateSha256": "ffff42dcee2fdee3bf3082fb5223ad86b44236af01d3779bc8b9fed93610ae20"
+    },
+    {
+      "scenarioId": "public-exponent-update",
+      "stepId": "step-3",
+      "kind": "db",
+      "requestSha256": "899438e9e00a7f0d0c9c54a4d81b535284deb8d535ee800c4d513f53c072aabe",
+      "reference": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "1",
+            "date": "2099-08-18"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+      },
+      "candidate": {
+        "appointments": [
+          {
+            "id": "1",
+            "mechanicId": "2",
+            "date": "2099-08-19"
+          }
+        ],
+        "appointmentSequence": "1",
+        "fullSnapshotSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+      },
+      "rawReferenceSha256": "e463fc5157ad648105a6e3802bd0f60a02ad11b2330d7490d89414d352aa916e",
+      "rawCandidateSha256": "709c3c5aee4a88352edfbd45ee3f946ad2d97013766e5952fa924f434cfc5eb3"
+    }
+  ]
+}

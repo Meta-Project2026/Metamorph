@@ -14,6 +14,7 @@ const files = [
   "finalize.mjs",
   "public-evidence.mjs",
   "run-public.mjs",
+  "verify-public.mjs",
 ];
 for (const name of files) {
   const path = join(root, "research/mmp-044", name);

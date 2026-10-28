@@ -1,0 +1,150 @@
+{
+  "designation": "PUBLIC_INDEPENDENT_REPRO",
+  "allZipDigestsIndependentlyVerified": true,
+  "runs": [
+    {
+      "runId": 40705634442,
+      "jobId": 122876872880,
+      "headSha": "6c7a5a8a65b93d458567c026c0a9269af2c5db05",
+      "jobConclusion": "failure",
+      "artifactId": 12823522048,
+      "zipSha256": "6669a0eebdb71e8c2b7fb1a1697a5b519754d51bbef699b89f053a41fe8b79b7",
+      "files": {
+        "finalizer.json": "85d18fa3139e6a0dcd91165f9f567de0c169f1e3fe241273278f37144cfc0caf",
+        "summary.json": "a1ebd9acc4a6ff82ed36252728878c9ca60bce7acc0278630b5421baca80a9d5"
+      },
+      "harness": "ERROR",
+      "parity": "INCONCLUSIVE",
+      "coverage": {
+        "plannedPairs": 14,
+        "plannedHttp": 38,
+        "plannedSqlite": 52,
+        "completedPairs": 0,
+        "http": 0,
+        "sqlite": 0
+      },
+      "finalizer": "ERROR",
+      "firstError": null
+    },
+    {
+      "runId": 40706258372,
+      "jobId": 122879097747,
+      "headSha": "238058f83a31480290addf93df0e3db5c306e68e",
+      "jobConclusion": "failure",
+      "artifactId": 12824057638,
+      "zipSha256": "fe86f2ddd0cd78075a02811f8a56d8fec1a5faadc3637ee2b52bc9f08953153b",
+      "files": {
+        "finalizer.json": "602c0ed7f34943d05c3a8c838db487519d907b79ded5205a11329c00df58808d",
+        "summary.json": "6c882781ce6720575928b5db817ede90e62faa3a8895bb651fecb7f5b9c9c27b"
+      },
+      "harness": "ERROR",
+      "parity": "INCONCLUSIVE",
+      "coverage": {
+        "completedPairs": 0,
+        "http": 0,
+        "sqlite": 0,
+        "counts": "NO_COMPLETION_RECEIPT"
+      },
+      "finalizer": "PASS",
+      "firstError": "DRIVER_NOT_COMPLETED"
+    },
+    {
+      "runId": 40706654187,
+      "jobId": 122880488845,
+      "headSha": "36f5a4c2817f681da44ab3c7d7bef141b651a963",
+      "jobConclusion": "failure",
+      "artifactId": 12823499066,
+      "zipSha256": "ea9e67a53929179e4d74b11a099f734e636afc047d0686bf8a83406c81b5f3dc",
+      "files": {
+        "finalizer.json": "4c79a9d883666d473cbf32c66172ce270cc7a55d0ca622b840ed2c40334b16d1",
+        "summary.json": "6813a788598daf49d8452914dbfbcaf673b18256e6298045692dee2ac6981e52"
+      },
+      "harness": "ERROR",
+      "parity": "INCONCLUSIVE",
+      "coverage": {
+        "plannedPairs": 14,
+        "plannedHttp": 38,
+        "plannedSqlite": 52,
+        "completedPairs": 0,
+        "http": 0,
+        "sqlite": 0
+      },
+      "finalizer": "ERROR",
+      "firstError": "WORKER_NOT_READY"
+    },
+    {
+      "runId": 40707314674,
+      "jobId": 122882809552,
+      "headSha": "05e7599a3fedff627eac4ab416dfcdcc26c220a3",
+      "jobConclusion": "success",
+      "artifactId": 12823279246,
+      "zipSha256": "af6f68e997242032e4d25f796cb62ff049ef562bbde65d2e398c8123e0eaf92c",
+      "files": {
+        "finalizer.json": "509e2508df1cd7082117beaf2dc4a38318523d1b566be8eaeb8a5adfd6899ec0",
+        "summary.json": "6f6c8675aabb10ff6775578943ccba40bb7e857a381b9235c77bb694cd51d5e0"
+      },
+      "harness": "SUCCESS",
+      "parity": "FAIL",
+      "coverage": {
+        "plannedPairs": 14,
+        "plannedHttp": 38,
+        "plannedSqlite": 52,
+        "completedPairs": 14,
+        "http": 38,
+        "sqlite": 52
+      },
+      "finalizer": "PASS",
+      "firstError": null
+    },
+    {
+      "runId": 40708007607,
+      "jobId": 122885277458,
+      "headSha": "daf2c9e4799251f898426ecebc4fe79511bce1a8",
+      "jobConclusion": "success",
+      "artifactId": 12825341402,
+      "zipSha256": "c1706e3aea3e7c5be23f24c414ccb020208152337fc34129e59e03f6a26d101b",
+      "files": {
+        "finalizer.json": "4487b167950930e07d4d35c76eb1a9456469cd8361cd0ce57490ef99d7fa273e",
+        "public-repro.json": "056c35c69453639750fc075cca2725c6c0b05fe0d5aa50155c8ab844df0e0897",
+        "summary.json": "e191a5a1bb959a65b9b51f75958dde1203455c99810a0f7000dd3c0265bc1915"
+      },
+      "harness": "SUCCESS",
+      "parity": "FAIL",
+      "coverage": {
+        "plannedPairs": 14,
+        "plannedHttp": 38,
+        "plannedSqlite": 52,
+        "completedPairs": 14,
+        "http": 38,
+        "sqlite": 52
+      },
+      "finalizer": "PASS",
+      "firstError": null
+    },
+    {
+      "runId": 40708487948,
+      "jobId": 122887959454,
+      "headSha": "5efce039179dfa46e8878b748bafa86fff11158a",
+      "jobConclusion": "success",
+      "artifactId": 12825241624,
+      "zipSha256": "5dd8bd994aa56e77bc39961077aea9d07594af11a267133761a88a1a11f62152",
+      "files": {
+        "finalizer.json": "8471611f3eae9d3518a354d510802ee928626799be4243d150c70e8265da7987",
+        "public-repro.json": "8d2f59ca3ee76dd496afef921edd96ed520c91fd17f7a9facd7f6c23422fea17",
+        "summary.json": "eaf19b6bc7a25c9339145fe2a21a8e104b29480aef4b98794bb7dc9fc6ceaea9"
+      },
+      "harness": "SUCCESS",
+      "parity": "FAIL",
+      "coverage": {
+        "plannedPairs": 14,
+        "plannedHttp": 38,
+        "plannedSqlite": 52,
+        "completedPairs": 14,
+        "http": 38,
+        "sqlite": 52
+      },
+      "finalizer": "PASS",
+      "firstError": null
+    }
+  ]
+}

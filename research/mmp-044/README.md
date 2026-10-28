@@ -69,3 +69,16 @@ gh workflow run mmp044-public-docker.yml --repo Meta-Project2026/Metamorph --ref
 No self-merge or direct push to main is part of delivery. A green Fast CI job is
 technical validation only. See the separate execution report for actual checks,
 dispatch state and exact counts.
+
+Actual selected proof: [run 40708487948](https://github.com/Meta-Project2026/Metamorph/actions/runs/40708487948),
+code `5efce039179dfa46e8878b748bafa86fff11158a`: 14/38/52 completed,
+9 scenario PASS / 5 FAIL, controls and cleanup PASS. The subsequent executor
+[classification](../../specs/014-public-validation-triage/classification.public.json)
+is CANDIDATE_BEHAVIOR_CONFIRMED on public evidence only. Runtime summaries retain
+their original deferred classification. External independent review is pending.
+
+Verify the preserved allowlisted artifact offline (no Docker/app execution):
+
+```sh
+node research/mmp-044/verify-public.mjs specs/014-public-validation-triage/docker-evidence/run-40708487948 5efce039179dfa46e8878b748bafa86fff11158a
+```

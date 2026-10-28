@@ -1,0 +1,27 @@
+{
+  "headSha": "238058f83a31480290addf93df0e3db5c306e68e",
+  "classification": "NOT_ESTABLISHED",
+  "harness": "ERROR",
+  "runtimeExecution": "DOCKER_NOT_RUN_OR_INTERRUPTED",
+  "errorCode": "DRIVER_NOT_COMPLETED",
+  "coverage": {
+    "completedPairs": 0,
+    "http": 0,
+    "sqlite": 0,
+    "counts": "NO_COMPLETION_RECEIPT"
+  },
+  "parity": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "G4": "INCONCLUSIVE",
+  "cleanup": {
+    "status": "PASS",
+    "normalCleanup": "PASS",
+    "emergencyRemoved": 0,
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "inventoryScope": "EXACT_JOB_LEDGER",
+    "headSha": "238058f83a31480290addf93df0e3db5c306e68e"
+  }
+}

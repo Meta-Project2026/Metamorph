@@ -1,0 +1,33 @@
+{
+  "version": "mmp044-public-classification-v1",
+  "classification": "CANDIDATE_BEHAVIOR_CONFIRMED",
+  "scope": "FIXED_PUBLIC_INDEPENDENT_REPRO_ONLY",
+  "classificationAuthor": "executor; independent external review pending",
+  "runtimeSummaryClassification": "NOT_ESTABLISHED; unchanged deferred-review receipt",
+  "baseSha": "aea0c5d97e3b1be44be82b8e11dc499e54ef782b",
+  "codeSha": "5efce039179dfa46e8878b748bafa86fff11158a",
+  "runId": 40708487948,
+  "jobId": 122887959454,
+  "artifactId": 12825241624,
+  "artifactZipSha256": "5dd8bd994aa56e77bc39961077aea9d07594af11a267133761a88a1a11f62152",
+  "summarySha256": "eaf19b6bc7a25c9339145fe2a21a8e104b29480aef4b98794bb7dc9fc6ceaea9",
+  "finalizerSha256": "8471611f3eae9d3518a354d510802ee928626799be4243d150c70e8265da7987",
+  "publicReproSha256": "8d2f59ca3ee76dd496afef921edd96ed520c91fd17f7a9facd7f6c23422fea17",
+  "coverage": { "pairs": 14, "http": 38, "sqlite": 52, "publicRecords": 76 },
+  "scenarios": { "PASS": 9, "FAIL": 5, "ERROR": 0, "NOT_RUN": 0 },
+  "controls": { "positive": "PASS", "negative": "PASS" },
+  "cleanup": { "status": "PASS", "containers": 0, "volumes": 0, "emergencyRemoved": 0 },
+  "measuredPublicRules": [
+    { "rule": "Interior UTF-8 NBSP in original phone/engine regexes", "php74Pcre": false, "ecmascript": true, "cases": ["public-phone-nbsp", "public-engine-nbsp"] },
+    { "rule": "Integer conversion of numeric string 1e1", "php74IntegerCast": 10, "candidateParseIntBase10": 1, "cases": ["public-exponent-mechanic", "public-exponent-cancel", "public-exponent-update"] }
+  ],
+  "repeatRunId": 40708007607,
+  "repeatPublicPayloadsMatched": 76,
+  "evaluatorErrorEstablished": false,
+  "privateAudit": "UNCHANGED; causal relationship NOT_ESTABLISHED",
+  "gates": { "G0": "INCONCLUSIVE", "publicG1": "PASS", "publicG2": "FAIL", "publicG3": "FAIL", "canonicalG4": "INCONCLUSIVE" },
+  "product": "NOT_ESTABLISHED",
+  "candidateFixProposal": "https://github.com/Meta-Project2026/Metamorph/issues/49",
+  "independentExternalReview": "PENDING",
+  "ownerApproval": "NOT_CLAIMED"
+}
