@@ -1,0 +1,39 @@
+{
+  "headSha": "5cd0e838d25486d9f16f63ebb86450bcd2686404",
+  "status": "PASS",
+  "stages": [
+    {
+      "name": "probe",
+      "status": "PASS",
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "inventoryScope": "EXACT_JOB_LEDGER"
+    },
+    {
+      "name": "proof",
+      "status": "PASS",
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "inventoryScope": "EXACT_JOB_LEDGER"
+    },
+    {
+      "name": "agent",
+      "status": "PASS",
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "inventoryScope": "EXACT_JOB_LEDGER"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "format": "mmp049-public-evidence-index-v1",
+  "selectedRunId": 40720986007,
+  "privateAudit": "UNCHANGED; NOT_ACCESSED",
+  "runs": [
+    {
+      "directory": "probe-40716984152",
+      "runId": 40716984152,
+      "jobId": 122917246413,
+      "artifactId": 12829191356,
+      "codeSha": "d7af19b9ddb17ad04e65177828bc2d4b137a1e80",
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40716984152",
+      "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40716984152/job/122917246413",
+      "artifactUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40716984152/artifacts/12829191356",
+      "artifactZipSha256": "de0a5ab8dbe7ab3c3534c7fc04ad9f297c1f51e2c008e056d38f0a5d37272989",
+      "files": {
+        "finalizer.json": "4d98d4b2b5d3f63fa66d223fe6bdd6797be70aaa339ca4852d73763d5c736484",
+        "semantics.json": "624605d0c452d39c342f05177a01992240aba18aa83034e99169bf15f2a38b7d"
+      },
+      "result": "PUBLIC_OPERATOR_MEASUREMENT_PASS"
+    },
+    {
+      "directory": "run-40718137721",
+      "runId": 40718137721,
+      "jobId": 122921331617,
+      "artifactId": 12830167367,
+      "codeSha": "bf33a02c4c60c9e530c0a8bc43d85a668d2e2e76",
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40718137721",
+      "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40718137721/job/122921331617",
+      "artifactUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40718137721/artifacts/12830167367",
+      "artifactZipSha256": "c796eb640ef6bb1be93b43b01c08b5ba1ea5537c05807f3da33fa760bbbb902e",
+      "files": {
+        "finalizer.json": "ff82fc12df04b3ebcf9a52b99f8949aa77b49069b7973fea7fa16002de3b7b97",
+        "semantics.json": "c93abca8e8a7f29d31499d728e1a2cf06c92101ff0013599e9a32fdc7a4d8283",
+        "summary.json": "b5a7f0ce75148c213b706b5b156faa0e30fbc35949fb4a52e2ea99b54561f198"
+      },
+      "result": "V1_PUBLIC_PARITY_PASS; AGENT_NOT_RUN"
+    },
+    {
+      "directory": "run-40719023326",
+      "runId": 40719023326,
+      "jobId": 122927509939,
+      "artifactId": 12830356059,
+      "codeSha": "5cd0e838d25486d9f16f63ebb86450bcd2686404",
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40719023326",
+      "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40719023326/job/122927509939",
+      "artifactUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40719023326/artifacts/12830356059",
+      "artifactZipSha256": "f01c0270a49df2895393a6e03a775de098ab4dc3237d4b46c36aa43092f155a9",
+      "files": {
+        "finalizer.json": "d02dc98605da06014ce6c62863f80b2af7c4de644f6494b34e641901c6d3dbca",
+        "semantics.json": "405dec6ad7a7734fe2aaaa0e1dc1675dbb655cd264d4ec9f8b25e421c7154411",
+        "summary.json": "cd0e25b5d53b7c8fb415326e1122cfb5c6faf2fe3614fedc7a08ebb40d126c1a"
+      },
+      "result": "ERROR_BUILD_FAILED; CAUSE_NOT_ESTABLISHED; AGENT_NOT_RUN"
+    },
+    {
+      "directory": "run-40720986007",
+      "runId": 40720986007,
+      "jobId": 122931495864,
+      "artifactId": 12831632788,
+      "codeSha": "cf33c5bbcaad524a99c667782fae5cb9b0b4125f",
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40720986007",
+      "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40720986007/job/122931495864",
+      "artifactUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40720986007/artifacts/12831632788",
+      "artifactZipSha256": "9a71d2ba8c7cc70c386e2b43ee2f4258705a0a4857c175b222bae2bde0ff83c6",
+      "files": {
+        "semantics.json": "08787350b1b9957871bf8cb682675d89f1d3316b2e9d340ba82e07bd5550f933",
+        "summary.json": "0b2e61eaf10032d0bcdf068caa29c7e0224812378b9c754aef8556a0174c786e",
+        "agent.json": "f5b693ed94574b0b7b91264219cb2e2fbaa0602205e26b6eb95c92560f215dc1",
+        "finalizer.json": "8fda0e25b1863121ec22dfe982e2208fd0f9ebf2b2ad78d3a51ed44d96193802"
+      },
+      "result": "PASS_SCOPED; PUBLIC_PARITY_PASS; OFFLINE_REPAIR_PASS; G0/G4_INCONCLUSIVE"
+    }
+  ]
+}

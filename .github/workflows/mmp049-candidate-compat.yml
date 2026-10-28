@@ -1,0 +1,61 @@
+name: MMP-049 candidate compatibility
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mmp049-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      MMP049_HEAD_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set output and private directories
+        run: |
+          test "$(git rev-parse HEAD)" = "$MMP049_HEAD_SHA"
+          echo "MMP049_PROBE_PARENT=$RUNNER_TEMP/mmp049-probe" >> "$GITHUB_ENV"
+          echo "MMP049_PROOF_PARENT=$RUNNER_TEMP/mmp049-proof" >> "$GITHUB_ENV"
+          echo "MMP049_AGENT_PARENT=$RUNNER_TEMP/mmp049-agent" >> "$GITHUB_ENV"
+          echo "MMP049_OUTPUT=$RUNNER_TEMP/mmp049-public" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Public host driver boundary checks
+        run: |
+          node research/mmp-049/check.mjs
+          node --test research/mmp-049/driver.test.mjs
+      - name: Measure pinned public language boundaries in isolation
+        run: node research/mmp-049/probe.mjs
+      - name: Real corrected candidate compatibility proof
+        run: node research/mmp-049/run-proof.mjs
+      - name: Corrected offline Agent fail and repair through unchanged MMP-010A
+        run: node research/mmp-049/run-agent.mjs
+      - name: Independent stage finalizers
+        if: always()
+        run: node research/mmp-049/finalize.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mmp049-public
+          path: |
+            ${{ env.MMP049_OUTPUT }}/semantics.json
+            ${{ env.MMP049_OUTPUT }}/summary.json
+            ${{ env.MMP049_OUTPUT }}/agent.json
+            ${{ env.MMP049_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
