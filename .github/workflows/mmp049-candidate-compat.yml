@@ -27,6 +27,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$MMP049_HEAD_SHA"
           echo "MMP049_PROBE_PARENT=$RUNNER_TEMP/mmp049-probe" >> "$GITHUB_ENV"
           echo "MMP049_PROOF_PARENT=$RUNNER_TEMP/mmp049-proof" >> "$GITHUB_ENV"
+          echo "MMP049_AGENT_PARENT=$RUNNER_TEMP/mmp049-agent" >> "$GITHUB_ENV"
           echo "MMP049_OUTPUT=$RUNNER_TEMP/mmp049-public" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v4
         with:
@@ -42,6 +43,8 @@ jobs:
         run: node research/mmp-049/probe.mjs
       - name: Real corrected candidate compatibility proof
         run: node research/mmp-049/run-proof.mjs
+      - name: Corrected offline Agent fail and repair through unchanged MMP-010A
+        run: node research/mmp-049/run-agent.mjs
       - name: Independent stage finalizers
         if: always()
         run: node research/mmp-049/finalize.mjs
@@ -52,6 +55,7 @@ jobs:
           path: |
             ${{ env.MMP049_OUTPUT }}/semantics.json
             ${{ env.MMP049_OUTPUT }}/summary.json
+            ${{ env.MMP049_OUTPUT }}/agent.json
             ${{ env.MMP049_OUTPUT }}/finalizer.json
           if-no-files-found: error
           retention-days: 7

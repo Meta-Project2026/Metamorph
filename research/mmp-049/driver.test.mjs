@@ -11,12 +11,74 @@ import {
 import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
 import { root, verifyPins } from "../mmp-044/config.mjs";
 import { blankCase } from "../mmp-044/driver.mjs";
+import { correctedReplay } from "./replay.mjs";
 import { regressions } from "./scenarios.mjs";
 import { validateGroup } from "./validation.mjs";
 
 const metadata = JSON.parse(
   readFileSync(join(root, "specs/016-candidate-compat/candidate.json")),
 );
+test("explicit corrected replay emits the original public defect then exactly restores the pinned new source", async () => {
+  const bundle = await admitDirectory(
+    join(root, metadata.path),
+    metadata.candidateSha256,
+  );
+  const provider = correctedReplay(bundle);
+  const signal = new AbortController().signal;
+  const broken = await provider.generate(
+    { unitId: "workshop", attempt: 1, action: "generate" },
+    signal,
+  );
+  const repaired = await provider.generate(
+    { unitId: "workshop", attempt: 2, action: "repair" },
+    signal,
+  );
+  assert.equal(provider.billing, "synthetic");
+  assert.equal(provider.maxRequestCostUsd, 0);
+  assert.deepEqual(
+    repaired.changes,
+    bundle.files.map(({ path, content }) => ({ path, content })),
+  );
+  assert.equal(
+    broken.changes.filter((f, i) => f.content !== repaired.changes[i].content)
+      .length,
+    1,
+  );
+  assert.ok(
+    broken.changes
+      .find((f) => f.path === "src/main.ts")
+      .content.includes(
+        "// Original public negative control: cancellation is a no-op.",
+      ),
+  );
+  await assert.rejects(
+    provider.generate(
+      { unitId: "workshop", attempt: 3, action: "repair" },
+      signal,
+    ),
+  );
+});
+test("corrected replay rejects cancellation and wrong unit before returning source", async () => {
+  const bundle = await admitDirectory(
+    join(root, metadata.path),
+    metadata.candidateSha256,
+  );
+  const provider = correctedReplay(bundle);
+  const controller = new AbortController();
+  controller.abort();
+  await assert.rejects(
+    provider.generate(
+      { unitId: "workshop", attempt: 1, action: "generate" },
+      controller.signal,
+    ),
+  );
+  await assert.rejects(
+    provider.generate(
+      { unitId: "unrelated", attempt: 1, action: "generate" },
+      new AbortController().signal,
+    ),
+  );
+});
 test("new candidate is separately admitted; immutable baseline, notices and trusted pins remain intact", async () => {
   const { pins } = verifyPins({ strictCheckout: process.platform === "linux" });
   const original = await admitDirectory(
