@@ -92,6 +92,11 @@ owner/link/size/mtime/ctime checks protect reads. Source, nonce, audit and two s
 roots must be disjoint. Restoration uses a fresh private staged directory in a
 disjoint destination and publishes after complete verification.
 
+Source preflight first freezes bounded nonblocking regular-file reads, then
+validates the unchanged v1 index against those buffers. It never invokes the
+legacy blocking verifier on an unvalidated source path (including a FIFO). The
+unchanged PrivateEvidence writer and restored-pack verifier are retained.
+
 New versions reserve directories exclusively. Files use O_EXCL staging, fsync,
 link NOREPLACE publication, unlink staging and directory fsync. A final ready
 marker commits the exact storage receipt. Missing/extra/staged files fail reads;
@@ -109,12 +114,23 @@ human/admin/failure domain. The synthetic APIs refuse REAL deployment rather tha
 claim that these assumptions authenticate physical custody. Candidate uid 65534
 denial tests exercise OS access, not containment of hostile root or runtime escape.
 
+Cooperating journal mutation and physical deletion share an exclusive 0600 lock.
+Stale writers fail, and an abandoned crash lock fails closed until separately
+witnessed recovery; there is no silent lock removal or timeout override. This
+serializes application operations, not a privileged administrator outside it.
+
 ## Calendar and deletion
 
 Deadlines are UTC calendar days at the terminal receipt's UTC time: minimum +180,
-independent full restore +90. A bundle including older attempts uses the latest
-terminal receipt, extending their retention. Holds extend indefinitely. Immediate
-post-teardown restore is separately required; it does not mark day90 complete.
+independent full restore +90. Expiry uses the latest included terminal receipt,
+extending older attempts' retention; day90 uses the earliest included deadline.
+DAY90 eligibility starts on each attempt's day89 and ends at its day90 deadline.
+A bundle uses the intersection of those windows, so receipt spans greater than
+one UTC day are rejected and require separately retained bounded bundles indexed
+by #56. This operational eligibility window does not change the owner-reported
+180-day/day90 durations and must be reviewed before any real admission. Holds
+extend indefinitely. Immediate post-teardown restore is separately required;
+an immediately relabeled DAY90 receipt is rejected and cannot retire future tasks.
 Fake time is passed only in synthetic unit tests; the reader CLI uses real time.
 Day90 tasks are pullable by an external operator/scheduler; no background daemon.
 Missing/late/one-copy checks create a sticky incident and block deletion/acceptance.
@@ -122,8 +138,12 @@ Clock rollback also records a sticky incident. No local-clock tamper-proof claim
 
 Expiry is not deletion authorization. Both pinned owner keys sign the exact
 witness/storage identity and time, with a separate current no-hold reviewer receipt.
-The store independently checks its configured authority and 180-day bound; a magic
-string or caller boolean cannot authorize deletion. Both copy witnesses, escrow
+The store checks configured authority, 180-day bound and a current checkpoint-bound
+deletion plan against the live ledger's policy, holds, incidents and day90 receipts.
+The exclusive journal lock remains held through physical unlink. ANY intervening
+journal event invalidates the old plan, including a hold added by another process;
+old owner/reviewer signatures alone cannot bypass that state. A magic string or
+caller boolean cannot authorize deletion. Both copy witnesses, escrow
 and snapshots must then attest the exact plan through pinned keys; otherwise
 DELETION_UNVERIFIED. Local ciphertext removal retains version receipts/tombstones;
 it does not prove secure physical erasure, destruction of RSA escrow keys or

@@ -5,6 +5,8 @@ import {
   admission,
   bytes,
   check,
+  DAY,
+  DAY90_WINDOW_START,
   equal,
   id,
   opaque,
@@ -226,6 +228,13 @@ export function restore({
       witness,
       trust.witnessPublicKey,
       trust.witnessSha256,
+    );
+    check(
+      purpose !== "DAY90" ||
+        timestamp(now) >=
+          timestamp(frozen.catalog.identity.terminalReceiptAt) +
+            DAY90_WINDOW_START * DAY,
+      "DAY90_WINDOW",
     );
     const storage = authenticated(
       storageWitness,

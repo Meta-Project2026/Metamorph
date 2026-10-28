@@ -1,5 +1,14 @@
-import { check, DAY, digest, equal, id, timestamp } from "./core.mjs";
+import {
+  check,
+  DAY,
+  DAY90_WINDOW_START,
+  digest,
+  equal,
+  id,
+  timestamp,
+} from "./core.mjs";
 import { authenticated, keyId, verifyCatalogWitness } from "./crypto.mjs";
+import { planBody } from "./deletion.mjs";
 import { Journal } from "./journal.mjs";
 
 /** UTC calendar deadlines. The caller of the synthetic simulation can pass a
@@ -59,7 +68,12 @@ export class RetentionLedger {
       "STORAGE_COVERAGE",
     );
     this.terminal = timestamp(this.identity.terminalReceiptAt);
-    this.due = this.terminal + 90 * DAY;
+    this.due =
+      Math.min(
+        ...frozen.catalog.attempts.map((a) => timestamp(a.terminalReceiptAt)),
+      ) +
+      90 * DAY;
+    this.windowStart = this.terminal + DAY90_WINDOW_START * DAY;
     this.expiry = this.terminal + 180 * DAY;
     this.journal = new Journal(
       journalRoot,
@@ -72,6 +86,7 @@ export class RetentionLedger {
       terminalReceiptAt: this.identity.terminalReceiptAt,
       minimumRetainUntil: new Date(this.expiry).toISOString(),
       day90DueAt: new Date(this.due).toISOString(),
+      day90WindowOpensAt: new Date(this.windowStart).toISOString(),
     };
     if (!this.journal.rows.length) {
       check(timestamp(now) >= this.terminal, "TIME");
@@ -96,7 +111,11 @@ export class RetentionLedger {
       if (p.type === "GRANT_REVOKED") revoked.add(p.grantId);
       if (p.type === "RESTORE_RECEIPT") {
         if (p.purpose === "IMMEDIATE") immediate.add(p.domainId);
-        if (p.purpose === "DAY90" && timestamp(p.restoredAt) <= this.due)
+        if (
+          p.purpose === "DAY90" &&
+          timestamp(p.restoredAt) >= this.windowStart &&
+          timestamp(p.restoredAt) <= this.due
+        )
           day90.add(p.domainId);
       }
     }
@@ -138,6 +157,7 @@ export class RetentionLedger {
         domainId,
         witnessRef: this.identity.witnessRef,
         dueAt: status.day90DueAt,
+        notBefore: new Date(this.windowStart).toISOString(),
         status: timestamp(now) > this.due ? "OVERDUE_NOT_VERIFIED" : "PENDING",
         action: "INDEPENDENT_FULL_RESTORE",
       }));
@@ -148,6 +168,10 @@ export class RetentionLedger {
       .filter((r) => r.domainId === p.domainId)
       .map((r) => r.versionId)
       .sort();
+    check(
+      p.purpose !== "DAY90" || timestamp(p.at) >= this.windowStart,
+      "DAY90_WINDOW",
+    );
     check(
       p.format === "mmp-evidence-restore-v1" &&
         p.status === "SIMULATED_RESTORED" &&
@@ -241,23 +265,26 @@ export class RetentionLedger {
         witnessRef: this.identity.witnessRef,
         at: now,
         targets: [...this.domains, "escrow", "snapshots"],
+        witnessSha256: this.trust.witnessSha256,
+        storageWitnessSha256: this.trust.storageWitnessSha256,
       };
       this.append(
         { type: "DELETION_AUTHORIZED", planSha256: digest(plan) },
         now,
       );
-      return plan;
+      return { ...plan, journalCheckpoint: this.journal.checkpoint() };
     } catch (error) {
       this.append({ type: "DELETION_DENIED" }, now);
       throw error;
     }
   }
   recordDeletion(plan, signedReceipts, now = new Date().toISOString()) {
+    this.journal.verify(plan.journalCheckpoint);
     check(
       this.journal.rows.some(
         (r) =>
           r.payload.type === "DELETION_AUTHORIZED" &&
-          r.payload.planSha256 === digest(plan),
+          r.payload.planSha256 === digest(planBody(plan)),
       ),
       "DELETION_UNAUTHORIZED",
     );

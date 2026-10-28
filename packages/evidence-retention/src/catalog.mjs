@@ -1,9 +1,9 @@
-import { PrivateEvidence } from "@metamorph/oracle";
 import {
   admission,
   bytes,
   canonical,
   check,
+  DAY,
   digest,
   equal,
   hex,
@@ -201,6 +201,14 @@ export function inspect({
     ),
     "ATTEMPT_INDEX",
   );
+  // One full-bundle maintenance restore must fit every included attempt's
+  // [day89, day90] window. Wider histories need separately retained bundles.
+  check(
+    timestamp(ident.terminalReceiptAt) -
+      Math.min(...packs.map((p) => timestamp(p.terminalReceiptAt))) <=
+      DAY,
+    "ATTEMPT_CALENDAR_SCOPE",
+  );
   const root = new Directory(sourceRoot);
   let total = 0;
   try {
@@ -214,12 +222,9 @@ export function inspect({
       try {
         const names = dir.names();
         check(names.length <= budget.maxFilesPerPack, "BUDGET");
-        // Reuse the unchanged Oracle sealed-index verifier. Our descriptor-pinned
-        // read then freezes the full index itself, not only the indexed records.
-        PrivateEvidence.verify(
-          `${sourceRoot}/${p.relativePath}`,
-          p.indexSha256,
-        );
+        // Freeze through nonblocking descriptor-pinned reads FIRST. The legacy
+        // verifier opens before checking regular-file type and could hang on a
+        // FIFO. Validate its unchanged v1 index against these frozen buffers.
         const data = new Map();
         let packBytes = 0;
         const files = names.map((name) => {
@@ -234,10 +239,14 @@ export function inspect({
           );
           return { name, bytes: value.length, sha256: sha(value) };
         });
+        check(data.has("index.json"), "INDEX");
         const index = canonical(data.get("index.json"), budget.maxRecordBytes);
+        keys(index, ["format", "retention", "entries"]);
         check(
           sha(data.get("index.json")) === p.indexSha256 &&
-            index.format === "oracle-private-pack-v1",
+            index.format === "oracle-private-pack-v1" &&
+            Array.isArray(index.entries) &&
+            index.entries.length < budget.maxFilesPerPack,
           "INDEX",
         );
         check(
@@ -250,7 +259,19 @@ export function inspect({
           ),
           "INDEX",
         );
+        const seen = new Set();
         for (const row of index.entries) {
+          check(
+            row &&
+              typeof row.id === "string" &&
+              /^[a-z0-9][a-z0-9-]{0,119}$/.test(row.id) &&
+              row.id !== "index" &&
+              !seen.has(row.id),
+            "INDEX",
+          );
+          seen.add(row.id);
+          integer(row.bytes, 1, budget.maxRecordBytes);
+          hex(row.sha256);
           const value = data.get(`${row.id}.json`);
           check(
             value && row.bytes === value.length && row.sha256 === sha(value),

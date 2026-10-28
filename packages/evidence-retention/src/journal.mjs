@@ -1,3 +1,5 @@
+import { closeSync, constants, openSync } from "node:fs";
+import { join } from "node:path";
 import {
   bytes,
   canonical,
@@ -18,34 +20,96 @@ export class Journal {
     this.rows = [];
     this.total = 0;
     this.lastAt = null;
+    this.locked = false;
     try {
-      const names = this.dir.names();
-      check(names.length <= LIMITS.events, "JOURNAL_BUDGET");
-      for (const [seq, name] of names.entries()) {
-        check(
-          name === `${String(seq).padStart(6, "0")}.json`,
-          "JOURNAL_TAMPERED",
-        );
-        const data = this.dir.read(name, 4096);
-        this.total += data.length;
-        check(this.total <= maxBytes, "JOURNAL_BUDGET");
-        const row = canonical(data, 4096);
-        check(
-          row.seq === seq &&
-            row.previousSha256 ===
-              (seq ? digest(this.rows.at(-1)) : "0".repeat(64)),
-          "JOURNAL_TAMPERED",
-        );
-        check(
-          this.lastAt === null || timestamp(row.at) >= timestamp(this.lastAt),
-          "JOURNAL_TAMPERED",
-        );
-        this.lastAt = row.at;
-        this.rows.push(row);
-      }
+      this.withLock(() => {
+        const names = this.names();
+        check(names.length <= LIMITS.events, "JOURNAL_BUDGET");
+        for (const [seq, name] of names.entries()) {
+          check(
+            name === `${String(seq).padStart(6, "0")}.json`,
+            "JOURNAL_TAMPERED",
+          );
+          const data = this.dir.read(name, 4096);
+          this.total += data.length;
+          check(this.total <= maxBytes, "JOURNAL_BUDGET");
+          const row = canonical(data, 4096);
+          check(
+            row.seq === seq &&
+              row.previousSha256 ===
+                (seq ? digest(this.rows.at(-1)) : "0".repeat(64)),
+            "JOURNAL_TAMPERED",
+          );
+          check(
+            this.lastAt === null || timestamp(row.at) >= timestamp(this.lastAt),
+            "JOURNAL_TAMPERED",
+          );
+          this.lastAt = row.at;
+          this.rows.push(row);
+        }
+      });
     } catch (error) {
       this.dir.close();
       throw error;
+    }
+  }
+  names() {
+    return this.dir.names().filter((name) => name !== "mutation.lock");
+  }
+  /** Synchronous cooperating-writer lock. A crash leaves a stale lock and fails
+   * closed; removing it requires separately witnessed operator recovery. */
+  withLock(action) {
+    if (this.locked) return action();
+    this.dir.assert();
+    const fd = openSync(
+      join(this.dir.anchor, "mutation.lock"),
+      constants.O_WRONLY |
+        constants.O_CREAT |
+        constants.O_EXCL |
+        constants.O_NOFOLLOW,
+      0o600,
+    );
+    this.locked = true;
+    let result;
+    let failure;
+    try {
+      result = action();
+      check(!result?.then, "ASYNC_LOCK_UNSUPPORTED");
+    } catch (error) {
+      failure = error;
+    }
+    try {
+      closeSync(fd);
+      this.dir.remove("mutation.lock");
+    } catch (error) {
+      if (failure)
+        Object.defineProperty(failure, "secondaryErrors", {
+          value: [...(failure.secondaryErrors ?? []), error],
+          configurable: true,
+        });
+      else failure = error;
+    } finally {
+      this.locked = false;
+    }
+    if (failure) throw failure;
+    return result;
+  }
+  assertCurrent() {
+    check(
+      equal(
+        this.names(),
+        this.rows.map((_, i) => `${String(i).padStart(6, "0")}.json`),
+      ),
+      "JOURNAL_CHANGED",
+    );
+    if (this.rows.length) {
+      const last = this.rows.length - 1;
+      check(
+        this.dir
+          .read(`${String(last).padStart(6, "0")}.json`, 4096)
+          .equals(bytes(this.rows[last])),
+        "JOURNAL_CHANGED",
+      );
     }
   }
   reserve() {
@@ -56,33 +120,37 @@ export class Journal {
     );
   }
   append(payload, at = new Date().toISOString()) {
-    check(this.rows.length < LIMITS.events, "JOURNAL_BUDGET");
-    timestamp(at);
-    const rollback =
-      this.lastAt !== null && timestamp(at) < timestamp(this.lastAt);
-    if (rollback)
-      payload = { type: "INCIDENT", code: "CLOCK_ROLLBACK", observedAt: at };
-    const row = {
-      seq: this.rows.length,
-      at: rollback ? this.lastAt : at,
-      previousSha256: this.rows.length
-        ? digest(this.rows.at(-1))
-        : "0".repeat(64),
-      payload,
-    };
-    const data = bytes(row);
-    check(
-      data.length <= 4096 && this.total + data.length <= this.maxBytes,
-      "JOURNAL_BUDGET",
-    );
-    this.dir.publish(`${String(row.seq).padStart(6, "0")}.json`, data);
-    this.rows.push(row);
-    this.total += data.length;
-    this.lastAt = row.at;
-    check(!rollback, "CLOCK_ROLLBACK");
-    return this.checkpoint();
+    return this.withLock(() => {
+      this.assertCurrent();
+      check(this.rows.length < LIMITS.events, "JOURNAL_BUDGET");
+      timestamp(at);
+      const rollback =
+        this.lastAt !== null && timestamp(at) < timestamp(this.lastAt);
+      if (rollback)
+        payload = { type: "INCIDENT", code: "CLOCK_ROLLBACK", observedAt: at };
+      const row = {
+        seq: this.rows.length,
+        at: rollback ? this.lastAt : at,
+        previousSha256: this.rows.length
+          ? digest(this.rows.at(-1))
+          : "0".repeat(64),
+        payload,
+      };
+      const data = bytes(row);
+      check(
+        data.length <= 4096 && this.total + data.length <= this.maxBytes,
+        "JOURNAL_BUDGET",
+      );
+      this.dir.publish(`${String(row.seq).padStart(6, "0")}.json`, data);
+      this.rows.push(row);
+      this.total += data.length;
+      this.lastAt = row.at;
+      check(!rollback, "CLOCK_ROLLBACK");
+      return this.checkpoint();
+    });
   }
   checkpoint() {
+    this.assertCurrent();
     return {
       format: "mmp-evidence-journal-checkpoint-v1",
       count: this.rows.length,

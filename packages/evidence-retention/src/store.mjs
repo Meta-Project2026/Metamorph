@@ -14,6 +14,8 @@ import {
   timestamp,
 } from "./core.mjs";
 import { authenticated, keyId } from "./crypto.mjs";
+import { verifyDeletionState } from "./deletion.mjs";
+import { Journal } from "./journal.mjs";
 import { Directory } from "./secure-fs.mjs";
 
 /** Functional local-disk adapter. Deliberately restricted to synthetic data:
@@ -147,27 +149,38 @@ export class LocalStore {
       }),
       "DELETION_UNAUTHORIZED",
     );
-    this.get(expected);
-    const version = this.dir.child(expected.versionId);
+    check(authority.ledgerRoot && authorization.plan, "DELETION_PLAN_REQUIRED");
+    const ledger = new Journal(authority.ledgerRoot);
     try {
-      // Keep the original storage receipt and a tombstone, never overwrite history.
-      version.remove("blob.bin");
-      version.publish(
-        "deleted.json",
-        bytes({
-          format: "mmp-evidence-deletion-v1",
-          versionId: expected.versionId,
-          ciphertextSha256: expected.sha256,
-        }),
-      );
-      return {
-        domainId: expected.domainId,
-        versionId: expected.versionId,
-        sha256: expected.sha256,
-        status: "SYNTHETIC_DELETED",
-      };
+      return ledger.withLock(() => {
+        verifyDeletionState(ledger, authority, authorization.plan, now);
+        this.get(expected);
+        const version = this.dir.child(expected.versionId);
+        try {
+          ledger.verify(authorization.plan.journalCheckpoint);
+          // Keep the original storage receipt and a tombstone, never overwrite history.
+          version.remove("blob.bin");
+          version.publish(
+            "deleted.json",
+            bytes({
+              format: "mmp-evidence-deletion-v1",
+              versionId: expected.versionId,
+              ciphertextSha256: expected.sha256,
+              deletionPlanSha256: digest(authorization.plan),
+            }),
+          );
+          return {
+            domainId: expected.domainId,
+            versionId: expected.versionId,
+            sha256: expected.sha256,
+            status: "SYNTHETIC_DELETED",
+          };
+        } finally {
+          version.close();
+        }
+      });
     } finally {
-      version.close();
+      ledger.close();
     }
   }
   close() {

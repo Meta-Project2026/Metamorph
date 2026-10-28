@@ -9,5 +9,6 @@
 - [x] Publish code/scope/usage/trust/deployment checklist, commit, push and PR #64.
 - [x] Request independent ChatGPT review without self-approval or merge.
 
-Review request is published and the GitHub connector reports code review running;
-no independent review verdict or real deployment is implied by these checks.
+The initial independent code review returned three P2 findings. Source FIFO,
+day90-window and live-ledger deletion fixes plus regression tests are implemented;
+final re-review remains pending. No self-approval or real deployment is implied.

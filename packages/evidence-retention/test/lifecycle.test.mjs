@@ -33,6 +33,7 @@ function recordBoth(f, ledger, purpose, at = now()) {
 }
 function deletionStores(f) {
   const deletionAuthority = {
+    ledgerRoot: f.dirs.policy,
     terminalReceiptAt: f.input.identity.terminalReceiptAt,
     witnessRef: f.input.identity.witnessRef,
     witnessSha256: f.trust.witnessSha256,
@@ -272,7 +273,8 @@ test(
       for (const store of stores) {
         const v = f.versions.find((r) => r.domainId === store.config.domainId);
         assert.equal(
-          store.deleteAuthorized(v, { approvals, reviewRecord }, at).status,
+          store.deleteAuthorized(v, { approvals, reviewRecord, plan }, at)
+            .status,
           "SYNTHETIC_DELETED",
         );
         assert.equal(

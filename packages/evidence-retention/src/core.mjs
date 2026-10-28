@@ -2,6 +2,7 @@ import { createHash, randomBytes } from "node:crypto";
 
 export const FORMAT = "mmp-local-evidence-v1";
 export const DAY = 86_400_000;
+export const DAY90_WINDOW_START = 89;
 export const LIMITS = Object.freeze({
   packs: 16,
   scenarios: 100,

@@ -60,8 +60,11 @@ never prints them. Do not copy its mock administration model into real custody.
 7. `RetentionLedger` consumes signed reader receipts, emits day90 tasks, enforces
    the 180-day minimum, holds, access/recovery/revocation history and clock
    high-water. It requires both owner signatures plus a separate no-hold review
-   for expiration. Store deletion independently rechecks those signatures and
-   the retention deadline. Completion additionally requires pinned custodian
+   for expiration. DAY90 receipts must fit each attempt's day89-to-day90 window;
+   relabeling immediate recovery cannot cancel future tasks. Store deletion
+   rechecks a current checkpoint-bound ledger permit, holds/incidents, signatures
+   and deadline while holding the same exclusive lock as journal writers. Any
+   later journal transition invalidates the permit. Completion additionally requires pinned custodian
    witnesses for both copies, escrow and snapshots. These are synthetic receipts
    here, not a claim that real equipment was erased.
 
@@ -70,6 +73,11 @@ RECOVER grant bound to the witness/principal. A reader-administered revocation
 list denies revoked grants. The ledger records revocation; the trusted operator
 must supply its current independently witnessed state to reader configuration.
 No LLM/repository secret is a recovery delegate. There is no rekey/downgrade API.
+
+For grouped attempts, 180-day expiry uses the latest terminal receipt and day90
+uses the earliest deadline. A common day89-to-day90 window must exist; attempts
+more than one UTC day apart require separate bounded retention bundles. The
+external #56 run catalog must still enumerate all such bundles and attempts.
 
 ## Failure and platform behavior
 

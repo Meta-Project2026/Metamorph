@@ -1,4 +1,4 @@
-MMP-055 v1 — actual sanitized synthetic test output
+MMP-055 v1 — actual sanitized synthetic test output after independent-review fixes
 Linux Node 22.23.1 / OpenSSL 3.5.7; pinned network-none unit container; exit 0
 
 TAP version 13
@@ -77,23 +77,33 @@ ok 72 - secondary audit failure never hides the primary storage error
 ok 73 - AEAD tag and suite downgrades fail; recipient rekey is not authorized
 ok 74 - public-key admission refuses private-key material and weak RSA recipients
 ok 75 - delegated escrow restores in a separate child after original source teardown
-# tests 75
+ok 76 - calendar: bundle day90 uses earliest attempt deadline while 180d uses latest terminal
+ok 77 - calendar: bundles without a shared day89-to-day90 window require separate retention
+ok 78 - review: immediate restore relabeled DAY90 cannot retire future recovery tasks
+ok 79 - review: later hold invalidates existing owner/reviewer deletion signatures and permit
+ok 80 - review: a separately opened writer's hold invalidates stale deletion state
+ok 81 - review: old signatures without a current ledger permit cannot delete
+ok 82 - review: deletion and hold publication share one exclusive mutation lock
+ok 83 - review: source FIFO fails bounded preflight without invoking blocking legacy opens
+ok 84 - review: a new incident invalidates a previously checkpointed deletion plan
+ok 85 - review: physical unlink holds the journal lock and later hold protects the remaining copy
+# tests 85
 # suites 0
-# pass 74
+# pass 84
 # fail 0
 # cancelled 0
 # skipped 1
 # todo 0
-# duration_ms 84419.374788
+# duration_ms 81466.614677
 
 Windows pnpm test; exit 0
-# tests 223
+# tests 233
 # pass 153
 # fail 0
-# skipped 70
+# skipped 80
 
 Windows targeted evidence-retention; exit 0
-# tests 75
+# tests 85
 # pass 5
 # fail 0
-# skipped 70
+# skipped 80

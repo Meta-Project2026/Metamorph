@@ -5,18 +5,18 @@ Branch: `Vladimir/mmp-055-encrypted-local-evidence`.
 Scope: new package and original synthetic fixtures, additive root unit-test entry
 and workspace lock importer only. No protected Oracle/comparator/worker/DTO,
 reference/candidate/public MANIFEST, historical audit, CI workflow or active
-feature pointer changed. No hidden pack read, real G4, model/provider call, cloud
+feature pointer changed. No hidden pack read, real G4, migration/provider call, cloud
 service, purchased medium or deployment. Review is pending, not self-approval.
 
 Published [PR #64](https://github.com/Meta-Project2026/Metamorph/pull/64) with
-implementation `2658da4cd66cf063d9fe2922481f2648a74c77e7`.
+initial implementation `2658da4cd66cf063d9fe2922481f2648a74c77e7`.
 [Independent review request](https://github.com/Meta-Project2026/Metamorph/pull/64#issuecomment-6482128835)
-is posted; the GitHub ChatGPT connector acknowledged code review running. No
-verdict is inferred. The [#56 interface handoff](https://github.com/Meta-Project2026/Metamorph/issues/56#issuecomment-6482129406)
-is proposed, not agreed. [Fast CI](https://github.com/Meta-Project2026/Metamorph/actions/runs/40779029504)
-was in progress when this publication note was written; consult its actual
-terminal result separately. Subsequent documentation-only publication metadata
-does not change the locally tested implementation.
+returned three actionable P2 findings, fixed below; final re-review remains
+pending. The [#56 interface handoff](https://github.com/Meta-Project2026/Metamorph/issues/56#issuecomment-6482129406)
+is proposed, not agreed. Pre-fix documentation HEAD `b40511fc4072862796e28d910b1969045dd8c2a9`
+had successful Node 22/24 [Fast CI 40779284441](https://github.com/Meta-Project2026/Metamorph/actions/runs/40779284441).
+That success is not final-head verification of the subsequent fixes. The table
+below records the actual post-review local runs; consult final-head CI separately.
 
 ## Actual results
 
@@ -25,10 +25,10 @@ does not change the locally tested implementation.
 | `pnpm install --frozen-lockfile`, Windows | 0 | Existing pinned dependencies + workspace-only importer |
 | `pnpm lint`, Windows | 0 | Biome; no fixes required |
 | `pnpm typecheck`, Windows | 0 | Builds and workspace checks; typed handoff compiles |
-| `pnpm test`, Windows | 0 | 223 total: 153 PASS, 0 FAIL, 70 explicit Linux skips |
+| `pnpm test`, Windows | 0 | 233 total: 153 PASS, 0 FAIL, 80 explicit Linux skips |
 | `pnpm build`, Windows | 0 | All workspace builds |
-| `pnpm --filter @metamorph/evidence-retention test`, Windows | 0 | 75 total: 5 PASS, 0 FAIL, 70 explicit Linux skips |
-| Pinned Linux synthetic unit-test container, command below | 0 | 75 total: **74 PASS, 0 FAIL**, 1 Windows-only skip; 84.419 s reported test duration |
+| `pnpm --filter @metamorph/evidence-retention test`, Windows | 0 | 85 total: 5 PASS, 0 FAIL, 80 explicit Linux skips |
+| Pinned Linux synthetic unit-test container, command below | 0 | 85 total: **84 PASS, 0 FAIL**, 1 Windows-only skip; 81.467 s reported test duration |
 | `git diff --check` | 0 | No whitespace errors |
 
 See [actual sanitized test output](test-output.txt). It contains only literal
@@ -114,6 +114,34 @@ Development failures were corrected before the final successful run: upstream
 mkdtemp names required case-sensitive safe basename support; a real foreign-owner
 read can fail with EACCES after dropping DAC override; a missing archive root now
 returns a fixed witness-mismatch failure. These are not erased qualification runs.
+
+## Independent review fixes
+
+The GitHub ChatGPT connector reviewed initial code and reported these three P2
+issues. They were reproduced and addressed in this package, with upstream Oracle,
+comparators and strict schemas still untouched:
+
+- [Day90 relabeling](https://github.com/Meta-Project2026/Metamorph/pull/64#discussion_r4406711474):
+  reader and ledger reject early DAY90 receipts; only a common day89-to-day90
+  eligibility window counts. Immediate restore retains future tasks. Grouped
+  attempts use the earliest deadline, latest minimum-retention timestamp and
+  reject histories without an intersecting window (separate bundles required).
+- [Stale deletion authorization](https://github.com/Meta-Project2026/Metamorph/pull/64#discussion_r4406711479):
+  deletion requires the live ledger's exact checkpoint-bound authorized plan,
+  current holds/incidents/day90 state, plus existing two-owner/reviewer signatures.
+  All mutations and physical unlink share an exclusive lock. Any subsequent
+  journal transition invalidates the plan; a different writer's hold and an
+  incident both preserve the copy. The test also attempts a hold during unlink,
+  then confirms a later hold protects the second copy after primary deletion.
+- [FIFO preflight hang](https://github.com/Meta-Project2026/Metamorph/pull/64#discussion_r4406711490):
+  source v1 index checks operate on already frozen bounded nonblocking buffers.
+  A real mode-0600 FIFO is rejected in a separate child with a hard timeout;
+  the old blocking source open is never invoked. Original writer and freshly
+  restored-pack verification remain unchanged.
+
+Ten post-review regression/calendar cases actually ran in the final Linux suite.
+They are implementation validation, not self-resolution or independent approval
+of the findings; re-review/security-review requests remain separate receipts.
 
 ## Explicit non-claims
 
