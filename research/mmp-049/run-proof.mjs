@@ -119,7 +119,7 @@ try {
   let operatorCleanup = false;
   try {
     await pair.target.provision(signal);
-    const program = String.raw`import {phpInt,phonePattern,enginePattern} from '/work/out/compat.js';let b='';for await(const c of process.stdin)b+=c;const m=JSON.parse(b);const trim=s=>{const c=' \t\n\r\0\v';let a=0,z=s.length;while(a<z&&c.includes(s[a]))a++;while(z>a&&c.includes(s[z-1]))z--;return s.slice(a,z)};console.log(JSON.stringify({integers:m.integers.map(s=>({input:s,cast:String(phpInt(s))})),whitespace:m.whitespace.map(([id,s])=>({id,phone:phonePattern.test(trim('+1555'+s+'440001')),engine:enginePattern.test(trim('ENG'+s+'049A')),edgePhone:phonePattern.test(trim(s+'+1555440001'+s))}))}));`;
+    const program = String.raw`import {phpInt,phonePattern,enginePattern} from '/work/out/compat.js';let b='';for await(const c of process.stdin)b+=c;const m=JSON.parse(b);const trim=s=>{const c=' \t\n\r\0\v';let a=0,z=s.length;while(a<z&&c.includes(s[a]))a++;while(z>a&&c.includes(s[z-1]))z--;return s.slice(a,z)};console.log(JSON.stringify({integers:m.integers.map(s=>({input:s,cast:String(phpInt(s))})),whitespace:m.whitespace.map(([id,s])=>({id,phone:phonePattern.test(trim('+1555'+s+'440001')),engine:enginePattern.test(trim('ENG'+s+'049A')),edgePhone:phonePattern.test(trim(s+'+1555440001'+s)),leadingPhone:phonePattern.test(trim(s+'+1555440001')),trailingPhone:phonePattern.test(trim('+1555440001'+s)),leadingEngine:enginePattern.test(trim(s+'ENG049A')),trailingEngine:enginePattern.test(trim('ENG049A'+s))}))}));`;
     const measured = requireSuccess(
       await pair.target.cmd(
         [
@@ -135,10 +135,8 @@ try {
       ),
     );
     const actual = JSON.parse(measured.stdout);
-    assert.deepEqual(actual.integers, reference.measurements.php.integers);
-    assert.deepEqual(actual.whitespace, reference.measurements.php.whitespace);
     summary.candidateOperators = {
-      status: "PASS",
+      status: "FAIL",
       integerCases: actual.integers.length,
       whitespaceCases: actual.whitespace.length,
       integerResults: actual.integers,
@@ -146,6 +144,9 @@ try {
       candidateSha256: bundle.candidateSha,
       artifactSha256: pair.target.evidence.artifactSha,
     };
+    assert.deepEqual(actual.integers, reference.measurements.php.integers);
+    assert.deepEqual(actual.whitespace, reference.measurements.php.whitespace);
+    summary.candidateOperators.status = "PASS";
   } finally {
     await pair.target.close();
     operatorCleanup = pair.cleanupVerified();

@@ -74,6 +74,34 @@ export function createRuntime(root, parent, evidence) {
         target,
         php,
         resources,
+        diagnostics() {
+          const build = target.evidence.build;
+          if (!build) return null;
+          let phases = [];
+          try {
+            phases = JSON.parse(build.stdout).checks.map((c) => ({
+              phase: c.phase,
+              exitCode: c.exitCode,
+              signal: c.signal,
+              error: c.error,
+              stderrBytes: Buffer.byteLength(c.stderr ?? ""),
+              stdoutBytes: Buffer.byteLength(c.stdout ?? ""),
+              typeScriptErrorCodes: [
+                ...new Set((c.stdout ?? "").match(/\bTS\d{4}\b/g) ?? []),
+              ],
+            }));
+          } catch {
+            /* Keep only structural command diagnostics. */
+          }
+          return {
+            exitCode: build.exitCode,
+            timedOut: build.timedOut,
+            cancelled: build.cancelled,
+            spawnError: build.spawnError,
+            elapsedMs: build.elapsedMs,
+            phases,
+          };
+        },
         identity: (identity) => ({
           runtimeId: identity.runtimeId,
           volume: target.runtime.volume,

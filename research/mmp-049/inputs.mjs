@@ -56,6 +56,7 @@ export const whitespace = [
   ["nel", "\u0085"],
   ["em-space", "\u2003"],
   ["line-separator", "\u2028"],
+  ["paragraph-separator", "\u2029"],
   ["bom", "\ufeff"],
 ];
 export const inputMatrix = { integers, whitespace };
