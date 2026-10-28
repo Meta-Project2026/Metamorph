@@ -89,3 +89,18 @@ adapter can implement ModelProvider after these blockers are resolved:
 
 Live Meta API, PHP/benchmark execution and actual Oracle G0–G4: **NOT_RUN**.
 No new OSS source was copied; existing exact Zod dependency retains its MIT notice.
+
+
+## MMP-037 opt-in Meta Model API readiness
+
+[Readiness/security/account procedure](../../specs/015-meta-model-api-readiness/README.md)
+and [primary sources checked2026-10-28](../../specs/015-meta-model-api-readiness/sources.md)
+supersede the historical provider-documentation unknowns above. Endpoint,
+Standard model and pricing are now verified from official public docs; account
+entitlement/credit expiry/settled billing remain unverified. Meta's spend alerts
+are not hard caps, so **BILLING_CAP_NOT_ESTABLISHED** still blocks paid generation.
+createMetaModelApiProvider is an additive opt-in factory with paid billing and
+maxRequestCostUsd:null; unchanged runAgent prevents invocation. The original
+createUnconfiguredMetaProvider remains no-IO. No migration composition is wired
+here. meta:preflight is an explicit local read-only action; live:probe stays off.
+All normal tests/CI are offline; no API key is passed to a candidate or worker.

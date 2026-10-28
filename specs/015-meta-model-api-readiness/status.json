@@ -1,0 +1,77 @@
+{
+  "checkedDate": "2026-10-28",
+  "baseSha": "aea0c5d97e3b1be44be82b8e11dc499e54ef782b",
+  "stageA": "BLOCKED",
+  "blockers": [
+    "BILLING_CAP_NOT_ESTABLISHED",
+    "MISSING_LOCAL_CREDENTIAL",
+    "OWNER_CONFIRMATION_REQUIRED"
+  ],
+  "apiSurface": "OFFICIAL_DOCS_VERIFIED",
+  "enabledStandardModel": "muse-spark-1.3",
+  "accountAccess": "USER_REPORTED_TWO_ACCOUNTS",
+  "accounts": {
+    "owner-a": {
+      "access": "USER_REPORTED_ACCESS",
+      "entitlement": "UNVERIFIED",
+      "readOnlyPreflight": "NOT_RUN",
+      "credits": "USER_REPORTED_$150_EACH",
+      "creditTypeAndExpiry": "UNVERIFIED",
+      "chargeThrough": "UNVERIFIED"
+    },
+    "owner-b": {
+      "access": "USER_REPORTED_ACCESS",
+      "entitlement": "UNVERIFIED",
+      "readOnlyPreflight": "NOT_RUN",
+      "credits": "USER_REPORTED_$150_EACH",
+      "creditTypeAndExpiry": "UNVERIFIED",
+      "chargeThrough": "UNVERIFIED"
+    }
+  },
+  "providerHardSpendCap": "NOT_AVAILABLE_IN_REVIEWED_OFFICIAL_DOCS",
+  "productionMaxRequestCostUsd": null,
+  "stageB": "LIVE_PROBE_NOT_RUN_PENDING_OWNER_APPROVAL",
+  "generatedRequests": 0,
+  "readOnlyRequests": 0,
+  "actualGeneratedSpendUsd": 0,
+  "settledBillingReceipt": null,
+  "estimatedLiveSpendUsd": null,
+  "AI_GENERATION": "NOT_RUN",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "independentReview": "PENDING",
+  "localTests": {
+    "newMeta": {
+      "pass": 61,
+      "fail": 0,
+      "skip": 0
+    },
+    "agent": {
+      "pass": 87,
+      "fail": 0,
+      "skip": 0
+    },
+    "root": {
+      "pass": 148,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "localChecks": {
+    "frozenInstall": 0,
+    "lint": 0,
+    "typecheck": 0,
+    "build": 0,
+    "rootTests": 0,
+    "agentTests": 0,
+    "diffCheck": 0,
+    "preflightExpectedExit": 2,
+    "disabledProbeExpectedExit": 2
+  },
+  "baseFastCI": {
+    "runId": 40700929216,
+    "sourceSha": "aea0c5d97e3b1be44be82b8e11dc499e54ef782b",
+    "status": "SUCCESS"
+  }
+}
