@@ -6,6 +6,20 @@ the reviewed implementation. **EXTERNAL_RETENTION_NOT_RUN** remains the current
 status. This document specifies future requirements; no storage was configured
 or private bytes read for MMP-038.
 
+## Local-first interpretation (pending exact-policy owner ratification)
+
+The [local-first architecture direction](local-first-decision.md) makes cloud
+providers **optional**, not mandatory for any migration or Oracle operation.
+For formal G4, a locally administered encrypted primary medium and a physically
+separate offline encrypted backup may satisfy the proposed two-failure-domain
+requirement **only if** independent physical/admin custody, witnessed immutable
+commitments, access denial, key recovery, exact-byte restore and required retention
+are demonstrated. Two directories, co-located writable disks or copies controlled
+by the candidate-author administrator do not establish independence. Where
+local media cannot meet the chosen independence profile, formal G4 is BLOCKED or
+requires an explicitly approved stronger custodian/storage option. This is a
+proposal, not evidence of current secure storage or second-owner assent.
+
 ## Canonical raw pack and integrity
 
 One run root indexes the frozen registration, selection and all attempts/pairs.
@@ -62,9 +76,12 @@ using that retention path; this proposal does not fix or bypass them.
    key in repo/workflow/candidate/model context. Record ciphertext identity and
    private plaintext manifest root, algorithm/key version and authenticated
    metadata binding run/epoch/attempt.
-5. Upload to owner-restricted storage outside runner temp and public GitHub
-   artifacts. Obtain immutable object/version, length/hash and durable completion
-   receipts; verify the remote bytes. Never overwrite the object on retry.
+5. Transfer to owner-restricted, durably retained storage **outside runner temp**
+   and public GitHub artifacts. Encrypted local/offline media under independent
+   custody can qualify; a remote/cloud upload is optional. Obtain the durable
+   medium and immutable-version identity, length/hash and completion receipt;
+   independently verify the retained bytes. Never overwrite an earlier version
+   on retry.
 6. R or an eligible recovery delegate restores from the durable copy into a new
    restricted environment after application workers have been destroyed. Verify
    decrypt/authentication, every exact plaintext file/index/root and full expected
