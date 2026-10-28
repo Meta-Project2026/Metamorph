@@ -122,7 +122,7 @@ export async function verifyPair(input: {
   try {
     evidenceDirectory = await mkdtemp(join(input.artifactParent, "oracle-"));
     for (const directory of ["http", "db", "diffs"])
-      await mkdir(join(evidenceDirectory, directory));
+      await mkdir(join(evidenceDirectory, directory), { mode: 0o700 });
   } catch (error) {
     await Promise.allSettled([
       operation((signal) => input.reference.close(signal)),

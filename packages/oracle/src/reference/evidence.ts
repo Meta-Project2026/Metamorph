@@ -7,7 +7,8 @@ import {
   mkdirSync,
   mkdtempSync,
   openSync,
-  readFileSync,
+  readdirSync,
+  readSync,
   renameSync,
   writeFileSync,
 } from "node:fs";
@@ -124,6 +125,7 @@ export class PrivateEvidence {
   }
   static verify(path: string, expectedIndexSha256: string): number {
     ownerDirectory(path);
+    const initialNames = readdirSync(path).sort();
     const read = (id: string): Buffer => {
       ensure(/^[a-z0-9][a-z0-9-]{0,119}$/.test(id), "EVIDENCE_ID");
       const fd = openSync(
@@ -131,16 +133,40 @@ export class PrivateEvidence {
         constants.O_RDONLY | constants.O_NOFOLLOW,
       );
       try {
-        const st = fstatSync(fd);
+        const st = fstatSync(fd, { bigint: true });
         ensure(
           st.isFile() &&
-            st.nlink === 1 &&
-            st.uid === process.getuid?.() &&
-            (st.mode & 0o077) === 0 &&
-            st.size <= 16 * 1024 * 1024,
+            st.nlink === 1n &&
+            st.uid === BigInt(process.getuid?.() ?? -1) &&
+            (st.mode & 0o077n) === 0n &&
+            st.size > 0n &&
+            st.size <= BigInt(16 * 1024 * 1024),
           "EVIDENCE_PERMISSIONS",
         );
-        return readFileSync(fd);
+        const data = Buffer.alloc(Number(st.size) + 1);
+        let length = 0;
+        while (length < data.length) {
+          const n = readSync(fd, data, length, data.length - length, length);
+          if (!n) break;
+          length += n;
+        }
+        const after = fstatSync(fd, { bigint: true });
+        const named = lstatSync(join(path, `${id}.json`), { bigint: true });
+        ensure(
+          length === Number(st.size) &&
+            st.dev === named.dev &&
+            st.ino === named.ino &&
+            st.mode === named.mode &&
+            st.uid === named.uid &&
+            st.nlink === named.nlink &&
+            st.size === named.size &&
+            st.mtimeNs === after.mtimeNs &&
+            st.ctimeNs === after.ctimeNs &&
+            st.mtimeNs === named.mtimeNs &&
+            st.ctimeNs === named.ctimeNs,
+          "EVIDENCE_TAMPERED",
+        );
+        return data.subarray(0, length);
       } finally {
         closeSync(fd);
       }
@@ -149,13 +175,25 @@ export class PrivateEvidence {
     ensure(sha256(bytes) === expectedIndexSha256, "EVIDENCE_TAMPERED");
     const index = JSON.parse(bytes.toString());
     ensure(
-      index.format === "oracle-private-pack-v1" && Array.isArray(index.entries),
+      index.format === "oracle-private-pack-v1" &&
+        Array.isArray(index.entries) &&
+        Buffer.from(JSON.stringify(index)).equals(bytes),
       "EVIDENCE_INDEX",
     );
     const names = new Set<string>();
-    let total = 0;
+    let total = bytes.length;
     for (const entry of index.entries) {
-      ensure(!names.has(entry.id), "EVIDENCE_ID");
+      ensure(
+        entry &&
+          typeof entry.id === "string" &&
+          entry.id !== "index" &&
+          !names.has(entry.id) &&
+          Number.isSafeInteger(entry.bytes) &&
+          entry.bytes > 0 &&
+          typeof entry.sha256 === "string" &&
+          /^[a-f0-9]{64}$/.test(entry.sha256),
+        "EVIDENCE_ID",
+      );
       names.add(entry.id);
       const data = read(entry.id);
       total += data.length;
@@ -166,6 +204,17 @@ export class PrivateEvidence {
         "EVIDENCE_TAMPERED",
       );
     }
+    const expectedNames = [...names]
+      .map((id) => `${id}.json`)
+      .concat("index.json")
+      .sort();
+    ownerDirectory(path);
+    ensure(
+      JSON.stringify(initialNames) === JSON.stringify(expectedNames) &&
+        JSON.stringify(readdirSync(path).sort()) ===
+          JSON.stringify(expectedNames),
+      "EVIDENCE_INDEX",
+    );
     return names.size;
   }
 }
