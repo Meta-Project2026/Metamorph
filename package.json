@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "biome check .",
     "typecheck": "pnpm build && pnpm -r typecheck",
-    "test": "pnpm build && node --test packages/contracts/test/contracts.test.mjs apps/server/test/health.test.mjs packages/agent/test/*.test.mjs packages/oracle/test/oracle.test.mjs packages/integration/test/*.test.mjs packages/agent-real/test/*.test.mjs",
+    "test": "pnpm build && node --test packages/contracts/test/contracts.test.mjs apps/server/test/health.test.mjs packages/agent/test/*.test.mjs packages/oracle/test/oracle.test.mjs packages/integration/test/*.test.mjs packages/agent-real/test/*.test.mjs packages/evidence-retention/test/*.test.mjs",
     "build": "pnpm -r build",
     "start": "pnpm --filter @metamorph/server start",
     "demo:agent": "pnpm build && pnpm --filter @metamorph/agent demo",

@@ -69,6 +69,12 @@ importers:
         specifier: workspace:*
         version: link:../target-worker
 
+  packages/evidence-retention:
+    dependencies:
+      '@metamorph/oracle':
+        specifier: workspace:*
+        version: link:../oracle
+
   packages/integration:
     dependencies:
       '@metamorph/agent':

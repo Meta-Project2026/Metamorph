@@ -1,0 +1,109 @@
+MMP-055 v1 — actual sanitized synthetic test output after independent-review fixes
+Linux Node 22.23.1 / OpenSSL 3.5.7; pinned network-none unit container; exit 0
+
+TAP version 13
+ok 1 - each encrypted copy retains the complete root, independently of the external witness store
+ok 2 - unindexed extra pack and inconsistent attempt receipts cannot be omitted from the root
+ok 3 - storage metadata cannot override generated version/size/hash receipt fields
+ok 4 - overlapping writer/storage roots fail before storage mutation
+ok 5 - storage owner-only modes and single-link ciphertext identity are rechecked at read
+ok 6 - 180 calendar days bind to terminal receipt; immediate restore is separate from day90
+ok 7 - simulated day90 executes both full restores and records signed exact-version receipts
+ok 8 - missing, one-copy or late day90 restore is NOT_VERIFIED and creates sticky incident/hold
+ok 9 - forged or incomplete restore receipts cannot satisfy retention checks
+ok 10 - clock rollback persists across restart and freezes deletion
+ok 11 - premature and unapproved deletion cannot remove either retained version
+ok 12 - legal/incident holds extend beyond day180; release needs both exact owner signatures
+ok 13 - day180 deletion needs two owners and independent no-hold review at the bound witness
+ok 14 - authorized synthetic deletion retains tombstones and needs all copy/escrow/snapshot witnesses
+ok 15 - recovery revocation is append-only and survives ledger reopen
+ok 16 - admission accounts for raw files, indexes, two ciphertexts, journals and working set
+ok 17 - oversized/negative/unknown resource admission fails before writes
+ok 18 - canonical JSON rejects duplicate keys, appendages and malformed UTF-8
+ok 19 - public exporter is an allowlist; raw paths/hashes/errors/keys/canaries are absent
+ok 20 - Windows support fails closed instead of treating POSIX mode bits as ACL proof # SKIP
+ok 21 - full MANIFEST 117/117 under umask 022 survives both fresh child-process restores after source teardown
+ok 22 - Oracle comparison retains observed FAIL/error and both exact restores
+ok 23 - Oracle request retains observed FAIL/error and both exact restores
+ok 24 - Oracle close retains observed FAIL/error and both exact restores
+ok 25 - aborted sealed attempt remains INCOMPLETE and recoverable
+ok 26 - high file count exceeds legacy 100-file cap without truncation
+ok 27 - preflight rejects missing record before encrypted storage writes
+ok 28 - preflight rejects extra unindexed record before encrypted storage writes
+ok 29 - preflight rejects missing index before encrypted storage writes
+ok 30 - preflight rejects duplicate index entry before encrypted storage writes
+ok 31 - preflight rejects symlink file before encrypted storage writes
+ok 32 - preflight rejects hardlink file before encrypted storage writes
+ok 33 - preflight rejects weak file mode before encrypted storage writes
+ok 34 - preflight rejects weak dir mode before encrypted storage writes
+ok 35 - preflight rejects outside-root pack before encrypted storage writes
+ok 36 - preflight rejects excess depth before encrypted storage writes
+ok 37 - preflight rejects mixed custody scopes before encrypted storage writes
+ok 38 - preflight rejects oversized record before encrypted storage writes
+ok 39 - preflight rejects changed exact bytes before encrypted storage writes
+ok 40 - real foreign-owner file is rejected
+ok 41 - symlinked root cannot be admitted
+ok 42 - TOCTOU file substitution during read is detected with pinned directory descriptors
+ok 43 - late writers and a missing writer revocation fail closed
+ok 44 - a re-sealed writer substitution cannot replace the prior independent witness
+ok 45 - stored bitflip cannot restore and leaves an incident
+ok 46 - stored truncate cannot restore and leaves an incident
+ok 47 - stored append cannot restore and leaves an incident
+ok 48 - stored delete cannot restore and leaves an incident
+ok 49 - stored missing-index cannot restore and leaves an incident
+ok 50 - stored extra cannot restore and leaves an incident
+ok 51 - stored metadata cannot restore and leaves an incident
+ok 52 - AEAD catches modified payload even if writer-side hashes are recomputed
+ok 53 - wrong key, wrong identity, wrong witness, missing prior commitment are not verified
+ok 54 - lost primary: other copy restores independently
+ok 55 - lost secondary: other copy restores independently
+ok 56 - interrupted WRITE publication remains immutable incomplete; no retry overwrite
+ok 57 - interrupted FSYNC publication remains immutable incomplete; no retry overwrite
+ok 58 - interrupted PUBLISH publication remains immutable incomplete; no retry overwrite
+ok 59 - interrupted RECEIPT publication remains immutable incomplete; no retry overwrite
+ok 60 - duplicate immutable version and duplicate nonce reservation are rejected
+ok 61 - two copies cannot alias the same root/domain/principal
+ok 62 - malicious single-admin/root capability never establishes independent physical custody
+ok 63 - actual unprivileged child cannot read source or private key; receives no keys/env
+ok 64 - restricted escrow recovery needs an unexpired unrevoked signed delegate grant
+ok 65 - journal external checkpoint detects history truncation, byte tamper and clock rollback
+ok 66 - journal budgets reserve failure overhead and cannot overflow silently
+ok 67 - storage witness requires all packs on both independently opened stores
+ok 68 - multiple bounded packs include earlier failed/partial attempts in the exact root catalog
+ok 69 - exact byte budget is admitted; one-byte overflow fails before any copy write
+ok 70 - encryption refuses a reused nonce and records the primary incident
+ok 71 - partial secondary write preserves the complete primary, partial secondary and incident
+ok 72 - secondary audit failure never hides the primary storage error
+ok 73 - AEAD tag and suite downgrades fail; recipient rekey is not authorized
+ok 74 - public-key admission refuses private-key material and weak RSA recipients
+ok 75 - delegated escrow restores in a separate child after original source teardown
+ok 76 - calendar: bundle day90 uses earliest attempt deadline while 180d uses latest terminal
+ok 77 - calendar: bundles without a shared day89-to-day90 window require separate retention
+ok 78 - review: immediate restore relabeled DAY90 cannot retire future recovery tasks
+ok 79 - review: later hold invalidates existing owner/reviewer deletion signatures and permit
+ok 80 - review: a separately opened writer's hold invalidates stale deletion state
+ok 81 - review: old signatures without a current ledger permit cannot delete
+ok 82 - review: deletion and hold publication share one exclusive mutation lock
+ok 83 - review: source FIFO fails bounded preflight without invoking blocking legacy opens
+ok 84 - review: a new incident invalidates a previously checkpointed deletion plan
+ok 85 - review: physical unlink holds the journal lock and later hold protects the remaining copy
+# tests 85
+# suites 0
+# pass 84
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 81466.614677
+
+Windows pnpm test; exit 0
+# tests 233
+# pass 153
+# fail 0
+# skipped 80
+
+Windows targeted evidence-retention; exit 0
+# tests 85
+# pass 5
+# fail 0
+# skipped 80
