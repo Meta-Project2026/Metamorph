@@ -12,8 +12,10 @@ pnpm install --frozen-lockfile
 pnpm build
 node --test research/mmp-044/driver.test.mjs
 export MMP044_HEAD_SHA="$(git rev-parse HEAD)"
-export MMP044_PARENT="$(mktemp -u -d /tmp/mmp044-private-XXXXXXXX)"
-export MMP044_OUTPUT="$(mktemp -d /tmp/mmp044-public-XXXXXXXX)"
+export MMP044_WORKDIR="$(mktemp -d /tmp/mmp044-job-XXXXXXXX)"
+export MMP044_PARENT="$MMP044_WORKDIR/private"
+export MMP044_OUTPUT="$MMP044_WORKDIR/public"
+mkdir "$MMP044_OUTPUT"
 node research/mmp-044/run-public.mjs
 node research/mmp-044/finalize.mjs
 sha256sum "$MMP044_OUTPUT/summary.json" "$MMP044_OUTPUT/finalizer.json"
@@ -28,13 +30,19 @@ work deadline is 20 minutes plus independent cleanup; the original runtime
 broker does not accept cancellation, so its bounded build is joined before
 acting on an abort. The outer workflow limit is 30 minutes.
 
-Only `summary.json` and `finalizer.json` may be uploaded, for seven days. Raw
+Only `summary.json`, `finalizer.json` and a successfully allowlist-verified
+`public-repro.json` may be uploaded, for seven days. Raw
 HTTP/DB/server/build receipts stay in a new 0700/0600 host evidence pack outside
 the repository. No existing audit directory or PR #31 artifact is accessed.
 The summary exposes original comparator codes and SHA-256 commitments to full
 mapped observations, never forecasts as runtime observations. Full raw receipts
-are not automatically made public. A bounded public evidence projection and
-independent cause review are required before a confirmed causal classification;
+are not automatically made public. The optional projection includes only public
+request commitments, numeric IDs, dates, sequence and counts, and verifies selected
+raw-versus-mapped HTTP/SQLite fields independently. Messages, seed names and all
+other cell values are excluded; an unexpected observation suppresses publication
+without changing comparison results. Fixed in-container PHP/JS operator diagnostics
+record actual PCRE version, form-decoding hex, regex outcomes and integer coercion.
+Independent cause review is required before a confirmed causal classification;
 the driver conservatively emits `NOT_ESTABLISHED` pending that review.
 
 Exit 0 means complete harness execution with valid positive/negative controls
@@ -48,8 +56,10 @@ run prefixes. The finalizer restores only that ledger and never removes foreign
 containers/volumes by a generic label or prefix. The existing runtime broker
 also removes its own short-lived provenance container in its internal finally.
 
-If this workflow path is absent on the default branch, registration must be
-reviewed and merged in a separate PR before dispatching the feature ref:
+The workflow path is absent on default main, but actual dispatch of the feature
+ref succeeded without registration merge. The optional registration PR #48 was
+therefore closed unmerged. Do not assume a default-branch registration blocker
+without an actual API response. Dispatch the reviewed feature ref:
 
 ```sh
 gh workflow run mmp044-public-docker.yml --repo Meta-Project2026/Metamorph --ref feat/mmp-044-public-docker-proof

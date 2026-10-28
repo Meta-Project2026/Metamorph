@@ -28,6 +28,12 @@ import { buildTrustedRuntime } from "../../packages/target-worker/src/runtime-br
 import { git, root, verifyPins } from "./config.mjs";
 import { CASES_SHA, errorCode, runSchedule, summarize } from "./driver.mjs";
 import { atomic, finalize } from "./finalize.mjs";
+import {
+  JS_SEMANTICS,
+  PHP_SEMANTICS,
+  publicRecord,
+  publicSemantics,
+} from "./public-evidence.mjs";
 
 if (process.argv.includes("--validate-imports")) process.exit(0);
 process.umask(0o077);
@@ -54,6 +60,8 @@ let parent,
   cleanup;
 const cleanupHistory = { normalCleanupError: false, emergencyRemoved: 0 };
 let lastCommandFailure;
+const publicRecords = [];
+let projectionFailed = false;
 const record = (kind, value) =>
   evidence.write(
     `entry-${++serial}-${kind.replaceAll(/[^a-z0-9-]/g, "-")}`,
@@ -143,7 +151,10 @@ try {
   // provisionRuntime's create mode is subject to our 077 umask. The verified
   // public OSS archive must be readable by uid 65534 through its readonly bind.
   chmodSync(phpRuntime.archivePath, 0o444);
-  requireCheck((statSync(phpRuntime.archivePath).mode & 0o777) === 0o444, "PROVENANCE_MISMATCH");
+  requireCheck(
+    (statSync(phpRuntime.archivePath).mode & 0o777) === 0o444,
+    "PROVENANCE_MISMATCH",
+  );
   // Existing broker joins its bounded build/provenance/cleanup before returning.
   // Cancellation is checked after joining; no new operation starts on a late result.
   const runtime = await buildTrustedRuntime((name, receipt) => {
@@ -188,7 +199,13 @@ try {
         profile: WORKSHOP_PROFILE,
       });
       resources.target(target.runId);
-      const php = new DockerReferenceTransport(phpRuntime, tracked);
+      let phpName;
+      const php = new DockerReferenceTransport(phpRuntime, (args, ...rest) => {
+        const at = args.indexOf("--name");
+        if (at >= 0 && /^mmp-reference-[a-f0-9-]{36}$/.test(args[at + 1]))
+          phpName = args[at + 1];
+        return tracked(args, ...rest);
+      });
       return {
         target,
         php,
@@ -215,17 +232,46 @@ try {
           const clock = strictJson(receipt.stdout);
           validateTargetClock(clock);
           record("clock", clock);
+          const phpDiagnostic = await tracked(
+            ["exec", phpName, "php", "-r", PHP_SEMANTICS],
+            workSignal,
+          );
+          const tsDiagnostic = requireSuccess(
+            await target.cmd(
+              [
+                "exec",
+                target.runtime.name,
+                "node",
+                "--input-type=module",
+                "-e",
+                JS_SEMANTICS,
+              ],
+              { signal: workSignal },
+            ),
+          );
+          const semantics = publicSemantics(
+            strictJson(phpDiagnostic.stdout.toString(), 4096),
+            strictJson(tsDiagnostic.stdout, 4096),
+          );
+          record("public-semantics", semantics);
           return {
             fixedUtc: clock.before.date,
             monotonicDeltaMs: clock.monotonicDeltaMs,
             node: clock.node,
             sqlite: clock.sqlite,
+            semantics,
           };
         },
       };
     },
     signal,
     (id, kind, value) => {
+      try {
+        const projection = publicRecord(config.corpus, id, kind, value);
+        if (projection) publicRecords.push(projection);
+      } catch {
+        projectionFailed = true;
+      }
       if (kind === "case-receipt") {
         cleanupHistory.normalCleanupError ||=
           value.normalCleanup !== "PASS" ||
@@ -294,6 +340,28 @@ if (evidence) {
   const index = evidence.seal();
   PrivateEvidence.verify(evidence.path, index);
 }
+summary.publicEvidence = {
+  status:
+    !projectionFailed &&
+    publicRecords.length === 76 &&
+    summary.harness === "SUCCESS"
+      ? "ALLOWLIST_VERIFIED"
+      : "NOT_PUBLISHED",
+  records: publicRecords.length,
+};
+if (summary.publicEvidence.status === "ALLOWLIST_VERIFIED")
+  atomicJson(
+    join(output, "public-repro.json"),
+    {
+      designation: "PUBLIC_INDEPENDENT_REPRO",
+      headSha,
+      casesSha256: CASES_SHA,
+      projection:
+        "PUBLIC_NUMERIC_IDS_DATES_COUNTS_ONLY_NO_MESSAGES_OR_SEED_IDENTITIES",
+      records: publicRecords,
+    },
+    0o644,
+  );
 atomicJson(join(output, "summary.json"), summary, 0o644);
 console.log(
   JSON.stringify({

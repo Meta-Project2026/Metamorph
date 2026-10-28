@@ -17,6 +17,7 @@ import {
   verifyCoverage,
 } from "./driver.mjs";
 import { cleanupInventory } from "./finalize.mjs";
+import { publicRecord, publicSemantics } from "./public-evidence.mjs";
 
 const bytes = readFileSync(join(root, CASES_PATH));
 const corpus = validateCorpus(bytes);
@@ -477,4 +478,105 @@ test("independent finalizer rejects global prefixes and reports removal failure"
   );
   assert.equal(failed.status, "ERROR");
   assert.equal(failed.inventory.containers, 1);
+});
+test("public HTTP projection validates raw-vs-mapped bytes and drops all message/seed fields", () => {
+  const observation = {
+    ...http(),
+    body: Buffer.from(
+      '{"success":true,"appointment_id":"1","message":"DO_NOT_PUBLISH_THIS"}',
+    ),
+  };
+  const raw = { status: 200, bodyBase64: observation.body.toString("base64") };
+  const input = {
+    request: scenario.requests[0],
+    php: { observation, raw },
+    mappedTarget: observation,
+    rawTarget: raw,
+  };
+  const result = publicRecord(corpus, scenario.id, "http-step-1", input);
+  assert(!JSON.stringify(result).includes("DO_NOT_PUBLISH"));
+  assert.equal(result.reference.appointmentId, "1");
+  assert.throws(
+    () =>
+      publicRecord(corpus, scenario.id, "http-step-1", {
+        ...input,
+        rawTarget: { ...raw, status: 503 },
+      }),
+    /OBSERVATION_ERROR/,
+  );
+});
+test("public DB projection contains fixed IDs/dates only and checks original wire cells", () => {
+  const db = {
+    tables: [
+      {
+        name: "appointments",
+        columns: ["id", "mechanic_id", "appointment_date", "client_name"],
+        rows: [
+          [
+            { type: "integer", value: "1" },
+            { type: "integer", value: "2" },
+            { type: "text", value: "2099-08-18" },
+            { type: "text", value: "DO_NOT_PUBLISH_THIS" },
+          ],
+        ],
+      },
+      {
+        name: "sqlite_sequence",
+        columns: ["name", "seq"],
+        rows: [
+          [
+            { type: "text", value: "appointments" },
+            { type: "integer", value: "1" },
+          ],
+        ],
+      },
+    ],
+  };
+  const raw = {
+    tables: db.tables.map((t) => ({
+      ...t,
+      columns: t.columns.map((name) => ({ name })),
+    })),
+  };
+  const input = {
+    php: {
+      snapshot: db,
+      raw: { stateBase64: Buffer.from(JSON.stringify(raw)).toString("base64") },
+    },
+    mappedTarget: db,
+    rawTarget: raw,
+  };
+  const result = publicRecord(corpus, scenario.id, "db-step-1", input);
+  assert(!JSON.stringify(result).includes("DO_NOT_PUBLISH"));
+  assert.deepEqual(result.reference.appointments, [
+    { id: "1", mechanicId: "2", date: "2099-08-18" },
+  ]);
+  const changed = clone(input);
+  changed.rawTarget.tables[0].rows[0][0].value = "7";
+  assert.throws(
+    () => publicRecord(corpus, scenario.id, "db-step-1", changed),
+    /OBSERVATION_ERROR/,
+  );
+  const injected = clone(input);
+  injected.mappedTarget.tables[0].rows[0][2].value = "SECRET";
+  assert.throws(
+    () => publicRecord(corpus, scenario.id, "db-step-1", injected),
+    /OBSERVATION_ERROR/,
+  );
+});
+test("public operator diagnostic admits measurements without assuming the hypotheses are true", () => {
+  const common = {
+    integer: 1,
+    phoneHex: "2b31353535c2a0343430303031",
+    engineHex: "454e47c2a030343441",
+    phoneMatch: true,
+    engineMatch: true,
+  };
+  const php = { ...common, php: "7.4.33", pcre: "10.35 2020-05-09" },
+    ts = { ...common, node: "v24.11.0" };
+  assert.equal(publicSemantics(php, ts).reference.integer, 1);
+  assert.throws(
+    () => publicSemantics({ ...php, pcre: "SECRET" }, ts),
+    /OBSERVATION_ERROR/,
+  );
 });
