@@ -15,7 +15,7 @@ export const PINS_PATH = "specs/014-public-validation-triage/pins.json";
 export const CASES_PATH =
   "specs/014-public-validation-triage/cases.public.json";
 export const PINS_SHA =
-  "8ed5d1eb8d62ac51db97e1d05a755809fabb6b69f945e56fdeb7c1488857f7bc";
+  "7b69ec9b65e57f920b5960c781a360f5168c8bd093f9f8324adb853f9cc7a9d1";
 export const git = (...args) =>
   execFileSync("git", args, { cwd: root, maxBuffer: 16 * 1024 * 1024 });
 export function verifyPins({

@@ -33,7 +33,7 @@
     "packages/oracle/src/reference/manifest.ts": "22433d033baa2188cbeadfc649e86112eab88be8dc9fa4a6155aeac453ecb4be",
     "packages/oracle/src/http.ts": "398031b89875b23fbd7be34a5d6f4a39c1c6d7970f00d757d9dcf2f1545266d3",
     "packages/oracle/src/sqlite.ts": "b8d9469d26ee378051e23d5f6cb7db38c03dadf7a1340595449ac943c2748220",
-    "packages/oracle/src/runner.ts": "87a9c4528402937d1be54a70a8903dc3ff025c3270b4a1eae93e404028aab94b",
+    "packages/oracle/src/runner.ts": "adf610324c8af75c4cde974f5e772ad82646b1435fd378b08584f3b8ea630150",
     "packages/oracle/src/reference/docker.ts": "d06e8f17eb3cf8312547c5bcdc1eb476bfe83c270de242055479a47fa37f0f59",
     "packages/oracle/src/reference/worker.ts": "7df7b297bf8d5b7515b550856a62b0a2aa464096bc31ddbacc0e9629d598762b",
     "packages/oracle/src/reference/mapping.ts": "0f269b214d45c9799d0ce3533b9cad6b7a65ac0c3dc53858627264c894474394",
