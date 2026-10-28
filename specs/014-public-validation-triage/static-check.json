@@ -1,0 +1,62 @@
+{
+  "designation": "PUBLIC_INDEPENDENT_REPRO",
+  "headSha": "bd79223173e1d372caa295cc1a635a3f599a7a9e",
+  "baseSha": "5de7a3315a8b728ee2baa6ed0c97acfc781dc641",
+  "scope": "STATIC_POLICY_PINS_AND_SYNTHETIC_CONTROLS_ONLY",
+  "classification": "NOT_ESTABLISHED",
+  "casesSha256": "5e3b588003de33d36f37cc2dadc848d0dfebc44fdd2c0a9aaed65e84f240f496",
+  "cases": 14,
+  "policyAdmittedRequests": 38,
+  "plannedHttpComparisons": 38,
+  "plannedSqliteComparisons": 52,
+  "executedPhpTsHttpComparisons": 0,
+  "executedPhpTsSqliteComparisons": 0,
+  "candidateSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+  "canonicalRecipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "checkoutRecipeSha256": "bd2296fcbb502f1788bc4eaee6de5c3adc49ec30b712d9caaf5bfc93a52680c3",
+  "checkoutDifferences": [
+    {
+      "path": "packages/oracle/reference/inspector.php",
+      "canonical": "2d7559397070c11b3f6d3f343ad8049be0bacdd0c5028d6c444cb9cca170a9e4",
+      "actual": "2a3bcda0a39c87a4810d7c3a9857198436a4d75e6753eea1b742a11c7c259c8d"
+    },
+    {
+      "path": "packages/target-worker/runtime/Dockerfile",
+      "canonical": "dea37c3264516b8e544b5cbbe513285c6b61c0cb8871616a0038aa85d8db1b76",
+      "actual": "12e37de8edd51cc27aff69ee67a42a3d5beab7b26a19ecc5b14c8a331258f279"
+    }
+  ],
+  "syntheticControls": [
+    {
+      "id": "http-equal",
+      "status": "PASS"
+    },
+    {
+      "id": "http-corrupt-status",
+      "status": "PASS",
+      "detected": "HTTP_STATUS"
+    },
+    {
+      "id": "db-equal",
+      "status": "PASS"
+    },
+    {
+      "id": "db-corrupt-sequence",
+      "status": "PASS",
+      "detected": "DB_STATE"
+    }
+  ],
+  "environment": {
+    "node": "v22.23.1",
+    "platform": "win32",
+    "arch": "x64"
+  },
+  "docker": {
+    "availability": "EXECUTABLE_ABSENT",
+    "publicProbe": "DOCKER_NOT_RUN",
+    "containers": null,
+    "volumes": null,
+    "emergencyRemoved": null,
+    "cleanup": "NOT_RUN"
+  }
+}
