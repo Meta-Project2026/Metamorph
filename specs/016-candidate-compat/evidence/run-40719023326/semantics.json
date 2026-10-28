@@ -1,0 +1,617 @@
+{
+  "format": "mmp049-public-semantics-v1",
+  "headSha": "5cd0e838d25486d9f16f63ebb86450bcd2686404",
+  "scope": "PUBLIC_OPERATORS_ONLY",
+  "status": "PASS",
+  "images": {
+    "php": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "node": "node:24.11.0-bookworm-slim@sha256:76d0ed0ed93bed4f4376211e9d8fddac4d8b3fbdb54cc45955696001a3c91152"
+  },
+  "inputMatrix": {
+    "integers": [
+      null,
+      "",
+      "0",
+      "1",
+      "01",
+      "10",
+      "+1",
+      "-1",
+      "1.9",
+      "-1.9",
+      ".9",
+      "1e1",
+      "1E+1",
+      "1e-1",
+      "1.9e1",
+      "-1e1",
+      "1e",
+      "1e+",
+      "1e1tail",
+      "12tail",
+      "nonnumeric",
+      "0x10",
+      " 1 ",
+      "\t1\n",
+      "\u000b1",
+      "\f1",
+      " 1",
+      "1 ",
+      "1 2",
+      "9007199254740991",
+      "9007199254740993",
+      "9223372036854775807",
+      "9223372036854775808",
+      "9223372036854775809",
+      "-9223372036854775808",
+      "-9223372036854775809",
+      "1e19",
+      "-1e19",
+      "1e309",
+      "-1e309",
+      "1e-999",
+      "INF",
+      "NAN",
+      "1.0000000000000001e1"
+    ],
+    "whitespace": [
+      [
+        "space",
+        " "
+      ],
+      [
+        "tab",
+        "\t"
+      ],
+      [
+        "lf",
+        "\n"
+      ],
+      [
+        "cr",
+        "\r"
+      ],
+      [
+        "ff",
+        "\f"
+      ],
+      [
+        "vt",
+        "\u000b"
+      ],
+      [
+        "nbsp",
+        " "
+      ],
+      [
+        "nel",
+        ""
+      ],
+      [
+        "em-space",
+        " "
+      ],
+      [
+        "line-separator",
+        " "
+      ],
+      [
+        "bom",
+        "﻿"
+      ]
+    ]
+  },
+  "measurements": {
+    "php": {
+      "php": "7.4.33",
+      "pcre": "10.35 2020-05-09",
+      "intSize": 8,
+      "integers": [
+        {
+          "input": null,
+          "cast": "0"
+        },
+        {
+          "input": "",
+          "cast": "0"
+        },
+        {
+          "input": "0",
+          "cast": "0"
+        },
+        {
+          "input": "1",
+          "cast": "1"
+        },
+        {
+          "input": "01",
+          "cast": "1"
+        },
+        {
+          "input": "10",
+          "cast": "10"
+        },
+        {
+          "input": "+1",
+          "cast": "1"
+        },
+        {
+          "input": "-1",
+          "cast": "-1"
+        },
+        {
+          "input": "1.9",
+          "cast": "1"
+        },
+        {
+          "input": "-1.9",
+          "cast": "-1"
+        },
+        {
+          "input": ".9",
+          "cast": "0"
+        },
+        {
+          "input": "1e1",
+          "cast": "10"
+        },
+        {
+          "input": "1E+1",
+          "cast": "10"
+        },
+        {
+          "input": "1e-1",
+          "cast": "0"
+        },
+        {
+          "input": "1.9e1",
+          "cast": "19"
+        },
+        {
+          "input": "-1e1",
+          "cast": "-10"
+        },
+        {
+          "input": "1e",
+          "cast": "1"
+        },
+        {
+          "input": "1e+",
+          "cast": "1"
+        },
+        {
+          "input": "1e1tail",
+          "cast": "10"
+        },
+        {
+          "input": "12tail",
+          "cast": "12"
+        },
+        {
+          "input": "nonnumeric",
+          "cast": "0"
+        },
+        {
+          "input": "0x10",
+          "cast": "0"
+        },
+        {
+          "input": " 1 ",
+          "cast": "1"
+        },
+        {
+          "input": "\t1\n",
+          "cast": "1"
+        },
+        {
+          "input": "\u000b1",
+          "cast": "1"
+        },
+        {
+          "input": "\f1",
+          "cast": "1"
+        },
+        {
+          "input": " 1",
+          "cast": "0"
+        },
+        {
+          "input": "1 ",
+          "cast": "1"
+        },
+        {
+          "input": "1 2",
+          "cast": "1"
+        },
+        {
+          "input": "9007199254740991",
+          "cast": "9007199254740991"
+        },
+        {
+          "input": "9007199254740993",
+          "cast": "9007199254740993"
+        },
+        {
+          "input": "9223372036854775807",
+          "cast": "9223372036854775807"
+        },
+        {
+          "input": "9223372036854775808",
+          "cast": "9223372036854775807"
+        },
+        {
+          "input": "9223372036854775809",
+          "cast": "9223372036854775807"
+        },
+        {
+          "input": "-9223372036854775808",
+          "cast": "-9223372036854775808"
+        },
+        {
+          "input": "-9223372036854775809",
+          "cast": "-9223372036854775808"
+        },
+        {
+          "input": "1e19",
+          "cast": "9223372036854775807"
+        },
+        {
+          "input": "-1e19",
+          "cast": "-9223372036854775808"
+        },
+        {
+          "input": "1e309",
+          "cast": "0"
+        },
+        {
+          "input": "-1e309",
+          "cast": "0"
+        },
+        {
+          "input": "1e-999",
+          "cast": "0"
+        },
+        {
+          "input": "INF",
+          "cast": "0"
+        },
+        {
+          "input": "NAN",
+          "cast": "0"
+        },
+        {
+          "input": "1.0000000000000001e1",
+          "cast": "10"
+        }
+      ],
+      "whitespace": [
+        {
+          "id": "space",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "tab",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "lf",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "cr",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "ff",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "vt",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "nbsp",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        },
+        {
+          "id": "nel",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        },
+        {
+          "id": "em-space",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        },
+        {
+          "id": "line-separator",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        },
+        {
+          "id": "bom",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        }
+      ]
+    },
+    "frozenTsOperators": {
+      "node": "v24.11.0",
+      "integers": [
+        {
+          "input": null,
+          "cast": "0"
+        },
+        {
+          "input": "",
+          "cast": "0"
+        },
+        {
+          "input": "0",
+          "cast": "0"
+        },
+        {
+          "input": "1",
+          "cast": "1"
+        },
+        {
+          "input": "01",
+          "cast": "1"
+        },
+        {
+          "input": "10",
+          "cast": "10"
+        },
+        {
+          "input": "+1",
+          "cast": "1"
+        },
+        {
+          "input": "-1",
+          "cast": "-1"
+        },
+        {
+          "input": "1.9",
+          "cast": "1"
+        },
+        {
+          "input": "-1.9",
+          "cast": "-1"
+        },
+        {
+          "input": ".9",
+          "cast": "0"
+        },
+        {
+          "input": "1e1",
+          "cast": "1"
+        },
+        {
+          "input": "1E+1",
+          "cast": "1"
+        },
+        {
+          "input": "1e-1",
+          "cast": "1"
+        },
+        {
+          "input": "1.9e1",
+          "cast": "1"
+        },
+        {
+          "input": "-1e1",
+          "cast": "-1"
+        },
+        {
+          "input": "1e",
+          "cast": "1"
+        },
+        {
+          "input": "1e+",
+          "cast": "1"
+        },
+        {
+          "input": "1e1tail",
+          "cast": "1"
+        },
+        {
+          "input": "12tail",
+          "cast": "12"
+        },
+        {
+          "input": "nonnumeric",
+          "cast": "0"
+        },
+        {
+          "input": "0x10",
+          "cast": "0"
+        },
+        {
+          "input": " 1 ",
+          "cast": "1"
+        },
+        {
+          "input": "\t1\n",
+          "cast": "1"
+        },
+        {
+          "input": "\u000b1",
+          "cast": "1"
+        },
+        {
+          "input": "\f1",
+          "cast": "1"
+        },
+        {
+          "input": " 1",
+          "cast": "1"
+        },
+        {
+          "input": "1 ",
+          "cast": "1"
+        },
+        {
+          "input": "1 2",
+          "cast": "1"
+        },
+        {
+          "input": "9007199254740991",
+          "cast": "9007199254740991"
+        },
+        {
+          "input": "9007199254740993",
+          "cast": "9007199254740992"
+        },
+        {
+          "input": "9223372036854775807",
+          "cast": "9223372036854776000"
+        },
+        {
+          "input": "9223372036854775808",
+          "cast": "9223372036854776000"
+        },
+        {
+          "input": "9223372036854775809",
+          "cast": "9223372036854776000"
+        },
+        {
+          "input": "-9223372036854775808",
+          "cast": "-9223372036854776000"
+        },
+        {
+          "input": "-9223372036854775809",
+          "cast": "-9223372036854776000"
+        },
+        {
+          "input": "1e19",
+          "cast": "1"
+        },
+        {
+          "input": "-1e19",
+          "cast": "-1"
+        },
+        {
+          "input": "1e309",
+          "cast": "1"
+        },
+        {
+          "input": "-1e309",
+          "cast": "-1"
+        },
+        {
+          "input": "1e-999",
+          "cast": "1"
+        },
+        {
+          "input": "INF",
+          "cast": "0"
+        },
+        {
+          "input": "NAN",
+          "cast": "0"
+        },
+        {
+          "input": "1.0000000000000001e1",
+          "cast": "1"
+        }
+      ],
+      "whitespace": [
+        {
+          "id": "space",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "tab",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "lf",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "cr",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "ff",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "vt",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "nbsp",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "nel",
+          "phone": false,
+          "engine": false,
+          "edgePhone": false
+        },
+        {
+          "id": "em-space",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "line-separator",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        },
+        {
+          "id": "bom",
+          "phone": true,
+          "engine": true,
+          "edgePhone": true
+        }
+      ]
+    }
+  },
+  "errorCode": null,
+  "cleanup": {
+    "status": "PASS",
+    "normalCleanup": "PASS",
+    "emergencyRemoved": 0,
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "inventoryScope": "EXACT_JOB_LEDGER"
+  }
+}

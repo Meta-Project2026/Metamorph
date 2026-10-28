@@ -1,0 +1,3856 @@
+{
+  "format": "mmp049-candidate-proof-v1",
+  "headSha": "cf33c5bbcaad524a99c667782fae5cb9b0b4125f",
+  "harness": "SUCCESS",
+  "parity": "PASS",
+  "candidate": {
+    "version": "workshop-compat-v1",
+    "path": "packages/target-worker/fixtures/workshop-compat-v1",
+    "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+    "baselinePath": "packages/target-worker/fixtures/workshop",
+    "baselineSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+    "status": "PUBLIC_COMPATIBILITY_CANDIDATE_REQUIRES_INDEPENDENT_REVIEW",
+    "sharedPolicyReplacement": false,
+    "license": "MIT; full upstream notice retained byte-for-byte in src/schema.ts"
+  },
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "clock": "2026-10-27 12:00:00",
+    "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+  },
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "groups": [
+    {
+      "name": "original-manifest",
+      "result": {
+        "status": "PASS",
+        "pairs": 3,
+        "http": 17,
+        "sqlite": 20
+      },
+      "cases": [
+        {
+          "scenarioId": "workshop-business",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "22847ce646e1d3147e13a3a42bb1144b3faf9404c2a82aa39864f395d32941b2",
+                "candidateSha256": "3db34496099d677376f39017012e64c83aeab0588623dc8e2940ead4fa07bedd"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "430289e25a6ae20478b240fb4d4536a1f3c1fa1225807d9f526cd48650222196",
+                "candidateSha256": "449ef84d98698c3d49ec0a0b863d2490ba398bb66215c41a49fecc33587f4cfb"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a96034e846b09eb03fc4dc3def12a3ad710ddaa43d0c2cdb7ef3e988f7512068",
+                "candidateSha256": "6e8d7bfebd1286e3b37a3a834b8cd449ae84a04fe8e10d8d463c8b08751556bd"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+                "candidateSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a4b97d5d2063a0b45ad93a6281739bd2eef564cd2d1cff5a52dfc0d770e3aaf6",
+                "candidateSha256": "d9e157b8f261cb0c47e24da90959ba6d32a48b4acab8c044578abbdd88d845d5"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+                "candidateSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+                "candidateSha256": "ed9158b53b5661cf06b1c2f8e778e7a0b2e78fde5ee13aea268ff3a0bfbd93f5"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            },
+            {
+              "stepId": "step-6",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "e42c84e2b68454abf234a297a5ade1cb50c4195414c9de176c076f1f75c61b94"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            }
+          ],
+          "executedHttp": 6,
+          "executedSqlite": 7,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 21363,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.08985,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.0204070000002,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "22847ce646e1d3147e13a3a42bb1144b3faf9404c2a82aa39864f395d32941b2",
+                "candidateSha256": "bfc13e2cbb9955d799db96b1c5c13795616820ccf2c7526cee645d83c91ab08a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "bbcafbfc8a94ab750676220eaa391690e160e3e6d07b311dbfbf422003245a75",
+                "candidateSha256": "affddbc546bc6580e1a0119af2867dc7a2757e11dd842ad27188e62a775b19f1"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "430289e25a6ae20478b240fb4d4536a1f3c1fa1225807d9f526cd48650222196",
+                "candidateSha256": "dc4f78213fd84ad8d7ef44f147ed948b19258307f5919b699efac05c476542fd"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b2bff7bbff8c379f78cbc7680c2134858d1a9fd4caf7aaf089fd97e4af34041b",
+                "candidateSha256": "0e6923b10ad7322a16e76d64124057ddd7536fd257ff7c7f65996487a62283f2"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "430289e25a6ae20478b240fb4d4536a1f3c1fa1225807d9f526cd48650222196",
+                "candidateSha256": "ed42c7b9f0ee9bf7c0fc5b29e6de9b11ca8bf7722f2faefa3028a4ebfada36e0"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            }
+          ],
+          "executedHttp": 5,
+          "executedSqlite": 6,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 20284,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.088705,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.914447,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "22847ce646e1d3147e13a3a42bb1144b3faf9404c2a82aa39864f395d32941b2",
+                "candidateSha256": "cb43bac7c1e87b4c99a429c363115990fdfc28e528d86a53f8be4837e66e116e"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "5ce8fb46a509c9c4446a017e98b72cc0c44b29ac9b1781a4cddd6640b5207057",
+                "candidateSha256": "6f257bc04a83b738c51a77c81ab4960f087949642495da820e084508f051fe11"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88",
+                "candidateSha256": "00b725a70ab5bc49cd6ab9e33c8f9518d25dac9db6c5af630c34be2a0899ce88"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "5df8ef794aecb8ffea5b1b6ad8063779e1cc136018af944b89f0a8453f398389",
+                "candidateSha256": "ed42251f95a8834bcbebe861c64d5d504ddf7c0f3fd0190ac20fa2840a89c046"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c",
+                "candidateSha256": "e73e1de0c178ffe3501511d6fc3810cbe0d8d7eb66e09b6a53e4a2c69e60ed2c"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "bb41c2b58702a762d7ed9b10496fc0e50b890773b0b507b59a23c8e7925890a9",
+                "candidateSha256": "b1c8dc78919182d23b7a2b33e7f905b20d5e4ea808fee7dcb6a850304d0aaea0"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+                "candidateSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "ef1089b99249f84e37f7cf1f45703900fd8efa015167ff6c3545f629b619cfd0",
+                "candidateSha256": "f1358ac9b1550ea1f10420e4358457a63761c9f436122f30418a538aba1ded6f"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+                "candidateSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14"
+              }
+            },
+            {
+              "stepId": "step-6",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "2cb2782651535afc6d94dd554f7f68c38de4c9be107e022fe6ec4844df46e66a",
+                "candidateSha256": "e516d174bfa4725e94ee171e0785c9eebb73fc4046fe08d7d7875b7972b3d6bf"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14",
+                "candidateSha256": "f2d92be73bd2a92aabf6a4cec63b960920e60cf4c8e3d35a03af577e3e15ed14"
+              }
+            }
+          ],
+          "executedHttp": 6,
+          "executedSqlite": 7,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 21957,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.093424,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.6720329999998,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "name": "unchanged-mmp044",
+      "result": {
+        "status": "PASS",
+        "pairs": 14,
+        "http": 38,
+        "sqlite": 52
+      },
+      "cases": [
+        {
+          "scenarioId": "public-good-lifecycle",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+                "candidateSha256": "79782402f83cabad12ca0fea971e3d9d9d59863205aef4ea5b0c21a6a185ce21"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+                "candidateSha256": "4dc5c7a3946f3270d0ed7457e8bead52b3cf7630e382a092f36401215270d781"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "97d095abb156c5f3a90ee96d0c8fd426080dacde9094d5e36a1a2137fed5e63e",
+                "candidateSha256": "76e8acdcb95a2133523313af722d7a2893237f30c6eaa9941ed189e6cebed65a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89",
+                "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f9f30b445c3161d52a3ded8895e2199b6e752d9610ed7813e4ac75532fba6660",
+                "candidateSha256": "d026a716a3712f67df03cfca5e273d157e93d36c649cf86879c08e5f6fbd16fe"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89",
+                "candidateSha256": "6b77efd9983b746a60fdea4550e893893902213906fe459db2f10887c167bb89"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+                "candidateSha256": "ed58d4c5c7b6172088f5727128eb90ecb19a057401e7bd382e436708b40c626f"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            },
+            {
+              "stepId": "step-6",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "370f1c51c7afadae52168ad2db75faa4667ad62d14025d87ae55ce8075e7bac1"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            },
+            {
+              "stepId": "step-7",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "fcd5bb044db5f11051ca56ff236e2a684f61d12e1f7a5e4e44da3bbb8eea5395",
+                "candidateSha256": "d88f10bd96c640394f2766e579453823bce21667f37370112f89942d2238835f"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292",
+                "candidateSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+              }
+            },
+            {
+              "stepId": "step-8",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e593182e5e387afec8aa1e8b0449f635d4f3228c7058eedfb0cb191f656a0682",
+                "candidateSha256": "307a262b76ec79a50ec2727db2d1eb45998b573132a8adba94cb782e4ddbbca3"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292",
+                "candidateSha256": "8b4fa2a5c32df25e0a781c6aefe4790f63245ca13bd426ff08270639759d6292"
+              }
+            }
+          ],
+          "executedHttp": 8,
+          "executedSqlite": 9,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 24020,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085644,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.713624,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "negativeControl": {
+            "status": "PASS",
+            "codes": [
+              "HTTP_STATUS"
+            ]
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-empty-form",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b2bff7bbff8c379f78cbc7680c2134858d1a9fd4caf7aaf089fd97e4af34041b",
+                "candidateSha256": "c859e5fcc325edfc13193a646e3da66792daf854772520485e485035a0fc7d38"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "bde7c351cb5b5a6a9f86d3e7ec4e64bb541a08f08419d22ba0f930d86b5c6a73"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17711,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.090144,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.757148,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-zero-name",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "250e15fa4b39b20c0eb48b8ed1721cc4d358cfd087ff1ac82d827eea1033c390",
+                "candidateSha256": "b8faa9bc4847572ee711cdcbc33d89eba754bf01b6fb30e299e11c1333b36a4c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "d48f1abc60008314efdaf3bea8a7361892ee8d7e16d9c5bb3b777940821b3321"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17734,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.08789,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.580765,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-ascii-padding",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+                "candidateSha256": "1e914623bd631f5a1a08486e8b15418340b16065bacaa307655e2e5768141746"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413",
+                "candidateSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "5656ac02813ba2f7db68ab36443502acad88bca6de721c738ae2a19a5e3f589d",
+                "candidateSha256": "072b0d30a41d72192a75a3eebe7ff6c6b0798bc3dcaf24713680418c2cc7069b"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413",
+                "candidateSha256": "474330213ca0bd8bafd7c8f07e1fb6344f8965bdad682125aba9d98e0cc77413"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16855,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085255,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.102255,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-phone-letter",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+                "candidateSha256": "e6c584e904bede1010b2e9f777154cbecb0868100ee2187fda0dd2bbb4ce9a72"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "a436559aa3041d2e5c438c048f6b1dd4d69befcd28cbef2d3a4e91bd68e37fd7"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17125,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.092002,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.7156420000001,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-engine-nbsp",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4392fc3bc3861ed781ac824227696d30cab6ee1416b0ee6a2a17bc99ad8a55e4",
+                "candidateSha256": "6dd6ad88f487f8adf45309cb769f87636ee8d211f54d2a8a5c374e74896c70e5"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "88bf246589bdf6b61a983301eabe4ef2bcf4f0cee29cdcc812be0dec994bcd23"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17262,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.088873,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.707416,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-phone-nbsp",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+                "candidateSha256": "1ea50af879a0b5ab23ae0a7566938c565425ae80ef623b3917198a22800aa11c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "5c01c9475f886c645196467d79d648c337405a70cf669a1c6e455cab280f3f11"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16968,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.093077,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.655687,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-exponent-mechanic",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "c917adad2a880d69b5fac98c655f504d9a850deed1092c932f19eb52962f625c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "04bf1fa36399f53886531cd584e9471f64a42e3c7f5dffe251bebbb852df8bb1"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17221,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.102977,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.77634,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-invalid-calendar",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4202cb19a79e87982062d6b40ab52a924409689e8425da9dd2cff29d6df6a3a5",
+                "candidateSha256": "70647fb38116976959ccfef0f800682819cf9eeca598e2092d782f6443b97848"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "072ec583cd57e32b24171b91c06c80f503d26609346464496ef991221f65e321"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17403,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.091812,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.804158,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-past-date",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "444443aeaefb96ff3ecebe8e4960e22afdcd0c10a829847f8795a2aa4b2c34c5",
+                "candidateSha256": "40913a6e918755c903e4e345bedb704903c1233e19aa3f16872dd9ff757a506c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "b2e1296b75fddf946eba5569ba384a8182e0809e7c4aca665a8776ecf4186f9b"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17015,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.083338,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.490338,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-missing-mechanic",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "b364dd49115154ef0e3f028e573c3036defe57534521713a2cca006ff1d2ca90"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "28d57286b6fdd155c7f83283242556d0394d86720438bcfe8fdb24cf6b5b5583"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17121,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.099577,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.763068,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-reject-before-insert",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+                "candidateSha256": "55f23247a57046f38b7f5a0d95326b3a2f93cbefce24448aa0edd2b6b2b6177d"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "23387d463b442aa37a76c8234e240e65395ea02c03c4182384f26db7cbe0cdd4"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+                "candidateSha256": "bbd3d13b1779b379485bd486e852b4599f9964ec6f9334b48c074ee96f00c80a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+                "candidateSha256": "255091ddc85fba876a72f4e4c4e7ddf8650a04b3d871ae5696281c8f073ab93a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            }
+          ],
+          "executedHttp": 4,
+          "executedSqlite": 5,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 19428,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.090613,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.582725,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-exponent-cancel",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+                "candidateSha256": "1c867e1c823d8ec0e3cf16b7bb3ed2dd20e348036704cbb45b917a212a860ad3"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+                "candidateSha256": "09c335870e4d89990c00184917d414ffc04321fa889dfe35b213021d9ea475b7"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+                "candidateSha256": "d902f003d24e671b4031231a6a7e775c0f96f455ffe7e6dadc65597a87d704cb"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            }
+          ],
+          "executedHttp": 3,
+          "executedSqlite": 4,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 18190,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085068,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.566351,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "public-exponent-update",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "7d727062ac0d62c62e80912686b9c300c66e16486b1906e658bf11d6ff34eb08",
+                "candidateSha256": "9e55f3a43739e1cd17393667be28c9da8927b286e49480a7d8ce4a09e5166b2b"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f090a24dc702a0d410c9528da4266ea38d4aba0ac6dae087f51de3d1888db412",
+                "candidateSha256": "34358674ef2ebb85d0071e4100603ca1b18d1a6b676c69a0a9e5475b6c6f30b7"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "d612434ca70be9cccd28120d4a134337eb39f7c1f1cf780d6a6118ef1d55f3d9",
+                "candidateSha256": "1f0c337982b068fc37c9d1448e52bcefbe5a32950acf1c3b25af46fb8a59f06a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325",
+                "candidateSha256": "19f2970bfb2f9a593322e77352ebdf6f59d6b5b1c1c7e502bb51ad4710386325"
+              }
+            }
+          ],
+          "executedHttp": 3,
+          "executedSqlite": 4,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 18805,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.093064,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.839463,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "name": "additional-public-regressions",
+      "result": {
+        "status": "PASS",
+        "pairs": 25,
+        "http": 55,
+        "sqlite": 80
+      },
+      "cases": [
+        {
+          "scenarioId": "compat-decimal-lifecycle",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "a2ffeadb1b86e7a6308ea7704dc4cb0b0a2b85814afabeb8b19790a64a02f25a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f562bd5390f9dc4fa08d2299ff016ce14da65b4c5bb0f8dd74626e62132ad04d",
+                "candidateSha256": "1a71e9a904fe096f001ed1d0ac6f4e05a2c6e711ef5afde523efec3c98ecccb1"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671",
+                "candidateSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+                "candidateSha256": "b2f3133e4e474bf5aed96546659426e8c79b48e329b993244c24f30caa8d16e4"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "9d7153340f4e4958d737baee7ef975b2c3162c765cd48d4d8a0626fddabf3913"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            }
+          ],
+          "executedHttp": 4,
+          "executedSqlite": 5,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 19405,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085347,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.978112,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-missing-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "4b61bcec19fde871d5aae18036edd8d4c623e09133147c2c33fe07df932f460b"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "6b96c470b4f2787ff4326db8b3d0e931c95827492d2f5d1c27fe3f7b370df842"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17213,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.103823,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.867827,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-empty-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "27f4ea0c9a62d9a4039998e2afb2dc24be1f1387cfd349c6fd46d45ad2ea51de"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "50e4a87b4b6025ad568174c2a34aec948b2b42bf4a1319c17abbb9b3b3f5457d"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16946,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.097982,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.761164,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-malformed-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "ed86bcd3cda7ffb6d95f53a0de938742a5b90b84497ae36c1d0208185aa62e31"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "84b3045155eec89c29d64c886fac4f5c9cb9ac908bcb009d7ca3f8c582c4133a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17414,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.08892,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.50728,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-prefix-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "70b8a5f52859450faa9e8175b4a9fdd4bede7e0ccdfbf3ebe8e18e20e03a5996"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "34c036d9b9e97d776dff4d7fe76d6cd505a122876ccd0c42739788e6f56f97bd"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17061,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.091723,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.494492,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-exponent-tail-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "5287adebbacccc93bcc3bb309add9df543376cbc9d70c994dd1ae50b24ee11dc"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "b80bb0a5648c4cfe9dd846418327845e9122bef251686938606c6ede7e777040"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17414,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085813,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.5263850000001,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-incomplete-exponent-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "afd5100bb45c6d3f5ff73a33e0e86c107369bd056b617b87eea9db2046c74553"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "72970d3cf0ffe7fd80a2da3e3388b90c42885f4a52c0c5aa7c6869a2dde0a7d5"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17243,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.091704,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.732689,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-fractional-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "9a495ed933c593357119e02d889cde93e7694bbec60a71c1c151a4902dd3ea4e"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "d745058902885186b99f651d1479b667233936fd94dc7bd70fcceee17b8f7579"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17057,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.092257,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.9418870000002,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-fractional-exponent-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "31533a3eb4806fc747ec006141fa5d0bebb6f5fd4665df7257676f10cb925382"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "08400628028ac01c78ec0681e41182339118db3099635c726817b69788ff5e99"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16836,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.08443,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.558509,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-negative-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "a953c56f476c03e906c9d6abd5e858d5ae074d78adb653d7b22fad1617e822a0"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "bd2ce0ef8f4b238511a144fba6c7f844220d5c6129a21d14d76cbb1df9c5aaaf"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16958,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.087024,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1202.434541,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-space-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "92cda77e4f7bdb9e0e01a83a52fa68b830121ddaf341ae11c236860adc060aa0"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "80ee0129eb7bac9346dab35fb7bbbe1f8209abb832c2475da7604c78e3c1b0ff"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16603,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.095114,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1202.295217,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-leading-nbsp-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "d62fa6a51a99ffdaaab59acd98c7a02b2e573fbe90e2443bf283a88e9ad6242a"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "a00b3eae96f74d6184540dcdc653865df73b3d6c66176ab4568da361a0557235"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16477,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085275,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.923254,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-trailing-nbsp-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "dd5a6056a55d61bdb47a3f0170368871c8aa5d37709d675cab48ad03964966bf"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "7656c45a3ff79238787ba80b76032412ba9e042a63281c4040b506331369bc4c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16885,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.077,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.378462,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-safe-integer-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "1d283a325565ff440665a38e49ec4faa17a3b71601d09d5451a2288f3dcfd402"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "11bc82c8bf4ad4fcb8f9fd2355df103b9bd0049a592c5b47b46787777056d7c9"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16573,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.089283,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.442863,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-unsafe-integer-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "00f83d4ac112b8edd3b6612bac7a3d6c7fd6eecfc476c1f9d42fac95198aabad"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "0947e955826662a27625cdbe0b6b8ba0f9c5626ab6bde7b86c2b9411cb8fda23"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17233,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.089693,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.658617,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-int-max-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "6cb79c6e0321a63e8c6d20e136f28b81db37676ded49019557b5555c5ffb9286"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "ef0ba77a5ab3900bb3930b5caaff6de03260c88ccd9fc0fd3830e59222dada62"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17309,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.076546,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.688051,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-int-overflow-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "17ce019673eaddb75286eedfed502f1f16e378e63d46a67f1e65b5329df280a3",
+                "candidateSha256": "fbd5fc5a16295f0c0eae1b3c296efa84c444ac70aab3ec7948fb4442f031cc25"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "a60f0ebfd139f217f01c195c04d42352ea8f0ab97cba6e7fe58762ed6f82b43f"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16421,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.094688,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.605639,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-infinite-exponent-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "9b8c9ec50972fb82b83f21fbe41250ed467d7161ba0ef7ebf45df971154e3109",
+                "candidateSha256": "6e70ba346fb94d9f35c7a275753aa310bc0fbf9ac1b7fb7cc41e342026aa26f4"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "4f9351e5cd4b4d75c57edbc6a49dd25669da205958d8716ed1f59f92fe6e3fb3"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16447,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.085766,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.43922,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-missing-cancel-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "ee2179945325d79edb8feb62cddffa72923ae62a7dfad911e5de422bab56bc57"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "934497786765f1606f108f6782600e5b5fb64a68469cbe0b2e2c4ece6fa3c4c8",
+                "candidateSha256": "ccaea952cebbcf3b4defee384179c2c93f4f0d0784fed23b3a3a2886b2b1335f"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "fa07734a7a2089545fe558aa5b35d51d665181c93e834028679419e829a67820"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 3,
+          "executedSqlite": 4,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17878,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.089354,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.527158,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-malformed-update-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "eec6ab994594a9ca7e9fae1fded4cd6a7bd5f880be288051080c72eb1e317a45"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "40b31a417080cffbbfbf6c2decb41ab5840c6841b172731d61e961415caa6da6",
+                "candidateSha256": "fc2fd1aae7950ee883533290c0b07721eacda1ab91a724fb173e8cec0eff958c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a2bade142c6c9010c5eca9ddc19946e8c19804b5767652f085b2ca5d698b1072",
+                "candidateSha256": "40dda5082448afb04dbd1dd98a99003e9a3380bbe4c710ae88300bef55cf431c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            }
+          ],
+          "executedHttp": 3,
+          "executedSqlite": 4,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17541,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.092229,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.6848650000002,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-space-update-id",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "9298b9695050c1a3699cbc22e7a20f6ff3d4cc339f437a7456cd47cb41907607"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d",
+                "candidateSha256": "4b9247da410faf28f3b5744bad270f84945998fad75a04bbf9a8770c86f1a77d"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f562bd5390f9dc4fa08d2299ff016ce14da65b4c5bb0f8dd74626e62132ad04d",
+                "candidateSha256": "5251abfe4162e60af36cf8dbd97659a26abb0312696c05601f83cb87a5483466"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671",
+                "candidateSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "1bdc4d982b0b26c1b6a1e71e83b3a589ac99ec270c4f7cca1d7afce95eccc91a",
+                "candidateSha256": "1a64ad6d1467628a6f5040ac62bd15e19424bc9609e493146457fb4ed99a1fd1"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671",
+                "candidateSha256": "0b8b69289df6a3b1308617aa824b2d435195d3f2ba7fc881b0fbd1c04ae7d671"
+              }
+            }
+          ],
+          "executedHttp": 3,
+          "executedSqlite": 4,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17562,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.086607,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.3530039999998,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-space-phone-engine",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "e713e6929c9e90758b119f5904b8a15aa3724ea91d061afd789866660972cc12",
+                "candidateSha256": "38e054eda815c1c98d717e03bdd76ece3aa4b97c19b491ab4e845c3d10fc305e"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "acb5db869d089d623781ce0bb8b2075b19503e99b40a6a396536da31519bfab1",
+                "candidateSha256": "acb5db869d089d623781ce0bb8b2075b19503e99b40a6a396536da31519bfab1"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "25b6f4320b3b37d91c435787fcbcb6d68e33b67f4c30f0b5d67389879b26282e",
+                "candidateSha256": "8e55c0642963e1ad619b9b53321ea290fccc31dea918a68a3c76bfb7619f8012"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "acb5db869d089d623781ce0bb8b2075b19503e99b40a6a396536da31519bfab1",
+                "candidateSha256": "acb5db869d089d623781ce0bb8b2075b19503e99b40a6a396536da31519bfab1"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16893,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.093629,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.5054989999999,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-edge-nbsp-phone",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+                "candidateSha256": "ec234a6278ee3e8fa382f3f5d6b0197e5be5f1b8a8940ebe09c286c0c0896e10"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "2e9f67688d9223545147b6af354dfdffeb424141c40504a06062c6d7c0e37d0e"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16659,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.089154,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.401895,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-unicode-engine",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "4392fc3bc3861ed781ac824227696d30cab6ee1416b0ee6a2a17bc99ad8a55e4",
+                "candidateSha256": "5e3eeaafa0533fa5a8b595678a5b1000e87fa8cc815516847d147ef15e78357d"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "c1a987687e3e8c05a46e85395909356db2a64ad79dd5b110c7d81f5163ff0f8c"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 16656,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.08389,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1200.683817,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "compat-unicode-phone",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "0df891dc8244c4ce8dcbf72476c84db4f6d9344ceb76f3806249a4b643efcaee",
+                "candidateSha256": "b369d4fa92371f76a23bab18310d38c39a3a676ecda46029797e5375c92d657d"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "649d78126dbab3c95015426e1d2d0a19870bc9d603e3803c9476d3e4ea0f11df"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+                "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+              }
+            }
+          ],
+          "executedHttp": 2,
+          "executedSqlite": 3,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 17278,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.083358,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.6040189999999,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "candidate-aux-enospc",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "candidate-wal-full",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "corrupt-db-rejected",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "hung-socket-timeout",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "process-crash",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "cancel-readiness",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    }
+  ],
+  "candidateOperators": {
+    "status": "PASS",
+    "integerCases": 44,
+    "whitespaceCases": 12,
+    "integerResults": [
+      {
+        "input": null,
+        "cast": "0"
+      },
+      {
+        "input": "",
+        "cast": "0"
+      },
+      {
+        "input": "0",
+        "cast": "0"
+      },
+      {
+        "input": "1",
+        "cast": "1"
+      },
+      {
+        "input": "01",
+        "cast": "1"
+      },
+      {
+        "input": "10",
+        "cast": "10"
+      },
+      {
+        "input": "+1",
+        "cast": "1"
+      },
+      {
+        "input": "-1",
+        "cast": "-1"
+      },
+      {
+        "input": "1.9",
+        "cast": "1"
+      },
+      {
+        "input": "-1.9",
+        "cast": "-1"
+      },
+      {
+        "input": ".9",
+        "cast": "0"
+      },
+      {
+        "input": "1e1",
+        "cast": "10"
+      },
+      {
+        "input": "1E+1",
+        "cast": "10"
+      },
+      {
+        "input": "1e-1",
+        "cast": "0"
+      },
+      {
+        "input": "1.9e1",
+        "cast": "19"
+      },
+      {
+        "input": "-1e1",
+        "cast": "-10"
+      },
+      {
+        "input": "1e",
+        "cast": "1"
+      },
+      {
+        "input": "1e+",
+        "cast": "1"
+      },
+      {
+        "input": "1e1tail",
+        "cast": "10"
+      },
+      {
+        "input": "12tail",
+        "cast": "12"
+      },
+      {
+        "input": "nonnumeric",
+        "cast": "0"
+      },
+      {
+        "input": "0x10",
+        "cast": "0"
+      },
+      {
+        "input": " 1 ",
+        "cast": "1"
+      },
+      {
+        "input": "\t1\n",
+        "cast": "1"
+      },
+      {
+        "input": "\u000b1",
+        "cast": "1"
+      },
+      {
+        "input": "\f1",
+        "cast": "1"
+      },
+      {
+        "input": " 1",
+        "cast": "0"
+      },
+      {
+        "input": "1 ",
+        "cast": "1"
+      },
+      {
+        "input": "1 2",
+        "cast": "1"
+      },
+      {
+        "input": "9007199254740991",
+        "cast": "9007199254740991"
+      },
+      {
+        "input": "9007199254740993",
+        "cast": "9007199254740993"
+      },
+      {
+        "input": "9223372036854775807",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "9223372036854775808",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "9223372036854775809",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "-9223372036854775808",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "-9223372036854775809",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "1e19",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "-1e19",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "1e309",
+        "cast": "0"
+      },
+      {
+        "input": "-1e309",
+        "cast": "0"
+      },
+      {
+        "input": "1e-999",
+        "cast": "0"
+      },
+      {
+        "input": "INF",
+        "cast": "0"
+      },
+      {
+        "input": "NAN",
+        "cast": "0"
+      },
+      {
+        "input": "1.0000000000000001e1",
+        "cast": "10"
+      }
+    ],
+    "whitespaceResults": [
+      {
+        "id": "space",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "tab",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "lf",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "cr",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "ff",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "vt",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true,
+        "leadingPhone": true,
+        "trailingPhone": true,
+        "leadingEngine": true,
+        "trailingEngine": true
+      },
+      {
+        "id": "nbsp",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      },
+      {
+        "id": "nel",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      },
+      {
+        "id": "em-space",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      },
+      {
+        "id": "line-separator",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      },
+      {
+        "id": "paragraph-separator",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      },
+      {
+        "id": "bom",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false,
+        "leadingPhone": false,
+        "trailingPhone": false,
+        "leadingEngine": false,
+        "trailingEngine": false
+      }
+    ],
+    "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+    "artifactSha256": "bef101fec5f87ecf1b1a2b698eb94480d1e8f620dacb478ade5a7ac4ee311d1d"
+  },
+  "runtime": {
+    "phpImageId": "sha256:9645ac0b4cbae87eba0c5a7822cc7fe965ae09589ca174d44f9ede1cf78db782",
+    "sourceSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "targetImageId": "sha256:495c729950eeef903c851626b5548bd1a1ecbd33da860a8e70fa9984ad816b4c",
+    "provenance": {
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "hashes": {
+        "Dockerfile": "dea37c3264516b8e544b5cbbe513285c6b61c0cb8871616a0038aa85d8db1b76",
+        "build.mjs": "25fa4fa9b91a8f7abaf2d67815ecbe3ab33c75e69ad936fd741374ebee49c6bb",
+        "clock.mjs": "6778b68119616e3bfc7803228ece2c0df90b0fe49d0b85cd4989f110ad0a6adb",
+        "inspect.mjs": "795b27c30381de565602d6e658510ec1fa9e4c261e74d520600c07dbecb69e07",
+        "launch.mjs": "ea5858e91fa62ba62ac9519f6c7bb359a0ae21c9751a244cc1cb010b865e24a3",
+        "package-lock.json": "af2bc4f0e80a37e8d330d95355e8972a2bd6c75e38f14e0dd36b3c60020396f8",
+        "package.json": "b00017ce23cdecc5cdab15fa0050a80527716cdd86e35819c4c08d24e46ce97d",
+        "profile.mjs": "b37a7994c3564dc30507c8b13aea5042a3887acd886454ba7c5293316aff7096",
+        "provenance.mjs": "e0a38c0111418956f2b0a8ef14f605462c94272fa8817d445dfba24a523cc506",
+        "quota.mjs": "2ee9ee285ff1656eee9ed1fda34805e90f9f716d2e2e15016729d65de58a523a",
+        "sqlite-value.mjs": "f4ed14c4709e275aeb92b7bcdbb8767f2a5ee31701c95a0d182bc276e096de00",
+        "unit-smoke.mjs": "eb8568bf0575d22507924335f05f41ce525e4f005d2504e0d060e9e76fc4259a"
+      },
+      "measured": {
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "typescript": "5.9.3",
+        "faketime": "0.9.10-2.1",
+        "clockPolicy": "libfaketime-real-monotonic-v1",
+        "hashes": {
+          "build.mjs": "25fa4fa9b91a8f7abaf2d67815ecbe3ab33c75e69ad936fd741374ebee49c6bb",
+          "clock.mjs": "6778b68119616e3bfc7803228ece2c0df90b0fe49d0b85cd4989f110ad0a6adb",
+          "inspect.mjs": "795b27c30381de565602d6e658510ec1fa9e4c261e74d520600c07dbecb69e07",
+          "launch.mjs": "ea5858e91fa62ba62ac9519f6c7bb359a0ae21c9751a244cc1cb010b865e24a3",
+          "profile.mjs": "b37a7994c3564dc30507c8b13aea5042a3887acd886454ba7c5293316aff7096",
+          "provenance.mjs": "e0a38c0111418956f2b0a8ef14f605462c94272fa8817d445dfba24a523cc506",
+          "quota.mjs": "2ee9ee285ff1656eee9ed1fda34805e90f9f716d2e2e15016729d65de58a523a",
+          "sqlite-value.mjs": "f4ed14c4709e275aeb92b7bcdbb8767f2a5ee31701c95a0d182bc276e096de00",
+          "unit-smoke.mjs": "eb8568bf0575d22507924335f05f41ce525e4f005d2504e0d060e9e76fc4259a",
+          "package.json": "b00017ce23cdecc5cdab15fa0050a80527716cdd86e35819c4c08d24e46ce97d",
+          "package-lock.json": "af2bc4f0e80a37e8d330d95355e8972a2bd6c75e38f14e0dd36b3c60020396f8"
+        }
+      },
+      "imageId": "sha256:495c729950eeef903c851626b5548bd1a1ecbd33da860a8e70fa9984ad816b4c",
+      "repoDigests": [],
+      "trust": "host-owned-build-and-inspect; not cryptographic attestation"
+    }
+  },
+  "gates": {
+    "G0": "INCONCLUSIVE",
+    "G1": "PASS",
+    "G2": "PASS",
+    "G3": "PASS",
+    "G4": "INCONCLUSIVE"
+  },
+  "product": "NOT_ESTABLISHED",
+  "ai": "AI_GENERATION_NOT_RUN",
+  "privateAudit": "UNCHANGED; CAUSE_NOT_ESTABLISHED",
+  "independentReview": "PENDING",
+  "errorCode": null,
+  "corpusSha256": "5e3b588003de33d36f37cc2dadc848d0dfebc44fdd2c0a9aaed65e84f240f496",
+  "httpControls": {
+    "positive": "PASS",
+    "negative": {
+      "status": "PASS",
+      "codes": [
+        "HTTP_STATUS"
+      ]
+    }
+  },
+  "cleanup": {
+    "status": "PASS",
+    "normalCleanup": "PASS",
+    "emergencyRemoved": 0,
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "inventoryScope": "EXACT_JOB_LEDGER"
+  },
+  "privatePackSha256": "1d10774b50c602bf2c4dd9df3787b38944dcc9dd40e3ba7c2782c6eeb690b2ea"
+}

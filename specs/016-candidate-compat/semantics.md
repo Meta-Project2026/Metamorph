@@ -7,6 +7,13 @@ code `d7af19b9ddb17ad04e65177828bc2d4b137a1e80`; exact public
 [semantics receipt](evidence/probe-40716984152/semantics.json).
 These are operator measurements; they do not establish application parity.
 
+The selected [complete replay](validation.md) additionally measured U+2029 and
+separate leading/trailing phone/engine positions for all 12 whitespace families.
+Actual compiled corrected operators match pinned PHP for every value. U+2028
+and U+2029 are rejected on either edge; existing anchors need no extra change.
+The [ECMAScript assertion rule](https://tc39.es/ecma262/2024/multipage/text-processing.html#sec-compileassertion)
+requires end-of-input without `m`; no multiline flag is present here.
+
 | Public input | PHP 7.4 | Frozen TS operator | Corrected rule |
 | --- | --- | --- | --- |
 | `1`, `01`, `10`, `+1` | 1, 1, 10, 1 | Same | Preserve decimal IDs |

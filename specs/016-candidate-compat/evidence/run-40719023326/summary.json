@@ -1,0 +1,674 @@
+{
+  "format": "mmp049-candidate-proof-v1",
+  "headSha": "5cd0e838d25486d9f16f63ebb86450bcd2686404",
+  "harness": "ERROR",
+  "parity": "INCONCLUSIVE",
+  "candidate": {
+    "version": "workshop-compat-v1",
+    "path": "packages/target-worker/fixtures/workshop-compat-v1",
+    "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+    "baselinePath": "packages/target-worker/fixtures/workshop",
+    "baselineSha256": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+    "status": "PUBLIC_COMPATIBILITY_CANDIDATE_REQUIRES_INDEPENDENT_REVIEW",
+    "sharedPolicyReplacement": false,
+    "license": "MIT; full upstream notice retained byte-for-byte in src/schema.ts"
+  },
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "clock": "2026-10-27 12:00:00",
+    "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+  },
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "groups": [
+    {
+      "name": "original-manifest",
+      "result": {
+        "status": "NOT_RUN"
+      },
+      "cases": [
+        {
+          "scenarioId": "workshop-business",
+          "status": "PASS",
+          "bootstrap": "PASS",
+          "g1": "PASS",
+          "initial": {
+            "status": "PASS",
+            "codes": [],
+            "referenceSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a",
+            "candidateSha256": "f594e7746b5ad120ecbe44ad4abf0977d7113864f4b121d44d073ef7b8659b2a"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "22847ce646e1d3147e13a3a42bb1144b3faf9404c2a82aa39864f395d32941b2",
+                "candidateSha256": "a5b1ed04b5873880c69a4799288498c2ffa48c399b2dfc8ef3966312aa2e69f7"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "430289e25a6ae20478b240fb4d4536a1f3c1fa1225807d9f526cd48650222196",
+                "candidateSha256": "7dfd8bb7836a94d10726b3eab9cbf8ca5b34cdb4ccf9c243cb02e4a6ec9ebab5"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965",
+                "candidateSha256": "f50cfff9806fa7e3304a7129a8b1c7c1bd22ea89ed06f350da8a23d56ee97965"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a96034e846b09eb03fc4dc3def12a3ad710ddaa43d0c2cdb7ef3e988f7512068",
+                "candidateSha256": "a170709b720a1856de47b7abddbe92d5f571f3603a6ae03b5a08ba1cc11e640b"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+                "candidateSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "a4b97d5d2063a0b45ad93a6281739bd2eef564cd2d1cff5a52dfc0d770e3aaf6",
+                "candidateSha256": "53833ab48033e18707bb9fac2eec4e7cd47ba88fb01b6918627b7db438333656"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce",
+                "candidateSha256": "f69ac8601dd5d912f7ab63b22e345966687be8f058a012c7a2be2eea32bbdbce"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "b585dcdec9ee3016ef26663cf89aef7a719d36f1b10904b4c7f33b83dcc1baa1",
+                "candidateSha256": "d43bb10adf3df03e71a9ba561a3b8b5cdd9f9790e81ea984b9a5dbbccdf96114"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            },
+            {
+              "stepId": "step-6",
+              "http": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "14ccfa6c171e42ad438ba5790f8b0bf23d44ea1ca5e4e4d67a9cd3b303ec616e",
+                "candidateSha256": "9864f2d848d882d2c0a74ae1d31cca2bb42aee261eab8eef5d6de013eb3f1095"
+              },
+              "db": {
+                "status": "PASS",
+                "codes": [],
+                "referenceSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b",
+                "candidateSha256": "693cc3537e6a01adcad666d33ae52e17079782fcffd836c50285531eecf4a36b"
+              }
+            }
+          ],
+          "executedHttp": 6,
+          "executedSqlite": 7,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 13183,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.130741,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "targetClock": {
+            "fixedUtc": "2026-10-27T12:00:00.000Z",
+            "monotonicDeltaMs": 1201.645161,
+            "node": "v24.11.0",
+            "sqlite": "3.50.4"
+          },
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "workshop-rejected",
+          "status": "ERROR",
+          "bootstrap": "PASS",
+          "g1": "NOT_RUN",
+          "initial": {
+            "status": "NOT_RUN"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            }
+          ],
+          "executedHttp": 0,
+          "executedSqlite": 0,
+          "firstDifference": null,
+          "normalCleanup": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "durationMs": 7355,
+          "referenceRuntime": {
+            "php": "7.4.33",
+            "sqlite": "3.34.1",
+            "fixedUtc": "2026-10-27 12:00:00",
+            "monotonicMs": 50.067415,
+            "clockLibrarySha256": "e306051a42e7f6454a2b09576b7ef02acb78895e135620c80a47c36b639c12b8"
+          },
+          "errorCode": "BUILD_FAILED",
+          "primaryErrorCode": "BUILD_FAILED",
+          "errorPhase": "target-provision",
+          "commandFailure": null,
+          "closeErrors": [
+            null,
+            null
+          ]
+        },
+        {
+          "scenarioId": "workshop-capacity",
+          "status": "NOT_RUN",
+          "bootstrap": "NOT_RUN",
+          "g1": "NOT_RUN",
+          "initial": {
+            "status": "NOT_RUN"
+          },
+          "steps": [
+            {
+              "stepId": "step-1",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-2",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-3",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-4",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-5",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            },
+            {
+              "stepId": "step-6",
+              "http": {
+                "status": "NOT_RUN"
+              },
+              "db": {
+                "status": "NOT_RUN"
+              }
+            }
+          ],
+          "executedHttp": 0,
+          "executedSqlite": 0,
+          "firstDifference": null,
+          "normalCleanup": "NOT_RUN",
+          "emergencyRemoved": 0,
+          "inventory": null,
+          "durationMs": 0
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "candidate-aux-enospc",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "candidate-wal-full",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "corrupt-db-rejected",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "hung-socket-timeout",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "process-crash",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    },
+    {
+      "id": "cancel-readiness",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES"
+    }
+  ],
+  "candidateOperators": {
+    "status": "PASS",
+    "integerCases": 44,
+    "whitespaceCases": 11,
+    "integerResults": [
+      {
+        "input": null,
+        "cast": "0"
+      },
+      {
+        "input": "",
+        "cast": "0"
+      },
+      {
+        "input": "0",
+        "cast": "0"
+      },
+      {
+        "input": "1",
+        "cast": "1"
+      },
+      {
+        "input": "01",
+        "cast": "1"
+      },
+      {
+        "input": "10",
+        "cast": "10"
+      },
+      {
+        "input": "+1",
+        "cast": "1"
+      },
+      {
+        "input": "-1",
+        "cast": "-1"
+      },
+      {
+        "input": "1.9",
+        "cast": "1"
+      },
+      {
+        "input": "-1.9",
+        "cast": "-1"
+      },
+      {
+        "input": ".9",
+        "cast": "0"
+      },
+      {
+        "input": "1e1",
+        "cast": "10"
+      },
+      {
+        "input": "1E+1",
+        "cast": "10"
+      },
+      {
+        "input": "1e-1",
+        "cast": "0"
+      },
+      {
+        "input": "1.9e1",
+        "cast": "19"
+      },
+      {
+        "input": "-1e1",
+        "cast": "-10"
+      },
+      {
+        "input": "1e",
+        "cast": "1"
+      },
+      {
+        "input": "1e+",
+        "cast": "1"
+      },
+      {
+        "input": "1e1tail",
+        "cast": "10"
+      },
+      {
+        "input": "12tail",
+        "cast": "12"
+      },
+      {
+        "input": "nonnumeric",
+        "cast": "0"
+      },
+      {
+        "input": "0x10",
+        "cast": "0"
+      },
+      {
+        "input": " 1 ",
+        "cast": "1"
+      },
+      {
+        "input": "\t1\n",
+        "cast": "1"
+      },
+      {
+        "input": "\u000b1",
+        "cast": "1"
+      },
+      {
+        "input": "\f1",
+        "cast": "1"
+      },
+      {
+        "input": " 1",
+        "cast": "0"
+      },
+      {
+        "input": "1 ",
+        "cast": "1"
+      },
+      {
+        "input": "1 2",
+        "cast": "1"
+      },
+      {
+        "input": "9007199254740991",
+        "cast": "9007199254740991"
+      },
+      {
+        "input": "9007199254740993",
+        "cast": "9007199254740993"
+      },
+      {
+        "input": "9223372036854775807",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "9223372036854775808",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "9223372036854775809",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "-9223372036854775808",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "-9223372036854775809",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "1e19",
+        "cast": "9223372036854775807"
+      },
+      {
+        "input": "-1e19",
+        "cast": "-9223372036854775808"
+      },
+      {
+        "input": "1e309",
+        "cast": "0"
+      },
+      {
+        "input": "-1e309",
+        "cast": "0"
+      },
+      {
+        "input": "1e-999",
+        "cast": "0"
+      },
+      {
+        "input": "INF",
+        "cast": "0"
+      },
+      {
+        "input": "NAN",
+        "cast": "0"
+      },
+      {
+        "input": "1.0000000000000001e1",
+        "cast": "10"
+      }
+    ],
+    "whitespaceResults": [
+      {
+        "id": "space",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "tab",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "lf",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "cr",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "ff",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "vt",
+        "phone": true,
+        "engine": true,
+        "edgePhone": true
+      },
+      {
+        "id": "nbsp",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false
+      },
+      {
+        "id": "nel",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false
+      },
+      {
+        "id": "em-space",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false
+      },
+      {
+        "id": "line-separator",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false
+      },
+      {
+        "id": "bom",
+        "phone": false,
+        "engine": false,
+        "edgePhone": false
+      }
+    ],
+    "candidateSha256": "5fe43bb1b0e2147fb85d1c0074678e5823fb07c45cbd7d90c1bdee030b24d928",
+    "artifactSha256": "bef101fec5f87ecf1b1a2b698eb94480d1e8f620dacb478ade5a7ac4ee311d1d"
+  },
+  "runtime": {
+    "phpImageId": "sha256:84d228d9aeffc407dbb6cf3076a3ea1968b79763f9069f2eeb2d9e4f87a56dcf",
+    "sourceSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "targetImageId": "sha256:591706a45610cf7137aac925851971b7512e1a24ba25e893c07f73bf904dab14",
+    "provenance": {
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "hashes": {
+        "Dockerfile": "dea37c3264516b8e544b5cbbe513285c6b61c0cb8871616a0038aa85d8db1b76",
+        "build.mjs": "25fa4fa9b91a8f7abaf2d67815ecbe3ab33c75e69ad936fd741374ebee49c6bb",
+        "clock.mjs": "6778b68119616e3bfc7803228ece2c0df90b0fe49d0b85cd4989f110ad0a6adb",
+        "inspect.mjs": "795b27c30381de565602d6e658510ec1fa9e4c261e74d520600c07dbecb69e07",
+        "launch.mjs": "ea5858e91fa62ba62ac9519f6c7bb359a0ae21c9751a244cc1cb010b865e24a3",
+        "package-lock.json": "af2bc4f0e80a37e8d330d95355e8972a2bd6c75e38f14e0dd36b3c60020396f8",
+        "package.json": "b00017ce23cdecc5cdab15fa0050a80527716cdd86e35819c4c08d24e46ce97d",
+        "profile.mjs": "b37a7994c3564dc30507c8b13aea5042a3887acd886454ba7c5293316aff7096",
+        "provenance.mjs": "e0a38c0111418956f2b0a8ef14f605462c94272fa8817d445dfba24a523cc506",
+        "quota.mjs": "2ee9ee285ff1656eee9ed1fda34805e90f9f716d2e2e15016729d65de58a523a",
+        "sqlite-value.mjs": "f4ed14c4709e275aeb92b7bcdbb8767f2a5ee31701c95a0d182bc276e096de00",
+        "unit-smoke.mjs": "eb8568bf0575d22507924335f05f41ce525e4f005d2504e0d060e9e76fc4259a"
+      },
+      "measured": {
+        "node": "v24.11.0",
+        "sqlite": "3.50.4",
+        "typescript": "5.9.3",
+        "faketime": "0.9.10-2.1",
+        "clockPolicy": "libfaketime-real-monotonic-v1",
+        "hashes": {
+          "build.mjs": "25fa4fa9b91a8f7abaf2d67815ecbe3ab33c75e69ad936fd741374ebee49c6bb",
+          "clock.mjs": "6778b68119616e3bfc7803228ece2c0df90b0fe49d0b85cd4989f110ad0a6adb",
+          "inspect.mjs": "795b27c30381de565602d6e658510ec1fa9e4c261e74d520600c07dbecb69e07",
+          "launch.mjs": "ea5858e91fa62ba62ac9519f6c7bb359a0ae21c9751a244cc1cb010b865e24a3",
+          "profile.mjs": "b37a7994c3564dc30507c8b13aea5042a3887acd886454ba7c5293316aff7096",
+          "provenance.mjs": "e0a38c0111418956f2b0a8ef14f605462c94272fa8817d445dfba24a523cc506",
+          "quota.mjs": "2ee9ee285ff1656eee9ed1fda34805e90f9f716d2e2e15016729d65de58a523a",
+          "sqlite-value.mjs": "f4ed14c4709e275aeb92b7bcdbb8767f2a5ee31701c95a0d182bc276e096de00",
+          "unit-smoke.mjs": "eb8568bf0575d22507924335f05f41ce525e4f005d2504e0d060e9e76fc4259a",
+          "package.json": "b00017ce23cdecc5cdab15fa0050a80527716cdd86e35819c4c08d24e46ce97d",
+          "package-lock.json": "af2bc4f0e80a37e8d330d95355e8972a2bd6c75e38f14e0dd36b3c60020396f8"
+        }
+      },
+      "imageId": "sha256:591706a45610cf7137aac925851971b7512e1a24ba25e893c07f73bf904dab14",
+      "repoDigests": [],
+      "trust": "host-owned-build-and-inspect; not cryptographic attestation"
+    }
+  },
+  "gates": {
+    "G0": "INCONCLUSIVE",
+    "G1": "NOT_RUN",
+    "G2": "INCONCLUSIVE",
+    "G3": "INCONCLUSIVE",
+    "G4": "INCONCLUSIVE"
+  },
+  "product": "NOT_ESTABLISHED",
+  "ai": "AI_GENERATION_NOT_RUN",
+  "privateAudit": "UNCHANGED; CAUSE_NOT_ESTABLISHED",
+  "independentReview": "PENDING",
+  "errorCode": "PROOF_CHECK_FAILED",
+  "corpusSha256": "5e3b588003de33d36f37cc2dadc848d0dfebc44fdd2c0a9aaed65e84f240f496",
+  "cleanup": {
+    "status": "PASS",
+    "normalCleanup": "PASS",
+    "emergencyRemoved": 0,
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "inventoryScope": "EXACT_JOB_LEDGER"
+  },
+  "privatePackSha256": "40fb8cdf0f73c950b0c908bcd3fc6254a3cfb1cc213c66000aee6de1b58836ec"
+}

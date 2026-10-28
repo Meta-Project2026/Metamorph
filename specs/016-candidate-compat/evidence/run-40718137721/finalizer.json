@@ -1,0 +1,28 @@
+{
+  "headSha": "bf33a02c4c60c9e530c0a8bc43d85a668d2e2e76",
+  "status": "PASS",
+  "stages": [
+    {
+      "name": "probe",
+      "status": "PASS",
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "inventoryScope": "EXACT_JOB_LEDGER"
+    },
+    {
+      "name": "proof",
+      "status": "PASS",
+      "normalCleanup": "PASS",
+      "emergencyRemoved": 0,
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "inventoryScope": "EXACT_JOB_LEDGER"
+    }
+  ]
+}
