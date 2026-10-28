@@ -1,9 +1,9 @@
-# MMP-038 — Local-first architecture direction (owner decision draft)
+# MMP-038 — Local-first architecture direction and ratified retention term
 
 Date: 2026-10-28. Related: #38, #52, PR #51, #26, #34.
-Status: **LOCAL_FIRST_DIRECTION_ACCEPTED_BY_REQUESTER; SECOND_OWNER_EXACT_POLICY_CONFIRMATION_PENDING; FORMAL_G4_NOT_AUTHORIZED**.
+Status: **LOCAL_FIRST_DIRECTION_ADOPTED; 180_DAY_RETENTION_AND_DAY_90_RESTORE_APPROVED_BY_BOTH_OWNERS_AS_REPORTED_BY_REQUESTER; AUTHENTICATED_JOINT_RECORD_PENDING; FORMAL_G4_NOT_AUTHORIZED**.
 
-This records the requester's explicit agreement to a local-first Metamorph architecture. The earlier report that both owners approved **proceeding to decisions** is not an independently authenticated signature by Ilia on this exact policy. Merging an ADR cannot supply another owner's assent. Formal G4 protocol readiness, first-run admission and product acceptance remain separate.
+The requester explicitly confirmed on 2026-10-28 that **both Vladimir and Ilia agreed to the local-first direction** and **definitively approved a minimum 180-day evidence-retention term and a mandatory day-90 restore test**. This records a reported unanimous owner policy decision, **not** an independently authenticated GitHub sign-off by Ilia: as checked at this revision, no separate review/comment from him on PR #53 is recorded. Do not impersonate or sign on his behalf. The exact storage media, custodian, key holders, concrete run admission and formal G4 acceptance remain separate decisions.
 
 ## Architectural direction
 
@@ -13,7 +13,7 @@ This records the requester's explicit agreement to a local-first Metamorph archi
 4. **Local-first private evidence.** Seal complete *and partial* exact-byte raw evidence and independently verifiable SHA-256 indices outside candidate/model workspaces, with frozen identity, attempt history, teardown receipts, prior witnessed/blinded commitments and restricted review. The storage interface can later expose cloud/S3-compatible adapters but they are not mandatory and cannot weaken required acceptance evidence.
 5. **Two independent encrypted durable copies for formal G4.** Default deployment target: custodian-controlled encrypted primary local disk/NAS plus physically separate encrypted offline removable medium under independently controlled custody. At least one copy is off the disposable runner; separate failure domains and recoverable key escrow are mandatory for the formal profile. Two folders, two mounted disks under the same administrator, or two drives in the same location are not sufficient on their own.
 6. **Real immutability and restore.** Local permissions/snapshots/filesystem immutable flags are not WORM against a privileged administrator. Require a separately witnessed append-only identity/journal, immutable versions or protected media, checks of owner/admin access, anti-tamper cases, and independent exact-byte restore in a clean environment *after* worker teardown. If required assurance is unavailable, formal G4 is BLOCKED, not PASS.
-7. **Proposed retention parameters:** complete and partial attempts for at least 180 days, extension under hold, tested key escrow/recovery, day-90 restore rehearsal and independently witnessed deletion/expiry. These operational commitments still require both owners to select the actual media, services, custodians, quotas, schedules and legal/operational limits. No storage is configured by this decision.
+7. **Approved retention parameters (binding architecture policy):** keep complete **and partial/failed** sealed G4 evidence at least **180 calendar days after the terminal run/attempt receipt**; maintain an extension while an active hold/incident/dispute applies; perform an **independent exact-byte restore and full index verification by day 90** of that retention period, recording the dated pass/failure and reviewer identity. A missing/delayed/failed restore is not a verified recovery and cannot qualify for G4_PASS; do not silently replace it with hash-only or upload-only evidence. Qualified custodian, concrete media, encryption/keys, quotas, recovery delegation, hold/expiry and deletion procedures must be selected and verified before formal admission. No media/storage/restore has been configured or run by this policy decision.
 
 ## Three modes and claims
 
@@ -35,9 +35,10 @@ No private corpus may enter the candidate author/model context. **LIMITED_TWO_PE
 
 ## Owner and evidence boundaries
 
-- **Requester:** local-first direction explicitly accepted in the present conversation; this record is not an independently authenticated owner signature.
-- **Ilia:** no separate signed approval of this exact ADR is present here; obtain through a verified owner repository channel.
-- **Still OPEN:** D1–D7 as applicable, selected independence profile, concrete local media/key custody, IMPLEMENTATION_READY and formal first-run admission. No new G4 receipt, no paid deployment and no hidden sample execution.
+- **Vladimir and Ilia:** the requester reports explicit agreement by **both owners** to the local-first architecture and the final **180-day/day-90** policy on 2026-10-28. This records the owners' *reported decision*, not an independently authenticated approval for the second owner's account.
+- **GitHub confirmation:** PR #53 requests Ilia's review; his authenticated acknowledgment of this exact version remains to be attached to the append-only decision record. The absence of a GitHub comment does **not** reverse the reported decision, but prevents claiming an authenticated two-person receipt.
+- **Approved D4 policy subset:** offline/local-first as default, **180-day minimum**, **independent day-90 restore verification**; these durations are no longer proposals. Specific physical devices, distinct administrators/custodian, custody/access controls, key escrow, expiry/deletion and independence profile remain implementation/admission choices.
+- **Still OPEN:** D1–D7 where not satisfied by this narrow policy decision, selected independence profile, concrete local media/key custody, IMPLEMENTATION_READY and formal first-run admission. No new G4 receipt, no paid deployment and no hidden sample execution.
 - **Historical results:** PR #31 AUDIT_FAIL is immutable; public MMP-044/MMP-049 parity does not convert canonical G4 from INCONCLUSIVE or product from NOT_ESTABLISHED.
 
 Future implementation executor, only after a separate approved task: **sol 6.1, effort xhigh**. Implementation must commit/push to a separate GitHub PR for independent ChatGPT review; no silently authorized formal run or automatic acceptance.
