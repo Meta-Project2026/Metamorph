@@ -14,10 +14,12 @@ Use [decision-record.md](decision-record.md) to name owners and record decisions
   administrator exposure. No same-corpus author access may be waived.
 - [ ] A3. Agree registration/selection/freeze ordering, mandatory coverage,
   outcome/finality rules, technical retry policy and fresh-version triggers.
-- [ ] A4. Agree concrete retention period, copies/key custody, restore/deletion
-  policy and authority. Resolve protocol policy choices D1/D2/D4/D5 explicitly;
-  unknown policy choices cannot count as readiness. D3/D6/D7 remain separate
-  implementation/registration/run gates, not implied approvals.
+- [ ] A4. Confirm the **already owner-reported agreed minimum 180-day retention
+  and independent exact-byte restore by day 90** in an authenticated both-owner
+  decision record. Separately choose concrete encrypted physical copies, distinct
+  storage/key custodians, access/recovery and verified deletion procedures.
+  Unknown implementation choices cannot count as readiness; D1/D2/D5 and
+  D3/D6/D7 remain separate gates, not implied approvals.
 
 This milestone approves a bounded protocol. It neither authorizes code changes
 to shared APIs nor dispatches a formal evaluation.
