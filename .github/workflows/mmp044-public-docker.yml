@@ -1,0 +1,59 @@
+name: MMP-044 public Docker reproduction
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mmp044-public-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      MMP044_HEAD_SHA: ${{ github.sha }}
+      MMP044_PARENT: ${{ runner.temp }}/mmp044-private
+      MMP044_OUTPUT: ${{ runner.temp }}/mmp044-public
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Verify exact checkout and public entrypoint
+        run: |
+          test "$(git rev-parse HEAD)" = "$MMP044_HEAD_SHA"
+          test -f research/mmp-044/run-public.mjs
+          mkdir -p "$MMP044_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Host driver tests (synthetic, no parity claim)
+        run: node --test research/mmp-044/driver.test.mjs
+      - name: Fixed public PHP/TS experiment
+        run: node research/mmp-044/run-public.mjs
+      - name: Independent exact-ledger finalizer
+        if: always()
+        run: |
+          mkdir -p "$MMP044_OUTPUT"
+          node research/mmp-044/finalize.mjs
+      - name: Hash allowlisted public receipts
+        if: always()
+        run: |
+          cd "$MMP044_OUTPUT"
+          sha256sum summary.json finalizer.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mmp044-public
+          path: |
+            ${{ env.MMP044_OUTPUT }}/summary.json
+            ${{ env.MMP044_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
