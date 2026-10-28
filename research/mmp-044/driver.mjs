@@ -75,6 +75,22 @@ const errors = new Set([
   "INSPECTOR_VERSION",
   "INSPECTOR_ADMIT",
   "INSPECTOR_SCHEMA",
+  "COMMAND_RUN_ERROR",
+  "COMMAND_EXEC_ERROR",
+  "COMMAND_VOLUME_ERROR",
+  "COMMAND_IMAGE_ERROR",
+  "COMMAND_PAUSE_ERROR",
+  "COMMAND_UNPAUSE_ERROR",
+  "COMMAND_RM_ERROR",
+  "COMMAND_PS_ERROR",
+  "EVIDENCE_WRITE_ERROR",
+  "WORKER_NOT_READY",
+  "INSPECTOR_WIRE",
+  "INSPECTOR_DIGEST",
+  "PHP_CLIENT_PARSE_ERROR",
+  "SOURCE_DOWNLOAD",
+  "SOURCE_LIMIT",
+  "EXTENSIONS_MISSING",
 ]);
 // Never publish arbitrary exception messages, even uppercase-looking values.
 export const errorCode = (error) => {
@@ -179,6 +195,7 @@ export function verifyCoverage(scenario, receipt) {
 }
 export async function runCase(scenario, pair, signal, record = () => {}) {
   const receipt = blankCase(scenario);
+  let phase = "policy";
   const start = performance.now();
   const mismatch = (kind, stepId, result) => {
     if (result.status === "FAIL" && !receipt.firstDifference)
@@ -193,10 +210,13 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
         requireCheck(false, "POLICY_ERROR");
       }
     }
+    phase = "php-reset";
     await active(signal, () => pair.php.reset(signal));
+    phase = "php-bootstrap";
     const boot = await active(signal, () => pair.php.http(BOOTSTRAP, signal));
     requireCheck(boot.observation.status === 200, "BOOTSTRAP_ERROR");
     record("bootstrap-http", boot);
+    phase = "php-initial-inspect";
     const initialPhp = await active(signal, () => pair.php.inspect(signal));
     requireCheck(
       initialPhp.legacySha256 === SOURCE.initialSha256,
@@ -213,9 +233,12 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
         clockLibrarySha256: r.clockLibrarySha256,
       };
     }
+    phase = "target-provision";
     const identity = await active(signal, () => pair.target.provision(signal));
+    phase = "clock";
     receipt.targetClock = await active(signal, () => pair.clock(signal));
     receipt.g1 = "PASS";
+    phase = "target-initial-inspect";
     const rawInitial = await active(signal, () =>
       pair.target.snapshot("initial", signal),
     );
@@ -240,7 +263,9 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
     for (const [i, request] of scenario.requests.entries()) {
       const step = receipt.steps[i],
         id = step.stepId;
+      phase = `${id}-php-http`;
       const php = await active(signal, () => pair.php.http(request, signal));
+      phase = `${id}-target-http`;
       const raw = await active(signal, () =>
         pair.target.request(
           id,
@@ -250,6 +275,7 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
           signal,
         ),
       );
+      phase = `${id}-http-compare`;
       const target = mapTargetHttp(raw, id, raw.requestId);
       step.http = comparison(
         compareHttp(php.observation, target),
@@ -274,7 +300,9 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
         );
         receipt.negativeControl = { status: "PASS", codes: codes(negative) };
       }
+      phase = `${id}-php-db`;
       const dbPhp = await active(signal, () => pair.php.inspect(signal));
+      phase = `${id}-target-db`;
       const dbRaw = await active(signal, () =>
         pair.target.snapshot(id, signal),
       );
@@ -297,6 +325,9 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
   } catch (error) {
     receipt.status = "ERROR";
     receipt.errorCode = errorCode(error);
+    receipt.primaryErrorCode = receipt.errorCode;
+    receipt.errorPhase = phase;
+    receipt.commandFailure = pair.diagnostics?.() ?? null;
     record("error", { code: receipt.errorCode });
   } finally {
     // No work signal here: normal cleanup has its own existing bounded grace.
@@ -304,6 +335,9 @@ export async function runCase(scenario, pair, signal, record = () => {}) {
       pair.php.close(),
       pair.target.close(),
     ]);
+    receipt.closeErrors = closed.map((r) =>
+      r.status === "rejected" ? errorCode(r.reason) : null,
+    );
     receipt.normalCleanup =
       closed.every((r) => r.status === "fulfilled") && pair.cleanupVerified()
         ? "PASS"

@@ -45,6 +45,7 @@ const signal = abort.signal;
 let parent,
   evidence,
   resources,
+      diagnostics: () => lastCommandFailure,
   serial = 0,
   results = [],
   config,
@@ -52,6 +53,7 @@ let parent,
   failure,
   cleanup;
 const cleanupHistory = { normalCleanupError: false, emergencyRemoved: 0 };
+let lastCommandFailure;
 const record = (kind, value) =>
   evidence.write(
     `entry-${++serial}-${kind.replaceAll(/[^a-z0-9-]/g, "-")}`,
@@ -92,7 +94,20 @@ try {
   // Never reap a generic worker/provenance prefix belonging to another job.
   resources.names.prefixes = [];
   resources.persist();
-  const rawCommand = dockerCommand(evidence);
+  const rawCommand = dockerCommand({ write: (id, value) => {
+    evidence.write(id, value);
+    if (value.exitCode !== 0 || value.fault) {
+      const stderr = Buffer.from(value.stderrBase64 ?? "", "base64").toString();
+      const rules = [
+        ["DOCKER_MOUNT_PERMISSION", /permission denied|operation not permitted/i],
+        ["DOCKER_MISSING_RESOURCE", /no such (?:file|container|volume)|not found/i],
+        ["DOCKER_INVALID_MOUNT", /invalid mount|invalid argument/i],
+        ["PHP_PARSE_ERROR", /PHP Parse error:/],
+        ["DOCKER_DAEMON_ERROR", /Error response from daemon:/],
+      ];
+      lastCommandFailure = { exitCode: value.exitCode, fault: value.fault, category: rules.find((r) => r[1].test(stderr))?.[0] ?? "COMMAND_FAILED" };
+    }
+  } });
   const tracked = async (args, ...rest) => {
     resources.track(args);
     const receipt = await rawCommand(args, ...rest);
@@ -246,6 +261,7 @@ Object.assign(summary, {
   runtime: runtimeIdentity ?? null,
   runtimeExecution: results.length ? "STARTED" : "DOCKER_NOT_RUN",
   errorCode: failure ?? null,
+  commandFailure: lastCommandFailure ?? null,
   cleanup: cleanup ?? {
     status: "NOT_RUN",
     inventory: null,
