@@ -26,8 +26,9 @@ jobs:
       MMP034_SOURCE_SHA: ${{ matrix.revision.sha }}
       MMP034_ATTEMPT_ID: ${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.revision.index }}-${{ matrix.repetition }}
       MMP034_SOURCE_DIR: ${{ github.workspace }}/historical
-      MMP034_OUTPUT: ${{ runner.temp }}/mmp034-public
     steps:
+      - name: Set allowlisted public directory
+        run: echo "MMP034_OUTPUT=$RUNNER_TEMP/mmp034-public" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           path: diagnostic
