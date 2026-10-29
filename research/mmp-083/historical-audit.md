@@ -6,6 +6,12 @@ existing public allowlisted artifacts are inspected. The machine-readable
 custody records identify bytes, hashes, source/run/attempt/job and provenance.
 No private evidence pack is reconstructed from a public pack digest.
 
+Nine historical ZIPs are retained by hash in [historical-receipts.json](historical-receipts.json).
+The #34 proof artifact 12773920415 belongs to original attempt 1, job
+122486167150. The latest-attempt API also presents the successful proof under
+carried-forward job ID 122489128400 with unchanged execution timestamps; this is
+not another Docker execution. The report records the original identity.
+
 | Incident / control | Run | Source SHA | Result |
 | --- | --- | --- | --- |
 | #84 original | [40907197167](https://github.com/Meta-Project2026/Metamorph/actions/runs/40907197167) | d9b5f62a9313e2b40727a7f9407662d98c6ec85e | PARTIAL / EVIDENCE_ERROR; initial G1 ERROR; later repair + six controls pass; cleanup 0/0/0 |

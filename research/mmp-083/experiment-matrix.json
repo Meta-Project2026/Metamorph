@@ -7,7 +7,7 @@
   "workflowReruns": 0,
   "provider": "none",
   "productionFix": "NONE",
-  "verdict84": "PENDING_BOUNDED_TRIALS",
+  "verdict84": "NOT_REPRODUCED_ROOT_CAUSE_UNKNOWN",
   "verdict34": "BLOCKED_NOT_RUN",
   "trials": [
     {
@@ -36,6 +36,13 @@
       "workflowConclusion": "success",
       "status": "PASS_SCOPED",
       "errorCode": null,
+      "commandExits": {
+        "basis": "successful Actions shell steps imply exit0; admission runner explicitly handles exit2",
+        "proof": 0,
+        "compiler": 0,
+        "finalizer": 0,
+        "modelAdmission": 2
+      },
       "environment": {
         "ubuntu": "24.04.5",
         "node": "v24.22.1",
@@ -456,15 +463,905 @@
     },
     {
       "id": "docker-2",
-      "runId": 40957774797,
       "provenance": "REAL_DOCKER",
-      "status": "IN_PROGRESS"
+      "runId": 40957774797,
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40957774797",
+      "attempt": 1,
+      "jobId": 123742255794,
+      "driverSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+      "source": {
+        "repository": "tanjilaafsarirubina/car-workshop",
+        "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+        "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+        "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+        "clock": "2026-10-27 12:00:00",
+        "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+      },
+      "dispatchCommand": "gh workflow run agent-workshop-compose.yml --repo Meta-Project2026/Metamorph --ref main -f model_provider=none",
+      "executionCommands": [
+        "pnpm --filter @metamorph/agent-real proof",
+        "node research/mmp-082/docker-proof.mjs",
+        "node packages/differential/src/workshop-finalizer.mjs"
+      ],
+      "workflowConclusion": "success",
+      "status": "PASS_SCOPED",
+      "errorCode": null,
+      "commandExits": {
+        "basis": "successful Actions shell steps imply exit0; admission runner explicitly handles exit2",
+        "proof": 0,
+        "compiler": 0,
+        "finalizer": 0,
+        "modelAdmission": 2
+      },
+      "environment": {
+        "ubuntu": "24.04.5",
+        "node": "v24.22.1",
+        "runnerImage": "ubuntu24/20261025.353",
+        "runnerLabels": [
+          "ubuntu-24.04"
+        ],
+        "dockerClientVersion": "UNKNOWN",
+        "dockerDaemonVersion": "UNKNOWN",
+        "dockerContext": "UNKNOWN",
+        "hostCpu": "UNKNOWN",
+        "hostMemory": "UNKNOWN",
+        "hostFreeDisk": "UNKNOWN",
+        "note": "Versions absent from public receipts/logs are not inferred from runner image documentation."
+      },
+      "bounds": {
+        "basis": "unchanged reviewed source configuration, not measured utilization",
+        "targetCpu": 1,
+        "targetMemoryMiB": 256,
+        "targetPids": 64,
+        "targetLifetimeMs": 180000,
+        "outerBuildTimeoutMs": 35000,
+        "innerCompilerTimeoutMs": 12000,
+        "workTmpfsMiB": 64,
+        "tempTmpfsMiB": 16,
+        "stateTmpfsMiB": 16,
+        "hostDiskQuota": "UNKNOWN",
+        "jobTimeoutMinutes": 40
+      },
+      "images": {
+        "php": "sha256:fc3ddc8916851f458f45aa10c3dc11f2b02d7fb634b0200e43adfac3cd1c9df8",
+        "target": "sha256:3041430d85a6b381d852b97d31a2832a67fb56837183e31f55fb7d4f99eb3ab6"
+      },
+      "manifestSha": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "timing": {
+        "basis": "Actions API step timestamps and fixed trusted log markers",
+        "jobStartedAt": "2026-10-29T21:26:11Z",
+        "jobCompletedAt": "2026-10-29T21:32:05Z",
+        "jobSeconds": 354,
+        "markers": {
+          "preparationCompleted": "2026-10-29T21:28:08.2487837Z",
+          "knownGoodCompleted": "2026-10-29T21:29:06.4960724Z",
+          "repairCompleted": "2026-10-29T21:31:04.6355522Z",
+          "proofCompleted": "2026-10-29T21:31:55.3044591Z"
+        },
+        "preparationApproxSeconds": 19.248,
+        "knownGoodSeconds": 58.248,
+        "negativeAndRepairSeconds": 118.139,
+        "runtimeControlsAndFinalizationSeconds": 50.669,
+        "perCompilerPhaseSeconds": "UNKNOWN",
+        "perDockerCommandSeconds": "UNKNOWN",
+        "steps": [
+          {
+            "name": "Run pnpm install --frozen-lockfile",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:26:17Z",
+            "completedAt": "2026-10-29T21:26:19Z",
+            "seconds": 2
+          },
+          {
+            "name": "Fast checks and original boundary regressions",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:26:19Z",
+            "completedAt": "2026-10-29T21:27:49Z",
+            "seconds": 90
+          },
+          {
+            "name": "MMP-061 source-bound model admission (NOT_RUN is explicit)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:27:49Z",
+            "completedAt": "2026-10-29T21:27:49Z",
+            "seconds": 0
+          },
+          {
+            "name": "Original deterministic replay and negative Docker controls (not AI generation)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:27:49Z",
+            "completedAt": "2026-10-29T21:31:55Z",
+            "seconds": 246
+          },
+          {
+            "name": "MMP-082 synthetic compiler diagnostic control (no provider or credential)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:31:55Z",
+            "completedAt": "2026-10-29T21:32:00Z",
+            "seconds": 5
+          },
+          {
+            "name": "Independent final inventory even after interruption",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:32:00Z",
+            "completedAt": "2026-10-29T21:32:00Z",
+            "seconds": 0
+          }
+        ]
+      },
+      "attempts": [
+        {
+          "mode": "known-good",
+          "attempt": 1,
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay"
+          ]
+        },
+        {
+          "mode": "repair",
+          "attempt": 1,
+          "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "FAIL",
+              "findingCodes": [
+                "HTTP_JSON_LENGTH"
+              ]
+            },
+            {
+              "gate": "G3",
+              "verdict": "FAIL",
+              "findingCodes": [
+                "HTTP_JSON_LENGTH",
+                "DB_STATE"
+              ]
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay",
+            "offline-deterministic-replay"
+          ]
+        },
+        {
+          "mode": "repair",
+          "attempt": 2,
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay",
+            "offline-deterministic-replay"
+          ]
+        }
+      ],
+      "runtimeControls": [
+        {
+          "id": "candidate-aux-enospc",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "candidate-wal-full",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "corrupt-db-rejected",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "hung-socket-timeout",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "process-crash",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "cancel-readiness",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        }
+      ],
+      "normalCleanup": {
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0,
+        "provenancePack": {
+          "id": "oracle-Iax82r",
+          "sha256": "608e2f088c4232632d3f9f4503883e431e2aa0dad4ab1f8b2f1daf7b5427ffdc"
+        }
+      },
+      "independentFinalizer": {
+        "headSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0,
+        "status": "PASS"
+      },
+      "compilerControl": {
+        "provenance": "REAL_DOCKER",
+        "candidate": "SYNTHETIC_COMPILER_ERROR",
+        "status": "PASS",
+        "publicG1": "FAIL",
+        "coverage": [
+          {
+            "http": 0,
+            "sqlite": 0,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          }
+        ],
+        "cleanup": {
+          "status": "VERIFIED_ZERO_RESOURCES",
+          "containers": 0,
+          "volumes": 0,
+          "emergencyRemoved": 0
+        },
+        "metaRequests": 0
+      },
+      "modelAdmission": {
+        "execution": "ADMISSION_ONLY",
+        "aiGeneration": "AI_GENERATION_NOT_RUN",
+        "generatedRequests": 0,
+        "blockers": [
+          "MISSING_PROVIDER"
+        ],
+        "modelTrialRunUrl": null
+      },
+      "custody": [
+        {
+          "expiresAt": "2026-11-05T21:32:00Z",
+          "members": [
+            {
+              "sha256": "05f133f80199e8dfb791c6cdbdf2bc4186b2a797256617422866998d8a018daf",
+              "bytes": 165,
+              "name": "finalizer.json"
+            },
+            {
+              "sha256": "dea94975fcf11d23da1187c43ee70d53f5412ebb4b3df4e2b5d52420964f389e",
+              "bytes": 3634,
+              "name": "compiler-control.json"
+            },
+            {
+              "sha256": "0b037996d0d5a598341b43bfd782a40deea346c09f8c9d611f546261baddc06a",
+              "bytes": 44811,
+              "name": "summary.json"
+            }
+          ],
+          "createdAt": "2026-10-29T21:32:01Z",
+          "zipSha256": "42a406fe36377266a0a48927bf4bb99c9c4253abb1001a8d60bf1d0faff5e98c",
+          "name": "agent-workshop-public",
+          "artifactId": 12934592855,
+          "zipBytes": 5813
+        },
+        {
+          "expiresAt": "2026-11-05T21:32:01Z",
+          "members": [
+            {
+              "sha256": "58e809047083d077a91c55385d2b895c935bbcecbafd04a160b30eeb580e3562",
+              "bytes": 1251,
+              "name": "trial.json"
+            }
+          ],
+          "createdAt": "2026-10-29T21:32:02Z",
+          "zipSha256": "28d0bb04d39a90c01f1d9aa70085a90b0c7f1466f8248a9645b6f5a1e6924bd5",
+          "name": "mmp061-model-public",
+          "artifactId": 12934264189,
+          "zipBytes": 831
+        }
+      ]
     },
     {
       "id": "docker-3",
-      "runId": null,
       "provenance": "REAL_DOCKER",
-      "status": "NOT_RUN"
+      "runId": 40958752426,
+      "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40958752426",
+      "attempt": 1,
+      "jobId": 123745684873,
+      "driverSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+      "source": {
+        "repository": "tanjilaafsarirubina/car-workshop",
+        "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+        "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+        "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+        "clock": "2026-10-27 12:00:00",
+        "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+      },
+      "dispatchCommand": "gh workflow run agent-workshop-compose.yml --repo Meta-Project2026/Metamorph --ref main -f model_provider=none",
+      "executionCommands": [
+        "pnpm --filter @metamorph/agent-real proof",
+        "node research/mmp-082/docker-proof.mjs",
+        "node packages/differential/src/workshop-finalizer.mjs"
+      ],
+      "workflowConclusion": "success",
+      "status": "PASS_SCOPED",
+      "errorCode": null,
+      "commandExits": {
+        "basis": "successful Actions shell steps imply exit0; admission runner explicitly handles exit2",
+        "proof": 0,
+        "compiler": 0,
+        "finalizer": 0,
+        "modelAdmission": 2
+      },
+      "environment": {
+        "ubuntu": "24.04.5",
+        "node": "v24.22.1",
+        "runnerImage": "ubuntu24/20261025.353",
+        "runnerLabels": [
+          "ubuntu-24.04"
+        ],
+        "dockerClientVersion": "UNKNOWN",
+        "dockerDaemonVersion": "UNKNOWN",
+        "dockerContext": "UNKNOWN",
+        "hostCpu": "UNKNOWN",
+        "hostMemory": "UNKNOWN",
+        "hostFreeDisk": "UNKNOWN",
+        "note": "Versions absent from public receipts/logs are not inferred from runner image documentation."
+      },
+      "bounds": {
+        "basis": "unchanged reviewed source configuration, not measured utilization",
+        "targetCpu": 1,
+        "targetMemoryMiB": 256,
+        "targetPids": 64,
+        "targetLifetimeMs": 180000,
+        "outerBuildTimeoutMs": 35000,
+        "innerCompilerTimeoutMs": 12000,
+        "workTmpfsMiB": 64,
+        "tempTmpfsMiB": 16,
+        "stateTmpfsMiB": 16,
+        "hostDiskQuota": "UNKNOWN",
+        "jobTimeoutMinutes": 40
+      },
+      "images": {
+        "php": "sha256:aa03c3b87f003fd826c046ba37387f52a0075faab3581dfb0792b63ffb5fa0d0",
+        "target": "sha256:7e6a946c8cb68a1617e9200b46c098b01b49e4f002a89a59aabc69f7b158965d"
+      },
+      "manifestSha": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "timing": {
+        "basis": "Actions API step timestamps and fixed trusted log markers",
+        "jobStartedAt": "2026-10-29T21:33:16Z",
+        "jobCompletedAt": "2026-10-29T21:40:49Z",
+        "jobSeconds": 453,
+        "markers": {
+          "preparationCompleted": "2026-10-29T21:35:45.3228969Z",
+          "knownGoodCompleted": "2026-10-29T21:36:59.0616076Z",
+          "repairCompleted": "2026-10-29T21:39:25.4684531Z",
+          "proofCompleted": "2026-10-29T21:40:35.6629438Z"
+        },
+        "preparationApproxSeconds": 19.322,
+        "knownGoodSeconds": 73.739,
+        "negativeAndRepairSeconds": 146.407,
+        "runtimeControlsAndFinalizationSeconds": 70.194,
+        "perCompilerPhaseSeconds": "UNKNOWN",
+        "perDockerCommandSeconds": "UNKNOWN",
+        "steps": [
+          {
+            "name": "Run pnpm install --frozen-lockfile",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:33:23Z",
+            "completedAt": "2026-10-29T21:33:26Z",
+            "seconds": 3
+          },
+          {
+            "name": "Fast checks and original boundary regressions",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:33:26Z",
+            "completedAt": "2026-10-29T21:35:26Z",
+            "seconds": 120
+          },
+          {
+            "name": "MMP-061 source-bound model admission (NOT_RUN is explicit)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:35:26Z",
+            "completedAt": "2026-10-29T21:35:26Z",
+            "seconds": 0
+          },
+          {
+            "name": "Original deterministic replay and negative Docker controls (not AI generation)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:35:26Z",
+            "completedAt": "2026-10-29T21:40:35Z",
+            "seconds": 309
+          },
+          {
+            "name": "MMP-082 synthetic compiler diagnostic control (no provider or credential)",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:40:35Z",
+            "completedAt": "2026-10-29T21:40:42Z",
+            "seconds": 7
+          },
+          {
+            "name": "Independent final inventory even after interruption",
+            "conclusion": "success",
+            "startedAt": "2026-10-29T21:40:42Z",
+            "completedAt": "2026-10-29T21:40:42Z",
+            "seconds": 0
+          }
+        ]
+      },
+      "attempts": [
+        {
+          "mode": "known-good",
+          "attempt": 1,
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay"
+          ]
+        },
+        {
+          "mode": "repair",
+          "attempt": 1,
+          "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "FAIL",
+              "findingCodes": [
+                "HTTP_JSON_LENGTH"
+              ]
+            },
+            {
+              "gate": "G3",
+              "verdict": "FAIL",
+              "findingCodes": [
+                "HTTP_JSON_LENGTH",
+                "DB_STATE"
+              ]
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay",
+            "offline-deterministic-replay"
+          ]
+        },
+        {
+          "mode": "repair",
+          "attempt": 2,
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "pairCleanup": [
+            {
+              "scenarioId": "workshop-business",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "cleanup": "VERIFIED_ZERO_RESOURCES"
+            }
+          ],
+          "paidCalls": 0,
+          "provider": [
+            "offline-deterministic-replay",
+            "offline-deterministic-replay"
+          ]
+        }
+      ],
+      "runtimeControls": [
+        {
+          "id": "candidate-aux-enospc",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "candidate-wal-full",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "corrupt-db-rejected",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "hung-socket-timeout",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "process-crash",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        },
+        {
+          "id": "cancel-readiness",
+          "outcome": "PASS",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "execution": "REAL_DOCKER"
+        }
+      ],
+      "normalCleanup": {
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0,
+        "provenancePack": {
+          "id": "oracle-FsFKGu",
+          "sha256": "fb1c34fac91374ab42ccddd9b5c1de425a5bb5277771feb09cc89fac8c505821"
+        }
+      },
+      "independentFinalizer": {
+        "headSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0,
+        "status": "PASS"
+      },
+      "compilerControl": {
+        "provenance": "REAL_DOCKER",
+        "candidate": "SYNTHETIC_COMPILER_ERROR",
+        "status": "PASS",
+        "publicG1": "FAIL",
+        "coverage": [
+          {
+            "http": 0,
+            "sqlite": 0,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          }
+        ],
+        "cleanup": {
+          "status": "VERIFIED_ZERO_RESOURCES",
+          "containers": 0,
+          "volumes": 0,
+          "emergencyRemoved": 0
+        },
+        "metaRequests": 0
+      },
+      "modelAdmission": {
+        "execution": "ADMISSION_ONLY",
+        "aiGeneration": "AI_GENERATION_NOT_RUN",
+        "generatedRequests": 0,
+        "blockers": [
+          "MISSING_PROVIDER"
+        ],
+        "modelTrialRunUrl": null
+      },
+      "custody": [
+        {
+          "artifactId": 12934921664,
+          "expiresAt": "2026-11-05T21:40:44Z",
+          "zipBytes": 830,
+          "createdAt": "2026-10-29T21:40:45Z",
+          "zipSha256": "86424694549d64c7aca7bc761138a74fdb958dfe6b530d770976115c3b463409",
+          "members": [
+            {
+              "bytes": 1251,
+              "name": "trial.json",
+              "sha256": "80c8a64058bfb45158d3c010763f6e24e806a5f9fd0aa15d65ed4f7967d83835"
+            }
+          ],
+          "name": "mmp061-model-public"
+        },
+        {
+          "artifactId": 12934572586,
+          "expiresAt": "2026-11-05T21:40:42Z",
+          "zipBytes": 5816,
+          "createdAt": "2026-10-29T21:40:43Z",
+          "zipSha256": "075e095bb37bc0c892721f2fda868b8f223d5410eac5dfe0aae64884a3dd7884",
+          "members": [
+            {
+              "bytes": 44809,
+              "name": "summary.json",
+              "sha256": "64fdc974fe1ebb0b55183ddcd4fca1bc5a49c853a5da877c727317f55d49957f"
+            },
+            {
+              "bytes": 165,
+              "name": "finalizer.json",
+              "sha256": "05f133f80199e8dfb791c6cdbdf2bc4186b2a797256617422866998d8a018daf"
+            },
+            {
+              "bytes": 3634,
+              "name": "compiler-control.json",
+              "sha256": "b5fcb07330e92abb02331f6e0b0f034d73197b5f674fdff18d6080b6639744f1"
+            }
+          ],
+          "name": "agent-workshop-public"
+        }
+      ]
     }
   ],
   "syntheticControls": {
@@ -496,7 +1393,7 @@
   "newHistorical34Execution": "NOT_RUN_EXACT_ORIGINAL_CASE_UNAVAILABLE",
   "product": "NOT_ESTABLISHED",
   "aiGeneration": "AI_GENERATION_NOT_RUN",
-  "completedTrials": 1,
+  "completedTrials": 3,
   "localBaselineChecks": [
     {
       "command": "pnpm install --frozen-lockfile",
@@ -586,5 +1483,161 @@
     "pass": 212,
     "fail": 4,
     "explanation": "Restricted Windows sandbox: hardlink EPERM and workflow admission fixture failures. Same 216-test suite passed outside sandbox; no code change or skip added."
-  }
+  },
+  "localImplementationChecks": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exit": 0,
+      "seconds": 0.5260667,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a"
+    },
+    {
+      "command": "pnpm lint",
+      "exit": 0,
+      "seconds": 0.9656001,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exit": 0,
+      "seconds": 28.8723326,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a"
+    },
+    {
+      "command": "pnpm test",
+      "exit": 0,
+      "seconds": 17.5736615,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "tests": 450,
+      "pass": 348,
+      "fail": 0,
+      "skipped": 102
+    },
+    {
+      "command": "pnpm build",
+      "exit": 0,
+      "seconds": 15.9030331,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a"
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "exit": 0,
+      "seconds": 0.9585491,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "tests": 69,
+      "pass": 69,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exit": 0,
+      "seconds": 7.4994499,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "tests": 122,
+      "pass": 77,
+      "fail": 0,
+      "skipped": 45
+    },
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "exit": 0,
+      "seconds": 7.4382381,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "tests": 56,
+      "pass": 55,
+      "fail": 0,
+      "skipped": 1
+    },
+    {
+      "command": "pnpm --filter @metamorph/agent-real test",
+      "exit": 0,
+      "seconds": 3.123283,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "tests": 217,
+      "pass": 217,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "implementationSha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+  "sourceIdentities": [
+    {
+      "baselineGitObject": "e8e7239f0f4406cd4ed3cfbd16260d5fe9f1faa6",
+      "implementationGitObject": "e8e7239f0f4406cd4ed3cfbd16260d5fe9f1faa6",
+      "path": "packages/agent-real/src/proof.mjs",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "e8e7239f0f4406cd4ed3cfbd16260d5fe9f1faa6"
+    },
+    {
+      "baselineGitObject": "8a567d4fc15bf00e868c8bbbf96c336d8ed2d6d2",
+      "implementationGitObject": "8a567d4fc15bf00e868c8bbbf96c336d8ed2d6d2",
+      "path": "packages/agent-real/src/runtime.mjs",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "8a567d4fc15bf00e868c8bbbf96c336d8ed2d6d2"
+    },
+    {
+      "baselineGitObject": "0ac307ffb6ec998cd4351b0c804181c9c0f21548",
+      "implementationGitObject": "0ac307ffb6ec998cd4351b0c804181c9c0f21548",
+      "path": "packages/agent-real/src/report.mjs",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "0ac307ffb6ec998cd4351b0c804181c9c0f21548"
+    },
+    {
+      "baselineGitObject": "ea04011db96649a0216a9f282222f3f129a47e63",
+      "implementationGitObject": "ea04011db96649a0216a9f282222f3f129a47e63",
+      "path": "packages/target-worker/src/controller.mjs",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "ea04011db96649a0216a9f282222f3f129a47e63"
+    },
+    {
+      "baselineGitObject": "3bd2d8c6626d30b60bae0e62d0879168e98f6f74",
+      "implementationGitObject": "3bd2d8c6626d30b60bae0e62d0879168e98f6f74",
+      "path": "packages/target-worker/src/runtime-broker.mjs",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "3bd2d8c6626d30b60bae0e62d0879168e98f6f74"
+    },
+    {
+      "baselineGitObject": "0028ac37ff9a8c2b097cd9daf8cf9b2d2f3a9cf4",
+      "implementationGitObject": "0028ac37ff9a8c2b097cd9daf8cf9b2d2f3a9cf4",
+      "path": "packages/target-worker/runtime",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "0028ac37ff9a8c2b097cd9daf8cf9b2d2f3a9cf4"
+    },
+    {
+      "baselineGitObject": "3c79a225dd526ea0467361da3659aa9b248ef4e8",
+      "implementationGitObject": "3c79a225dd526ea0467361da3659aa9b248ef4e8",
+      "path": ".github/workflows/agent-workshop-compose.yml",
+      "unchangedSinceHistoricalFailure": true,
+      "historicalFailureGitObject": "3c79a225dd526ea0467361da3659aa9b248ef4e8"
+    }
+  ],
+  "hostedCiHistory": [
+    {
+      "runId": 40954083259,
+      "sha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+      "status": "SUCCESS"
+    },
+    {
+      "runId": 40957473375,
+      "sha": "29c7eb2a21986ecf04bb91d5746b1d0a888a8bb4",
+      "node22": "SUCCESS",
+      "node24": "SUCCESS"
+    },
+    {
+      "runId": 40958154021,
+      "sha": "7f1a87351b3886795bc3dde6293438ed9fb3391a",
+      "node22": "FAILURE",
+      "node24": "SUCCESS",
+      "failedJobId": 123743620682,
+      "failedStep": "Shallow history negative control",
+      "code": "ENOTEMPTY",
+      "phase": "temporary Git clone removal",
+      "newControls": "PASS",
+      "connectedAdversarial": "SKIPPED_ON_NODE22",
+      "demo": "SKIPPED_ON_NODE22",
+      "rerun": "NOT_RUN",
+      "rootCause": "UNKNOWN"
+    }
+  ]
 }

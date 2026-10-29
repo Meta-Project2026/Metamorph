@@ -27,4 +27,7 @@
 Normal cleanup and emergency removal are recorded separately. A zero final
 inventory after emergency removal remains ERROR. Each new trial must pass both
 normal cleanup and independent inventory before another is dispatched.
+All three executed trials satisfied this condition. Each model admission receipt
+has generatedRequests=0, MISSING_PROVIDER and AI_GENERATION_NOT_RUN; each replay
+reports paidCalls=0, and each compiler control reports metaRequests=0.
 Product NOT_ESTABLISHED; G0/G4 INCONCLUSIVE; model trial #81 ROOT_CAUSE_UNKNOWN.

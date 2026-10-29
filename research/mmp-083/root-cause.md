@@ -50,8 +50,10 @@ volume creation/probe, partial resources and sticky cleanup failure. Added
 synthetic cases cover the narrower build-envelope/inner-process distinctions
 and post-creation transport loss. Synthetic resource sets are not Docker inventory.
 
-Final verdict is pending the bounded trials. If all pass, use
-`NOT_REPRODUCED_ROOT_CAUSE_UNKNOWN`, never FIXED or statistically reliable.
+Final verdict: `NOT_REPRODUCED_ROOT_CAUSE_UNKNOWN`. All three independent trials
+passed the original good/negative/repair, six runtime controls, compiler control
+and normal/finalizer cleanup. No new discriminatory failure justified a fourth
+trial. Passing three trials does not establish FIXED or statistical reliability.
 If a future failure occurs, inspect trusted private receipts inside that runner
 and publish only reviewed fixed phase/cause enums, exit/signal/timedOut flags,
 bounded durations and cleanup counts. The next useful discriminator is the
