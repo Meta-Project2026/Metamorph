@@ -13,9 +13,11 @@ import {
 } from "./meta-wire.mjs";
 import { isMigrationContext } from "./migration-context.mjs";
 export const META_MIGRATION_POLICY = Object.freeze({
-  version: "mmp061-meta-manual-v1",
+  version: "mmp061-meta-manual-v2",
   model: META_MODEL,
   mode: "STANDARD",
+  // Muse Spark cannot disable reasoning; "none" yields HTTP 400.
+  reasoningEffort: "low",
   maxRequests: 1,
   maxRepairs: 0,
   inputBytes: 128 * 1024,
@@ -73,7 +75,7 @@ export function prepareMetaMigration(context, request, previousChanges = []) {
       { role: "user", content: prompt },
     ],
     max_completion_tokens: META_MIGRATION_POLICY.outputTokens,
-    reasoning_effort: "none",
+    reasoning_effort: META_MIGRATION_POLICY.reasoningEffort,
     store: false,
     stream: false,
     n: 1,
