@@ -1,0 +1,139 @@
+{
+  "id": "sqlite-row-narrowing",
+  "status": "PASS",
+  "execution": "ACTUAL_PAID_VALIDATOR_CLI_REAL_DOCKER_SYNTHETIC_INPUT",
+  "expectedCompilerCode": "TS2322",
+  "commandExitCode": 1,
+  "network": {
+    "format": "mmp086-network-guard-v1",
+    "sourceFetches": 1,
+    "blockedRequests": 0,
+    "metaProviderConstructed": false,
+    "metaCredentialMapped": false
+  },
+  "privateWorkspace": {
+    "exactCandidateInPrivatePack": true,
+    "trustedBuildReceiptInPrivatePack": true,
+    "compilerErrorsInPrivatePack": true,
+    "durablePreservation": "NOT_CONFIGURED"
+  },
+  "trial": {
+    "format": "mmp086-synthetic-transfer-v1",
+    "modelGeneration": "GENERATED",
+    "aiGeneration": "AI_GENERATION_NOT_RUN",
+    "generatedRequests": 0,
+    "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+    "candidateSha": "47a3311c10f744050d733bf377b99b5aad1928450e059bde690442f8bfa7b875",
+    "attempts": [
+      {
+        "attemptId": "343f898b-8ffb-4e3b-bac1-55a2b2a0dbc6",
+        "candidateSha": "47a3311c10f744050d733bf377b99b5aad1928450e059bde690442f8bfa7b875",
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "G0_NOT_ESTABLISHED"
+            ]
+          },
+          {
+            "gate": "G1",
+            "verdict": "FAIL",
+            "executedTestIds": [
+              "workshop-business:typecheck"
+            ],
+            "findingCodes": [
+              "BUILD_FAILED"
+            ]
+          },
+          {
+            "gate": "G2",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "MISSING_COVERAGE"
+            ]
+          },
+          {
+            "gate": "G3",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "MISSING_COVERAGE"
+            ]
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "HELD_OUT_NOT_RUN"
+            ]
+          }
+        ],
+        "coverage": {
+          "http": 0,
+          "sqlite": 0,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "871b26d2-a4a7-4bbc-aa5c-8a663fca5c87",
+            "packs": [
+              {
+                "id": "oracle-OlFzw2",
+                "sha256": "57bc60938c101286384cf718b7e4f3c7da53748433e492e267c55092fa515f91"
+              },
+              {
+                "id": "oracle-LC4FgA",
+                "sha256": "c6243eea830478a96df515167ce1424fbe1057a22682b16b2ab933f9bca0e484"
+              }
+            ],
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "targetLifetimePolicyMs": 180000,
+            "compilerDiagnostics": {
+              "format": "mmp082-g1-diagnostics-v1",
+              "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+              "candidateSha": "47a3311c10f744050d733bf377b99b5aad1928450e059bde690442f8bfa7b875",
+              "attemptId": "343f898b-8ffb-4e3b-bac1-55a2b2a0dbc6",
+              "pairId": "871b26d2-a4a7-4bbc-aa5c-8a663fca5c87",
+              "g1Verdict": "FAIL",
+              "status": "AVAILABLE",
+              "entries": [
+                {
+                  "phase": "typecheck",
+                  "code": "TS2322",
+                  "path": "src/main.ts",
+                  "line": 3,
+                  "column": 7
+                }
+              ],
+              "errorCount": 1,
+              "truncated": false
+            },
+            "gates": []
+          }
+        ]
+      }
+    ],
+    "publicG1": "FAIL",
+    "publicG2": "INCONCLUSIVE",
+    "publicG3": "INCONCLUSIVE",
+    "G0": "INCONCLUSIVE",
+    "G4": "INCONCLUSIVE",
+    "product": "NOT_ESTABLISHED",
+    "blockers": [
+      "BUILD_FAILED",
+      "MISSING_COVERAGE"
+    ],
+    "cleanup": {
+      "status": "VERIFIED_ZERO_RESOURCES",
+      "containers": 0,
+      "volumes": 0,
+      "emergencyRemoved": 0
+    }
+  }
+}

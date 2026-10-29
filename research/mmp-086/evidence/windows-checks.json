@@ -1,0 +1,43 @@
+{
+  "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "node": "v22.23.1",
+  "platform": "win32",
+  "checks": [
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "seconds": 2.35,
+      "counts": {}
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "seconds": 87.43,
+      "counts": {}
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "seconds": 72.31,
+      "counts": {
+        "tests": 439,
+        "pass": 337,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 102
+      }
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "seconds": 61.3,
+      "counts": {}
+    },
+    {
+      "command": "pnpm exec biome check research/mmp-086",
+      "exitCode": 0,
+      "seconds": 3.44,
+      "counts": {}
+    }
+  ]
+}

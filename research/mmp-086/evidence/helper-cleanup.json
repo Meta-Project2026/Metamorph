@@ -1,0 +1,24 @@
+{
+  "format": "mmp086-helper-cleanup-v1",
+  "steps": [
+    {
+      "command": "docker rm --force mmp086-trusted-runner",
+      "exitCode": 0
+    },
+    {
+      "command": "docker volume rm mmp086-runner-data",
+      "exitCode": 0
+    },
+    {
+      "command": "docker image rm mmp086-trusted-runner:local",
+      "exitCode": 0
+    }
+  ],
+  "remainingHelperContainers": 0,
+  "remainingHelperVolumes": 0,
+  "remainingWorkerContainers": 0,
+  "remainingWorkerVolumes": 0,
+  "unrelatedResources": "UNTOUCHED",
+  "privateSyntheticWorkspace": "REMOVED_WITH_TASK_HELPER_VOLUME",
+  "publicEvidence": "EXTRACTED_BEFORE_REMOVAL"
+}

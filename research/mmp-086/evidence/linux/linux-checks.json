@@ -1,0 +1,79 @@
+{
+  "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "platform": "linux",
+  "node": "v22.23.1",
+  "checks": [
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "seconds": 1.998,
+      "counts": {}
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "seconds": 121.091,
+      "counts": {}
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "seconds": 105.376,
+      "counts": {
+        "tests": 439,
+        "pass": 438,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "seconds": 41.17,
+      "counts": {}
+    },
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "exitCode": 1,
+      "seconds": 20.228,
+      "counts": {
+        "tests": 56,
+        "pass": 55,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "exitCode": 0,
+      "seconds": 1.766,
+      "counts": {
+        "tests": 69,
+        "pass": 69,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exitCode": 0,
+      "seconds": 48.229,
+      "counts": {
+        "tests": 122,
+        "pass": 122,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "pnpm exec biome check research/mmp-086",
+      "exitCode": 0,
+      "seconds": 1.742,
+      "counts": {}
+    }
+  ]
+}

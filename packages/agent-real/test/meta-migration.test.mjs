@@ -92,6 +92,26 @@ test("whole public source fits official strict structured request, no tool/repla
     /workshop-compat-v1|replayProvider|MODEL_API_KEY|correctedReplay/,
   );
 });
+test("compiler context names the pinned toolchain without exposing verifier answers", () => {
+  const wire = JSON.parse(prepareMetaMigration(context(), request));
+  const target = JSON.parse(wire.messages[1].content).context.target;
+  const toolchain = JSON.parse(
+    readFileSync(
+      new URL("../../target-worker/runtime/package.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  assert.equal(target.typescript, toolchain.dependencies.typescript);
+  assert.equal(target.nodeTypes, toolchain.dependencies["@types/node"]);
+  assert.equal(target.compilerContract, "mmp086-ts-compiler-v1");
+  assert.match(target.modules, /CommonJS/);
+  assert.match(target.modules, /No top-level await or import.meta/);
+  assert.match(target.strictTypes, /get\(\) may be undefined/);
+  assert.doesNotMatch(
+    JSON.stringify(target),
+    /TS[0-9]{4}|workshop-business|expectedOutputs|fixture/,
+  );
+});
 test("repair encoder retains own previous changes and fixed feedback codes", () => {
   const previous = [
     { path: "src/main.ts", content: "export const priorOwnOutput=1;" },
