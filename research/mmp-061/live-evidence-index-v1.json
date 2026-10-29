@@ -2,7 +2,7 @@
   "format": "mmp061-live-evidence-index-v1",
   "previousReviewedHeadSha": "e8f6e739f1a727997c061dc5bafaa37040392489",
   "preflightImplementationSha": "01235b345aab6e37d605ef684ab8a51d65367943",
-  "implementationSha": null,
+  "implementationSha": "4e1d2a83152c6c9282f2f5b662604a3580222923",
   "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
   "contextSha256": "b15d9d33d0f1f671ad383759c37cb8e02e007cf1beca7ec7c78267073f54cd1c",
   "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
@@ -81,5 +81,21 @@
       "bytes": 1748,
       "sha256": "68ebd18336c338461d5d4261166600ce0371e12a4fd08141144184894e6a1577"
     }
+  ],
+  "fastCiUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40873768667",
+  "fastCiStatus": "SUCCESS",
+  "hostedNode24": {
+    "rootPass": 360,
+    "rootFail": 0,
+    "rootSkip": 3,
+    "referencePass": 56,
+    "targetPass": 69,
+    "differentialPass": 122,
+    "qualificationPass": 2,
+    "workshopAuditPass": 54
+  },
+  "fastCiNodes": [
+    22,
+    24
   ]
 }

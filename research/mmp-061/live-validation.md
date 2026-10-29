@@ -53,3 +53,26 @@ review first. Prior run40793819074 remains historical replay/control evidence,
 not evidence of this new wire adapter or a generated candidate. The live E2E
 branch and shared no-USD-cap admission are not activated; stage D awaits review
 and explicit joint policy decision. No issues closed or changes self-merged.
+
+## Hosted C verification
+
+Implementation 4e1d2a83152c6c9282f2f5b662604a3580222923; Fast CI associated
+with this PR head SUCCESS on Node22/24:
+https://github.com/Meta-Project2026/Metamorph/actions/runs/40873768667
+
+Node24 actual log counts: root363 = 360 PASS / 0 FAIL / 3 SKIP; reference56,
+target69, differential122, qualification2 and workshop-audit54 PASS. PR CI checks
+the GitHub merge context (current main includes MMP069 workshop-audit CI); this
+branch did not edit fast CI or adopt those unrelated changes into its source.
+The three root Linux skips are the existing Windows-only check and two fixtures
+requiring root/chown/uid selection; no Meta test skipped. Both jobs completed all
+configured checks with exit0. This proves offline code/regressions, not Meta access.
+
+All eight indexed source/test/workflow hashes independently matched committed
+Git bytes. Index is bound to implementation SHA, not a self-referential document
+commit. Subsequent commit updates only this record/index; no new execution claimed.
+
+Next reviewer action: review e8f6e739..4e1d2a83 in PR70 as a new exact-SHA diff.
+Earlier scoped APPROVED is preserved but not reused for these new code paths.
+Configure Environment/main protection and authorize reviewed read-only dispatch
+only after review/merge. No paid dispatch until the separate joint policy decision.
