@@ -137,7 +137,7 @@ function noLinks(path) {
     requireDiagnostic(!lstatSync(current).isSymbolicLink());
   }
 }
-export function readPrivateJson(path, maxBytes = 16 * 1024 * 1024) {
+export function readPrivateBytes(path, maxBytes, ownerOnly = true) {
   noLinks(path);
   const fd = openSync(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
   try {
@@ -148,7 +148,8 @@ export function readPrivateJson(path, maxBytes = 16 * 1024 * 1024) {
         st.size > 0 &&
         st.size <= maxBytes &&
         (process.platform !== "linux" ||
-          (st.uid === process.getuid() && (st.mode & 0o077) === 0)),
+          (st.uid === process.getuid() &&
+            (!ownerOnly || (st.mode & 0o077) === 0))),
     );
     const data = Buffer.alloc(st.size + 1);
     let count = 0;
@@ -172,18 +173,24 @@ export function readPrivateJson(path, maxBytes = 16 * 1024 * 1024) {
             s.mode === st.mode,
         ),
     );
-    return {
-      bytes: data.subarray(0, count),
-      value: strictJson(
-        new TextDecoder("utf-8", { fatal: true }).decode(
-          data.subarray(0, count),
-        ),
-        maxBytes,
-      ),
-    };
+    return data.subarray(0, count);
   } finally {
     closeSync(fd);
   }
+}
+export function readPrivateJson(
+  path,
+  maxBytes = 16 * 1024 * 1024,
+  ownerOnly = true,
+) {
+  const bytes = readPrivateBytes(path, maxBytes, ownerOnly);
+  return {
+    bytes,
+    value: strictJson(
+      new TextDecoder("utf-8", { fatal: true }).decode(bytes),
+      maxBytes,
+    ),
+  };
 }
 // Read only public-selected pack indexes, provenance and the two indexed bridge
 // records. No recursive traversal, archive, reference pack or whole-pack export.
@@ -287,6 +294,10 @@ export function collectDiagnosticPackage(trial, expected, verificationRoot) {
 export function buildDiagnosticPackage(identity, source, completion) {
   fields(source, ["files", "candidateSha"]);
   const bundle = validateBundle(source.files, identity.candidateSha);
+  for (const file of bundle.files) {
+    rejectSecrets(file.path);
+    rejectSecrets(file.content);
+  }
   requireDiagnostic(source.candidateSha === identity.candidateSha);
   fields(completion, [
     "workerEvidence",
@@ -420,6 +431,8 @@ export function buildDiagnosticPackage(identity, source, completion) {
           : phase.exitCode === 0),
     );
     total += Buffer.byteLength(phase.stdout) + Buffer.byteLength(phase.stderr);
+    rejectSecrets(phase.stdout);
+    rejectSecrets(phase.stderr);
   }
   requireDiagnostic(total <= DIAGNOSTIC_POLICY.phaseBytes);
   requireDiagnostic(

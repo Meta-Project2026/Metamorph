@@ -101,9 +101,11 @@ jobs:
         if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
         run: node research/mmp-078/validate-candidate.mjs
       - name: Preserve one attributable G1 failure with approved public recipient
+        id: preservation
         if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
         run: node research/mmp-089/preserve.mjs
       - name: Final owned-resource inventory without credential
+        id: finalizer
         if: always()
         env:
           WORKSHOP_PUBLIC_OUTPUT: ${{ runner.temp }}/meta-paid-public
@@ -111,11 +113,14 @@ jobs:
         run: node packages/differential/src/workshop-finalizer.mjs
       - name: Require encryption and both normal and independent cleanup proofs
         id: diagnostic-gate
-        if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.generation.outcome == 'success' && steps.preservation.outcome == 'success' && steps.finalizer.outcome == 'success' }}
+        env:
+          MMP089_PRESERVE_OUTCOME: ${{ steps.preservation.outcome }}
+          MMP089_FINALIZER_OUTCOME: ${{ steps.finalizer.outcome }}
         run: node research/mmp-089/prepare-upload.mjs
       - name: Upload only approved authenticated ciphertext for seven days
         id: diagnostic-upload
-        if: ${{ !cancelled() && steps.diagnostic-gate.outputs.eligible == 'true' }}
+        if: ${{ !cancelled() && steps.diagnostic-gate.outcome == 'success' && steps.diagnostic-gate.outputs.eligible == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: mmp089-private-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}

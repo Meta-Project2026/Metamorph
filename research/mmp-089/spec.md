@@ -23,7 +23,7 @@ The following policy was explicitly accepted by the owner in this chat on
 | Field | Proposed value / outstanding input |
 | --- | --- |
 | Recipient | Owner supplied `age1yvf40njrznnr7emg5j76azu62579z38gzh2jqss72l2u9308n5essrvy6f`. No SSH/plugin/passphrase recipient, identity/private key or generated substitute. |
-| Pin | Exact recipient UTF-8 SHA-256 `f829a274ca293c96d0fb80b2e6873eaa6e8ea7070e1d22f6342c8802bbd30917`; decoded 32-byte public-key SHA-256 `48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600`. Executor Node and independent reviewer Python checks agree on bech32 checksum/length/padding and both pins (exit 0 each); age-tool acceptance NOT_RUN. Separate owner approval of the pin and policy was received in this chat. |
+| Pin | Exact recipient UTF-8 SHA-256 `f829a274ca293c96d0fb80b2e6873eaa6e8ea7070e1d22f6342c8802bbd30917`; decoded 32-byte public-key SHA-256 `48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600`. Executor Node and independent reviewer Python checks agree on bech32 checksum/length/padding and both pins (exit 0 each); age-tool recipient acceptance also observed exit 0 (empty input encrypted to /dev/null; no owner decryption). Separate owner approval of the pin and policy was received in this chat. |
 | Destination | A separate GitHub Actions artifact in `Meta-Project2026/Metamorph`, named `mmp089-private-diagnostics-<runId>-<runAttempt>`, containing exactly one `candidate-diagnostics.age`. No Git commit, release, PR attachment, alternate destination or automatic fallback. |
 | Retention | Seven days for the ciphertext artifact, matching the existing public artifact lifetime. No plaintext artifact. |
 | Runner plaintext lifetime | Original generation/validator source and mixed evidence packs retain the existing private ephemeral-runner lifetime, until runner destruction. New diagnostic staging is explicitly removed and checked before upload; Docker zero-resource proofs do not prove filesystem erasure. No secure-erasure or crash-time cleanup guarantee. |
@@ -104,13 +104,13 @@ successful decryption to the owner's recipient.
 Use upstream age X25519 authenticated encryption; no custom cryptography. The
 upstream release API currently advertises `v1.3.2` Linux amd64 archive SHA-256
 `cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10`.
-This is release metadata, **not** an independently verified binary pin. Before
-implementation/recommendation, verify upstream provenance/proof, archive,
-installed executable version and executable SHA-256; independent review must
-repeat relevant verification. Executable pin, age-tool recipient acceptance,
-crypto roundtrip, wrong-key and tamper controls are currently
-**NOT_RUN / NOT_VERIFIED**. The public recipient encoding check is a separate
-preparation observation and does not establish cryptographic qualification.
+Archive/executable/version/LICENSE pins have now been measured by the executor
+and independently reproduced by the reviewer. The executor also verified the
+upstream Sigsum proof in a network-off container and age accepted the exact
+owner recipient. [Binary provenance](binary-provenance.json) separates those
+observations. Crypto roundtrip/wrong-key/tamper and actual candidate-path
+qualification are recorded separately in the validation evidence; tool
+qualification alone does not establish preservation or owner decryptability.
 
 AEAD detects tampering; it does not authenticate who encrypted the package.
 The owner's offline verifier must verify every per-file hash against the

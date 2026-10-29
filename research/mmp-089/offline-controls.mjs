@@ -2,7 +2,7 @@
 // Run only on the authorized disposable Linux Docker host; never on host TS.
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -101,12 +101,29 @@ try {
   const hangWorker = join(parent, "hang-worker.mjs");
   writeFileSync(hangWorker, "setInterval(() => {}, 1000);\n", { mode: 0o644 });
   await check("encryptor-abort-cleanup", async () => { const abort = new AbortController(); const timer = setTimeout(() => abort.abort(), 1500); try { await assert.rejects(encrypt(Buffer.from(plaintext), { policy: syntheticPolicy, workerPath: hangWorker, signal: abort.signal })); } finally { clearTimeout(timer); } });
-  publicRecord = preservationRecord("ENCRYPTED_PENDING_UPLOAD", pack.identity, { sha256: sha256(ciphertext), bytes: ciphertext.length }, "VERIFIED_ZERO_RESOURCES");
-  await check("no-plaintext-in-public-record", () => { assert.doesNotMatch(JSON.stringify(publicRecord), /MMP089_PRIVATE|stdout|stderr|src\/|error TS|\.ts|AGE-SECRET/); assert.equal(publicRecord.upload, "NOT_RUN"); });
+  // Schema-only projection, never published as a receipt for throwaway-key
+  // ciphertext: that ciphertext is not addressed to the owner's recipient.
+  const schemaControl = preservationRecord("ENCRYPTED_PENDING_UPLOAD", pack.identity, { sha256: sha256(ciphertext), bytes: ciphertext.length }, "VERIFIED_ZERO_RESOURCES");
+  await check("no-plaintext-in-public-record-schema", () => { assert.doesNotMatch(JSON.stringify(schemaControl), /MMP089_PRIVATE|stdout|stderr|src\/|error TS|\.ts|AGE-SECRET/); assert.equal(schemaControl.upload, "NOT_RUN"); });
   // Kept private for the independent reviewer; never part of a public artifact.
   writeFileSync(join(parent, "roundtrip.age"), ciphertext, { mode: 0o600 });
   writeFileSync(join(parent, "expected-package.json"), plaintext, { mode: 0o600 });
   writeFileSync(join(parent, "expected-digests.json"), JSON.stringify({ plaintextSha256: sha256(plaintext), ciphertextSha256: sha256(ciphertext), candidateSha: candidate.candidateSha, compilerSha256: pack.compilerSha256 }), { mode: 0o600 });
+  const tools = join(runnerTemp, "mmp089-tools");
+  mkdirSync(tools, { mode: 0o700 });
+  copyFileSync(agePath, join(tools, "age")); chmodSync(join(tools, "age"), 0o755);
+  await check("production-preserver-cli-fixed-owner-recipient-no-upload", () => {
+    const result = spawnSync(process.execPath, [join(root, "research/mmp-089/preserve.mjs")], { cwd: root, env: { PATH: process.env.PATH, RUNNER_TEMP: runnerTemp, GITHUB_SHA: headSha, GITHUB_RUN_ID: expected.runId, GITHUB_RUN_ATTEMPT: expected.runAttempt }, timeout: 90000, maxBuffer: 1024 * 1024 });
+    assert.equal(result.status, 0);
+    publicRecord = JSON.parse(readFileSync(join(runnerTemp, "meta-paid-public/preservation.json")));
+    assert.equal(publicRecord.status, "ENCRYPTED_PENDING_UPLOAD");
+    assert.equal(publicRecord.recipientFingerprint, DIAGNOSTIC_POLICY.recipientKeySha256);
+    const ownerCiphertext = readFileSync(join(runnerTemp, "mmp089-private-diagnostics/candidate-diagnostics.age"));
+    assert.equal(sha256(ownerCiphertext), publicRecord.ciphertextSha256);
+    assert.equal(ownerCiphertext.length, publicRecord.ciphertextBytes);
+    assert.equal(publicRecord.collectorCleanup, "VERIFIED_ZERO_RESOURCES");
+    assert.doesNotMatch(JSON.stringify(publicRecord) + result.stdout + result.stderr, /MMP089_PRIVATE|stdout|stderr|src\/|error TS|AGE-SECRET/);
+  });
   plaintext.fill(0);
   status = "PASS";
 } catch {
@@ -114,7 +131,14 @@ try {
 } finally {
   const finalizer = spawnSync(process.execPath, [join(root, "packages/differential/src/workshop-finalizer.mjs")], { cwd: root, env: { PATH: process.env.PATH, WORKSHOP_PUBLIC_OUTPUT: join(runnerTemp, "meta-paid-public"), PILOT_HEAD_SHA: headSha }, timeout: 60000, maxBuffer: 1024 * 1024 });
   let finalizerRecord = null;
-  try { finalizerRecord = JSON.parse(readFileSync(join(runnerTemp, "meta-paid-public/finalizer.json"), "utf8")); assert.equal(finalizer.status, 0); assert.equal(finalizerRecord.status, "PASS"); assert.equal(finalizerRecord.emergencyRemoved, 0); assert.deepEqual(finalizerRecord.inventory, { containers: 0, volumes: 0 }); rows.push({ id: "independent-finalizer-zero-resources", status: "PASS" }); }
+  try {
+    finalizerRecord = JSON.parse(readFileSync(join(runnerTemp, "meta-paid-public/finalizer.json"), "utf8")); assert.equal(finalizer.status, 0); assert.equal(finalizerRecord.status, "PASS"); assert.equal(finalizerRecord.emergencyRemoved, 0); assert.deepEqual(finalizerRecord.inventory, { containers: 0, volumes: 0 }); rows.push({ id: "independent-finalizer-zero-resources", status: "PASS" });
+    if (status === "PASS") {
+      const stepOutput = join(parent, "upload-eligibility.txt");
+      const gate = spawnSync(process.execPath, [join(root, "research/mmp-089/prepare-upload.mjs")], { cwd: root, env: { RUNNER_TEMP: runnerTemp, GITHUB_SHA: headSha, GITHUB_RUN_ID: expected.runId, GITHUB_RUN_ATTEMPT: expected.runAttempt, GITHUB_OUTPUT: stepOutput, MMP089_PRESERVE_OUTCOME: "success", MMP089_FINALIZER_OUTCOME: finalizer.status === 0 ? "success" : "failure" }, timeout: 10000, maxBuffer: 1024 * 1024 });
+      assert.equal(gate.status, 0); assert.equal(readFileSync(stepOutput, "utf8"), "eligible=true\n"); rows.push({ id: "production-upload-gate-after-actual-finalizer-no-upload", status: "PASS" });
+    }
+  }
   catch { status = "FAIL"; process.exitCode = 1; }
   const result = { format: "mmp089-offline-controls-v1", headSha, status, execution: "ACTUAL_VALIDATOR_REAL_NETWORK_OFF_DOCKER_SYNTHETIC_INPUT", aiGeneration: "AI_GENERATION_NOT_RUN", metaRequests: 0, validatorExitCode: validator.status, cases: rows, finalizer: finalizerRecord, preservation: publicRecord, privateKey: "THROWAWAY_ONLY_NEVER_OWNER_IDENTITY", ownerRecipientDecryptability: "NOT_ESTABLISHED", product: "NOT_ESTABLISHED" };
   writeFileSync(join(output, "controls.json"), `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });

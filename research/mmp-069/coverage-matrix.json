@@ -283,6 +283,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-089",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Research scripts receive syntax-only Fast CI coverage. Package private-diagnostics tests run through pnpm test, including bounded CLI controls; actual Docker/crypto controls are separately observed offline. Paid workflow dispatch and artifact upload are not Fast CI tests."
     }
   ],
   "skips": [

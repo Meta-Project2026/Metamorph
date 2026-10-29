@@ -4,6 +4,13 @@ Status: owner public recipient and separate explicit data-policy approval in
 [spec.md](spec.md) received in this chat. Implementation/qualification in
 progress; no upload or paid request has occurred.
 
+On continuation, remote main had advanced to
+`59a6266801956a3048a4c1ceb915bc1fb0f773a9` (PR90 CI coverage and PR91 Docker
+reliability evidence). Its [Node22/24 Fast CI 40961012738](https://github.com/Meta-Project2026/Metamorph/actions/runs/40961012738)
+passed. The unpublished implementation checkpoint was rebased onto that fresh
+main before executing implementation controls. Candidate/runtime/Oracle recipes
+were unchanged by that main update.
+
 ## Verified current source ordering at the pinned base
 
 1. `.github/workflows/meta-paid-migration.yml`: install/build trusted code;

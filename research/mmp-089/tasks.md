@@ -9,13 +9,15 @@
   private compiler/source evidence without collecting generated private content.
 - [x] Receive only the owner's public native age X25519 recipient; executor
   Node and independent reviewer Python encoding/checksum/SHA-256 pin checks
-  agree (exit 0 each); age-tool acceptance NOT_RUN.
+  agree (exit 0 each); executor age-tool recipient acceptance also exit 0.
 - [x] Receive separate explicit approval of recipient, access, seven-day retention
   and exact ciphertext destination (or revise proposal to owner-supplied policy).
 - [x] Independent read-only security design review; substantive findings resolved
   at design level; proposal ready for owner decision, NO_GO for egress remains.
 - [x] Independent public-recipient encoding and fingerprint check.
-- [ ] Independently verified age binary/version/provenance pins and tool acceptance.
+- [x] Independently verified age archive/binary/version/LICENSE pins; executor
+  Sigsum proof and exact public-recipient tool acceptance exit 0 (separate from
+  decryption/roundtrip controls).
 - [ ] Implement bounded collection/encryption/failure-aware ordering and cleanup.
 - [ ] Synthetic positive/negative/crash/canary controls and independent crypto
   roundtrip/hash-equality, wrong-key/tamper tests.

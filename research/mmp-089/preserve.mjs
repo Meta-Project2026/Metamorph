@@ -40,7 +40,7 @@ if (process.argv[2] !== "--isolated") {
     requireDiagnostic(!existsSync(privateOutput));
     mkdirSync(privateOutput, { mode: 0o700 });
     const trial = readPrivateJson(join(output, "trial.json"), 4 * 1024 * 1024).value;
-    if (trial.modelGeneration === "GENERATED" && trial.publicG1 !== "FAIL") {
+    if (trial.modelGeneration === "GENERATED" && ["PASS", "ERROR", "INCONCLUSIVE", "NOT_RUN"].includes(trial.publicG1)) {
       record = preservationRecord("NOT_APPLICABLE");
     } else {
       const expected = { runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, headSha: process.env.GITHUB_SHA };
