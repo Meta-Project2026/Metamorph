@@ -1,108 +1,113 @@
-# MMP-069 — Test/CI Coverage Matrix & Workshop-Audit Inclusion
+# MMP-063 / 069 / 074 — executable CI coverage
 
-**Contract:** MMP-069  
-**Issue:** [Meta-Project2026/Metamorph#69](https://github.com/Meta-Project2026/Metamorph/issues/69)  
-**Base SHA:** `4cdfcf6de8bfd411a7c0c7c18953abb1bb0aa299`  
-**Related Issues:** #61 (parallel model admission, Ilia), #63 (historical Git objects on shallow checkout), #68 (sandbox invariants and action SHA pinning)
+Scope: Docker-free PR checks only. Base main `c3ddf08b1a7774c4a5ddecf89fd668c6b81c7651`.
+PR #88 is merged; #87 remains separate at initial inspection. No paid/manual
+dispatch, Oracle changes, hidden cases or candidate execution.
 
----
+## Existing coverage and the defect
 
-## 1. Summary of Changes
+Main CI [40940984676](https://github.com/Meta-Project2026/Metamorph/actions/runs/40940984676)
+already executed Workshop-audit tests, Active research lint and Validate coverage
+matrix on Node 22 and 24. PR #73's 54 hosted audit tests remain historical evidence.
+The old validator checked its JSON assertions, not the workflow/manifests.
+It even listed nonexistent package test scripts. No old run is reclassified here.
 
-MMP-069 closes key blind spots in Metamorph Fast CI without expanding to expensive full Docker runs or changing Oracle/comparator/product behavior:
+## Design and implementation
 
-1. **54 Docker-free workshop-audit tests enabled in Fast CI:**
-   - Package: `@metamorph/workshop-audit` (`packages/workshop-audit/test/*.test.mjs`).
-   - Execution command in `.github/workflows/ci.yml`: `pnpm --filter @metamorph/workshop-audit test`.
-   - Tests: 30 in `audit.test.mjs`, 24 in `lifecycle.test.mjs` (total 54).
-   - Speed: ~3.9 seconds total; zero Docker dependencies (in-process SQLite + mock worker adapters).
-   - Node matrix: runs on both Node 22 and Node 24 on `ubuntu-latest`.
+- [Version 2 matrix](coverage-matrix.json) stores actual workspace names, paths and
+  scripts, checked against manifests discovered from `pnpm-workspace.yaml`.
+  Listing a manifest script does not mean it executes in CI; gates and expanded
+  test files establish that separately. No invented N/A/test scripts. Pure MJS workshop-audit
+  really has no build/typecheck script; its existing lint and test gate remain.
+- [Validator](validate.mjs) parses actual YAML 1.2 using exact `yaml@2.8.1`
+  (ISC, zero dependencies; upstream notice retained in installed package).
+  [Upstream API](https://eemeli.org/yaml/) documents `parseDocument`.
+  Duplicate keys, warnings and aliases are rejected.
+- A deliberately narrow, reviewed CI dialect requires the actual ordered quick
+  job/steps, Ubuntu, Node22/24, setup-node expression, unfiltered PR event,
+  eight-minute timeout and contents:read. Unknown conditions, shells, defaults,
+  environment overrides, dependencies, matrix exclusions, soft failure, comments,
+  echo-only commands and shell wrappers fail closed. Supporting new workflow
+  semantics requires updating code and controls, not guessing shell execution.
+- Root and filtered test scripts are traced through the exact supported
+  `pnpm build && node --test` forms. Expanded globs must be nonempty and cover
+  every workspace `*.test.mjs`. New/removed/renamed packages or stale commands
+  invalidate the matrix. Test discovery is not a test execution count.
+- Research module discovery covers all `research/**/*.mjs`. Every discovered
+  harness needs a matrix entry; every active module receives `node --check`
+  (parse only, no imports/execution). Existing manual harnesses #34/#44/#49/#54
+  are ACTIVE, not falsely archived. #61/#78/#82/#86 remain active and syntax
+  checked without editing or invoking their privileged paths.
+- Only `mmp-055/v1/linux-test.mjs` is the explicit archived privileged harness:
+  the repository has no current workflow invocation of it. Its original local
+  proof is not a hosted test. Dedicated privileged CI remains NO_DECISION/NOT_RUN.
+- Scoped recommended Biome checks gate demo, this validator and connected tests.
+  Demo `*.test.mjs` discovery automatically includes future #87 files; no claim
+  of 83 executions until the files land and an actual run reports them.
+- [Negative controls](validate.test.mjs) run the real validator CLI on isolated
+  copies and require exit 1 for 43 mutations; clean copy exits 0. A new demo test
+  discovery control proves wildcard inclusion. The normal matrix check and
+  controls are separate unconditional CI steps.
+- [History bootstrap](../mmp-054-connected/history.mjs) fetches exactly the two
+  pinned commits at depth 2, no tags/submodules/retry/full-history fallback.
+  Checks the full fix SHA, its exact parent and both historical SHA256 contents.
+  It never changes `verifyPins()` or replaces history with JSON.
+  Failure is HISTORY_MISSING_OR_INVALID or HISTORY_FETCH_FAILED, not SKIP.
+- [History controls](../mmp-054-connected/history.test.mjs) create a real depth-one
+  Git clone with no checkout/alternates. Missing history must fail the CLI, then
+  exact-object bootstrap must pass while retaining shallow status. This uses
+  authentic local Git objects without network; the ordinary hosted checkout
+  separately exercises actual origin fetch and all 21 original adversarial tests.
 
-2. **Machine-readable coverage matrix:**
-   - `research/mmp-069/coverage-matrix.json` records all 11 workspace packages, research harnesses, execution commands, Fast CI status, and test counts.
-   - Fail-closed validator: `research/mmp-069/validate.mjs` executed in Fast CI to ensure schema and counts remain consistent.
+## Status semantics and limitations
 
-3. **Scoped active research linting:**
-   - Active research code in `research/demo-readiness/` is checked in CI via `npx @biomejs/biome check research/demo-readiness` (~34ms runtime) using its scoped configuration.
-   - Global `biome.json` is preserved untouched; archived harnesses with historical receipts are protected from mass format churn.
+GATED_HOSTED means an unconditional checked Fast CI command selects the files,
+not that they passed. Counts/PASS/FAIL/SKIP belong to actual run evidence.
+HOSTED_SKIP: one Windows-only test and two uid-0 isolation tests are skipped on
+unprivileged Linux. They are not all privilege-dependent and never become PASS.
+MANUAL_DOCKER, PRIVILEGED_NOT_RUN, LOCAL_ONLY, ARCHIVED and NOT_VERIFIED are
+distinct from automatically gated execution; unused labels are not fake runs.
 
-4. **Negative control verified:**
-   - Injected intentional mutation (`assert.equal(1, 2)`) in `packages/workshop-audit/test/audit.test.mjs` in a temporary worktree.
-   - Result: `pnpm --filter @metamorph/workshop-audit test` exited with status `1` (`ERR_TEST_FAILURE`), proving the gate is active and fail-closed.
-   - Mutation was completely rolled back.
+This is drift detection, not protection against an adversary changing the
+validator and its policy together, deleting the entire workflow or replacing
+the toolchain. It does not prove a test's semantic adequacy. Static syntax alone
+does not audit Docker mount/credential security. Full semantic lint/unit coverage
+for active manual/privileged harnesses remains an explicit #69 gap, in each
+matrix entry. No mass formatting of archived or other-owner scripts.
 
----
+## Acceptance disposition
 
-## 2. Workspace Packages Inventory (11 Packages)
+| Issue | Delivered | Remaining |
+| --- | --- | --- |
+| #74 | YAML/workspace/file reality checks; 45/45 controls in hosted Node22/24 | Independent review of final HEAD |
+| #63 | Exact history bootstrap; 2/2 history controls and 21/21 original tests in hosted Node22/24 | Independent review of final HEAD |
+| #69 | Preserve audit gate; demo tests; active inventory/syntax; honest skips/gaps | Semantic lint/test gaps in manual harnesses; privileged-runner NO_DECISION; keep OPEN |
 
-| Package | Path | Fast CI Test Command | Build / Typecheck | Fast CI Status |
-| :--- | :--- | :--- | :--- | :--- |
-| `metamorph` (root) | `.` | `pnpm test` (root composite suite) | `pnpm build && pnpm -r typecheck` | PASS |
-| `@metamorph/server` | `apps/server` | `node --test test/health.test.mjs` (via root) | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/contracts` | `packages/contracts` | `node --test test/contracts.test.mjs` (via root) | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/agent` | `packages/agent` | `node --test test/*.test.mjs` (via root) | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/agent-real` | `packages/agent-real` | `node --test test/*.test.mjs` (via root) | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/differential` | `packages/differential` | Dedicated: `pnpm --filter @metamorph/differential test` | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/evidence-retention` | `packages/evidence-retention` | `pnpm --filter ... test` (via root) | `tsc -p tsconfig.json` | PASS (3 privileged skips) |
-| `@metamorph/integration` | `packages/integration` | `node --test test/*.test.mjs` (via root) | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/oracle` | `packages/oracle` | Dedicated: `test:reference` & `probes/qualification.test.mjs` | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/target-worker` | `packages/target-worker` | Dedicated: `pnpm --filter @metamorph/target-worker test` | `tsc -p tsconfig.json` | PASS |
-| `@metamorph/workshop-audit` | `packages/workshop-audit` | **NEW Dedicated:** `pnpm --filter @metamorph/workshop-audit test` | N/A (MJS runtime, Biome static) | **PASS (54 tests)** |
+Do not auto-close any issue or merge before independent review. This PR has no
+bearing on #84 flakiness, #89 private diagnostics, historical ROOT_CAUSE_UNKNOWN,
+G0/G4 INCONCLUSIVE or product NOT_ESTABLISHED.
 
----
+## Reproduce
 
-## 3. Special Categories & Blind Spot Analysis
+```text
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm --filter @metamorph/workshop-audit test
+pnpm exec biome check research/demo-readiness research/mmp-069 research/mmp-054-connected
+node research/mmp-069/validate.mjs
+node --test research/mmp-069/validate.test.mjs
+node research/mmp-069/check-syntax.mjs
+node research/mmp-054-connected/history.mjs bootstrap
+node --test research/mmp-054-connected/history.test.mjs
+node --test research/mmp-054-connected/verify.test.mjs
+node --test research/demo-readiness/*.test.mjs
+git diff --check
+```
 
-### A. 54 Workshop-Audit Tests
-- **Files:** `packages/workshop-audit/test/audit.test.mjs` (30 tests), `packages/workshop-audit/test/lifecycle.test.mjs` (24 tests).
-- **Environment:** Pure Node.js, uses in-memory / temporary SQLite and mock adapters (`AuditReference`, `AuditTarget`). Docker is NOT required.
-- **Hosted Linux CI Result:** 54 PASS / 0 FAIL / 0 SKIP.
-- **Windows Local Result:** 53 PASS / 0 FAIL / 1 SKIP (one POSIX permission test `test/lifecycle.test.mjs:363` safely skips on `win32`).
-
-### B. 21 #63 Connected Adversarial Tests
-- **File:** `research/mmp-054-connected/verify.test.mjs` (21 tests).
-- **Status:** **NOT_RUN in Fast CI**.
-- **Reason:** Requires historical Git objects (`git show 7cf6e678...:specs/014-public-validation-triage/pins.json` and `git show 8779dfe^:packages/oracle/src/runner.ts`). Under default GitHub Actions `actions/checkout@v4` shallow clone (`fetch-depth: 1`), these commits are not present.
-- **Resolution:** Tracked separately by issue **#63** (assigned to sol 6.1) to avoid breaking shallow CI checkouts.
-
-### C. 3 Privileged SKIPs in Root Tests
-On hosted unprivileged Ubuntu CI runners (`ubuntu-latest`), exactly 3 tests in `packages/evidence-retention/test/retention.test.mjs` are skipped:
-1. `line 104` ("Windows support fails closed instead of treating POSIX mode bits as ACL proof"): skipped because runner is Linux (`process.platform !== "win32"`).
-2. `line 311` ("real foreign-owner file is rejected"): skipped because `process.getuid?.() !== 0` (chown to foreign UID 65534 requires root).
-3. `line 612` ("actual unprivileged child cannot read source or private key; receives no keys/env"): skipped because `process.getuid?.() !== 0` (spawning child with foreign UID 65534 requires root).
-- **Policy:** These remain explicitly documented as `SKIPPED` on unprivileged CI; they are not faked as PASS.
-
-### D. 50 Demo #71 Local Focused Tests
-- **File:** `research/demo-readiness/demo.test.mjs` (50 tests, MMP-071).
-- **Status:** Tested locally (50 PASS in ~525ms). Scoped lint step `npx @biomejs/biome check research/demo-readiness` is enabled in Fast CI.
-
----
-
-## 4. Active vs Archived Research Harnesses
-
-| Directory | Role | Lifecycle | Fast CI Gating |
-| :--- | :--- | :--- | :--- |
-| `research/demo-readiness` | Public evidence viewer & rehearsal runbook | ACTIVE | Scoped Biome check enabled |
-| `research/mmp-069` | Test/CI coverage matrix & validator | ACTIVE | Machine-readable validator in CI |
-| `research/mmp-054-connected` | Adversarial verifier tests (21 tests) | ACTIVE | Shallow checkout gap tracked in #63 |
-| `research/mmp-054` | Offline local proof / Docker gateway | ARCHIVE | Dispatch-only / manual Docker |
-| `research/mmp-044` | Public validation triage | ARCHIVE | Dispatch-only / manual Docker |
-| `research/mmp-049` | Workshop candidate compatibility | ARCHIVE | Dispatch-only / manual Docker |
-| `research/mmp-034` | Items smoke diagnosis & incident review | ARCHIVE | Local diagnostic |
-| `research/mmp-055` | Privileged encrypted evidence | ARCHIVE | Privileged container mount |
-| `research/mmp-061` | Real model admission & Oracle controls | SEPARATE TRACK | PR #70 (Ilia Botnariuc) |
-
----
-
-## 5. Non-Interference Boundaries
-
-- **Zero modifications** to:
-  - `packages/agent*/`
-  - `packages/oracle/`
-  - `packages/differential/`
-  - `packages/target-worker/`
-  - `packages/contracts/`
-  - `research/mmp-061/`
-  - Corpus, manifests, benchmarks, historical evidence.
-- No changes to action pinning (`@v4` preserved; SHA pinning is owned by #68).
-- No new billable API calls or Docker container requirements on Fast CI.
+Ordinary Node tests execute trusted harnesses and synthetic transports, never
+benchmark/candidate code on the host. Linux checkout must preserve pinned LF bytes.
+See [validation](validation.md) for actual results. The final delivery SHA and its
+separate CI links are published in PR #90.

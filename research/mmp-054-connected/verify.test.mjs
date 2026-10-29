@@ -9,6 +9,10 @@ import {
 } from "../../packages/target-worker/src/admission.mjs";
 import { git, PINS_PATH, root, verifyPins } from "../mmp-044/config.mjs";
 import { verifyPublic } from "../mmp-049/verify.mjs";
+import { checkHistory } from "./history.mjs";
+
+// Explicit deterministic precondition; no platform skip or relaxed pin checks.
+checkHistory();
 
 const historicalSha = "cf33c5bbcaad524a99c667782fae5cb9b0b4125f";
 const names = [

@@ -1,450 +1,312 @@
 {
-  "version": "1.0.0",
-  "contract": "MMP-069",
-  "timestamp": "2026-10-29T03:30:00Z",
-  "baseSha": "4cdfcf6de8bfd411a7c0c7c18953abb1bb0aa299",
-  "summary": {
-    "workspacePackagesCount": 11,
-    "fastCiSteps": [
-      "pnpm install --frozen-lockfile",
-      "pnpm lint",
-      "pnpm typecheck",
-      "pnpm test",
-      "pnpm build",
-      "pnpm --filter @metamorph/oracle test:reference",
-      "pnpm --filter @metamorph/target-worker test",
-      "pnpm --filter @metamorph/differential test",
-      "node --test packages/oracle/probes/qualification.test.mjs",
-      "pnpm --filter @metamorph/workshop-audit test",
-      "npx @biomejs/biome check research/demo-readiness research/mmp-069",
-      "node research/mmp-069/validate.mjs"
-    ],
-    "workshopAuditTestsCount": 54,
-    "mmp063ConnectedTestsCount": 21,
-    "demoReadinessTestsCount": 50,
-    "privilegedHostedSkipsCount": 3
-  },
+  "version": 2,
+  "contract": "MMP-063-069-074",
+  "semantics": "Static gating inventory; execution counts and verdicts are recorded separately",
+  "gates": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm test",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm build",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test packages/oracle/probes/qualification.test.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm --filter @metamorph/workshop-audit test",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "pnpm exec biome check research/demo-readiness research/mmp-069 research/mmp-054-connected",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node research/mmp-054-connected/history.mjs bootstrap",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test research/mmp-054-connected/history.test.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test research/mmp-054-connected/verify.test.mjs",
+      "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test research/demo-readiness/*.test.mjs",
+      "status": "GATED_HOSTED"
+    }
+  ],
   "packages": [
     {
-      "name": "metamorph",
       "path": ".",
-      "type": "root",
-      "tier": "orchestrator",
-      "commands": {
+      "name": "metamorph",
+      "scripts": {
         "lint": "biome check .",
         "typecheck": "pnpm build && pnpm -r typecheck",
         "test": "pnpm build && node --test packages/contracts/test/contracts.test.mjs apps/server/test/health.test.mjs packages/agent/test/*.test.mjs packages/oracle/test/oracle.test.mjs packages/integration/test/*.test.mjs packages/agent-real/test/*.test.mjs packages/evidence-retention/test/*.test.mjs",
-        "build": "pnpm -r build"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "build": "pnpm -r build",
+        "start": "pnpm --filter @metamorph/server start",
+        "demo:agent": "pnpm build && pnpm --filter @metamorph/agent demo",
+        "demo:integration": "pnpm build && pnpm --filter @metamorph/integration demo"
+      }
     },
     {
-      "name": "@metamorph/server",
       "path": "apps/server",
-      "type": "app",
-      "tier": "gateway",
-      "commands": {
+      "name": "@metamorph/server",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/health.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "start": "node dist/start.js"
+      }
     },
     {
-      "name": "@metamorph/contracts",
-      "path": "packages/contracts",
-      "type": "package",
-      "tier": "domain-types",
-      "commands": {
-        "build": "tsc -p tsconfig.json",
-        "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json",
-        "test": "node --test test/contracts.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
-    },
-    {
-      "name": "@metamorph/agent",
       "path": "packages/agent",
-      "type": "package",
-      "tier": "orchestration",
-      "commands": {
+      "name": "@metamorph/agent",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "demo": "node dist/demo.js",
+        "test": "node --test test/*.test.mjs",
+        "meta:preflight": "node dist/meta-cli.js preflight",
+        "live:probe": "node dist/meta-cli.js probe"
+      }
     },
     {
-      "name": "@metamorph/agent-real",
       "path": "packages/agent-real",
-      "type": "package",
-      "tier": "model-integration",
-      "commands": {
+      "name": "@metamorph/agent-real",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "test": "node --test test/*.test.mjs",
+        "proof": "node src/proof.mjs"
+      }
     },
     {
-      "name": "@metamorph/differential",
+      "path": "packages/contracts",
+      "name": "@metamorph/contracts",
+      "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json"
+      }
+    },
+    {
       "path": "packages/differential",
-      "type": "package",
-      "tier": "comparator",
-      "commands": {
+      "name": "@metamorph/differential",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs",
+        "pilot": "node src/pilot.mjs"
+      }
     },
     {
-      "name": "@metamorph/evidence-retention",
       "path": "packages/evidence-retention",
-      "type": "package",
-      "tier": "evidence-security",
-      "commands": {
+      "name": "@metamorph/evidence-retention",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS_WITH_3_PRIVILEGED_SKIPS"
+      }
     },
     {
-      "name": "@metamorph/integration",
       "path": "packages/integration",
-      "type": "package",
-      "tier": "e2e-integration",
-      "commands": {
+      "name": "@metamorph/integration",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "demo": "node dist/demo.js"
+      }
     },
     {
-      "name": "@metamorph/oracle",
       "path": "packages/oracle",
-      "type": "package",
-      "tier": "oracle-baseline",
-      "commands": {
+      "name": "@metamorph/oracle",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/oracle.test.mjs",
+        "controls": "node test/run-controls.mjs",
         "test:reference": "pnpm --filter @metamorph/oracle... build && node --test reference/reference.test.mjs reference/acceptance.test.mjs",
-        "test:qualification": "node --test probes/qualification.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "reference:proof": "node reference/proof.mjs"
+      }
     },
     {
-      "name": "@metamorph/target-worker",
       "path": "packages/target-worker",
-      "type": "package",
-      "tier": "candidate-worker",
-      "commands": {
+      "name": "@metamorph/target-worker",
+      "scripts": {
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "node --test test/*.test.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+        "test": "node --test test/*.test.mjs",
+        "smoke:isolated": "node src/smoke.mjs"
+      }
     },
     {
-      "name": "@metamorph/workshop-audit",
       "path": "packages/workshop-audit",
-      "type": "package",
-      "tier": "independent-audit",
-      "commands": {
-        "build": "N/A (pure MJS runtime)",
-        "typecheck": "N/A (pure MJS runtime; biome static check)",
+      "name": "@metamorph/workshop-audit",
+      "scripts": {
         "test": "node --test test/*.test.mjs",
         "audit:isolated": "node src/run.mjs"
-      },
-      "fastCi": true,
-      "status": "PASS"
+      }
     }
   ],
-  "researchHarnesses": [
+  "research": [
     {
       "path": "research/demo-readiness",
       "lifecycle": "ACTIVE",
-      "description": "Offline read-only public evidence viewer and rehearsal runbook (MMP-071)",
-      "files": [
-        "adapter.mjs",
-        "demo.test.mjs",
-        "pins.mjs",
-        "serve.mjs",
-        "viewer.mjs"
-      ],
-      "verification": {
-        "lint": {
-          "command": "npx @biomejs/biome check research/demo-readiness",
-          "fastCi": true,
-          "status": "PASS"
-        },
-        "tests": {
-          "command": "node --test research/demo-readiness/demo.test.mjs",
-          "count": 50,
-          "fastCi": false,
-          "environment": "local focused / rehearsal",
-          "status": "PASS_LOCAL"
-        }
-      }
+      "execution": "GATED_HOSTED",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "GATED_HOSTED",
+      "gap": "Docker-free checks only; actual test counts belong to run logs."
     },
     {
-      "path": "research/mmp-069",
+      "path": "research/mmp-034",
       "lifecycle": "ACTIVE",
-      "description": "Test/CI coverage matrix, fail-closed matrix validation and audit reporting (MMP-069)",
-      "files": [
-        "coverage-matrix.json",
-        "validate.mjs",
-        "README.md"
-      ],
-      "verification": {
-        "lint": {
-          "command": "node --check research/mmp-069/validate.mjs",
-          "fastCi": true,
-          "status": "PASS"
-        },
-        "validation": {
-          "command": "node research/mmp-069/validate.mjs",
-          "fastCi": true,
-          "status": "PASS"
-        }
-      }
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-044",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-049",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-054",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
     },
     {
       "path": "research/mmp-054-connected",
       "lifecycle": "ACTIVE",
-      "description": "Adversarial verifier and pin-refresh tests (tracked by #63)",
-      "files": [
-        "verify.test.mjs"
-      ],
-      "verification": {
-        "syntax": {
-          "command": "node --check research/mmp-054-connected/verify.test.mjs",
-          "fastCi": false,
-          "status": "PASS_SYNTAX"
-        },
-        "tests": {
-          "command": "node --test research/mmp-054-connected/verify.test.mjs",
-          "count": 21,
-          "fastCi": false,
-          "reasonExcludedFromFastCi": "Requires historical Git objects (7cf6e678... and 8779dfe^) absent under default actions/checkout@v4 shallow depth 1; tracked by #63",
-          "status": "NOT_RUN_ON_SHALLOW_CI"
-        }
-      }
-    },
-    {
-      "path": "research/mmp-054",
-      "lifecycle": "ARCHIVE",
-      "description": "MMP-054 offline local proof and Docker gateway harness",
-      "files": [
-        "check.mjs",
-        "docker-gateway.mjs",
-        "driver.test.mjs",
-        "lib.mjs",
-        "network.mjs",
-        "offline-preload.mjs",
-        "prepare.mjs",
-        "run-offline.mjs",
-        "verify.mjs"
-      ],
-      "verification": {
-        "tests": {
-          "command": "node --test research/mmp-054/driver.test.mjs",
-          "count": 53,
-          "fastCi": false,
-          "environment": "manual Linux/Docker workflow or local Docker",
-          "status": "PASS_LOCAL"
-        }
-      }
-    },
-    {
-      "path": "research/mmp-044",
-      "lifecycle": "ARCHIVE",
-      "description": "MMP-044 public validation triage and historical proof harness",
-      "files": [
-        "check.mjs",
-        "config.mjs",
-        "driver.mjs",
-        "driver.test.mjs",
-        "finalize.mjs",
-        "public-evidence.mjs",
-        "run-public.mjs",
-        "validate.mjs",
-        "verify-public.mjs"
-      ],
-      "verification": {
-        "tests": {
-          "command": "node --test research/mmp-044/driver.test.mjs",
-          "count": 31,
-          "fastCi": false,
-          "environment": "dispatch-only workflow or local",
-          "status": "PASS_LOCAL"
-        }
-      }
-    },
-    {
-      "path": "research/mmp-049",
-      "lifecycle": "ARCHIVE",
-      "description": "MMP-049 workshop candidate compatibility harness",
-      "files": [
-        "check.mjs",
-        "driver.test.mjs",
-        "environment.mjs",
-        "finalize.mjs",
-        "inputs.mjs",
-        "probe.mjs",
-        "replay.mjs",
-        "run-agent.mjs",
-        "run-proof.mjs",
-        "scenarios.mjs",
-        "validation.mjs",
-        "verify.mjs"
-      ],
-      "verification": {
-        "tests": {
-          "command": "node --test research/mmp-049/driver.test.mjs",
-          "count": 13,
-          "fastCi": false,
-          "environment": "dispatch-only workflow or local",
-          "status": "PASS_LOCAL"
-        }
-      }
-    },
-    {
-      "path": "research/mmp-034",
-      "lifecycle": "ARCHIVE",
-      "description": "MMP-034 items smoke incident diagnosis and historical evidence review",
-      "files": [
-        "diagnose.mjs",
-        "diagnose.test.mjs"
-      ],
-      "verification": {
-        "tests": {
-          "command": "node --test research/mmp-034/diagnose.test.mjs",
-          "count": 4,
-          "fastCi": false,
-          "environment": "local diagnostic",
-          "status": "PASS_LOCAL"
-        }
-      }
+      "execution": "GATED_HOSTED",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "GATED_HOSTED",
+      "gap": "Docker-free checks only; actual test counts belong to run logs."
     },
     {
       "path": "research/mmp-055",
-      "lifecycle": "ARCHIVE",
-      "description": "MMP-055 privileged encrypted local evidence runner",
-      "files": [
-        "v1/linux-test.mjs"
-      ],
-      "verification": {
-        "syntax": {
-          "command": "node --check research/mmp-055/v1/linux-test.mjs",
-          "fastCi": false,
-          "status": "PASS_SYNTAX"
-        },
-        "tests": {
-          "command": "node research/mmp-055/v1/linux-test.mjs",
-          "fastCi": false,
-          "environment": "privileged Linux container mount (/source, /tmp)",
-          "status": "PRIVILEGED_ONLY"
-        }
-      }
+      "lifecycle": "ARCHIVED",
+      "execution": "PRIVILEGED_NOT_RUN",
+      "staticCheck": "ARCHIVED",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
     },
     {
       "path": "research/mmp-061",
-      "lifecycle": "SEPARATE_EXTERNAL_TRACK",
-      "description": "Real model admission and manual Ubuntu Oracle controls (PR #70 by Ilia Botnariuc)",
-      "files": [
-        "protected on branch codex/mmp061-real-model"
-      ],
-      "verification": {
-        "fastCi": false,
-        "status": "UNTOUCHED_SEPARATE_TRACK"
-      }
+      "lifecycle": "ACTIVE",
+      "execution": "PRIVILEGED_NOT_RUN",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-069",
+      "lifecycle": "ACTIVE",
+      "execution": "GATED_HOSTED",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "GATED_HOSTED",
+      "gap": "Docker-free checks only; actual test counts belong to run logs."
+    },
+    {
+      "path": "research/mmp-078",
+      "lifecycle": "ACTIVE",
+      "execution": "PRIVILEGED_NOT_RUN",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-082",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
+    },
+    {
+      "path": "research/mmp-086",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
     }
   ],
-  "specialCoverageCategories": {
-    "workshopAudit": {
-      "package": "@metamorph/workshop-audit",
-      "testCommand": "pnpm --filter @metamorph/workshop-audit test",
-      "testFiles": [
-        "packages/workshop-audit/test/audit.test.mjs",
-        "packages/workshop-audit/test/lifecycle.test.mjs"
-      ],
-      "testCounts": {
-        "audit": 30,
-        "lifecycle": 24,
-        "total": 54
-      },
-      "mode": "Docker-free (in-process SQLite + mock worker adapters)",
-      "fastCiIncluded": true,
-      "linuxStatus": "PASS (54/54)",
-      "windowsStatus": "PASS (53 pass, 1 POSIX skip)",
-      "negativeControl": {
-        "verified": true,
-        "mutation": "Injected assertion failure (assert.equal(1, 2)) in audit.test.mjs",
-        "observedExitCode": 1,
-        "observedFailure": "ERR_TEST_FAILURE: 1 !== 2"
-      }
+  "skips": [
+    {
+      "title": "Windows support fails closed instead of treating POSIX mode bits as ACL proof",
+      "status": "HOSTED_SKIP",
+      "reason": "Windows-only",
+      "guard": "skip: process.platform !== \"win32\""
     },
-    "mmp063Connected": {
-      "path": "research/mmp-054-connected/verify.test.mjs",
-      "testCommand": "node --test research/mmp-054-connected/verify.test.mjs",
-      "testCount": 21,
-      "mode": "Adversarial pin-refresh and verifier validation",
-      "fastCiIncluded": false,
-      "reason": "Requires historical Git commit objects 7cf6e678802802d16336685771c842d0ce6cf37d and 8779dfe^, absent in shallow actions/checkout@v4 (fetch-depth: 1)",
-      "trackedBy": "Issue #63 (assigned to sol 6.1)",
-      "localStatus": "PASS (21/21 in full checkout)"
+    {
+      "title": "real foreign-owner file is rejected",
+      "status": "HOSTED_SKIP",
+      "reason": "Requires uid 0",
+      "guard": "process.getuid?.() !== 0"
     },
-    "privilegedSkips": [
-      {
-        "id": "evidence-retention-windows-only",
-        "file": "packages/evidence-retention/test/retention.test.mjs",
-        "line": 104,
-        "title": "Windows support fails closed instead of treating POSIX mode bits as ACL proof",
-        "skipCondition": "process.platform !== 'win32'",
-        "statusOnLinuxCi": "SKIPPED",
-        "reason": "Windows-specific ACL failure test; skipped on Linux runner"
-      },
-      {
-        "id": "evidence-retention-foreign-chown",
-        "file": "packages/evidence-retention/test/retention.test.mjs",
-        "line": 311,
-        "title": "real foreign-owner file is rejected",
-        "skipCondition": "process.getuid?.() !== 0",
-        "statusOnLinuxCi": "SKIPPED",
-        "reason": "Requires root uid 0 to chown to foreign uid 65534; runner is unprivileged non-root"
-      },
-      {
-        "id": "evidence-retention-unprivileged-child-spawn",
-        "file": "packages/evidence-retention/test/retention.test.mjs",
-        "line": 612,
-        "title": "actual unprivileged child cannot read source or private key; receives no keys/env",
-        "skipCondition": "process.getuid?.() !== 0",
-        "statusOnLinuxCi": "SKIPPED",
-        "reason": "Requires root uid 0 to spawn child with uid 65534; runner is unprivileged non-root"
-      }
-    ],
-    "demoReadiness": {
-      "path": "research/demo-readiness",
-      "testCommand": "node --test research/demo-readiness/demo.test.mjs",
-      "lintCommand": "npx @biomejs/biome check research/demo-readiness",
-      "testCount": 50,
-      "fastCiLintIncluded": true,
-      "fastCiTestsIncluded": false,
-      "localTestStatus": "PASS (50/50 in ~525ms)"
+    {
+      "title": "actual unprivileged child cannot read source or private key; receives no keys/env",
+      "status": "HOSTED_SKIP",
+      "reason": "Requires uid 0",
+      "guard": "process.getuid?.() !== 0"
     }
+  ],
+  "privilegedRunner": {
+    "decision": "NO_DECISION",
+    "execution": "PRIVILEGED_NOT_RUN"
   }
 }

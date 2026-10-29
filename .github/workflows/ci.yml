@@ -22,6 +22,8 @@ jobs:
         node: ['22', '24']
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -41,7 +43,19 @@ jobs:
         run: node --test packages/oracle/probes/qualification.test.mjs
       - name: Workshop-audit tests
         run: pnpm --filter @metamorph/workshop-audit test
-      - name: Active research lint (demo-readiness, mmp-069)
-        run: npx @biomejs/biome check research/demo-readiness research/mmp-069
+      - name: Active research lint
+        run: pnpm exec biome check research/demo-readiness research/mmp-069 research/mmp-054-connected
+      - name: Active research syntax
+        run: node research/mmp-069/check-syntax.mjs
       - name: Validate coverage matrix
         run: node research/mmp-069/validate.mjs
+      - name: Coverage validator negative controls
+        run: node --test research/mmp-069/validate.test.mjs
+      - name: Connected history bootstrap
+        run: node research/mmp-054-connected/history.mjs bootstrap
+      - name: Shallow history negative control
+        run: node --test research/mmp-054-connected/history.test.mjs
+      - name: Connected adversarial tests
+        run: node --test research/mmp-054-connected/verify.test.mjs
+      - name: Demo-readiness tests
+        run: node --test research/demo-readiness/*.test.mjs
