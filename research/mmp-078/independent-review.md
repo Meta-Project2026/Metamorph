@@ -22,5 +22,10 @@ or a guaranteed provider dollar ceiling. Actual GitHub OIDC issuance, Meta
 entitlement/inference and model-generated Docker parity were NOT_RUN at review.
 No Meta request or spending is authorized by this review.
 
-Follow-up safe validate_only mode / delivery metadata: independent review pending
-the final follow-up SHA. Meta network/provider implementation is unchanged.
+Follow-up **49841dd8be47bd0c7b9ae7c763c2f1e8cb53a9c9**: independent **SCOPED_GO**;
+reviewer reran30 paid tests, exit0, verified network step/secret mapping and
+candidate validation skip with validate_only:true. The validation script only
+issues a signed capability; it never constructs a provider/session or Meta
+exchange. Serialized scope cannot reconstruct the in-memory WeakMap capability.
+No JWT/key is persisted. Meta network/provider implementation is unchanged.
+Fast CI Node22/24 for both reviewed revisions is now SUCCESS.

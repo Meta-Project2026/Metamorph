@@ -32,7 +32,36 @@ responses, downward budget and expiry, and safe receipts. These tests prove code
 reachability under the new authorization; they do not prove Meta entitlement or
 live model quality. No model-generated code is executed by host unit tests.
 
-Hosted exact-SHA CI and separate manual Docker evidence: pending publication.
+Hosted Fast CI (all steps exit0):
+
+- Initial implementation46d172a: [Node22](https://github.com/Meta-Project2026/Metamorph/actions/runs/40890286290/job/123504907297),
+  [Node24](https://github.com/Meta-Project2026/Metamorph/actions/runs/40890286290/job/123504906992).
+- Signed-validation follow-up49841dd: [Node22](https://github.com/Meta-Project2026/Metamorph/actions/runs/40891051286/job/123507631053),
+  [Node24](https://github.com/Meta-Project2026/Metamorph/actions/runs/40891051286/job/123507631369).
+
+Manual no-secret Ubuntu Docker run **40890281953**, exact46d172a, SUCCESS:
+[job](https://github.com/Meta-Project2026/Metamorph/actions/runs/40890281953/job/123504900688).
+Its real hosted GITHUB_TOKEN metadata step returned VERIFIED, reviewers=0,
+branch=main, Meta GET/POST=0/0. This proves the configured token read permissions
+work with actual repository/Environment APIs; no admin PAT is needed in workflow.
+
+Original deterministic controls returned **PASS_SCOPED**: known-good public
+G1/G2/G3 PASS (17HTTP/20SQLite), deliberate broken candidate FAIL then explicit
+offline repaired candidate PASS; six runtime controls PASS. Each attempt and both
+normal finalizer/independent inventory verified containers=0, volumes=0,
+emergencyRemoved=0. This is replay/control evidence, **not model generation**.
+Exact downloaded allowlisted receipts are in hosted/40890281953. Meta/Oracle/
+source/worker implementation files are identical between46d172a and49841dd.
+
+Independent review: SCOPED_GO at46d172a and49841dd; separate reviewer independently
+reran30 paid tests, exit0. The latter actual CI is now green. No other-owner native
+GitHub APPROVE is needed. Main-only signed OIDC validation will be run after the
+reviewed owner self-merge, using explicit validate_only:true and checking that
+the Meta network step is skipped. No billable run is part of this task.
+
+Python comparison of original branch protection after deleting only the review
+field equals the reread protection exactly: PASS. Protected source/Oracle/worker/
+differential files have zero diff from original main: PASS.
 Meta GET/POST observed: **0/0**. Real model trial **NOT_RUN**.
 Settings before/after files are real authenticated admin reads. No secret value
 retrieval or secret mutation. Original source/Oracle/manifest/runtime/control files

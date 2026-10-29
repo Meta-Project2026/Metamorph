@@ -17,9 +17,9 @@ access, historical evidence mutation, or private control changes.
   verifier; preserve ordinary defaults/synthetic harness refusal.
 - [x] Add offline fake-credential HTTPS/JWT and negative-policy/race/uncertainty tests.
 - [x] Full local install/lint/typecheck/test/build and original extra controls.
-- [ ] Push PR, Fast CI Node22/24, no-credential hosted GitHub-token metadata proof,
+- [x] Push PR, Fast CI Node22/24, no-credential hosted GitHub-token metadata proof,
   manual Docker controls and final zero inventory.
-- [ ] Independent ChatGPT review; resolve findings; exact-head delivery evidence.
+- [x] Independent ChatGPT review; resolve findings; exact-head delivery evidence.
 - [ ] Owner manual paid run: deliberately NOT_RUN in this task, no spend authorization.
 
 Acceptance: both actors admitted by signed identity and independent run ledger;
