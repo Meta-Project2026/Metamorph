@@ -1,94 +1,78 @@
 # Operator runbook — 30 October 2026
 
-The viewer language is English; the suggested spoken script below is Russian.
-Slots below are **target pacing**, not measured human narration durations.
-Actual technical smoke timing and unexecuted rehearsals are in VALIDATION.md.
+Интерфейс английский, речь русская. Интервалы — **target pacing**, не измеренная
+репетиция человека. Технические проверки в [VALIDATION-085.md](VALIDATION-085.md).
+Human timed rehearsal: NOT_RUN.
 
-## Before taking the stage
-
-Use this isolated checkout, not Ilia's active branch:
+## Подготовка и порядок экранов
 
 ```powershell
-Set-Location -LiteralPath 'C:\Users\user\Documents\Metamorph-mmp-071'
+Set-Location -LiteralPath 'C:\Users\user\Documents\Metamorph-mmp-085'
 git branch --show-current
 git rev-parse HEAD
 git diff --check
 node --version
 node --test research/demo-readiness/demo.test.mjs
+node --test research/demo-readiness/real-ai.test.mjs
 node research/demo-readiness/serve.mjs
 ```
 
-Expected branch `demo/mmp-071-hackathon`. Record the viewer head printed locally;
-it is not the replay execution head. Node 22.13+ / 24, modern Chrome/Edge and the
-local checkout are sufficient. No install or Internet needed at presentation time.
-Open `http://127.0.0.1:4171/`. Click **Load pinned public receipts**. Expect
-`PINNED_PUBLIC_SNAPSHOT`, five files, model requests 0, null candidate/cost, and
-replay rows PASS → FAIL → PASS for G2/G3. Refresh and repeat once before the talk.
-Do not open a GitHub environment or configure an API key to prepare this demo.
+Ветка demo/mmp-085-real-ai-fail; viewer HEAD отличается от execution heads.
+Достаточно Node 22.13+ / 24, браузера и checkout, без установки и Интернета.
 
-Alternatively select these five files together in the local picker:
+1. Откройте http://127.0.0.1:4171/ и **Load pinned public receipts**: historical
+   A/B (5 receipts) + PINNED_REAL_AI_SNAPSHOT C (4).
+2. Верх / architecture / NOT_ESTABLISHED → A historical admission → B replay.
+3. C **Real AI trial — G1 build failure**: generation PASS, G1 FAIL, HTTP 0/17,
+   SQLite 0/20, charged USD null. Прочитайте timeline.
+4. Раскройте **Real run / source / candidate / artifact identities**. При вопросах
+   **Inspect the allowlisted public receipt JSON** → Real AI #81 / generation.json,
+   затем Real AI #81 / trial.json.
+5. Завершите на G0/G4 INCONCLUSIVE и product NOT_ESTABLISHED. Перед выступлением
+   обновите страницу и повторите загрузку. После — Ctrl+C для остановки сервера.
 
-```text
-research/demo-readiness/evidence/trial.json
-research/demo-readiness/evidence/summary.json
-research/demo-readiness/evidence/finalizer.json
-research/demo-readiness/evidence/inventory.json
-research/demo-readiness/evidence/evidence-index.json
-```
+Picker принимает один полный набор: пять JSON непосредственно в evidence/ либо
+все четыре JSON в evidence/real-ai-40900698372/. Имена trial.json/finalizer.json
+совпадают, identities различаются; не смешивайте папки. Picker показывает только
+выбранный набор, кнопка — все три трека. future-model.json — NOT_VERIFIED preview.
 
-The architecture flow is at the top of the page and fits in one desktop screen.
-Scroll down for attempts and provenance. Expand **Inspect the allowlisted public
-receipt JSON** to inspect trial.json, then summary.json. No source/candidate executes.
+## 90 секунд — сценарий с целевыми слотами
 
-## 3–5 minute storyboard (target 4 minutes)
-
-| Target slot | Screen / action | Suggested narration |
+| Target | Экран | Речь |
 | --- | --- | --- |
-| 0:00–0:30 | Header, acceptance label, architecture flow | «Metamorph строит проверяемую миграцию PHP в TypeScript. Сегодня показываем реальный путь проверки на публичном ограниченном примере и явно отделяем его от ещё не выполненной AI-генерации. Product acceptance пока NOT_ESTABLISHED». |
-| 0:30–1:05 | Scope and provenance | «Исходник — публичный MIT car-workshop на закреплённом commit d272170…. Измерены 5 API actions и 11 PHP functions; это SQLite API slice. Числа 831/439 относятся ко всем PHP-extension files: physical lines / nonblank PHP-region lines including comments. Это не 10–15 маршрутов и не покрытие всего приложения». |
-| 1:05–1:40 | Track A / trial.json | «PR #70 связывает исходник и manifest с admission провайдера. Самой генерации не было: MODEL_GENERATION_NOT_RUN, generatedRequests=0; candidate и cost — null. Build, HTTP и stateful gates нового model candidate не запускались. Здесь нет скрытого готового ответа модели». |
-| 1:40–2:35 | Track B / attempt table and SHA | «Отдельный hosted run 40793819074 выполнял реальный Docker Oracle для исторического deterministic replay. PHP reference и TS candidate изолированы. Known-good имеет G1/G2/G3 PASS; deliberate mutation — G2/G3 FAIL; scripted repair возвращает scoped parity. Это scripted repair, не работа AI. Для каждого кандидата указан точный SHA». |
-| 2:35–3:10 | Comparison counts and cleanup | «На попытку выполнены 17 HTTP comparisons и 20 typed SQLite comparisons: initial state и post-step snapshots в трёх сценариях. Это не 17 endpoints. Даже падающий контроль имеет полные comparison counts. Шесть runtime controls PASS. Normal cleanup и finalizer показывают 0 containers / 0 volumes / emergencyRemoved=0 — только для этого replay». |
-| 3:10–4:00 | G0/G4 and roadmap | «G0 и formal G4 остаются INCONCLUSIVE. Прежний PR #31 AUDIT_FAIL не отменён. Следующий шаг #61 — настоящий разрешённый model trial с provider/model/cost и candidate receipts, затем независимые checks для именно этого кандидата. Если модель естественно упадёт, покажем её FAIL/ERROR/NOT_RUN отдельно и вернёмся к честно помеченному recorded control». |
+| 0–15s | Верх | «Metamorph проверяет миграцию PHP в TypeScript на публичном SQLite API. Показываем три разных набора фактов. Product acceptance пока NOT_ESTABLISHED». |
+| 15–30s | A → B | «A — исторический admission-only снимок без AI-генерации. B — deterministic Docker replay: PASS, намеренная ошибка FAIL, scripted repair PASS. Это контроль, не ответ модели». |
+| 30–65s | C timeline | «29 октября Muse Spark 1.3 ответила на один разрешённый запрос и создала TS-кандидата. Генерация PASS. Но независимый Docker typecheck вернул G1 FAIL, BUILD_FAILED. HTTP и SQLite дальше не исполнялись: 0 из 17 и 0 из 20, G2/G3 INCONCLUSIVE. Ошибка сохранена, успешной миграции здесь нет». |
+| 65–90s | C cost / acceptance | «Оценка — 0.04653825 доллара; списанная сумма неизвестна, null. Cleanup и finalizer — ноль ресурсов. Исходные diagnostics неизвестны. G0/G4 INCONCLUSIVE. Показан контур генерация → изолированная компиляция → честный FAIL; product NOT_ESTABLISHED». |
 
-G1 means executed build/typecheck; G2 HTTP contracts; G3 stateful HTTP and typed
-SQLite parity. G0 requires independently complete target; G4 requires independent
-controls and held-out isolation. Public controls alone do not close formal G4.
+## Около четырёх минут — целевые слоты
 
-## 90-second version (target)
-
-0–20s, architecture/scope: «Это проверяемая PHP→TS миграция на публичном MIT SQLite
-API slice: 5 actions, 11 functions. Источник и входы закреплены SHA».
-
-20–40s, Track A: «Сегодня model generation NOT_RUN: 0 requests, candidate/cost null.
-Никакой готовый deterministic replay не выдаётся за AI-ответ».
-
-40–70s, Track B: «Исторический hosted Docker control отдельно показывает
-known-good PASS, намеренную mutation FAIL и scripted repair PASS для G2/G3.
-На каждую попытку — 17 HTTP и 20 typed SQLite comparisons. Cleanup 0/0,
-emergencyRemoved=0. Всё привязано к run 40793819074 и execution SHA 6ab6e36…».
-
-70–90s, acceptance/roadmap: «G0/G4 INCONCLUSIVE, product NOT_ESTABLISHED. Реальная
-AI-генерация #61 и formal G4 — следующие отдельные доказательства. Этот offline
-viewer показывает подлинные записанные receipts даже без API и GitHub».
-
-## Failure rehearsal and factual fallback
-
-| Condition | Operator action | Exact distinction to say |
+| Target | Экран | Речь |
 | --- | --- | --- |
-| Provider unavailable or not authorized | Show Track A; do not start/configure a model | «Admission only; MODEL_GENERATION_NOT_RUN, 0 requests, null candidate/cost». |
-| Future model fails before candidate | Keep original public FAIL/ERROR/NOT_RUN record visible separately; select pinned bundle for replay | «Новый model trial не дал кандидата; ниже отдельный исторический control, не его результат». |
-| Candidate build FAIL | Show that candidate's original G1 FAIL; never substitute replay G1 | «Этот candidate не прошёл build; downstream unexecuted gates NOT_RUN». |
-| Candidate parity FAIL / partial coverage | Keep exact FAIL/INCONCLUSIVE and executed IDs; no comparator or fixture edits | «Обнаружено расхождение; неполные проверки не объявлены PASS». |
-| GitHub/API/network outage | Use committed local files and loopback viewer | «Recorded hosted snapshot; новые GitHub/model действия сейчас не выполняются». |
-| Corrupt/missing receipt | Viewer clears prior results and shows NOT_VERIFIED; restore exact file from this reviewed demo branch | «Этот выбранный набор не проверен; цифры из него не показываем». |
-| Port 4171 occupied / Node unavailable / browser failure | Stop demo server if it is yours; otherwise use this runbook plus local evidence/*.json in a text editor | Read exact public receipt fields. Do not imply the viewer or a live run succeeded. |
+| 0:00–0:35 | Верх / architecture | «Metamorph строит проверяемую миграцию PHP в TypeScript. Здесь есть настоящий ответ модели и созданный кандидат. Важно отдельно видеть результат генерации и результат независимой проверки. Сегодня все данные записанные и закреплены по SHA; новых запросов сейчас нет. Это демонстрация работающего контура, но не завершённой миграции». |
+| 0:35–1:05 | Scope → A | «Публичный MIT car-workshop закреплён на commit d272170…. Это ограниченный SQLite API slice: пять actions и одиннадцать PHP functions, не всё приложение. A — исторический admission-only снимок #70: тогда generatedRequests было ноль, candidate и cost null. Это не текущее состояние всего проекта. Мы сохраняем этот этап истории отдельно». |
+| 1:05–1:45 | B, три строки | «B показывает реальный исторический Docker replay. Known-good проходит, намеренная mutation падает на G2/G3, scripted repair возвращает scoped parity. На попытку выполнены 17 HTTP и 20 typed SQLite comparisons. Это сравнения в трёх сценариях, не число endpoints. Repair scripted, не AI. Coverage этого контроля нельзя перенести на другого кандидата, даже если используется тот же исходник». |
+| 1:45–2:40 | C timeline | «Теперь настоящий запуск #81, 29 октября. Исходник заморожен; один запрос разрешён; Muse Spark 1.3 вернула ответ и создала кандидата с отдельным SHA. Generation PASS означает, что генерация состоялась. Затем кандидат поступил в изолированный Docker typecheck. Здесь G1 FAIL, BUILD_FAILED. HTTP и SQLite сравнения не исполнялись: 0/17 и 0/20. В оригинальных receipts G2/G3 — INCONCLUSIVE с MISSING_COVERAGE. Независимая проверка остановила плохую сборку; FAIL не заменён успешным историческим replay». |
+| 2:40–3:20 | C cost / cleanup | «Receipt сообщает 5818 входных и 9239 выходных токенов. Estimated cost — 0.04653825 доллара. Charged cost null: оценка не доказывает списание. Cleanup VERIFIED_ZERO_RESOURCES и отдельный finalizer PASS показывают ноль контейнеров, томов и emergency removals. Это собственные receipts нового запуска, не заимствованные у replay. Полный candidate SHA и execution head доступны рядом». |
+| 3:20–4:00 | Identities / acceptance | «Оригинальный ZIP и четыре публичных JSON сверены побайтно по SHA-256. Исходная TypeScript-ошибка неизвестна: TS2322 из #82 относится к другому синтетическому кандидату. G0 и formal G4 не установлены; product NOT_ESTABLISHED. Прежний AUDIT_FAIL не отменён. Следующий repair потребует отдельного разрешения и новых evidence. Сегодня показаны генерация, изолированная компиляция и честная обратная связь, доступные даже без Интернета». |
 
-For a public negative-input rehearsal, select only trial.json: expect
-INCOMPLETE_BUNDLE, with model/replay result panels hidden. Restore with **Load pinned
-public receipts**. For mutation failure evidence, show the real middle replay row;
-do not edit JSON to manufacture a live failure.
+G1 — build/typecheck; G2 — HTTP contracts; G3 — stateful/typed SQLite parity.
+G0 требует independent complete target; G4 — independent controls / held-out
+isolation. Public runtime controls не закрывают formal G4.
 
-Human timed narration and full disconnected-laptop rehearsal should be completed
-by the presenter. Record stopwatch durations without relabeling target slots as
-measured results. Stop the server with Ctrl+C when finished.
+## Fallback и негативная репетиция
+
+| Условие | Действие / формулировка |
+| --- | --- |
+| Нет сети / GitHub / модели / Docker / ключа | Bundled load использует девять локальных JSON. «Recorded hosted evidence, новых model/GitHub действий нет». |
+| Реальный G1 FAIL | Покажите C без замены replay PASS. «Build failed; downstream comparisons не исполнены, G2/G3 INCONCLUSIVE». |
+| Спрашивают текст ошибки | «Original diagnostics UNKNOWN. MMP-082 synthetic TS2322 — другой candidate». |
+| Corrupt / missing receipt | Viewer очищает результаты, показывает NOT_VERIFIED. Восстановите точные bytes из этой ветки. Если C недоступен, picker пяти исторических файлов позволяет показать A/B, явно назвав их историческими. |
+| Нет Node / порт занят / browser failure | Не останавливайте чужой процесс. Откройте локальные JSON и runbook в редакторе; прочитайте поля. Успешную работу UI в этом случае не заявлять. |
+| Нет полного набора | README/PROVENANCE — текстовая справка; прямо скажите, что receipts не загружены, viewer NOT_VERIFIED. |
+
+Негативная репетиция: выбрать только generation.json → INCOMPLETE_BUNDLE,
+все результаты скрыты. Затем **Load pinned public receipts** восстанавливает их.
+Реальный FAIL показывается в C без редактирования JSON. Человеческую речь на
+90 секунд / ~4 минуты и полностью отключённый ноутбук отрепетировать отдельно;
+записать секундомер, не выдавать target pacing за фактический замер.

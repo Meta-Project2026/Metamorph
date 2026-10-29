@@ -1,5 +1,10 @@
 # MMP-071 executed validation — 2026-10-29
 
+Historical record at MMP-071 delivery, not current whole-project status.
+See [MMP-085 validation](VALIDATION-085.md) for the added real AI evidence track.
+Its statements about unexecuted generation/archive verification apply to MMP-071
+at the time; they are not claims that MMP-081 generation never occurred.
+
 Environment: Windows, Node v22.23.1, pnpm 11.25.0. Isolated branch
 `demo/mmp-071-hackathon`, base `2a6eef6a583cf981e604d697bc1cb287174a823c`.
 The delivered implementation head is recorded by the PR/Git history; the commands
