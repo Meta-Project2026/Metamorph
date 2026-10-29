@@ -3,7 +3,7 @@
 Refs #61. Base `2a6eef6a583cf981e604d697bc1cb287174a823c` (fresh origin/main,
 2026-10-29 Europe/Bucharest). This slice adds an actual pinned-PHP context binding,
 strict normalized response codec, source-aware synthetic transport tests and a
-production admission CLI. **It does not demonstrate genuine AI migration.**
+production admission CLI and a manual Ubuntu Actions recipe. **It does not demonstrate genuine AI migration.**
 
 `MODEL_GENERATION=NOT_RUN`; generated candidate/public G1/G2/G3 NOT_RUN;
 G0/G4 INCONCLUSIVE; PRODUCT NOT_ESTABLISHED. The five-route API slice is below the
@@ -31,6 +31,47 @@ archive. It writes to a new output directory; do not commit the downloaded archi
 `public-source.json` is **untouched public PHP source data**, not a model prompt,
 response or target fixture; api.php/config.php bytes and the full LICENSE are
 verified against inventory. Upstream tests/UI/TS/replay/private records are excluded.
+
+## Manual Ubuntu Actions recipe (owner-authorized follow-up)
+
+The owner confirmed there is no prepared local model host and authorized Ubuntu
+GitHub Actions for Docker, following MMP-054. Do not install a heavy CPU-only
+model. The already registered `.github/workflows/agent-workshop-compose.yml`
+now accepts `model_provider=none|local|meta` and has two explicitly separate legs:
+
+1. MMP-061 source-bound admission writes `mmp061-model-public/trial.json` at the
+   exact checkout SHA. With every currently available selector it exits 2 with
+   `AI_GENERATION_NOT_RUN`, zero generated requests and null candidate/cost/trial
+   URL. The workflow recognizes only this explicit admission result as NOT_RUN;
+   malformed input, mismatched SHA or unexpected execution exit 1.
+2. The unchanged `@metamorph/agent-real proof` executes the original deterministic
+   replay, repair mutation and six runtime controls in real Docker. Its separate
+   `agent-workshop-public/summary.json` is environment/Oracle control evidence,
+   **never** newly generated migration evidence. This leg still runs after an
+   admission error if the boundary checks passed. The independent finalizer always
+   checks owned resources and treats emergency removal as ERROR.
+
+Dispatch the scoped branch (once pushed):
+
+```sh
+gh workflow run agent-workshop-compose.yml --repo Meta-Project2026/Metamorph --ref codex/mmp061-real-model -f model_provider=none
+```
+
+Ubuntu 24.04, 40-minute job limit, Node 24, frozen pnpm install, contents:read,
+checkout at github.sha without persisted credentials, cancel-in-progress:false.
+No PR/push triggers, secret inputs, API keys, arbitrary endpoint/module/source
+inputs or billable call paths were added. Only three explicit public JSON files
+are uploaded in two artifacts; no directory glob, private packs, candidate source
+or raw model prompt/response is published. Artifacts expire after seven days.
+`workflowRunUrl` identifies a diagnostic/control run; `modelTrialRunUrl` remains
+null until an actual model trial. Model cleanup remains NOT_RUN, even if the
+separate replay/control finalizer proves zero resources.
+
+The recipe is reproducible **now for admission plus real Oracle controls**. The
+live generated-candidate leg is still blocked and is not ready to activate just
+by toggling a boolean. See `provider-handoff.md` for the pluggable ModelProvider
+boundary and remaining adapter/receipt/configuration work. A green workflow does
+not establish AI generation or public parity on a newly generated candidate.
 
 ## Scope measured from upstream
 

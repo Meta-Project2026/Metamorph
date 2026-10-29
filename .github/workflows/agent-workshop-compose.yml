@@ -1,7 +1,16 @@
-name: Agent real workshop composition
+name: Agent model admission and real Oracle controls
 
 on:
   workflow_dispatch:
+    inputs:
+      model_provider:
+        description: 'Admission selector only; no live provider is currently authorized'
+        type: choice
+        default: none
+        options:
+          - none
+          - local
+          - meta
 
 permissions:
   contents: read
@@ -17,11 +26,13 @@ jobs:
     env:
       AGENT_HEAD_SHA: ${{ github.sha }}
       PILOT_HEAD_SHA: ${{ github.sha }}
+      MMP061_PROVIDER: ${{ inputs.model_provider || 'none' }}
     steps:
       - name: Set safe output directories
         run: |
           echo "AGENT_PUBLIC_OUTPUT=$RUNNER_TEMP/agent-public" >> "$GITHUB_ENV"
           echo "WORKSHOP_PUBLIC_OUTPUT=$RUNNER_TEMP/agent-public" >> "$GITHUB_ENV"
+          echo "MMP061_PUBLIC_OUTPUT=$RUNNER_TEMP/mmp061-public" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -34,6 +45,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - run: pnpm install --frozen-lockfile
       - name: Fast checks and original boundary regressions
+        id: boundaries
         run: |
           pnpm lint
           pnpm typecheck
@@ -43,7 +55,17 @@ jobs:
           pnpm --filter @metamorph/target-worker test
           pnpm --filter @metamorph/differential test
           pnpm --filter @metamorph/agent-real test
-      - name: Real Agent positive and negative repair proof
+      - name: MMP-061 source-bound model admission (NOT_RUN is explicit)
+        run: |
+          status=0
+          node research/mmp-061/run-e2e.mjs "$MMP061_PROVIDER" || status=$?
+          case "$status" in
+            0) echo "MMP-061 trial completed; inspect its separate receipt." ;;
+            2) echo "::notice::AI_GENERATION_NOT_RUN: provider admission unavailable; see mmp061-model-public artifact." ;;
+            *) exit "$status" ;;
+          esac
+      - name: Original deterministic replay and negative Docker controls (not AI generation)
+        if: ${{ !cancelled() && steps.boundaries.outcome == 'success' }}
         run: pnpm --filter @metamorph/agent-real proof
       - name: Independent final inventory even after interruption
         if: always()
@@ -55,5 +77,12 @@ jobs:
           path: |
             ${{ env.AGENT_PUBLIC_OUTPUT }}/summary.json
             ${{ env.AGENT_PUBLIC_OUTPUT }}/finalizer.json
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mmp061-model-public
+          path: ${{ env.MMP061_PUBLIC_OUTPUT }}/trial.json
           if-no-files-found: error
           retention-days: 7

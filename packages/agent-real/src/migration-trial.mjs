@@ -33,6 +33,7 @@ export async function runPublicMigration({
     budgetAuth: "NOT_ADMITTED",
     admittedMaxRequestCostUsd: null,
     modelGeneration: "NOT_RUN",
+    aiGeneration: "AI_GENERATION_NOT_RUN",
     publicG1: "NOT_RUN",
     publicG2: "NOT_RUN",
     publicG3: "NOT_RUN",

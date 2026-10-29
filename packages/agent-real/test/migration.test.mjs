@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
+import { execFileSync, spawnSync } from "node:child_process";
 import fs, { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { runAgent } from "@metamorph/agent";
 import {
   bindMigrationContext,
@@ -516,4 +518,77 @@ test("normalized paid reply without settled cost remains UNKNOWN_PAID_USAGE", ()
       ),
     /UNKNOWN_PAID_USAGE/,
   );
+});
+
+for (const selection of ["none", "meta", "local"]) {
+  test(`workflow ${selection} publishes only an explicit NOT_RUN receipt`, (t) => {
+    const root = fileURLToPath(new URL("../../../", import.meta.url));
+    const output = mkdtempSync(join(tmpdir(), "mmp061-workflow-test-"));
+    t.after(() => rmSync(output, { recursive: true, force: true }));
+    const head = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
+    const result = spawnSync(
+      process.execPath,
+      ["research/mmp-061/run-e2e.mjs", selection],
+      {
+        cwd: root,
+        encoding: "utf8",
+        timeout: 10000,
+        env: {
+          ...process.env,
+          AGENT_HEAD_SHA: head,
+          MMP061_PUBLIC_OUTPUT: output,
+          GITHUB_RUN_ID: "123456",
+          GITHUB_REPOSITORY: "Meta-Project2026/Metamorph",
+        },
+      },
+    );
+    assert.equal(result.status, 2, result.stderr);
+    const receipt = JSON.parse(
+      readFileSync(join(output, "trial.json"), "utf8"),
+    );
+    assert.equal(receipt.headSha, head);
+    assert.equal(receipt.aiGeneration, "AI_GENERATION_NOT_RUN");
+    assert.equal(receipt.execution, "ADMISSION_ONLY");
+    assert.equal(receipt.modelTrialRunUrl, null);
+    assert.equal(receipt.generatedRequests, 0);
+    assert.equal(receipt.candidateSha, null);
+    assert.equal(receipt.totalCostUsd, null);
+    assert.equal(receipt.cleanup.status, "NOT_RUN");
+    assert.equal(
+      receipt.workflowRunUrl,
+      "https://github.com/Meta-Project2026/Metamorph/actions/runs/123456",
+    );
+    assert.deepEqual(receipt.attempts, []);
+    assert.doesNotMatch(
+      result.stdout + result.stderr + JSON.stringify(receipt),
+      /<\?php|syntheticTransportOnly|export const/,
+    );
+  });
+}
+test("workflow wrong SHA or synthetic selection is ERROR, never a harmless skip", (t) => {
+  const root = fileURLToPath(new URL("../../../", import.meta.url));
+  const output = mkdtempSync(join(tmpdir(), "mmp061-workflow-error-"));
+  t.after(() => rmSync(output, { recursive: true, force: true }));
+  for (const selection of ["none", "synthetic"]) {
+    const result = spawnSync(
+      process.execPath,
+      ["research/mmp-061/run-e2e.mjs", selection],
+      {
+        cwd: root,
+        encoding: "utf8",
+        timeout: 10000,
+        env: {
+          ...process.env,
+          AGENT_HEAD_SHA: "0".repeat(40),
+          MMP061_PUBLIC_OUTPUT: output,
+        },
+      },
+    );
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /MMP061_WORKFLOW_ERROR/);
+    assert.equal(fs.existsSync(join(output, "trial.json")), false);
+  }
 });
