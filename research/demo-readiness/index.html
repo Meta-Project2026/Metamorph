@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Metamorph · Evidence desk</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/viewer.mjs"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">M<span>Metamorph</span></a><span class="eyebrow">PUBLIC EVIDENCE DESK · MMP-071 · 30 OCT 2026</span><span class="pill neutral">READ ONLY / OFFLINE</span></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">PHP → TYPESCRIPT / A BOUNDED PUBLIC SLICE</p><h1>Show the evidence.<br>Keep the limits visible.</h1><p class="lede">A recorded Oracle control can demonstrate the verification path. Real model generation needs its own candidate and receipts.</p></div><aside class="acceptance"><span class="eyebrow">PRODUCT ACCEPTANCE</span><strong>NOT_ESTABLISHED</strong><p>G0 and formal G4 remain INCONCLUSIVE.<br>Public replay parity is scoped evidence.</p></aside></section>
+    <section class="flow" aria-label="Architecture flow">
+      <div><b>01 / PUBLIC PHP</b><span>Pinned source + MIT notice</span></div><div><b>02 / TRUSTED INPUTS</b><span>Source / manifest identities</span></div><div class="pending"><b>03 / AGENT + PROVIDER</b><span>Admission only · model NOT_RUN</span></div><div><b>04 / TS CANDIDATE</b><span>Historical deterministic replay</span></div><div><b>05 / DOCKER ORACLE</b><span>Build · HTTP · typed SQLite</span></div>
+    </section>
+    <section class="toolbar" aria-label="Receipt selection">
+      <button id="load" type="button">Load pinned public receipts</button>
+      <label class="file-button">Select local receipt files<input id="files" type="file" accept=".json,application/json" multiple></label>
+      <p id="status" role="status" aria-live="polite">No receipts loaded. Select the bundled public snapshot to begin.</p>
+    </section>
+    <div id="evidence" hidden>
+      <section class="model card"><div class="section-title"><div><p class="eyebrow">TRACK A / PR #70 PROVIDER ADMISSION</p><h2 id="model-label"></h2></div><span class="pill warning">NO GENERATED CANDIDATE</span></div><p id="model-alias" class="muted"></p><div id="model-metrics" class="metrics"></div><div id="model-gates" class="gate-strip"></div><p class="muted">Provider is not admitted. Model cleanup is NOT_RUN, with null inventory. Replay results below never fill this track.</p></section>
+      <section class="card"><div class="section-title"><div><p class="eyebrow">TRACK B / HISTORICAL HOSTED DOCKER CONTROLS</p><h2>DETERMINISTIC_REPLAY_NOT_AI</h2></div><span class="pill neutral">PINNED PUBLIC SNAPSHOT</span></div><p class="muted">Observed on run 40793819074. The repair is scripted. No model answer or new migration is being executed here.</p><div class="table-wrap"><table><caption>Observed gate verdicts and comparison counts for each exact candidate</caption><thead><tr><th scope="col">Attempt</th><th scope="col">G0</th><th scope="col">G1</th><th scope="col">G2</th><th scope="col">G3</th><th scope="col">G4</th><th scope="col">HTTP</th><th scope="col">Typed SQLite</th></tr></thead><tbody id="attempts"></tbody></table></div><div id="cleanup" class="cleanup"></div><p class="muted">17 HTTP steps and 20 typed database comparisons per attempt (initial state + post-step snapshots across 3 scenarios). Counts describe executed comparisons, including the failing mutation; they are not route or function coverage percentages.</p></section>
+      <div class="two-columns"><section class="card"><p class="eyebrow">MEASURED PUBLIC BENCHMARK SCOPE</p><h2>5 API actions / 11 PHP functions</h2><div id="scope"></div><p class="muted">SQLite API slice. HTML/JS UI, MySQL, concurrency and unrestricted queries are excluded. Function inventory is not measured end-to-end function coverage.</p></section><section class="card"><p class="eyebrow">PROVENANCE / EXACT IDENTITIES</p><h2>Recorded facts, pinned bytes</h2><div id="identities"></div><p class="muted">PINNED_PUBLIC_SNAPSHOT means bytes match this reviewed public snapshot. It does not authenticate an arbitrary uploaded receipt or independently rerun the Oracle.</p></section></div>
+      <details class="card"><summary>Inspect the allowlisted public receipt JSON</summary><label for="receipt">Receipt</label><select id="receipt"></select><pre id="raw"></pre></details>
+    </div>
+    <section id="future" class="card" hidden><p class="eyebrow">OPTIONAL FUTURE INPUT / DECLARATION PREVIEW</p><h2>REAL_MODEL_GENERATION — DECLARED ONLY</h2><span class="pill warning">NOT_VERIFIED</span><p>No independent execution proof is established by an uploaded file. Claimed outcomes cannot change the historical controls or product acceptance.</p><pre id="future-content"></pre></section>
+    <section class="roadmap"><div><p class="eyebrow">NEXT / MMP-061</p><h2>Genuine model trial</h2><p>Authorize and verify provider access and limits. Record real requests, model identity, cost and generated candidate SHA. Execute isolated public comparisons for that candidate.</p></div><div><p class="eyebrow">NEXT / FORMAL G4</p><h2>Independent acceptance</h2><p>Independent controls and held-out isolation remain separate work. Preserve natural FAIL, ERROR, INCONCLUSIVE and NOT_RUN outcomes.</p></div><div><p class="eyebrow">PRESENTATION FALLBACK</p><h2>Use the recorded control</h2><p>If a future live run fails or is unavailable, show this pinned historical track with its provenance intact. Do not simulate a successful migration.</p></div></section>
+  </main>
+  <footer>Metamorph / Independent demo track · No model calls · No candidate execution · No external assets or telemetry</footer>
+</body>
+</html>

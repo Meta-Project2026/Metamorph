@@ -1,0 +1,1076 @@
+{
+  "format": "agent-workshop-composition-v1",
+  "headSha": "6ab6e36f813673756af157bc0de2265964c26071",
+  "status": "PASS_SCOPED",
+  "errorCode": null,
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+    "clock": "2026-10-27 12:00:00",
+    "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+  },
+  "manifestSha": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "phpImage": "sha256:4c42db34a6200864288a2b641cecf4f02c5a400151f64b84e855d1e79fc861fd",
+  "targetImage": "sha256:5344241d9d0360995bf4770a2bce78b64567879a015d96ba71ca015ab8ea1aae",
+  "runs": [
+    {
+      "mode": "known-good",
+      "agentVerdict": "INCONCLUSIVE",
+      "agentReason": "VERIFIER_INCONCLUSIVE",
+      "evidenceKind": "external",
+      "billing": "synthetic",
+      "admissionSpendLimitUsd": 1,
+      "paidCalls": 0,
+      "knownModelSpendUsd": 0,
+      "totalModelSpendUsd": 0,
+      "reservedModelSpendUsd": 0,
+      "providerCalls": 1,
+      "usage": [
+        {
+          "requestId": "offline-replay-1",
+          "provider": "offline-deterministic-replay",
+          "modelId": "public-workshop-source-replay-v1",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "estimatedCostUsd": 0,
+          "durationMs": 0.037871000000450294
+        }
+      ],
+      "attempts": [
+        {
+          "attemptId": "06ca1d06-13ce-47b7-a8a5-ce22ff55917b",
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [],
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:typecheck",
+                "workshop-business:build",
+                "workshop-rejected:typecheck",
+                "workshop-rejected:build",
+                "workshop-capacity:typecheck",
+                "workshop-capacity:build"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:initial",
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:initial",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:initial",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [
+                "workshop-business:http-positive",
+                "workshop-business:http-key-order",
+                "workshop-business:http-status-mutant",
+                "workshop-business:http-type-mutant",
+                "workshop-business:http-missing-mutant",
+                "workshop-business:http-order-mutant",
+                "workshop-business:db-positive",
+                "workshop-business:db-row-mutant",
+                "workshop-business:db-sequence-mutant",
+                "workshop-rejected:http-positive",
+                "workshop-rejected:http-key-order",
+                "workshop-rejected:http-status-mutant",
+                "workshop-rejected:http-type-mutant",
+                "workshop-rejected:http-missing-mutant",
+                "workshop-rejected:http-order-mutant",
+                "workshop-rejected:db-positive",
+                "workshop-rejected:db-row-mutant",
+                "workshop-rejected:db-sequence-mutant",
+                "workshop-capacity:http-positive",
+                "workshop-capacity:http-key-order",
+                "workshop-capacity:http-status-mutant",
+                "workshop-capacity:http-type-mutant",
+                "workshop-capacity:http-missing-mutant",
+                "workshop-capacity:http-order-mutant",
+                "workshop-capacity:db-positive",
+                "workshop-capacity:db-row-mutant",
+                "workshop-capacity:db-sequence-mutant"
+              ],
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "pairs": [
+            {
+              "scenarioId": "workshop-business",
+              "pairId": "a2de701a-a1b3-4d0a-8eaa-23be616957ce",
+              "packs": [
+                {
+                  "id": "oracle-5elucU",
+                  "sha256": "38bda9ebec867ecfe749565bc0c89a842060c17214774c69eb1611afe979d25d"
+                },
+                {
+                  "id": "oracle-122d7L",
+                  "sha256": "8f38397bbcbfc00c0079c2bc5907e158123f51a24098a40844d070603858ec92"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "pairId": "473c8669-5aa1-4039-b145-2bb8eb330b11",
+              "packs": [
+                {
+                  "id": "oracle-CCNzk4",
+                  "sha256": "1ccf13fd478dc823b306e6b3f7d8f558bb809de59b25167ef0513e67f0f19ea6"
+                },
+                {
+                  "id": "oracle-V8uvxI",
+                  "sha256": "d7e57c0db05882c8e54295bb8730a1e463aee7188bcc2371ca9864b534d14a77"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "pairId": "32a357f2-8fa9-49b3-a245-072fa600f11a",
+              "packs": [
+                {
+                  "id": "oracle-R4iers",
+                  "sha256": "061c6e6835a669a15313382db53585d1cb1395d907458375a8c5b7a4132d6f85"
+                },
+                {
+                  "id": "oracle-U4eQTm",
+                  "sha256": "b9e06e7829eed2eb78d00e6d4331899ff398b65101ad560fa51f2613334a1376"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "repair",
+      "agentVerdict": "INCONCLUSIVE",
+      "agentReason": "VERIFIER_INCONCLUSIVE",
+      "evidenceKind": "external",
+      "billing": "synthetic",
+      "admissionSpendLimitUsd": 1,
+      "paidCalls": 0,
+      "knownModelSpendUsd": 0,
+      "totalModelSpendUsd": 0,
+      "reservedModelSpendUsd": 0,
+      "providerCalls": 2,
+      "usage": [
+        {
+          "requestId": "offline-replay-1",
+          "provider": "offline-deterministic-replay",
+          "modelId": "public-workshop-source-replay-v1",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "estimatedCostUsd": 0,
+          "durationMs": 0.0175219999946421
+        },
+        {
+          "requestId": "offline-replay-2",
+          "provider": "offline-deterministic-replay",
+          "modelId": "public-workshop-source-replay-v1",
+          "inputTokens": null,
+          "outputTokens": null,
+          "cachedInputTokens": null,
+          "estimatedCostUsd": 0,
+          "durationMs": 0.01144099998055026
+        }
+      ],
+      "attempts": [
+        {
+          "attemptId": "c8bd4b4e-975b-4acb-b04c-e501c897ae8a",
+          "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [],
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:typecheck",
+                "workshop-business:build",
+                "workshop-rejected:typecheck",
+                "workshop-rejected:build",
+                "workshop-capacity:typecheck",
+                "workshop-capacity:build"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "FAIL",
+              "executedTestIds": [
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": [
+                "HTTP_JSON_LENGTH"
+              ]
+            },
+            {
+              "gate": "G3",
+              "verdict": "FAIL",
+              "executedTestIds": [
+                "workshop-business:initial",
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:initial",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:initial",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": [
+                "HTTP_JSON_LENGTH",
+                "DB_STATE"
+              ]
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [
+                "workshop-business:http-positive",
+                "workshop-business:http-key-order",
+                "workshop-business:http-status-mutant",
+                "workshop-business:http-type-mutant",
+                "workshop-business:http-missing-mutant",
+                "workshop-business:http-order-mutant",
+                "workshop-business:db-positive",
+                "workshop-business:db-row-mutant",
+                "workshop-business:db-sequence-mutant",
+                "workshop-rejected:http-positive",
+                "workshop-rejected:http-key-order",
+                "workshop-rejected:http-status-mutant",
+                "workshop-rejected:http-type-mutant",
+                "workshop-rejected:http-missing-mutant",
+                "workshop-rejected:http-order-mutant",
+                "workshop-rejected:db-positive",
+                "workshop-rejected:db-row-mutant",
+                "workshop-rejected:db-sequence-mutant",
+                "workshop-capacity:http-positive",
+                "workshop-capacity:http-key-order",
+                "workshop-capacity:http-status-mutant",
+                "workshop-capacity:http-type-mutant",
+                "workshop-capacity:http-missing-mutant",
+                "workshop-capacity:http-order-mutant",
+                "workshop-capacity:db-positive",
+                "workshop-capacity:db-row-mutant",
+                "workshop-capacity:db-sequence-mutant"
+              ],
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "pairs": [
+            {
+              "scenarioId": "workshop-business",
+              "pairId": "14338b7e-eccf-4518-8863-c0cef1649f83",
+              "packs": [
+                {
+                  "id": "oracle-SzHD3Q",
+                  "sha256": "59520cf66e4cf67256b929129509352a35b920f4d48be59b1f17f55c0675a234"
+                },
+                {
+                  "id": "oracle-BBdEPy",
+                  "sha256": "8397b183b24424a9409279d06cd7feb5e933c7d15d7b95b2caa74cb8987715f8"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "FAIL",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": [
+                    "HTTP_JSON_LENGTH"
+                  ]
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "FAIL",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": [
+                    "HTTP_JSON_LENGTH",
+                    "DB_STATE"
+                  ]
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "pairId": "ce3205cf-c2ad-4948-94c8-5924b91a418d",
+              "packs": [
+                {
+                  "id": "oracle-lqTLsQ",
+                  "sha256": "9bd67d650765115dfa2f11733127c4eaaf5a33387033c64d3d45258bc96e5910"
+                },
+                {
+                  "id": "oracle-PR6kSF",
+                  "sha256": "83f0592770e4a55d7ae259ca5c806ff366887fa0f3d61be758e8a015dd4d1525"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "pairId": "192df3e5-6b1a-4526-898b-500961b28db8",
+              "packs": [
+                {
+                  "id": "oracle-ZdvDjh",
+                  "sha256": "e957bf002687ab313227829493c1f62ea2555b3884bdb9496585a2a149a631a0"
+                },
+                {
+                  "id": "oracle-PKzWGW",
+                  "sha256": "1047fab33fd03f277a57731b0d0e3cfea406140e0fda09b5d2d06412321e5eab"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "attemptId": "572215d0-c82d-419b-ba6f-7d4810bff823",
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "gates": [
+            {
+              "gate": "G0",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [],
+              "findingCodes": [
+                "G0_NOT_ESTABLISHED"
+              ]
+            },
+            {
+              "gate": "G1",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:typecheck",
+                "workshop-business:build",
+                "workshop-rejected:typecheck",
+                "workshop-rejected:build",
+                "workshop-capacity:typecheck",
+                "workshop-capacity:build"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G2",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G3",
+              "verdict": "PASS",
+              "executedTestIds": [
+                "workshop-business:initial",
+                "workshop-business:step-0",
+                "workshop-business:step-1",
+                "workshop-business:step-2",
+                "workshop-business:step-3",
+                "workshop-business:step-4",
+                "workshop-business:step-5",
+                "workshop-rejected:initial",
+                "workshop-rejected:step-0",
+                "workshop-rejected:step-1",
+                "workshop-rejected:step-2",
+                "workshop-rejected:step-3",
+                "workshop-rejected:step-4",
+                "workshop-capacity:initial",
+                "workshop-capacity:step-0",
+                "workshop-capacity:step-1",
+                "workshop-capacity:step-2",
+                "workshop-capacity:step-3",
+                "workshop-capacity:step-4",
+                "workshop-capacity:step-5"
+              ],
+              "findingCodes": []
+            },
+            {
+              "gate": "G4",
+              "verdict": "INCONCLUSIVE",
+              "executedTestIds": [
+                "workshop-business:http-positive",
+                "workshop-business:http-key-order",
+                "workshop-business:http-status-mutant",
+                "workshop-business:http-type-mutant",
+                "workshop-business:http-missing-mutant",
+                "workshop-business:http-order-mutant",
+                "workshop-business:db-positive",
+                "workshop-business:db-row-mutant",
+                "workshop-business:db-sequence-mutant",
+                "workshop-rejected:http-positive",
+                "workshop-rejected:http-key-order",
+                "workshop-rejected:http-status-mutant",
+                "workshop-rejected:http-type-mutant",
+                "workshop-rejected:http-missing-mutant",
+                "workshop-rejected:http-order-mutant",
+                "workshop-rejected:db-positive",
+                "workshop-rejected:db-row-mutant",
+                "workshop-rejected:db-sequence-mutant",
+                "workshop-capacity:http-positive",
+                "workshop-capacity:http-key-order",
+                "workshop-capacity:http-status-mutant",
+                "workshop-capacity:http-type-mutant",
+                "workshop-capacity:http-missing-mutant",
+                "workshop-capacity:http-order-mutant",
+                "workshop-capacity:db-positive",
+                "workshop-capacity:db-row-mutant",
+                "workshop-capacity:db-sequence-mutant"
+              ],
+              "findingCodes": [
+                "HELD_OUT_NOT_RUN"
+              ]
+            }
+          ],
+          "coverage": {
+            "http": 17,
+            "sqlite": 20,
+            "requiredHttp": 17,
+            "requiredSqlite": 20
+          },
+          "pairs": [
+            {
+              "scenarioId": "workshop-business",
+              "pairId": "7ef69433-a05d-48d5-9508-efe79ca81428",
+              "packs": [
+                {
+                  "id": "oracle-cfwkWX",
+                  "sha256": "d5fb5d4edeca67f390a8edab52faa612543377c4d9e2d0a97a49f902321d7aa0"
+                },
+                {
+                  "id": "oracle-BdBI7s",
+                  "sha256": "819163cafb4aa0395e1aa63878a6132ff75f4dc7eb13ed5046964d6005d5e569"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-rejected",
+              "pairId": "09c664a0-aa6f-42f9-8d15-166ab1531762",
+              "packs": [
+                {
+                  "id": "oracle-Kg2uRV",
+                  "sha256": "76c9b8b1a3c465dc3833c0eb833ba8aed987b53f5e002adae3e4e170ea8ae3ec"
+                },
+                {
+                  "id": "oracle-29fotW",
+                  "sha256": "4db129924c731b9e4baca242f1f67d44fae8ce8eec8a565e6c91f1c48521a13e"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            },
+            {
+              "scenarioId": "workshop-capacity",
+              "pairId": "c25213e2-3d60-4322-b395-653cc185608b",
+              "packs": [
+                {
+                  "id": "oracle-zukFg0",
+                  "sha256": "d8fb17b508cd26ba7961c922610d9a59692d85406f4d77c0e4d6c32e79788bce"
+                },
+                {
+                  "id": "oracle-MMoiXV",
+                  "sha256": "e9f01d1b514e7585ba7bd7fc58af6cc387ce1f9e227160dd8d14dbb01d4a26a5"
+                }
+              ],
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "targetLifetimePolicyMs": 180000,
+              "gates": [
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "http-positive",
+                    "http-key-order",
+                    "http-status-mutant",
+                    "http-type-mutant",
+                    "http-missing-mutant",
+                    "http-order-mutant",
+                    "db-positive",
+                    "db-row-mutant",
+                    "db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtimeControls": [
+    {
+      "id": "candidate-aux-enospc",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    },
+    {
+      "id": "candidate-wal-full",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    },
+    {
+      "id": "corrupt-db-rejected",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    },
+    {
+      "id": "hung-socket-timeout",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    },
+    {
+      "id": "process-crash",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    },
+    {
+      "id": "cancel-readiness",
+      "outcome": "PASS",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "execution": "REAL_DOCKER"
+    }
+  ],
+  "completion": {
+    "cleanup": "VERIFIED_ZERO_RESOURCES",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0,
+    "provenancePack": {
+      "id": "oracle-xYAVBU",
+      "sha256": "d93b8f2aa9c8fae14e14cc9a5c7d22d08e6ea9f9a9eb4b51a6f2d6525b5af8a9"
+    }
+  },
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "liveProvider": "NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+}

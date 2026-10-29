@@ -1,0 +1,205 @@
+{
+  "format": "mmp061-source-inventory-v1",
+  "repository": "tanjilaafsarirubina/car-workshop",
+  "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "archiveBytes": 998653,
+  "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 32,
+      "sha256": "23302dd90b8bb74b44d365fafef8df20f809b61cb347023951ecf60a88a29651"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 2405,
+      "sha256": "fe950cf433bdf7f28c611510a941c8ac3e97b85ef9421af990ec2e8c16efa9eb"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 216,
+      "sha256": "40bc4dca92890c861a07be62ef867aa4bc97445a24fc82c9746dcbea5f5fdb36"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1078,
+      "sha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7235,
+      "sha256": "0f66e8ade8cd8d92168e9785435a1b1a81e0ca92a528fa0969f7d2ef0028da91"
+    },
+    {
+      "path": "admin.js",
+      "bytes": 10944,
+      "sha256": "9e5e94b5d2f6dace1f783a40ce83746a6e758252f81a2aa59f158efdd51e9e1d"
+    },
+    {
+      "path": "admin.php",
+      "bytes": 6734,
+      "sha256": "38197858ae8ddad76a23651fa735c3bc816cd8a1870504e6945d25f6b8a4567c"
+    },
+    {
+      "path": "api.php",
+      "bytes": 11956,
+      "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77"
+    },
+    {
+      "path": "app.js",
+      "bytes": 8429,
+      "sha256": "3e94280b652794ced4ff8959c786bebd5f525d50080d864f219827a8a1f306c8"
+    },
+    {
+      "path": "config.local.example.php",
+      "bytes": 502,
+      "sha256": "f840f8a88db70ac0cc12ef163d61fcbf08f8b2e5e5b4b6af2d31cfad537fbcb7"
+    },
+    {
+      "path": "config.php",
+      "bytes": 4331,
+      "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd"
+    },
+    {
+      "path": "database.sql",
+      "bytes": 1662,
+      "sha256": "4f05afb3056aa0ac4a8382588fafa9c6281c0aae32162a2e6564f6fde39a9df8"
+    },
+    {
+      "path": "docs/AI_DECLARATION_SIMPLE.txt",
+      "bytes": 1132,
+      "sha256": "8602a2942fa394bef25094a3304a1c4514b0a133fe5690f2147a921c2c7bc5e1"
+    },
+    {
+      "path": "docs/screenshots/admin.png",
+      "bytes": 191187,
+      "sha256": "82c51718cd49695243c6b3f1a87ef0b14e85a5c15671b0b8ac446ce213d8d36c"
+    },
+    {
+      "path": "docs/screenshots/booking.png",
+      "bytes": 275332,
+      "sha256": "fd8bbdf76933b69fb070236a0b53fad0e0be63ff9108111992afab92cb7d3564"
+    },
+    {
+      "path": "docs/screenshots/mobile.png",
+      "bytes": 542486,
+      "sha256": "9107aff0fcb37d1762bd0c879b76a904ea78bc67f9046f6c6cfe0aa43d5c609f"
+    },
+    {
+      "path": "index.php",
+      "bytes": 8455,
+      "sha256": "bc41dadd8fbfb7404ae3337a4b3ce29b8471d8add46b2ff452d956a5169e55a9"
+    },
+    {
+      "path": "style.css",
+      "bytes": 14171,
+      "sha256": "fac6e6840b1e932207e3b09d8cf89a191e109295df3b5b56ca98a163e32bafda"
+    },
+    {
+      "path": "tests/api_test.php",
+      "bytes": 8704,
+      "sha256": "104a41abf25f69ddd8ab769856be208c5510e35663305f13df26ac0beadd6af1"
+    }
+  ],
+  "phpMetrics": [
+    {
+      "path": "admin.php",
+      "physicalFileLines": 168,
+      "nonblankPhpRegionLinesIncludingComments": 1
+    },
+    {
+      "path": "api.php",
+      "physicalFileLines": 360,
+      "nonblankPhpRegionLinesIncludingComments": 312
+    },
+    {
+      "path": "config.local.example.php",
+      "physicalFileLines": 14,
+      "nonblankPhpRegionLinesIncludingComments": 11
+    },
+    {
+      "path": "config.php",
+      "physicalFileLines": 124,
+      "nonblankPhpRegionLinesIncludingComments": 112
+    },
+    {
+      "path": "index.php",
+      "physicalFileLines": 165,
+      "nonblankPhpRegionLinesIncludingComments": 3
+    }
+  ],
+  "phpFunctionUnits": [
+    {
+      "path": "api.php",
+      "function": "isValidDate",
+      "line": 30
+    },
+    {
+      "path": "api.php",
+      "function": "beginBookingLock",
+      "line": 43
+    },
+    {
+      "path": "api.php",
+      "function": "getSlots",
+      "line": 52
+    },
+    {
+      "path": "api.php",
+      "function": "bookAppointment",
+      "line": 91
+    },
+    {
+      "path": "api.php",
+      "function": "getAppointments",
+      "line": 203
+    },
+    {
+      "path": "api.php",
+      "function": "updateAppointment",
+      "line": 248
+    },
+    {
+      "path": "api.php",
+      "function": "cancelAppointment",
+      "line": 339
+    },
+    {
+      "path": "config.php",
+      "function": "defineSetting",
+      "line": 9
+    },
+    {
+      "path": "config.php",
+      "function": "getDBConnection",
+      "line": 31
+    },
+    {
+      "path": "config.php",
+      "function": "initSQLiteTables",
+      "line": 79
+    },
+    {
+      "path": "config.php",
+      "function": "ensureSeeded",
+      "line": 105
+    }
+  ],
+  "classCount": 0,
+  "apiActions": [
+    "get_slots",
+    "book",
+    "get_appointments",
+    "update_appointment",
+    "cancel_appointment"
+  ],
+  "apiActionCount": 5,
+  "modelFiles": [
+    "api.php",
+    "config.php"
+  ],
+  "composerManifestPresent": false,
+  "scope": "Public API slice only; HTML/JS UI, MySQL, concurrency and unrestricted queries excluded",
+  "sizing": "5 actions, below a 10-15 route benchmark; not whole-product qualification"
+}
