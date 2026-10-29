@@ -521,7 +521,7 @@ test("pre-send projection counts whole protocol bytes with overhead, not Respons
   assert.ok(p.worstCaseEstimatedUsd < 1);
   assert.ok(p.worstCaseEstimatedUsd > 0);
 });
-test("a selected USD 0.10 projection allowance blocks the pinned USD 0.220377 workload before send", async (t) => {
+test("a selected USD 0.10 projection allowance blocks the current workload before send", async (t) => {
   const e = signedRun(t),
     calls = nativeStub(t);
   writeFileSync(

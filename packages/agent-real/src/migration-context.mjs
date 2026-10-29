@@ -31,6 +31,14 @@ const target = Object.freeze({
   database: "/state/target.sqlite",
   compiler:
     "strict ES2022 NodeNext; no package.json in /work; use node built-ins only",
+  compilerContract: "mmp086-ts-compiler-v1",
+  nodeTypes: "22.20.5",
+  modules:
+    "NodeNext emits CommonJS for these .ts files without package.json. No top-level await or import.meta. Use relative .js imports for local TS modules; no npm dependencies or generated package/tsconfig files.",
+  strictTypes:
+    "Type all parameters without contextual types; narrow unknown caught errors and nullable values. node:sqlite get() may be undefined; row values are string | number | bigint | Uint8Array | null. Validate/narrow values before typed use; serialize bigint explicitly.",
+  startup:
+    "src/main.ts must initialize schema and seeds in /state/target.sqlite, then listen on 127.0.0.1:3000 and serve the original /api.php action routes. No application configuration environment variables are supplied.",
   permissions:
     "Only /work/out read and /state read/write. No child processes, downloads, reference access or external network.",
 });
