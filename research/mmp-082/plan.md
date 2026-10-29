@@ -19,10 +19,12 @@ generated candidate source. Unsafe/ambiguous input is DIAGNOSTIC_UNAVAILABLE.
 - [x] Evaluate optional post-response compile: existing secret-free Docker validator
       already does it; add no duplicate host compiler or second G1 authority.
 - [x] Execute all four local fast checks and original boundary suites; record skips.
-- [ ] Execute original public positive/negative Docker controls and final inventory.
-- [ ] Exercise new compiler sidecar through the actual generated-candidate validator
+- [x] Execute original public positive/negative Docker controls and final inventory;
+      first original proof PASS_SCOPED, latest PARTIAL with known-good G1 ERROR.
+- [x] Exercise new compiler sidecar through the actual generated-candidate validator
       with an explicitly synthetic original candidate, never a new model generation.
-- [ ] Record exact results, push and open PR; independent review remains external.
+- [x] Record exact results, push and open draft PR #83 with the runtime blocker;
+      independent review remains external.
 
 No Meta GET/POST, paid workflow dispatch, rerun, candidate repair/regeneration,
 secret read, owner permission change, merge or product acceptance is authorized.

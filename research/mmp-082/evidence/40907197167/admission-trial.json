@@ -1,0 +1,38 @@
+{
+  "format": "mmp061-public-trial-v1",
+  "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "contextSha256": "b15d9d33d0f1f671ad383759c37cb8e02e007cf1beca7ec7c78267073f54cd1c",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "provider": null,
+  "modelId": null,
+  "budgetAuth": "NOT_ADMITTED",
+  "admittedMaxRequestCostUsd": null,
+  "modelGeneration": "NOT_RUN",
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "publicG1": "NOT_RUN",
+  "publicG2": "NOT_RUN",
+  "publicG3": "NOT_RUN",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "trialRunId": null,
+  "candidateSha": null,
+  "totalCostUsd": null,
+  "generatedRequests": 0,
+  "attempts": [],
+  "cleanup": {
+    "status": "NOT_RUN",
+    "containers": null,
+    "volumes": null,
+    "emergencyRemoved": null
+  },
+  "blockers": [
+    "MISSING_PROVIDER"
+  ],
+  "workflowRunUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40907197167",
+  "modelTrialRunUrl": null,
+  "execution": "ADMISSION_ONLY",
+  "oracleControls": "SEPARATE_REPLAY_CONTROL_ARTIFACT"
+}

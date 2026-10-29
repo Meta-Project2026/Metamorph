@@ -1,0 +1,123 @@
+{
+  "format": "mmp082-offline-compiler-control-v1",
+  "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
+  "status": "PASS",
+  "execution": "SYNTHETIC_CANDIDATE_REAL_DOCKER",
+  "metaRequests": 0,
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "validation": {
+    "candidateSha": "47bc850883ded819c2092fac18743e404c85c581b639cf789e4a572db370d4e2",
+    "attempts": [
+      {
+        "attemptId": "791262ad-c788-4edf-b96e-c220e17244c0",
+        "candidateSha": "47bc850883ded819c2092fac18743e404c85c581b639cf789e4a572db370d4e2",
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "G0_NOT_ESTABLISHED"
+            ]
+          },
+          {
+            "gate": "G1",
+            "verdict": "FAIL",
+            "executedTestIds": [
+              "workshop-business:typecheck"
+            ],
+            "findingCodes": [
+              "BUILD_FAILED"
+            ]
+          },
+          {
+            "gate": "G2",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "MISSING_COVERAGE"
+            ]
+          },
+          {
+            "gate": "G3",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "MISSING_COVERAGE"
+            ]
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "HELD_OUT_NOT_RUN"
+            ]
+          }
+        ],
+        "coverage": {
+          "http": 0,
+          "sqlite": 0,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "8416c404-c6f2-42f0-a44a-2cb14bb05379",
+            "packs": [
+              {
+                "id": "oracle-m42NaK",
+                "sha256": "1058fc23a339248ad0b54e8792192f491761a569d6135c403d753c71d0f1d744"
+              },
+              {
+                "id": "oracle-jOnzlt",
+                "sha256": "76f1e578dcdbb3a67666b566761a9ac2a2a5701ee3af3e0538ce19e8c1a5e316"
+              }
+            ],
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "targetLifetimePolicyMs": 180000,
+            "compilerDiagnostics": {
+              "format": "mmp082-g1-diagnostics-v1",
+              "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+              "candidateSha": "47bc850883ded819c2092fac18743e404c85c581b639cf789e4a572db370d4e2",
+              "attemptId": "791262ad-c788-4edf-b96e-c220e17244c0",
+              "pairId": "8416c404-c6f2-42f0-a44a-2cb14bb05379",
+              "g1Verdict": "FAIL",
+              "status": "AVAILABLE",
+              "entries": [
+                {
+                  "phase": "typecheck",
+                  "code": "TS2322",
+                  "path": "src/main.ts",
+                  "line": 1,
+                  "column": 14
+                }
+              ],
+              "errorCount": 1,
+              "truncated": false
+            },
+            "gates": []
+          }
+        ]
+      }
+    ],
+    "publicG1": "FAIL",
+    "publicG2": "INCONCLUSIVE",
+    "publicG3": "INCONCLUSIVE",
+    "G0": "INCONCLUSIVE",
+    "G4": "INCONCLUSIVE",
+    "product": "NOT_ESTABLISHED",
+    "blockers": [
+      "BUILD_FAILED",
+      "MISSING_COVERAGE"
+    ],
+    "cleanup": {
+      "status": "VERIFIED_ZERO_RESOURCES",
+      "containers": 0,
+      "volumes": 0,
+      "emergencyRemoved": 0
+    }
+  }
+}

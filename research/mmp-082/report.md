@@ -2,7 +2,8 @@
 
 Issue: <https://github.com/Meta-Project2026/Metamorph/issues/82>.
 Base main, freshly fetched: `d21376747c7147043ca618e149fac87c0df80111`.
-Code commit: `a17efd8a95e42abbfabcc4489fe03e950907e413`.
+Code commit (including corrected manual driver): `d9b5f62a9313e2b40727a7f9407662d98c6ec85e`.
+Initial parser/runtime/publication implementation: `a17efd8a95e42abbfabcc4489fe03e950907e413`.
 PR: <https://github.com/Meta-Project2026/Metamorph/pull/83>.
 Scope is future observability only. Product remains **NOT_ESTABLISHED**.
 Implementation/review contract: [task-contract.md](task-contract.md).
@@ -70,8 +71,8 @@ candidate's source bounds. Paths must also pass the existing admission rules;
 secret/token-like filename markers are conservatively rejected. Absolute paths,
 traversal, unadmitted files and Unicode paths are unavailable.
 
-At most **20 distinct phase/code/position entries** and **8192 serialized UTF-8
-bytes per versioned block**, including identity. Input limit: **1 MiB**; individual
+At most **20 distinct phase/code/position entries** and **8192 canonical compact
+JSON UTF-8 bytes per versioned block**, including identity. Input limit: **1 MiB**; individual
 line limit: **16 KiB**. errorCount counts parsed diagnostic headers, including
 duplicates; entries deduplicate identical locations/codes within a phase.
 More than 20 distinct entries sets truncated=true while retaining the header
@@ -119,10 +120,10 @@ formatting and a control-regex lint violation; corrected before final validation
 | `pnpm --filter @metamorph/target-worker test` | PASS, exit 0; 69/69 |
 | `pnpm --filter @metamorph/differential test` | PASS, exit 0; 122 tests: 77 passed, 45 skipped on Windows, 0 failed |
 | `pnpm exec biome check research/mmp-082` | PASS after formatting, exit 0 |
-| Original public positive/negative Docker and Oracle controls | PASS_SCOPED, [40905449684](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905449684); original proof exit 0 |
-| New synthetic compiler control through actual trial validator | First driver ERROR before execution: research directory could not resolve workspace package import; corrected to explicit built-module path, new offline run pending |
-| Hosted Node 22/24 Fast CI | PASS on both versions, [40905453375](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905453375), code SHA above |
-| Final hosted cleanup 0/0, emergencyRemoved=0 | PASS, original proof completion and independent finalizer in 40905449684 |
+| Original public positive/negative Docker and Oracle controls | First run PASS_SCOPED, exit 0; second run PARTIAL / EVIDENCE_ERROR, exit 1 (known-good G1 ERROR); details below |
+| New synthetic compiler control through actual trial validator | PASS, exit 0 in [40907197167](https://github.com/Meta-Project2026/Metamorph/actions/runs/40907197167): actual Docker TS2322, src/main.ts:1:14, G1 FAIL retained; first driver failed before execution |
+| Hosted Node 22/24 Fast CI | PASS on both versions in [40905453375](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905453375) and corrected-code [40907204753](https://github.com/Meta-Project2026/Metamorph/actions/runs/40907204753) |
+| Final hosted cleanup 0/0, emergencyRemoved=0 | PASS in both manual runs: original proof completion, new compiler control and independent finalizers |
 | Real Meta generation, repair, regeneration, GET/POST, paid rerun | NOT_RUN; prohibited |
 
 The existing manual `agent-workshop-compose.yml` gains only the synthetic
@@ -132,8 +133,8 @@ Meta credential, and explicit missing admission. It is separate from Fast CI.
 The new control's host-fetch allowlist permits only the exact pinned public
 GitHub source archive; every other direct fetch is rejected and counted.
 Local command exit statuses and TAP counters: [local-checks.json](local-checks.json).
-Windows skips are not represented as executed tests; Linux CI remains required
-to cover the POSIX-only admission and filesystem cases.
+Windows skips are not represented as executed tests. Linux CI covers the
+POSIX-only admission and filesystem cases.
 Linux Fast CI completed those cases: root 435 PASS / 3 SKIP on each Node version;
 reference 56/56, target 69/69, differential 122/122, qualification sanitizer 2/2,
 workshop audit 54/54. Root skips are one Windows-only case and two fixtures
@@ -143,9 +144,79 @@ First hosted manual run 40905449684 is overall **FAIL**, despite the original
 proof succeeding: the new research driver failed to import `@metamorph/oracle`
 from outside a workspace package before any compiler control execution. This is
 a harness **ERROR / NOT_RUN**, not a candidate FAIL or a parser result. The import
-now uses the explicit trusted `packages/oracle/dist/index.js`; a fresh offline
-dispatch on the corrected commit is required. No workflow rerun or paid operation
-was used. The first run's public artifacts are retained under [evidence](evidence/40905449684).
+was corrected to the explicit trusted `packages/oracle/dist/index.js` and checked
+locally before a fresh offline dispatch on the corrected commit. No workflow
+rerun or paid operation was used. The first run's public artifacts are retained
+under [evidence](evidence/40905449684).
+
+In [40905449684](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905449684),
+the original proof passed three fresh attempts: known-good public G1/G2/G3 PASS,
+deliberate public cancellation defect G2/G3 FAIL, then the existing deterministic
+repair control public G1/G2/G3 PASS. Each executed 17 HTTP / 20 SQLite comparisons:
+**51 HTTP / 60 SQLite total**. All six runtime negative controls passed. These
+are existing public replay controls, not repair of the historical model candidate.
+
+Corrected-code manual run [40907197167](https://github.com/Meta-Project2026/Metamorph/actions/runs/40907197167)
+is also overall **FAIL**, for a different reason. The initial known-good replay
+returned G1 **ERROR / ENVIRONMENT_ERROR** with no executed build test IDs and
+0/0 HTTP/SQLite coverage. Its aggregate includes BUILD_FAILED; the proof's final
+expected-result assertion produces **EVIDENCE_ERROR / PARTIAL**. The exact worker
+failure is not present in public receipts; no timeout/OOM/compiler cause is
+asserted. The same known-good candidate SHA
+`34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334`
+later passed G1/G2/G3 as the repair control's second attempt with 17/20 coverage.
+The defect attempt also executed 17/20 with expected G2/G3 FAIL: **34 HTTP /
+40 SQLite comparisons** in this run. All six runtime controls passed again.
+Core package/workflow diff between the two tested commits is empty (exit 0);
+only research driver/docs/evidence changed. This does not establish the cause
+of the inconsistent initial known-good result.
+
+The new compiler control **did execute and PASS** in that second run: an original
+synthetic TS candidate was compiled only by the pinned worker through
+validateGeneratedMigration. Public G1 stayed FAIL / BUILD_FAILED, coverage stayed
+0/17 and 0/20, and the sidecar contained only TS2322 at src/main.ts line 1 column
+14, errorCount=1, truncated=false and bound identities. No private marker/source
+or raw stream was published. Its guarded host fetch admitted only the pinned
+public GitHub archive; metaRequests=0. This is not a model-generated candidate.
+
+Both proof completions and finalizers report containers=0, volumes=0 and
+emergencyRemoved=0. Second-run public artifacts, including the compiler-control
+receipt, are retained under [evidence](evidence/40907197167). Both admission trials
+record generatedRequests=0, candidateSha=null and AI_GENERATION_NOT_RUN.
+Retained evidence was checked for raw-stream/private-marker strings: no matches
+(rg exit 1 means no match).
+
+**Draft blocker:** the latest full original-control job is PARTIAL because of
+the initial known-good G1 ERROR. Independent review must assess that failure
+before readiness; it is not relabelled PASS, attributed to a guessed cause,
+hidden by rerunning, or addressed by weakening the recipe, tests or budgets.
+Compiler observability is locally and Docker-tested; full replay reliability
+on the corrected delivery is not established by this run.
+
+## Changed files
+
+The complete diff is limited to these paths (no protected input changes):
+
+```text
+.github/workflows/agent-workshop-compose.yml
+packages/agent-real/src/compiler-diagnostics.mjs
+packages/agent-real/src/report.mjs
+packages/agent-real/src/runtime.mjs
+packages/agent-real/test/compiler-diagnostics.test.mjs
+research/mmp-082/biome.json
+research/mmp-082/docker-proof.mjs
+research/mmp-082/local-checks.json
+research/mmp-082/plan.md
+research/mmp-082/report.md
+research/mmp-082/task-contract.md
+research/mmp-082/evidence/40905449684/admission-trial.json
+research/mmp-082/evidence/40905449684/finalizer.json
+research/mmp-082/evidence/40905449684/summary.json
+research/mmp-082/evidence/40907197167/admission-trial.json
+research/mmp-082/evidence/40907197167/compiler-control.json
+research/mmp-082/evidence/40907197167/finalizer.json
+research/mmp-082/evidence/40907197167/summary.json
+```
 
 Unchanged: trusted recipe pin
 `f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3`,
