@@ -16,7 +16,8 @@ It even listed nonexistent package test scripts. No old run is reclassified here
 
 - [Version 2 matrix](coverage-matrix.json) stores actual workspace names, paths and
   scripts, checked against manifests discovered from `pnpm-workspace.yaml`.
-  No hardcoded package count or invented N/A/test scripts. Pure MJS workshop-audit
+  Listing a manifest script does not mean it executes in CI; gates and expanded
+  test files establish that separately. No invented N/A/test scripts. Pure MJS workshop-audit
   really has no build/typecheck script; its existing lint and test gate remain.
 - [Validator](validate.mjs) parses actual YAML 1.2 using exact `yaml@2.8.1`
   (ISC, zero dependencies; upstream notice retained in installed package).
@@ -78,8 +79,8 @@ matrix entry. No mass formatting of archived or other-owner scripts.
 
 | Issue | Delivered | Remaining |
 | --- | --- | --- |
-| #74 | YAML/workspace/file reality checks and negative CLI controls | Exact-head hosted CI and independent review |
-| #63 | Verified bounded history bootstrap, missing-history control, 21-test step | Real hosted shallow Node22/24 execution and independent review |
+| #74 | YAML/workspace/file reality checks; 45/45 controls in hosted Node22/24 | Independent review of final HEAD |
+| #63 | Exact history bootstrap; 2/2 history controls and 21/21 original tests in hosted Node22/24 | Independent review of final HEAD |
 | #69 | Preserve audit gate; demo tests; active inventory/syntax; honest skips/gaps | Semantic lint/test gaps in manual harnesses; privileged-runner NO_DECISION; keep OPEN |
 
 Do not auto-close any issue or merge before independent review. This PR has no
@@ -108,5 +109,5 @@ git diff --check
 
 Ordinary Node tests execute trusted harnesses and synthetic transports, never
 benchmark/candidate code on the host. Linux checkout must preserve pinned LF bytes.
-Detailed observed results and exact delivery SHA/CI links are published in the PR.
-
+See [validation](validation.md) for actual results. The final delivery SHA and its
+separate CI links are published in PR #90.

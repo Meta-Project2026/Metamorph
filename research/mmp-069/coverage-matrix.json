@@ -247,7 +247,7 @@
     {
       "path": "research/mmp-061",
       "lifecycle": "ACTIVE",
-      "execution": "MANUAL_DOCKER",
+      "execution": "PRIVILEGED_NOT_RUN",
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
@@ -263,7 +263,7 @@
     {
       "path": "research/mmp-078",
       "lifecycle": "ACTIVE",
-      "execution": "MANUAL_DOCKER",
+      "execution": "PRIVILEGED_NOT_RUN",
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Syntax only in Fast CI; behavior/security lint coverage remains unresolved (#69). Manual/paid/privileged entrypoints are never executed here."
