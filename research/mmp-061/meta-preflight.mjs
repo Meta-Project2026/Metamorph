@@ -4,9 +4,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { preflightMetaV2 } from "../../packages/agent-real/src/meta-preflight.mjs";
+import { validateWorkflowIdentity } from "../../packages/agent-real/src/github-meta-guard.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 try {
   const headSha = execFileSync("git", ["rev-parse", "HEAD"], {cwd: root, encoding: "utf8"}).trim();
+  validateWorkflowIdentity(process.env, headSha, {reviewed_sha: process.env.REVIEWED_SHA});
   if (process.env.GITHUB_EVENT_NAME !== "workflow_dispatch" ||
       process.env.GITHUB_REPOSITORY !== "Meta-Project2026/Metamorph" ||
       process.env.GITHUB_REF !== "refs/heads/main" ||

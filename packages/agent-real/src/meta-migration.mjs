@@ -2,7 +2,13 @@
 import { ModelResponseSchema } from "@metamorph/agent";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import {
+  paidAdmission,
+  paidProjection,
+  reservePaidAttempt,
+} from "./meta-paid-authorization.mjs";
+import {
   checkMetaHttp,
+  credentialCode,
   META_MODEL,
   MetaWireError,
   metaCheck,
@@ -278,6 +284,8 @@ function session(
     readCredential,
     timeoutMs,
     now = () => performance.now(),
+    authorization,
+    checkpoint,
   },
 ) {
   metaCheck(isMigrationContext(context), "SOURCE_IDENTITY");
@@ -292,7 +300,8 @@ function session(
     maxRequestCostUsd: production ? null : 1, // unit-harness reservation only, never production admission
     async generate(request, signal) {
       // No caller flag, environment value or arbitrary dollar value issues admission.
-      if (production) throw new MetaWireError("BILLING_CAP_NOT_ESTABLISHED");
+      if (production && !authorization)
+        throw new MetaWireError("BILLING_CAP_NOT_ESTABLISHED");
       metaCheck(!stopped && !busy, "SESSION_STOPPED");
       metaCheck(
         receipts.length < META_MIGRATION_POLICY.maxRequests,
@@ -305,6 +314,9 @@ function session(
       );
       metaCheck(request.attempt === receipts.length + 1, "REQUEST_SEQUENCE");
       const body = prepareMetaMigration(context, request, previous);
+      const admission = production
+        ? paidAdmission(authorization, context, body)
+        : null;
       const observation = newWireObservation();
       const receipt = {
         format: "meta-generation-v1",
@@ -335,6 +347,13 @@ function session(
         durationMs: null,
         monetaryCap: "MONETARY_CAP_UNSET",
         ...observation,
+        ...(admission
+          ? {
+              authorization: admission,
+              policy: admission.kind,
+              monetaryCap: "NO_PROVIDER_HARD_CAP",
+            }
+          : {}),
       };
       receipts.push(receipt);
       busy = true;
@@ -361,16 +380,31 @@ function session(
         });
         pending = Promise.resolve().then(() => {
           metaCheck(!controller.signal.aborted, "CANCELLED");
-          if (production)
+          if (production) {
+            const key = readCredential();
+            const code = credentialCode(key);
+            if (code) throw new MetaWireError(code);
+            try {
+              reservePaidAttempt(authorization, context, body);
+            } catch (error) {
+              throw new MetaWireError(error.code);
+            }
+            // Durable UNKNOWN before a possible send. Crash/timeout never permits retry.
+            checkpoint?.({
+              ...receipt,
+              attemptedRequests: 1,
+              networkSend: "UNKNOWN",
+            });
             return metaHttpsExchange({
               operation: "GENERATION",
-              key: readCredential(),
+              key,
               body,
               signal: controller.signal,
               timeoutMs,
               responseBytes: META_MIGRATION_POLICY.responseBytes,
               observation,
             });
+          }
           observation.attemptedRequests = 1;
           observation.networkSend = "UNKNOWN";
           return transport({ body, signal: controller.signal });
@@ -396,6 +430,19 @@ function session(
           usageStatus: decoded.usageStatus,
         });
         metaCheck(decoded.usageStatus !== "UNKNOWN", "USAGE_UNKNOWN");
+        if (admission) {
+          const projection = paidProjection(body);
+          metaCheck(
+            decoded.response.usage.inputTokens <=
+              projection.inputTokensUpperEstimate,
+            "USAGE_BOUND_EXCEEDED",
+          );
+          metaCheck(
+            decoded.response.usage.estimatedCostUsd <=
+              admission.maxEstimatedUsd,
+            "ESTIMATED_BUDGET_BLOCKED",
+          );
+        }
         previous = structuredClone(decoded.response.changes);
         receipt.status = "PASS";
         // No second call while charge is unknown; first pilot is one request anyway.
@@ -413,6 +460,7 @@ function session(
         // later but has no receipt/writer access; cannot trigger a second dispatch.
         if (production) await pending?.catch(() => {});
         Object.assign(receipt, observation, { durationMs: now() - begin });
+        checkpoint?.(receipt);
         busy = false;
       }
     },
@@ -425,13 +473,20 @@ function session(
 }
 export function createMetaMigrationProvider(context, options = {}) {
   metaCheck(
-    object(options) && Object.keys(options).length === 0,
+    object(options) &&
+      Object.keys(options).every((k) =>
+        ["authorization", "checkpoint"].includes(k),
+      ) &&
+      (options.checkpoint === undefined ||
+        typeof options.checkpoint === "function"),
     "CONFIG_DENIED",
   );
+  if (options.authorization) paidAdmission(options.authorization, context);
   return session(context, {
     production: true,
     readCredential: () => process.env.MODEL_API_KEY,
     timeoutMs: META_MIGRATION_POLICY.timeoutMs,
+    ...options,
   });
 }
 export function createOfflineMetaWireHarness(

@@ -1,0 +1,63 @@
+{
+  "capturedAtUtc": "2026-10-29T14:21:23.6861722Z",
+  "repository": "Meta-Project2026/Metamorph",
+  "mainSha": "0b90ecb353cfabed6465760d311991ef7cd8dab6",
+  "mainProtected": true,
+  "requiredPullRequestReviews": null,
+  "requiredStatusChecks": null,
+  "enforceAdmins": true,
+  "allowForcePushes": false,
+  "allowDeletions": false,
+  "environment": {
+    "name": "META_API_KEY",
+    "canAdminsBypass": false,
+    "requiredReviewerCount": 0,
+    "waitRuleCount": 0,
+    "deploymentBranchPolicy": {
+      "protected_branches": false,
+      "custom_branch_policies": true
+    },
+    "policies": [
+      {
+        "id": 64793111,
+        "node_id": "MDE2OkdhdGVCcmFuY2hQb2xpY3k2NDc5MzExMQ==",
+        "name": "main",
+        "type": "branch"
+      }
+    ],
+    "secretNamesOnly": {
+      "name": "META"
+    }
+  },
+  "collaborators": [
+    {
+      "login": "barbalatv",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "pull": true,
+        "push": true,
+        "triage": true
+      },
+      "role_name": "admin"
+    },
+    {
+      "login": "l1ncolny",
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "pull": true,
+        "push": true,
+        "triage": true
+      },
+      "role_name": "admin"
+    }
+  ],
+  "teams": [],
+  "rulesets": [],
+  "orgDefaultPermission": "admin",
+  "orgMembers": [
+    "barbalatv",
+    "l1ncolny"
+  ]
+}
