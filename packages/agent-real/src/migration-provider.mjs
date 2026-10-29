@@ -1,9 +1,7 @@
-import {
-  createMetaModelApiProvider,
-  ModelResponseSchema,
-} from "@metamorph/agent";
+import { ModelResponseSchema } from "@metamorph/agent";
 import { fields, strictJson } from "../../differential/src/strict.mjs";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
+import { createMetaMigrationProvider } from "./meta-migration.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 
 const RESPONSE_LIMIT = 1024 * 1024 + 64 * 1024;
@@ -52,7 +50,8 @@ export function migrationProviderStatus(selection = "none") {
 export function createProductionMigrationProvider(context, selection) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
   const status = migrationProviderStatus(selection);
-  const blocked = selection === "meta" ? createMetaModelApiProvider() : null;
+  const blocked =
+    selection === "meta" ? createMetaMigrationProvider(context) : null;
   return Object.freeze({
     status,
     provider: Object.freeze({
@@ -60,7 +59,7 @@ export function createProductionMigrationProvider(context, selection) {
       maxRequestCostUsd: null,
       async generate(request, signal) {
         context.prompt(request);
-        if (blocked) return blocked.generate(request, signal);
+        if (blocked) return blocked.provider.generate(request, signal);
         throw Object.assign(new Error(status.code), { code: status.code });
       },
     }),

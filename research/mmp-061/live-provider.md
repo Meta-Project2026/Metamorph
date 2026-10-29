@@ -59,3 +59,76 @@ protected execution mechanism instead.
 The internal native HTTP primitive includes bounded POST serialization for the
 next adapter increment; it has no CLI/automatic paid dispatch. Native tests replace
 https.request and use a clearly fake credential. No actual GET or POST executed.
+
+## Increment C: actual wire adapter, production admission still closed
+
+meta-migration.mjs now builds official POST /v1/chat/completions JSON and validates
+its external envelope. Only choices[0].message.content supplies changes; all usage,
+model identity and request ID come from API metadata. Unknown top-level/model
+metadata, refusal, truncation, tool calls, empty/Markdown output, duplicate JSON
+keys, unsafe paths, missing src/main.ts and invalid usage fail closed. Candidate
+bundle SHA is computed independently before any writer. No generated code executes
+on host. The production selector now points at this adapter, retaining billing=paid,
+maxRequestCostUsd=null and direct/orchestrated BILLING_CAP_NOT_ESTABLISHED refusal.
+The private session contains the real native POST path; the entry gate is closed
+in code, with no enable flag or caller-supplied monetary override. The offline
+harness exercises the same wire mapping and is marked SYNTHETIC_WIRE_TEST.
+
+Proposed first-call policy mmp061-meta-manual-v1: Standard muse-spark-1.3, no tools,
+no streaming/store, reasoning_effort=none, one request, no repair/retry/failover,
+128 KiB prompt bytes, 16,384 output tokens, 2 MiB response, 180s request deadline,
+240s session TTL. Target file limits remain 64 files / 256 KiB each / 1 MiB total.
+These are application proposals, not provider-default assertions. Whole public
+PHP fits the prompt, unlike legacy 2048-byte/128-output-token probe limits. Output
+cap covers reasoning as documented; none avoids spending this pilot on reasoning.
+
+Input-token caveat: no verified provider tokenizer/preflight token-count API is
+implemented. The adapter enforces prompt bytes before sending and validates at
+most 65,536 input tokens in returned usage; it does NOT claim this is a guaranteed
+pre-dispatch token cap. Before paid admission, agree to this bounded-byte policy
+or provide an official tokenizer for a real pre-dispatch input-token guard.
+
+Estimates use dated Standard tariff snapshot meta-standard-2026-10-29 and exact
+API input/cache/output counts. Missing usage/cache stays UNKNOWN/null; charged
+cost is always null because no billing settlement endpoint is integrated. Unknown
+usage prevents candidate writing. Unknown charge prevents any second call. Rates
+are never treated as a bound or invoice; they need reconfirmation for live time.
+Repair request encoding includes only prior own output and existing public codes;
+this pilot session allows only the first generation. A two-call experiment needs
+new approval and resolution of charge uncertainty, not an automatic retry.
+
+## Proposed versioned paid policy decision (NOT_IMPLEMENTED)
+
+Both owners plus independent reviewer must explicitly approve a new discriminated
+manual-only policy, e.g. RunConfigV2.modelBudget.kind=manual-paid-no-usd-cap-v1,
+separate from existing guaranteed-USD reservations. Record USD cap as null with
+MONETARY_CAP_UNSET and disclose possible actual charges: finite token/request caps
+reduce activity but **do not guarantee a monetary ceiling**. Preserve existing
+RunConfig and paid admission unchanged for all current callers.
+
+The new admission must be scoped to an exact reviewed repository SHA, named
+provider/model/Standard account, public source/context/manifest SHA, single manual
+run and short expiry. It needs explicit Vladimir and Ilia decision references and
+independent code-review reference, not a CLI boolean. Keep a finite request ledger
+and no-send/pre-send/may-have-sent/response-received states; after uncertainty,
+no second dispatch. Preserve usage estimates separately from charged/null and
+never label this paid session synthetic. Owner acceptance must also settle the
+input-token caveat above. No such capability is issued by this PR.
+
+## Next activation sequence
+
+1. Independent review of this new exact-SHA diff, especially native transport,
+   preflight guard and model/API metadata split. Current earlier APPROVED does not
+   cover it. Then owner-authorized merge of trusted code; no self-merge here.
+2. Configure required reviewers/prevent-self-review and main-only environment;
+   authorize one read-only dispatch at the reviewed main SHA. No paid POST in it.
+3. Review actual preflight receipt and explicit joint paid-policy decision. Only
+   then implement/integrate changed shared admission and complete live E2E receipt
+   correlation/run configuration, preserving existing real Docker Oracle.
+4. Separately authorize exactly one paid dispatch. Record candidate SHA and actual
+   build/HTTP/SQLite outcomes, positive/negative controls and independent cleanup.
+
+runPublicMigration's live execution branch remains dormant pending step 3. No
+unreviewed paid activation or new Docker proof is run in this increment. The
+acceptable intermediate result is tested actual transport/codec + protected
+preflight, not a claim of completed live E2E. Historical hosted receipts stay intact.

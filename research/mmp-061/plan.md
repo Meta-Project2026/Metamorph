@@ -23,3 +23,14 @@ mutation or fast PR CI expansion. Constitution pending ratification.
 - [ ] Real model admission and production transport: BLOCKED, not a synthetic substitute.
 - [ ] Actual inference/generated candidate/isolated public parity/control trial: NOT_RUN.
 - [ ] Independent ChatGPT review/owner interface decision: pending.
+
+## Next Meta increment (separate from historical replay evidence)
+
+- [x] Verify official API/pricing/docs and new owner/review scope.
+- [x] Inspect Environment metadata without secret access; no protection configured.
+- [x] Commit/push A/B protected preflight v2; 27 offline tests, hosted Fast CI PASS.
+- [x] Implement actual Meta wire codec/native POST session and preserve paid refusal.
+- [x] Add 41 codec/session/real-writer negative tests; full local checks pass.
+- [ ] Independent exact-SHA review of new increment; shared no-cap policy decision.
+- [ ] Configure protection, reviewed merge and explicitly authorized GET preflight.
+- [ ] Live E2E admission/receipt integration and separately authorized paid dispatch.

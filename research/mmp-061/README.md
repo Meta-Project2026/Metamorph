@@ -10,6 +10,12 @@ G0/G4 INCONCLUSIVE; PRODUCT NOT_ESTABLISHED. The five-route API slice is below t
 suggested 10-15 route size. A broader benchmark needs separate versioned selection,
 registration and owner review; no frozen original scenario is silently expanded.
 
+The next Meta live-provider increment is documented separately in
+[live-provider.md](live-provider.md) and [live-validation.md](live-validation.md).
+It adds actual HTTPS/wire code and a protected read-only workflow; production
+paid admission remains closed pending the explicit shared-policy decision and
+independent review. Earlier hosted receipts below remain unchanged historical data.
+
 ## Commands
 
 After the trusted workspace build:
