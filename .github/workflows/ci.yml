@@ -39,3 +39,9 @@ jobs:
         run: pnpm --filter @metamorph/differential test
       - name: PHP qualification sanitizer and recipe tests
         run: node --test packages/oracle/probes/qualification.test.mjs
+      - name: Workshop-audit tests
+        run: pnpm --filter @metamorph/workshop-audit test
+      - name: Active research lint (demo-readiness, mmp-069)
+        run: npx @biomejs/biome check research/demo-readiness research/mmp-069
+      - name: Validate coverage matrix
+        run: node research/mmp-069/validate.mjs
