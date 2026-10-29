@@ -18,7 +18,8 @@ mutation or fast PR CI expansion. Constitution pending ratification.
 - [x] Commit/push/open PR70; initial fast CI PASS on Node22/24.
 - [x] Add manual Ubuntu recipe, explicit admission receipt and separate unchanged real
   Docker replay/negative controls; no model fallback.
-- [ ] Run the updated manual workflow at a pushed SHA and retain public receipts.
+- [x] Run the updated manual workflow at 6ab6e36: SUCCESS; preserve exact public
+  admission/control/finalizer receipts and hashes. Model generation remains NOT_RUN.
 - [ ] Real model admission and production transport: BLOCKED, not a synthetic substitute.
 - [ ] Actual inference/generated candidate/isolated public parity/control trial: NOT_RUN.
 - [ ] Independent ChatGPT review/owner interface decision: pending.

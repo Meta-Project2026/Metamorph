@@ -73,6 +73,13 @@ by toggling a boolean. See `provider-handoff.md` for the pluggable ModelProvider
 boundary and remaining adapter/receipt/configuration work. A green workflow does
 not establish AI generation or public parity on a newly generated candidate.
 
+Hosted run [40793819074](https://github.com/Meta-Project2026/Metamorph/actions/runs/40793819074)
+completed SUCCESS at `6ab6e36f813673756af157bc0de2265964c26071`. Source-bound
+admission reported AI_GENERATION_NOT_RUN; the separate original Docker controls
+passed with normal and independent finalizer inventory 0/0/emergencyRemoved=0.
+See [retained public receipts](hosted/40793819074) and validation.md. This is
+successful workflow/control verification, with genuine inference still NOT_RUN.
+
 ## Scope measured from upstream
 
 - Repository: tanjilaafsarirubina/car-workshop; commit
