@@ -1,0 +1,52 @@
+{
+  "format": "mmp061-public-evidence-index-v1",
+  "baseSha": "2a6eef6a583cf981e604d697bc1cb287174a823c",
+  "implementationHeadSha": null,
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "modelGeneration": "NOT_RUN",
+  "publicG1": "NOT_RUN",
+  "publicG2": "NOT_RUN",
+  "publicG3": "NOT_RUN",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "trialRunUrl": null,
+  "candidateSha": null,
+  "budgetAuthorization": "NOT_ADMITTED",
+  "totalCostUsd": null,
+  "generatedRequests": 0,
+  "cleanup": {
+    "status": "NOT_RUN",
+    "containers": null,
+    "volumes": null,
+    "emergencyRemoved": null
+  },
+  "provenance": {
+    "source": "pinned public MIT PHP data, not generated output",
+    "implementation": "original MMP061 context/codec/admission/test work",
+    "reused": "unchanged Agent/source-session/RealVerifier/Oracle/worker ports",
+    "historical": "MMP049 and PR62 replay receipts not reused as a new trial"
+  },
+  "files": [
+    {
+      "path": "inventory.json",
+      "bytes": 5378,
+      "sha256": "3243da24babc68fda1da3e422d350efaeff2f57f4a5e9db07243d06f28213ff4"
+    },
+    {
+      "path": "public-source.json",
+      "bytes": 18323,
+      "sha256": "5e47f717e505da575b0515a06a1946a3307e04f9657f599545f4ab990ae166d6"
+    },
+    {
+      "path": "LICENSE.upstream",
+      "bytes": 1078,
+      "sha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9"
+    },
+    {
+      "path": "freeze-source.py",
+      "bytes": 4347,
+      "sha256": "82bb9b2694328ae517dc456abbbae5c44c7576f651c7f3d39f41a0eb067cbcd1"
+    }
+  ]
+}
