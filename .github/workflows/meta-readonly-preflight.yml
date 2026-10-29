@@ -1,0 +1,66 @@
+name: Meta protected read-only preflight
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: 'Exact main SHA independently reviewed for this read-only run'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: meta-readonly-preflight
+  cancel-in-progress: false
+jobs:
+  guard:
+    if: ${{ github.ref == 'refs/heads/main' && inputs.reviewed_sha == github.sha }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Require protected main and independently approved environment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const repo = {owner: context.repo.owner, repo: context.repo.repo};
+              const {data: branch} = await github.rest.repos.getBranch({...repo, branch: 'main'});
+              const {data: env} = await github.rest.repos.getEnvironment({...repo, environment_name: 'META_API_KEY'});
+              const {data: policies} = await github.rest.repos.listDeploymentBranchPolicies({...repo, environment_name: 'META_API_KEY'});
+              const reviewers = env.protection_rules.find(r => r.type === 'required_reviewers');
+              if (!branch.protected || branch.commit.sha !== context.sha ||
+                  !reviewers?.reviewers?.length || reviewers.prevent_self_review !== true ||
+                  env.deployment_branch_policy?.custom_branch_policies !== true ||
+                  policies.total_count !== 1 || policies.branch_policies.length !== 1 ||
+                  policies.branch_policies[0].name !== 'main' || policies.branch_policies[0].type !== 'branch') {
+                core.setFailed('ENVIRONMENT_PROTECTION_REQUIRED');
+              }
+            } catch { core.setFailed('ENVIRONMENT_PROTECTION_UNVERIFIED'); }
+  preflight:
+    needs: guard
+    if: ${{ github.ref == 'refs/heads/main' && inputs.reviewed_sha == github.sha }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    environment: META_API_KEY
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      # No package install, lifecycle scripts, build, tests, Docker or candidate.
+      - name: One bounded authenticated GET (no POST)
+        env:
+          MODEL_API_KEY: ${{ secrets.META }}
+          REVIEWED_SHA: ${{ inputs.reviewed_sha }}
+        run: node research/mmp-061/meta-preflight.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta-readonly-public
+          path: ${{ runner.temp }}/meta-preflight-public/meta-preflight.json
+          if-no-files-found: error
+          retention-days: 7
