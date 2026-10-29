@@ -1,0 +1,264 @@
+{
+  "format": "mmp061-public-evidence-index-v1",
+  "baseSha": "2a6eef6a583cf981e604d697bc1cb287174a823c",
+  "implementationHeadSha": "6ab6e36f813673756af157bc0de2265964c26071",
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "modelGeneration": "NOT_RUN",
+  "publicG1": "NOT_RUN",
+  "publicG2": "NOT_RUN",
+  "publicG3": "NOT_RUN",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "trialRunUrl": null,
+  "candidateSha": null,
+  "budgetAuthorization": "NOT_ADMITTED",
+  "totalCostUsd": null,
+  "generatedRequests": 0,
+  "cleanup": {
+    "status": "NOT_RUN",
+    "containers": null,
+    "volumes": null,
+    "emergencyRemoved": null
+  },
+  "provenance": {
+    "source": "pinned public MIT PHP data, not generated output",
+    "implementation": "original MMP061 context/codec/admission/test work",
+    "reused": "unchanged Agent/source-session/RealVerifier/Oracle/worker ports",
+    "historical": "MMP049 and PR62 replay receipts not reused as a new trial"
+  },
+  "files": [
+    {
+      "path": "inventory.json",
+      "bytes": 5378,
+      "sha256": "3243da24babc68fda1da3e422d350efaeff2f57f4a5e9db07243d06f28213ff4"
+    },
+    {
+      "path": "public-source.json",
+      "bytes": 18323,
+      "sha256": "5e47f717e505da575b0515a06a1946a3307e04f9657f599545f4ab990ae166d6"
+    },
+    {
+      "path": "LICENSE.upstream",
+      "bytes": 1078,
+      "sha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9"
+    },
+    {
+      "path": "freeze-source.py",
+      "bytes": 4347,
+      "sha256": "82bb9b2694328ae517dc456abbbae5c44c7576f651c7f3d39f41a0eb067cbcd1"
+    },
+    {
+      "path": "hosted/40793819074/controls/finalizer.json",
+      "bytes": 165,
+      "sha256": "5f50bd995af0a228c3d51892959a29ed6e9ccddcf593cd2891a23b69d4500e4d"
+    },
+    {
+      "path": "hosted/40793819074/controls/summary.json",
+      "bytes": 39328,
+      "sha256": "5f49a9c71b5c2e28797a8d2f4d2ec44c7a20a5e4e9ed64ba3aaa268cc20e42fa"
+    },
+    {
+      "path": "hosted/40793819074/model/trial.json",
+      "bytes": 1251,
+      "sha256": "faf7e4f08423e0beab3655f0dd0fac9b5bbfd8babbb1ff8e6df72f5234e6004b"
+    }
+  ],
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "workflowRunUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40793819074",
+  "workflowScope": "ADMISSION_AND_SEPARATE_ORIGINAL_REPLAY_CONTROLS",
+  "workflowStatus": "SUCCESS",
+  "prUrl": "https://github.com/Meta-Project2026/Metamorph/pull/70",
+  "fastCi": {
+    "status": "PASS",
+    "headSha": "6ab6e36f813673756af157bc0de2265964c26071",
+    "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40793826897",
+    "nodes": [
+      22,
+      24
+    ]
+  },
+  "localValidation": {
+    "platform": "Windows",
+    "node": "24.21.0",
+    "pnpm": "11.25.0",
+    "rootTests": {
+      "pass": 193,
+      "fail": 0,
+      "skip": 102
+    },
+    "focusedTests": {
+      "pass": 40,
+      "fail": 0,
+      "skip": 0
+    },
+    "lintExit": 0,
+    "typecheckExit": 0,
+    "testExit": 0,
+    "buildExit": 0
+  },
+  "hostedValidation": {
+    "rootTests": {
+      "pass": 292,
+      "fail": 0,
+      "skip": 3
+    },
+    "referenceTests": {
+      "pass": 56,
+      "fail": 0,
+      "skip": 0
+    },
+    "targetTests": {
+      "pass": 69,
+      "fail": 0,
+      "skip": 0
+    },
+    "differentialTests": {
+      "pass": 122,
+      "fail": 0,
+      "skip": 0
+    },
+    "agentRealTests": {
+      "pass": 62,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "separateDockerControls": {
+    "evidenceKind": "DETERMINISTIC_REPLAY_NOT_AI",
+    "status": "PASS_SCOPED",
+    "headSha": "6ab6e36f813673756af157bc0de2265964c26071",
+    "runtimeControlsPass": 6,
+    "attempts": [
+      {
+        "mode": "known-good",
+        "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE"
+          },
+          {
+            "gate": "G1",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G2",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G3",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE"
+          }
+        ]
+      },
+      {
+        "mode": "repair",
+        "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE"
+          },
+          {
+            "gate": "G1",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G2",
+            "verdict": "FAIL"
+          },
+          {
+            "gate": "G3",
+            "verdict": "FAIL"
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE"
+          }
+        ]
+      },
+      {
+        "mode": "repair",
+        "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE"
+          },
+          {
+            "gate": "G1",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G2",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G3",
+            "verdict": "PASS"
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE"
+          }
+        ]
+      }
+    ],
+    "cleanup": {
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0,
+      "provenancePack": {
+        "id": "oracle-xYAVBU",
+        "sha256": "d93b8f2aa9c8fae14e14cc9a5c7d22d08e6ea9f9a9eb4b51a6f2d6525b5af8a9"
+      }
+    },
+    "finalizer": {
+      "headSha": "6ab6e36f813673756af157bc0de2265964c26071",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0,
+      "status": "PASS"
+    }
+  },
+  "hostedArtifacts": [
+    {
+      "id": 12863526140,
+      "name": "mmp061-model-public",
+      "archiveSha256": "36c64836d1226e56453d242088a8d3f54b80c1f34ad98b757111e2fc8b4ec629"
+    },
+    {
+      "id": 12863496238,
+      "name": "agent-workshop-public",
+      "archiveSha256": "c6ed607b7181ab57702c60a53d86a13fd2514711eb5327a86dc92f9e1bbe973d"
+    }
+  ]
+}
