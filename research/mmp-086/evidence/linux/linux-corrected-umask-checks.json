@@ -1,0 +1,45 @@
+{
+  "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "platform": "linux",
+  "node": "v22.23.1",
+  "umask": "0022",
+  "reason": "Original reference/differential permission controls require deliberately insecure 0755 directories; parent test harness had masked these to 0700 with umask 0077. No test/code changes.",
+  "checks": [
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "exitCode": 0,
+      "seconds": 17.28,
+      "counts": {
+        "tests": 56,
+        "pass": 56,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exitCode": 0,
+      "seconds": 49.338,
+      "counts": {
+        "tests": 122,
+        "pass": 122,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "command": "node --test packages/oracle/probes/qualification.test.mjs",
+      "exitCode": 0,
+      "seconds": 0.237,
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0
+      }
+    }
+  ]
+}

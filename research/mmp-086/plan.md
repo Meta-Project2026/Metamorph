@@ -24,3 +24,11 @@ rerun, paid repair, private G4, governance change or merge.
 Reproduction scripts are original synthetic diagnostics, not recovered model
 output. The positive fixture and original proof retain their existing provenance
 and notices. No Spec Kit generated files or active feature pointer are modified.
+
+Phase A outcome: all five steps executed. Original bytes/errors unavailable;
+root cause UNKNOWN. Eight actual paid-validator controls passed, original
+positive/negative/repair and six runtime controls passed, normal and independent
+final inventories 0/0/0. Fast checks and Node22/24 CI passed; initial harness
+umask failure is retained alongside its correction. Decision: NO_GO to request
+new paid authorization pending independent review and a concrete private-data
+decision. Encryption is proposed only, key absent/tests NOT_RUN. No Phase B work.

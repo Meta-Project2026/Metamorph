@@ -1,0 +1,125 @@
+{
+  "format": "mmp086-offline-matrix-v1",
+  "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "positive-public-replay",
+      "status": "PASS",
+      "commandExitCode": 0
+    },
+    {
+      "id": "strict-assignment",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "unresolved-module",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "implicit-any",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "malformed-source",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "commonjs-top-level-await",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "commonjs-import-meta",
+      "status": "PASS",
+      "commandExitCode": 1
+    },
+    {
+      "id": "sqlite-row-narrowing",
+      "status": "PASS",
+      "commandExitCode": 1
+    }
+  ],
+  "admission": [
+    {
+      "id": "missing-entrypoint",
+      "status": "PASS",
+      "classification": "ADMISSION_REJECTED_BEFORE_DOCKER",
+      "compilerDiagnostics": "NOT_RUN",
+      "execution": "REAL_SOURCE_ADMISSION_NO_EXECUTION"
+    },
+    {
+      "id": "disallowed-source-path",
+      "status": "PASS",
+      "classification": "ADMISSION_REJECTED_BEFORE_DOCKER",
+      "compilerDiagnostics": "NOT_RUN",
+      "execution": "REAL_SOURCE_ADMISSION_NO_EXECUTION"
+    }
+  ],
+  "receiptControls": [
+    {
+      "id": "outer-timeout",
+      "execution": "SYNTHETIC_ENVELOPE_ONLY",
+      "observedPairG1": {
+        "gate": "G1",
+        "verdict": "ERROR",
+        "executedTestIds": [],
+        "findingCodes": [
+          "TIMEOUT"
+        ]
+      },
+      "diagnosticStatus": "DIAGNOSTIC_UNAVAILABLE",
+      "coverage": {
+        "http": 0,
+        "sqlite": 0,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      }
+    },
+    {
+      "id": "outer-spawn-error",
+      "execution": "SYNTHETIC_ENVELOPE_ONLY",
+      "observedPairG1": {
+        "gate": "G1",
+        "verdict": "ERROR",
+        "executedTestIds": [],
+        "findingCodes": [
+          "ENVIRONMENT_ERROR"
+        ]
+      },
+      "diagnosticStatus": "DIAGNOSTIC_UNAVAILABLE",
+      "coverage": {
+        "http": 0,
+        "sqlite": 0,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      }
+    },
+    {
+      "id": "compiler-process-timeout",
+      "execution": "SYNTHETIC_ENVELOPE_ONLY",
+      "observedPairG1": {
+        "gate": "G1",
+        "verdict": "ERROR",
+        "executedTestIds": [],
+        "findingCodes": [
+          "ENVIRONMENT_ERROR"
+        ]
+      },
+      "diagnosticStatus": "DIAGNOSTIC_UNAVAILABLE",
+      "coverage": {
+        "http": 0,
+        "sqlite": 0,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      }
+    }
+  ],
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "metaRequests": 0,
+  "product": "NOT_ESTABLISHED"
+}

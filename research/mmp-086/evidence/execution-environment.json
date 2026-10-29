@@ -1,0 +1,24 @@
+{
+  "format": "mmp086-execution-environment-v1",
+  "codeHead": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "host": "Windows / Docker Desktop Linux amd64",
+  "trustedOrchestrator": {
+    "imageId": "sha256:04f2f0668d1ad2421b039ca9a963cbeccc4106c5e65341f5cc5665da0b8b65d6",
+    "node": "22.23.1",
+    "pnpm": "11.25.0",
+    "dockerCli": "29.9.2",
+    "nodeBaseDigest": "sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+    "dockerCliBaseDigest": "sha256:5e6baf67325a79f64ed3bed6863954d5e05d0f3d4e57cbdb14809346814bbfdb",
+    "gitBundleCheckout": true,
+    "credentialMapping": "NONE",
+    "siblingBindResolution": "named Linux volume mounted at daemon Mountpoint; unchanged PHP bind paths",
+    "socketScope": "trusted orchestrator only; no socket/reference/credential mount into candidate"
+  },
+  "candidatePolicy": "UNCHANGED_PINNED_NETWORK_OFF_NONROOT_READ_ONLY_WORKER",
+  "linuxFrozenInstallExitCode": 0,
+  "windowsFrozenInstallExitCode": 0,
+  "metaApiGet": 0,
+  "metaApiPost": 0,
+  "workflowDispatch": 0,
+  "workflowRerun": 0
+}

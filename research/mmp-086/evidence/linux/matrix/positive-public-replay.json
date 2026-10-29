@@ -1,0 +1,388 @@
+{
+  "id": "positive-public-replay",
+  "status": "PASS",
+  "execution": "ACTUAL_PAID_VALIDATOR_CLI_REAL_DOCKER_SYNTHETIC_INPUT",
+  "expectedCompilerCode": null,
+  "commandExitCode": 0,
+  "network": {
+    "format": "mmp086-network-guard-v1",
+    "sourceFetches": 1,
+    "blockedRequests": 0,
+    "metaProviderConstructed": false,
+    "metaCredentialMapped": false
+  },
+  "privateWorkspace": {
+    "exactCandidateInPrivatePack": true,
+    "trustedBuildReceiptInPrivatePack": true,
+    "compilerErrorsInPrivatePack": false,
+    "durablePreservation": "NOT_CONFIGURED"
+  },
+  "trial": {
+    "format": "mmp086-synthetic-transfer-v1",
+    "modelGeneration": "GENERATED",
+    "aiGeneration": "AI_GENERATION_NOT_RUN",
+    "generatedRequests": 0,
+    "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+    "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+    "attempts": [
+      {
+        "attemptId": "19bf22db-0202-4066-a35f-665c2f472c81",
+        "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+        "gates": [
+          {
+            "gate": "G0",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [],
+            "findingCodes": [
+              "G0_NOT_ESTABLISHED"
+            ]
+          },
+          {
+            "gate": "G1",
+            "verdict": "PASS",
+            "executedTestIds": [
+              "workshop-business:typecheck",
+              "workshop-business:build",
+              "workshop-rejected:typecheck",
+              "workshop-rejected:build",
+              "workshop-capacity:typecheck",
+              "workshop-capacity:build"
+            ],
+            "findingCodes": []
+          },
+          {
+            "gate": "G2",
+            "verdict": "PASS",
+            "executedTestIds": [
+              "workshop-business:step-0",
+              "workshop-business:step-1",
+              "workshop-business:step-2",
+              "workshop-business:step-3",
+              "workshop-business:step-4",
+              "workshop-business:step-5",
+              "workshop-rejected:step-0",
+              "workshop-rejected:step-1",
+              "workshop-rejected:step-2",
+              "workshop-rejected:step-3",
+              "workshop-rejected:step-4",
+              "workshop-capacity:step-0",
+              "workshop-capacity:step-1",
+              "workshop-capacity:step-2",
+              "workshop-capacity:step-3",
+              "workshop-capacity:step-4",
+              "workshop-capacity:step-5"
+            ],
+            "findingCodes": []
+          },
+          {
+            "gate": "G3",
+            "verdict": "PASS",
+            "executedTestIds": [
+              "workshop-business:initial",
+              "workshop-business:step-0",
+              "workshop-business:step-1",
+              "workshop-business:step-2",
+              "workshop-business:step-3",
+              "workshop-business:step-4",
+              "workshop-business:step-5",
+              "workshop-rejected:initial",
+              "workshop-rejected:step-0",
+              "workshop-rejected:step-1",
+              "workshop-rejected:step-2",
+              "workshop-rejected:step-3",
+              "workshop-rejected:step-4",
+              "workshop-capacity:initial",
+              "workshop-capacity:step-0",
+              "workshop-capacity:step-1",
+              "workshop-capacity:step-2",
+              "workshop-capacity:step-3",
+              "workshop-capacity:step-4",
+              "workshop-capacity:step-5"
+            ],
+            "findingCodes": []
+          },
+          {
+            "gate": "G4",
+            "verdict": "INCONCLUSIVE",
+            "executedTestIds": [
+              "workshop-business:http-positive",
+              "workshop-business:http-key-order",
+              "workshop-business:http-status-mutant",
+              "workshop-business:http-type-mutant",
+              "workshop-business:http-missing-mutant",
+              "workshop-business:http-order-mutant",
+              "workshop-business:db-positive",
+              "workshop-business:db-row-mutant",
+              "workshop-business:db-sequence-mutant",
+              "workshop-rejected:http-positive",
+              "workshop-rejected:http-key-order",
+              "workshop-rejected:http-status-mutant",
+              "workshop-rejected:http-type-mutant",
+              "workshop-rejected:http-missing-mutant",
+              "workshop-rejected:http-order-mutant",
+              "workshop-rejected:db-positive",
+              "workshop-rejected:db-row-mutant",
+              "workshop-rejected:db-sequence-mutant",
+              "workshop-capacity:http-positive",
+              "workshop-capacity:http-key-order",
+              "workshop-capacity:http-status-mutant",
+              "workshop-capacity:http-type-mutant",
+              "workshop-capacity:http-missing-mutant",
+              "workshop-capacity:http-order-mutant",
+              "workshop-capacity:db-positive",
+              "workshop-capacity:db-row-mutant",
+              "workshop-capacity:db-sequence-mutant"
+            ],
+            "findingCodes": [
+              "HELD_OUT_NOT_RUN"
+            ]
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "b7b3acc9-ff15-43b9-9d3d-a0d0ca38b216",
+            "packs": [
+              {
+                "id": "oracle-bA7m0m",
+                "sha256": "99f8243d74e6c0bdcf80c0264b57418aeac8683c8a9f87d5afefe5dc55143262"
+              },
+              {
+                "id": "oracle-kIlHHt",
+                "sha256": "6969e6725cf2f97fbb4627a12732e3e8daadb7b8401c2e5e2dd55a5bcdf07055"
+              }
+            ],
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "targetLifetimePolicyMs": 180000,
+            "compilerDiagnostics": {
+              "format": "mmp082-g1-diagnostics-v1",
+              "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "attemptId": "19bf22db-0202-4066-a35f-665c2f472c81",
+              "pairId": "b7b3acc9-ff15-43b9-9d3d-a0d0ca38b216",
+              "g1Verdict": "PASS",
+              "status": "DIAGNOSTIC_UNAVAILABLE",
+              "entries": [],
+              "errorCount": null,
+              "truncated": false
+            },
+            "gates": [
+              {
+                "gate": "G2",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-business:step-0",
+                  "workshop-business:step-1",
+                  "workshop-business:step-2",
+                  "workshop-business:step-3",
+                  "workshop-business:step-4",
+                  "workshop-business:step-5"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G3",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-business:initial",
+                  "workshop-business:step-0",
+                  "workshop-business:step-1",
+                  "workshop-business:step-2",
+                  "workshop-business:step-3",
+                  "workshop-business:step-4",
+                  "workshop-business:step-5"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G4",
+                "verdict": "INCONCLUSIVE",
+                "executedTestIds": [
+                  "http-positive",
+                  "http-key-order",
+                  "http-status-mutant",
+                  "http-type-mutant",
+                  "http-missing-mutant",
+                  "http-order-mutant",
+                  "db-positive",
+                  "db-row-mutant",
+                  "db-sequence-mutant"
+                ],
+                "findingCodes": [
+                  "HELD_OUT_NOT_RUN"
+                ]
+              }
+            ]
+          },
+          {
+            "scenarioId": "workshop-rejected",
+            "pairId": "6c57b2ca-0c02-4bb0-b6e9-9e1c834ca916",
+            "packs": [
+              {
+                "id": "oracle-PtvLPD",
+                "sha256": "22b9f4d6eff6151e55c2fcac41d92e7bbea3c7c1cbfff518596e9e3a02802b9f"
+              },
+              {
+                "id": "oracle-PudcHN",
+                "sha256": "3c74cf653eec1122e9ec1698338388a509b59f183eaededf5ad55d1a8e8a691b"
+              }
+            ],
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "targetLifetimePolicyMs": 180000,
+            "compilerDiagnostics": {
+              "format": "mmp082-g1-diagnostics-v1",
+              "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "attemptId": "19bf22db-0202-4066-a35f-665c2f472c81",
+              "pairId": "6c57b2ca-0c02-4bb0-b6e9-9e1c834ca916",
+              "g1Verdict": "PASS",
+              "status": "DIAGNOSTIC_UNAVAILABLE",
+              "entries": [],
+              "errorCount": null,
+              "truncated": false
+            },
+            "gates": [
+              {
+                "gate": "G2",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-rejected:step-0",
+                  "workshop-rejected:step-1",
+                  "workshop-rejected:step-2",
+                  "workshop-rejected:step-3",
+                  "workshop-rejected:step-4"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G3",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-rejected:initial",
+                  "workshop-rejected:step-0",
+                  "workshop-rejected:step-1",
+                  "workshop-rejected:step-2",
+                  "workshop-rejected:step-3",
+                  "workshop-rejected:step-4"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G4",
+                "verdict": "INCONCLUSIVE",
+                "executedTestIds": [
+                  "http-positive",
+                  "http-key-order",
+                  "http-status-mutant",
+                  "http-type-mutant",
+                  "http-missing-mutant",
+                  "http-order-mutant",
+                  "db-positive",
+                  "db-row-mutant",
+                  "db-sequence-mutant"
+                ],
+                "findingCodes": [
+                  "HELD_OUT_NOT_RUN"
+                ]
+              }
+            ]
+          },
+          {
+            "scenarioId": "workshop-capacity",
+            "pairId": "98efc8d5-112f-44bc-b409-63b4d646d182",
+            "packs": [
+              {
+                "id": "oracle-Zj8cAV",
+                "sha256": "335fa0f1b7d89f5bcead12cf9a26f15b4741e0e2239e2813cbb6a4455d28aba2"
+              },
+              {
+                "id": "oracle-k27su0",
+                "sha256": "8089af7204b2ae6d89e8b251c14f8cacb7bbc4b159050c877854529fb4731116"
+              }
+            ],
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "targetLifetimePolicyMs": 180000,
+            "compilerDiagnostics": {
+              "format": "mmp082-g1-diagnostics-v1",
+              "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "attemptId": "19bf22db-0202-4066-a35f-665c2f472c81",
+              "pairId": "98efc8d5-112f-44bc-b409-63b4d646d182",
+              "g1Verdict": "PASS",
+              "status": "DIAGNOSTIC_UNAVAILABLE",
+              "entries": [],
+              "errorCount": null,
+              "truncated": false
+            },
+            "gates": [
+              {
+                "gate": "G2",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-capacity:step-0",
+                  "workshop-capacity:step-1",
+                  "workshop-capacity:step-2",
+                  "workshop-capacity:step-3",
+                  "workshop-capacity:step-4",
+                  "workshop-capacity:step-5"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G3",
+                "verdict": "PASS",
+                "executedTestIds": [
+                  "workshop-capacity:initial",
+                  "workshop-capacity:step-0",
+                  "workshop-capacity:step-1",
+                  "workshop-capacity:step-2",
+                  "workshop-capacity:step-3",
+                  "workshop-capacity:step-4",
+                  "workshop-capacity:step-5"
+                ],
+                "findingCodes": []
+              },
+              {
+                "gate": "G4",
+                "verdict": "INCONCLUSIVE",
+                "executedTestIds": [
+                  "http-positive",
+                  "http-key-order",
+                  "http-status-mutant",
+                  "http-type-mutant",
+                  "http-missing-mutant",
+                  "http-order-mutant",
+                  "db-positive",
+                  "db-row-mutant",
+                  "db-sequence-mutant"
+                ],
+                "findingCodes": [
+                  "HELD_OUT_NOT_RUN"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "publicG1": "PASS",
+    "publicG2": "PASS",
+    "publicG3": "PASS",
+    "G0": "INCONCLUSIVE",
+    "G4": "INCONCLUSIVE",
+    "product": "NOT_ESTABLISHED",
+    "blockers": [],
+    "cleanup": {
+      "status": "VERIFIED_ZERO_RESOURCES",
+      "containers": 0,
+      "volumes": 0,
+      "emergencyRemoved": 0
+    }
+  }
+}

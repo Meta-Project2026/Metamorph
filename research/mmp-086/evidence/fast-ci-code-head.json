@@ -1,0 +1,107 @@
+{
+  "runId": "40937423202",
+  "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40937423202",
+  "headSha": "b421465307d4dde3101ccbc4309660b5884d297e",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "quick (24)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40937423202/job/123671558738",
+      "tap": {
+        "Run pnpm test": {
+          "tests": 439,
+          "pass": 436,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 3
+        },
+        "Oracle reference tests": {
+          "tests": 56,
+          "pass": 56,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Target-worker tests": {
+          "tests": 69,
+          "pass": 69,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Differential tests": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "PHP qualification sanitizer and recipe tests": {
+          "tests": 2,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Workshop-audit tests": {
+          "tests": 54,
+          "pass": 54,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "name": "quick (22)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40937423202/job/123671559401",
+      "tap": {
+        "Run pnpm test": {
+          "tests": 439,
+          "pass": 436,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 3
+        },
+        "Oracle reference tests": {
+          "tests": 56,
+          "pass": 56,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Target-worker tests": {
+          "tests": 69,
+          "pass": 69,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Differential tests": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "PHP qualification sanitizer and recipe tests": {
+          "tests": 2,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        },
+        "Workshop-audit tests": {
+          "tests": 54,
+          "pass": 54,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0
+        }
+      }
+    }
+  ]
+}
