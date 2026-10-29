@@ -67,6 +67,11 @@ test("whole public source fits official strict structured request, no tool/repla
   assert.ok(Buffer.byteLength(body.messages[1].content) > 18000);
   assert.equal(body.model, "muse-spark-1.3");
   assert.equal(body.max_completion_tokens, 16384);
+  // Muse Spark rejects reasoning_effort=none with HTTP 400 (Meta docs).
+  assert.equal(META_MIGRATION_POLICY.version, "mmp061-meta-manual-v2");
+  assert.equal(META_MIGRATION_POLICY.reasoningEffort, "low");
+  assert.equal(body.reasoning_effort, META_MIGRATION_POLICY.reasoningEffort);
+  assert.ok(["minimal", "low", "medium", "high", "xhigh", "max"].includes(body.reasoning_effort));
   assert.equal(body.response_format.json_schema.strict, true);
   assert.equal(
     body.response_format.json_schema.schema.additionalProperties,
@@ -127,6 +132,13 @@ test("API metadata alone determines usage/identity; estimate never means settled
     b.response.usage.estimatedCostUsd > a.response.usage.estimatedCostUsd,
   );
   assert.equal(a.candidateSha, b.candidateSha);
+  // A nonzero reasoning-token count is allowed and already part of total
+  // completion tokens; it must not be added a second time to billing.
+  const reasoned = envelope();
+  reasoned.usage.completion_tokens_details.reasoning_tokens = 40;
+  const c = decodeMetaMigration(JSON.stringify(reasoned), 12);
+  assert.equal(c.response.usage.outputTokens, 100);
+  assert.equal(c.response.usage.estimatedCostUsd, a.response.usage.estimatedCostUsd);
 });
 for (const [name, mutate, code] of [
   [
