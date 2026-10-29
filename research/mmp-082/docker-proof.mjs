@@ -6,10 +6,10 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SOURCE } from "@metamorph/oracle";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { validateGeneratedMigration } from "../../packages/agent-real/src/migration-trial.mjs";
 import { atomicJson } from "../../packages/differential/src/private-run.mjs";
+import { SOURCE } from "../../packages/oracle/dist/index.js";
 import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));

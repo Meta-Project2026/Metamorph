@@ -2,6 +2,8 @@
 
 Issue: <https://github.com/Meta-Project2026/Metamorph/issues/82>.
 Base main, freshly fetched: `d21376747c7147043ca618e149fac87c0df80111`.
+Code commit: `a17efd8a95e42abbfabcc4489fe03e950907e413`.
+PR: <https://github.com/Meta-Project2026/Metamorph/pull/83>.
 Scope is future observability only. Product remains **NOT_ESTABLISHED**.
 Implementation/review contract: [task-contract.md](task-contract.md).
 
@@ -117,10 +119,10 @@ formatting and a control-regex lint violation; corrected before final validation
 | `pnpm --filter @metamorph/target-worker test` | PASS, exit 0; 69/69 |
 | `pnpm --filter @metamorph/differential test` | PASS, exit 0; 122 tests: 77 passed, 45 skipped on Windows, 0 failed |
 | `pnpm exec biome check research/mmp-082` | PASS after formatting, exit 0 |
-| Original public positive/negative Docker and Oracle controls | NOT_RUN on this branch yet; hosted proof pending |
-| New synthetic compiler control through actual trial validator | NOT_RUN on this branch yet; hosted proof pending |
-| Hosted Node 22/24 Fast CI | NOT_RUN on this branch yet; PR pending |
-| Final hosted cleanup 0/0, emergencyRemoved=0 | NOT_RUN on this branch yet; proof pending |
+| Original public positive/negative Docker and Oracle controls | PASS_SCOPED, [40905449684](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905449684); original proof exit 0 |
+| New synthetic compiler control through actual trial validator | First driver ERROR before execution: research directory could not resolve workspace package import; corrected to explicit built-module path, new offline run pending |
+| Hosted Node 22/24 Fast CI | PASS on both versions, [40905453375](https://github.com/Meta-Project2026/Metamorph/actions/runs/40905453375), code SHA above |
+| Final hosted cleanup 0/0, emergencyRemoved=0 | PASS, original proof completion and independent finalizer in 40905449684 |
 | Real Meta generation, repair, regeneration, GET/POST, paid rerun | NOT_RUN; prohibited |
 
 The existing manual `agent-workshop-compose.yml` gains only the synthetic
@@ -132,6 +134,18 @@ GitHub source archive; every other direct fetch is rejected and counted.
 Local command exit statuses and TAP counters: [local-checks.json](local-checks.json).
 Windows skips are not represented as executed tests; Linux CI remains required
 to cover the POSIX-only admission and filesystem cases.
+Linux Fast CI completed those cases: root 435 PASS / 3 SKIP on each Node version;
+reference 56/56, target 69/69, differential 122/122, qualification sanitizer 2/2,
+workshop audit 54/54. Root skips are one Windows-only case and two fixtures
+requiring root/chown; they remain SKIP, not PASS.
+
+First hosted manual run 40905449684 is overall **FAIL**, despite the original
+proof succeeding: the new research driver failed to import `@metamorph/oracle`
+from outside a workspace package before any compiler control execution. This is
+a harness **ERROR / NOT_RUN**, not a candidate FAIL or a parser result. The import
+now uses the explicit trusted `packages/oracle/dist/index.js`; a fresh offline
+dispatch on the corrected commit is required. No workflow rerun or paid operation
+was used. The first run's public artifacts are retained under [evidence](evidence/40905449684).
 
 Unchanged: trusted recipe pin
 `f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3`,

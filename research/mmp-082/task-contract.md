@@ -1,9 +1,9 @@
 # MMP-082 — Safe G1 Compiler Diagnostics (Offline Only)
 
-**Исполнитель:** `sol 6.1`  
-**Effort:** `xhigh`  
-**Репозиторий:** `Meta-Project2026/Metamorph`  
-**Issue:** https://github.com/Meta-Project2026/Metamorph/issues/82  
+**Исполнитель:** `sol 6.1`
+**Effort:** `xhigh`
+**Репозиторий:** `Meta-Project2026/Metamorph`
+**Issue:** https://github.com/Meta-Project2026/Metamorph/issues/82
 **Текущая опора:** `main` (перед работой получи актуальный SHA и проверь отсутствие новых изменений, связанных с задачей).
 
 ## Миссия
