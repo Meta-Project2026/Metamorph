@@ -1,11 +1,11 @@
 {
+  "format": "mmp083-public-artifact-custody-v1",
   "records": [
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 122486167588,
+      "runId": 40588295315,
       "createdAt": "2026-10-27T21:43:25Z",
-      "driverSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
-      "artifactId": 12771614054,
-      "zipBytes": 705,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
@@ -41,32 +41,32 @@
           "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
         }
       },
-      "jobId": 122486167588,
-      "members": [
-        {
-          "sha256": "b3cb3112b58d2bf125cad698d66183ac21086bf07141fba7b388d90219a2d09c",
-          "name": "regressions.json",
-          "size": 528
-        },
-        {
-          "sha256": "b372215e1af3ba1d6302f715fc358e72df3e98be6e96d8379adedf49540a1f99",
-          "name": "finalizer.json",
-          "size": 166
-        }
-      ],
-      "zipSha256": "f49ac3e644dff683fd7f8135de2f37248a3df2b81ecbb5fd1717ad7cc4cae523",
+      "driverSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+      "attempt": 1,
       "artifactName": "workshop-regressions-public",
       "expiresAt": "2026-11-03T21:43:25Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40588295315
+      "zipBytes": 705,
+      "artifactId": 12771614054,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "f49ac3e644dff683fd7f8135de2f37248a3df2b81ecbb5fd1717ad7cc4cae523",
+      "members": [
+        {
+          "sha256": "b3cb3112b58d2bf125cad698d66183ac21086bf07141fba7b388d90219a2d09c",
+          "name": "regressions.json",
+          "size": 528
+        },
+        {
+          "sha256": "b372215e1af3ba1d6302f715fc358e72df3e98be6e96d8379adedf49540a1f99",
+          "name": "finalizer.json",
+          "size": 166
+        }
+      ]
     },
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 122489125401,
+      "runId": 40588295315,
       "createdAt": "2026-10-27T21:46:52Z",
-      "driverSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
-      "artifactId": 12773531413,
-      "zipBytes": 705,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
@@ -102,7 +102,14 @@
           "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
         }
       },
-      "jobId": 122489125401,
+      "driverSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+      "attempt": 2,
+      "artifactName": "workshop-regressions-public",
+      "expiresAt": "2026-11-03T21:46:51Z",
+      "zipBytes": 705,
+      "artifactId": 12773531413,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "fcb122c18a57131f9b3805738c829deb6e4b754432df323b47593b101046f325",
       "members": [
         {
           "sha256": "b3cb3112b58d2bf125cad698d66183ac21086bf07141fba7b388d90219a2d09c",
@@ -114,20 +121,80 @@
           "name": "finalizer.json",
           "size": 166
         }
-      ],
-      "zipSha256": "fcb122c18a57131f9b3805738c829deb6e4b754432df323b47593b101046f325",
-      "artifactName": "workshop-regressions-public",
-      "expiresAt": "2026-11-03T21:46:51Z",
-      "apiDigestMatches": true,
-      "attempt": 2,
-      "runId": 40588295315
+      ]
     },
     {
+      "jobId": 122489128400,
+      "runId": 40588295315,
+      "createdAt": "2026-10-27T21:44:17Z",
+      "apiDigestMatches": true,
+      "observations": {
+        "completion.json": {
+          "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+          "provenancePackSha": "e08e853540a03cd4552717561d118dcb7099908c2b2d3d0958d9526d538cda5c",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "status": "PASS_SCOPED",
+          "externalRetention": "EXTERNAL_RETENTION_NOT_RUN"
+        },
+        "finalizer.json": {
+          "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "emergencyRemoved": 0,
+          "status": "PASS"
+        },
+        "summary.json": {
+          "source": {
+            "repository": "tanjilaafsarirubina/car-workshop",
+            "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+            "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+            "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+            "clock": "2026-10-27 12:00:00",
+            "initialSha256": "4dad8da4cd93e4a7386c75898113ede6e9875fe2adee9fb9d4482da0cae696fb"
+          },
+          "product": "NOT_ESTABLISHED",
+          "coverage": "ALL_17_PUBLIC_STEPS_PER_PASS",
+          "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+          "G0": "NOT_RUN",
+          "headSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+          "targetImage": "sha256:6b1eaf2537de953b37a36034088bf59b5404e2d35a539a8439968549dba970e6",
+          "phpImage": "sha256:f8ff9b6834d89d77127b4621473d76db16b56ca051a494612cdfb2e98efb1f2d"
+        }
+      },
+      "driverSha": "a14429ca9d5ac565dbb618e9f9c26297c9ead30b",
+      "attempt": 2,
+      "artifactName": "workshop-public",
+      "expiresAt": "2026-11-03T21:44:17Z",
+      "zipBytes": 2766,
+      "artifactId": 12773920415,
       "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "de1f84f1f3a01d0a243105efb8f097c076a00b63d03e9c083201aa2a0c02f855",
+      "members": [
+        {
+          "sha256": "2285907c2fa5a8d1cd16745b5769a619dced140b8f72f52b171ef652e366520f",
+          "size": 12726,
+          "name": "summary.json"
+        },
+        {
+          "sha256": "e7fcaa5bc53a9b75a577b7228d16965421ac2c936776cbd239f13872560dce2c",
+          "size": 271,
+          "name": "completion.json"
+        },
+        {
+          "sha256": "b3b4af2a4cbdb447325909a6adf8a07bf43a64afb05e77420191cda7a559e7ba",
+          "size": 165,
+          "name": "finalizer.json"
+        }
+      ]
+    },
+    {
+      "jobId": 123046127685,
+      "runId": 40753497017,
       "createdAt": "2026-10-28T19:27:58Z",
-      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
-      "artifactId": 12844782605,
-      "zipBytes": 768,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "attemptId": "40753497017-1-0-2",
@@ -163,7 +230,14 @@
           "imageId": "sha256:f9b91b46ae54c8c10b4dab59a92a9c0779aacde9bf5503313fb8bd48ec8ff434"
         }
       },
-      "jobId": 123046127685,
+      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+      "attempt": 1,
+      "artifactName": "mmp034-0-2",
+      "expiresAt": "2026-11-04T19:27:57Z",
+      "zipBytes": 768,
+      "artifactId": 12844782605,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "182050ba3320514bb21e53a4dd47b8690b5f6875345091b6ba3dc88a820f1cb2",
       "members": [
         {
           "sha256": "0617a182c87adbc9e9e1c36982b10aada0b43972ca623c07185a5d33f566cf0c",
@@ -175,20 +249,13 @@
           "name": "finalizer.json",
           "size": 281
         }
-      ],
-      "zipSha256": "182050ba3320514bb21e53a4dd47b8690b5f6875345091b6ba3dc88a820f1cb2",
-      "artifactName": "mmp034-0-2",
-      "expiresAt": "2026-11-04T19:27:57Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40753497017
+      ]
     },
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 123046128517,
+      "runId": 40753497017,
       "createdAt": "2026-10-28T19:28:17Z",
-      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
-      "artifactId": 12845491820,
-      "zipBytes": 770,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "attemptId": "40753497017-1-0-1",
@@ -224,7 +291,14 @@
           "imageId": "sha256:2d1de69fcf87d7e14d640a8620b1871a89e67db751b47190209e7562237f3439"
         }
       },
-      "jobId": 123046128517,
+      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+      "attempt": 1,
+      "artifactName": "mmp034-0-1",
+      "expiresAt": "2026-11-04T19:28:16Z",
+      "zipBytes": 770,
+      "artifactId": 12845491820,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "df7209b8bb4f15d785ddc6fa73910bf27226d449030a7a0eb0a43fcbf34f0ad5",
       "members": [
         {
           "sha256": "63b63255443be286b959b7e752f49f0a76e702225704487b85197d48f542f901",
@@ -236,20 +310,13 @@
           "name": "finalizer.json",
           "size": 281
         }
-      ],
-      "zipSha256": "df7209b8bb4f15d785ddc6fa73910bf27226d449030a7a0eb0a43fcbf34f0ad5",
-      "artifactName": "mmp034-0-1",
-      "expiresAt": "2026-11-04T19:28:16Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40753497017
+      ]
     },
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 123046128425,
+      "runId": 40753497017,
       "createdAt": "2026-10-28T19:33:32Z",
-      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
-      "artifactId": 12846085649,
-      "zipBytes": 768,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "attemptId": "40753497017-1-1-2",
@@ -285,7 +352,14 @@
           "imageId": "sha256:bacd2d12f00dcac8bc3fd9818c0ece1f1986ea6a4241ad3302318144ec1d7a36"
         }
       },
-      "jobId": 123046128425,
+      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+      "attempt": 1,
+      "artifactName": "mmp034-1-2",
+      "expiresAt": "2026-11-04T19:33:31Z",
+      "zipBytes": 768,
+      "artifactId": 12846085649,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "b5e4669e69ecd4179e8928a68fa755ba66a86dd61e9e3a1b007dffd8669e5ea5",
       "members": [
         {
           "sha256": "3fd7599e81eed1dd173b68eb9d46e937720173fef12caa50c1a5b2c19c52d7b5",
@@ -297,20 +371,13 @@
           "name": "finalizer.json",
           "size": 281
         }
-      ],
-      "zipSha256": "b5e4669e69ecd4179e8928a68fa755ba66a86dd61e9e3a1b007dffd8669e5ea5",
-      "artifactName": "mmp034-1-2",
-      "expiresAt": "2026-11-04T19:33:31Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40753497017
+      ]
     },
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 123046128746,
+      "runId": 40753497017,
       "createdAt": "2026-10-28T19:35:00Z",
-      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
-      "artifactId": 12846575028,
-      "zipBytes": 766,
+      "apiDigestMatches": true,
       "observations": {
         "finalizer.json": {
           "attemptId": "40753497017-1-1-1",
@@ -346,7 +413,14 @@
           "imageId": "sha256:32f295b663a081edd9771d23b23966fd9a2b5387a194b22e219a2f3c9f794489"
         }
       },
-      "jobId": 123046128746,
+      "driverSha": "c86bce6e5d70f264d2b236d6654582e5b553a7fc",
+      "attempt": 1,
+      "artifactName": "mmp034-1-1",
+      "expiresAt": "2026-11-04T19:34:59Z",
+      "zipBytes": 766,
+      "artifactId": 12846575028,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "844015d0f9383ea9d913dbffc8966594cc6fb86734ed172f15a95bae640be939",
       "members": [
         {
           "sha256": "98bb37c543cce0469575b0f8f7a01189019642cfc4c60210594bde317277bb17",
@@ -358,38 +432,36 @@
           "name": "finalizer.json",
           "size": 281
         }
-      ],
-      "zipSha256": "844015d0f9383ea9d913dbffc8966594cc6fb86734ed172f15a95bae640be939",
-      "artifactName": "mmp034-1-1",
-      "expiresAt": "2026-11-04T19:34:59Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40753497017
+      ]
     },
     {
-      "provenance": "HISTORICAL_RECEIPT",
+      "jobId": 123565110414,
+      "runId": 40907197167,
       "createdAt": "2026-10-29T16:04:56Z",
-      "driverSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
-      "artifactId": 12912557116,
-      "zipBytes": 5458,
+      "apiDigestMatches": true,
       "observations": {
         "compiler-control.json": {
-          "execution": "SYNTHETIC_CANDIDATE_REAL_DOCKER",
-          "metaRequests": 0,
-          "status": "PASS",
+          "g1": "FAIL",
           "cleanup": {
             "status": "VERIFIED_ZERO_RESOURCES",
             "containers": 0,
             "volumes": 0,
             "emergencyRemoved": 0
           },
-          "g1": "FAIL"
+          "execution": "SYNTHETIC_CANDIDATE_REAL_DOCKER",
+          "metaRequests": 0,
+          "status": "PASS"
+        },
+        "finalizer.json": {
+          "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "emergencyRemoved": 0,
+          "status": "PASS"
         },
         "summary.json": {
-          "aiGeneration": "AI_GENERATION_NOT_RUN",
-          "phpImage": "sha256:799cc725cdcac59b120be07d0f8a3e0715aab963bb3a163fb36f9113289815fc",
-          "targetImage": "sha256:427137f825c810f1345b9de234a4d4f2f8d01058f3eddd378ffa0f815936e07a",
-          "status": "PARTIAL",
           "completion": {
             "cleanup": "VERIFIED_ZERO_RESOURCES",
             "inventory": {
@@ -402,15 +474,59 @@
               "sha256": "9941b20cd3103387443aeea6d4490d153b3cbcbdc70c460360b9f2d034fc4868"
             }
           },
+          "status": "PARTIAL",
+          "aiGeneration": "AI_GENERATION_NOT_RUN",
+          "liveProvider": "NOT_RUN",
+          "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
+          "runtimeControls": [
+            {
+              "id": "candidate-aux-enospc",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            },
+            {
+              "id": "candidate-wal-full",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            },
+            {
+              "id": "corrupt-db-rejected",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            },
+            {
+              "id": "hung-socket-timeout",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            },
+            {
+              "id": "process-crash",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            },
+            {
+              "id": "cancel-readiness",
+              "outcome": "PASS",
+              "cleanup": "VERIFIED_ZERO_RESOURCES",
+              "execution": "REAL_DOCKER"
+            }
+          ],
+          "errorCode": "EVIDENCE_ERROR",
           "attempts": [
             {
-              "mode": "known-good",
-              "coverage": {
-                "http": 0,
-                "sqlite": 0,
-                "requiredHttp": 17,
-                "requiredSqlite": 20
-              },
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "pairs": [
+                {
+                  "scenarioId": "workshop-business",
+                  "pairId": "7984a474-f622-4682-93e2-7a5615abdaf1",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                }
+              ],
               "gates": [
                 {
                   "gate": "G0",
@@ -454,138 +570,16 @@
                   ]
                 }
               ],
-              "pairs": [
-                {
-                  "scenarioId": "workshop-business",
-                  "pairId": "7984a474-f622-4682-93e2-7a5615abdaf1",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                }
-              ],
-              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334"
-            },
-            {
-              "mode": "repair",
+              "mode": "known-good",
               "coverage": {
-                "http": 17,
-                "sqlite": 20,
+                "http": 0,
+                "sqlite": 0,
                 "requiredHttp": 17,
                 "requiredSqlite": 20
-              },
-              "gates": [
-                {
-                  "gate": "G0",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [],
-                  "findingCodes": [
-                    "G0_NOT_ESTABLISHED"
-                  ]
-                },
-                {
-                  "gate": "G1",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:typecheck",
-                    "workshop-business:build",
-                    "workshop-rejected:typecheck",
-                    "workshop-rejected:build",
-                    "workshop-capacity:typecheck",
-                    "workshop-capacity:build"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G2",
-                  "verdict": "FAIL",
-                  "executedTestIds": [
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": [
-                    "HTTP_JSON_LENGTH"
-                  ]
-                },
-                {
-                  "gate": "G3",
-                  "verdict": "FAIL",
-                  "executedTestIds": [
-                    "workshop-business:initial",
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:initial",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:initial",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": [
-                    "HTTP_JSON_LENGTH",
-                    "DB_STATE"
-                  ]
-                },
-                {
-                  "gate": "G4",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [
-                    "workshop-business:http-positive",
-                    "workshop-business:http-key-order",
-                    "workshop-business:http-status-mutant",
-                    "workshop-business:http-type-mutant",
-                    "workshop-business:http-missing-mutant",
-                    "workshop-business:http-order-mutant",
-                    "workshop-business:db-positive",
-                    "workshop-business:db-row-mutant",
-                    "workshop-business:db-sequence-mutant",
-                    "workshop-rejected:http-positive",
-                    "workshop-rejected:http-key-order",
-                    "workshop-rejected:http-status-mutant",
-                    "workshop-rejected:http-type-mutant",
-                    "workshop-rejected:http-missing-mutant",
-                    "workshop-rejected:http-order-mutant",
-                    "workshop-rejected:db-positive",
-                    "workshop-rejected:db-row-mutant",
-                    "workshop-rejected:db-sequence-mutant",
-                    "workshop-capacity:http-positive",
-                    "workshop-capacity:http-key-order",
-                    "workshop-capacity:http-status-mutant",
-                    "workshop-capacity:http-type-mutant",
-                    "workshop-capacity:http-missing-mutant",
-                    "workshop-capacity:http-order-mutant",
-                    "workshop-capacity:db-positive",
-                    "workshop-capacity:db-row-mutant",
-                    "workshop-capacity:db-sequence-mutant"
-                  ],
-                  "findingCodes": [
-                    "HELD_OUT_NOT_RUN"
-                  ]
-                }
-              ],
+              }
+            },
+            {
+              "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
               "pairs": [
                 {
                   "scenarioId": "workshop-business",
@@ -603,402 +597,6 @@
                   "cleanup": "VERIFIED_ZERO_RESOURCES"
                 }
               ],
-              "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121"
-            },
-            {
-              "mode": "repair",
-              "coverage": {
-                "http": 17,
-                "sqlite": 20,
-                "requiredHttp": 17,
-                "requiredSqlite": 20
-              },
-              "gates": [
-                {
-                  "gate": "G0",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [],
-                  "findingCodes": [
-                    "G0_NOT_ESTABLISHED"
-                  ]
-                },
-                {
-                  "gate": "G1",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:typecheck",
-                    "workshop-business:build",
-                    "workshop-rejected:typecheck",
-                    "workshop-rejected:build",
-                    "workshop-capacity:typecheck",
-                    "workshop-capacity:build"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G2",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G3",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:initial",
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:initial",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:initial",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G4",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [
-                    "workshop-business:http-positive",
-                    "workshop-business:http-key-order",
-                    "workshop-business:http-status-mutant",
-                    "workshop-business:http-type-mutant",
-                    "workshop-business:http-missing-mutant",
-                    "workshop-business:http-order-mutant",
-                    "workshop-business:db-positive",
-                    "workshop-business:db-row-mutant",
-                    "workshop-business:db-sequence-mutant",
-                    "workshop-rejected:http-positive",
-                    "workshop-rejected:http-key-order",
-                    "workshop-rejected:http-status-mutant",
-                    "workshop-rejected:http-type-mutant",
-                    "workshop-rejected:http-missing-mutant",
-                    "workshop-rejected:http-order-mutant",
-                    "workshop-rejected:db-positive",
-                    "workshop-rejected:db-row-mutant",
-                    "workshop-rejected:db-sequence-mutant",
-                    "workshop-capacity:http-positive",
-                    "workshop-capacity:http-key-order",
-                    "workshop-capacity:http-status-mutant",
-                    "workshop-capacity:http-type-mutant",
-                    "workshop-capacity:http-missing-mutant",
-                    "workshop-capacity:http-order-mutant",
-                    "workshop-capacity:db-positive",
-                    "workshop-capacity:db-row-mutant",
-                    "workshop-capacity:db-sequence-mutant"
-                  ],
-                  "findingCodes": [
-                    "HELD_OUT_NOT_RUN"
-                  ]
-                }
-              ],
-              "pairs": [
-                {
-                  "scenarioId": "workshop-business",
-                  "pairId": "ab135801-810b-4fce-9767-807dab43573e",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-rejected",
-                  "pairId": "719855b1-7aeb-4593-b4b4-136190bf6b02",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-capacity",
-                  "pairId": "056dfe89-b875-44be-ab96-c11ec50a4976",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                }
-              ],
-              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334"
-            }
-          ],
-          "liveProvider": "NOT_RUN",
-          "errorCode": "EVIDENCE_ERROR",
-          "runtimeControls": [
-            {
-              "id": "candidate-aux-enospc",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            },
-            {
-              "id": "candidate-wal-full",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            },
-            {
-              "id": "corrupt-db-rejected",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            },
-            {
-              "id": "hung-socket-timeout",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            },
-            {
-              "id": "process-crash",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            },
-            {
-              "id": "cancel-readiness",
-              "outcome": "PASS",
-              "cleanup": "VERIFIED_ZERO_RESOURCES",
-              "execution": "REAL_DOCKER"
-            }
-          ],
-          "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e"
-        },
-        "finalizer.json": {
-          "headSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
-          "inventory": {
-            "containers": 0,
-            "volumes": 0
-          },
-          "emergencyRemoved": 0,
-          "status": "PASS"
-        }
-      },
-      "jobId": 123565110414,
-      "members": [
-        {
-          "sha256": "4de24fb92569aeb3f824004c8fa3adddabd1368fab5cf8f97e2cd0a84d1ee22d",
-          "name": "summary.json",
-          "size": 34142
-        },
-        {
-          "sha256": "dcbf028515f542edd900a30ccd25fdc0b954e106260f3288b979b984c7a0b833",
-          "name": "finalizer.json",
-          "size": 165
-        },
-        {
-          "sha256": "053fa5501369a30b03d88694fb859e84ac49e5cde3d2f6db4f9e5fb5cdcf194e",
-          "name": "compiler-control.json",
-          "size": 3634
-        }
-      ],
-      "zipSha256": "971c114339a9360eef92461ac6f9566855a6ed223a22730b068ec031645849c0",
-      "artifactName": "agent-workshop-public",
-      "expiresAt": "2026-11-05T16:04:55Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40907197167
-    },
-    {
-      "provenance": "HISTORICAL_RECEIPT",
-      "createdAt": "2026-10-29T18:04:23Z",
-      "driverSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
-      "artifactId": 12921071895,
-      "zipBytes": 5800,
-      "observations": {
-        "finalizer.json": {
-          "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
-          "inventory": {
-            "containers": 0,
-            "volumes": 0
-          },
-          "emergencyRemoved": 0,
-          "status": "PASS"
-        },
-        "summary.json": {
-          "aiGeneration": "AI_GENERATION_NOT_RUN",
-          "phpImage": "sha256:03dcd3694e74341caef68af6b5a007e13810a8f0f69b4dc3d83f6dd77e6d799c",
-          "targetImage": "sha256:476084de8a904ca6da98dcb16d30c86f4f86b77ebd9d2560c851a1fe20ea1016",
-          "status": "PASS_SCOPED",
-          "completion": {
-            "cleanup": "VERIFIED_ZERO_RESOURCES",
-            "inventory": {
-              "containers": 0,
-              "volumes": 0
-            },
-            "emergencyRemoved": 0,
-            "provenancePack": {
-              "id": "oracle-ZFXJof",
-              "sha256": "42649aec0495743e454158074cc413211331e87e71e7039295e0109f24eee05b"
-            }
-          },
-          "attempts": [
-            {
-              "mode": "known-good",
-              "coverage": {
-                "http": 17,
-                "sqlite": 20,
-                "requiredHttp": 17,
-                "requiredSqlite": 20
-              },
-              "gates": [
-                {
-                  "gate": "G0",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [],
-                  "findingCodes": [
-                    "G0_NOT_ESTABLISHED"
-                  ]
-                },
-                {
-                  "gate": "G1",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:typecheck",
-                    "workshop-business:build",
-                    "workshop-rejected:typecheck",
-                    "workshop-rejected:build",
-                    "workshop-capacity:typecheck",
-                    "workshop-capacity:build"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G2",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G3",
-                  "verdict": "PASS",
-                  "executedTestIds": [
-                    "workshop-business:initial",
-                    "workshop-business:step-0",
-                    "workshop-business:step-1",
-                    "workshop-business:step-2",
-                    "workshop-business:step-3",
-                    "workshop-business:step-4",
-                    "workshop-business:step-5",
-                    "workshop-rejected:initial",
-                    "workshop-rejected:step-0",
-                    "workshop-rejected:step-1",
-                    "workshop-rejected:step-2",
-                    "workshop-rejected:step-3",
-                    "workshop-rejected:step-4",
-                    "workshop-capacity:initial",
-                    "workshop-capacity:step-0",
-                    "workshop-capacity:step-1",
-                    "workshop-capacity:step-2",
-                    "workshop-capacity:step-3",
-                    "workshop-capacity:step-4",
-                    "workshop-capacity:step-5"
-                  ],
-                  "findingCodes": []
-                },
-                {
-                  "gate": "G4",
-                  "verdict": "INCONCLUSIVE",
-                  "executedTestIds": [
-                    "workshop-business:http-positive",
-                    "workshop-business:http-key-order",
-                    "workshop-business:http-status-mutant",
-                    "workshop-business:http-type-mutant",
-                    "workshop-business:http-missing-mutant",
-                    "workshop-business:http-order-mutant",
-                    "workshop-business:db-positive",
-                    "workshop-business:db-row-mutant",
-                    "workshop-business:db-sequence-mutant",
-                    "workshop-rejected:http-positive",
-                    "workshop-rejected:http-key-order",
-                    "workshop-rejected:http-status-mutant",
-                    "workshop-rejected:http-type-mutant",
-                    "workshop-rejected:http-missing-mutant",
-                    "workshop-rejected:http-order-mutant",
-                    "workshop-rejected:db-positive",
-                    "workshop-rejected:db-row-mutant",
-                    "workshop-rejected:db-sequence-mutant",
-                    "workshop-capacity:http-positive",
-                    "workshop-capacity:http-key-order",
-                    "workshop-capacity:http-status-mutant",
-                    "workshop-capacity:http-type-mutant",
-                    "workshop-capacity:http-missing-mutant",
-                    "workshop-capacity:http-order-mutant",
-                    "workshop-capacity:db-positive",
-                    "workshop-capacity:db-row-mutant",
-                    "workshop-capacity:db-sequence-mutant"
-                  ],
-                  "findingCodes": [
-                    "HELD_OUT_NOT_RUN"
-                  ]
-                }
-              ],
-              "pairs": [
-                {
-                  "scenarioId": "workshop-business",
-                  "pairId": "eabedfa2-b664-4dce-b93d-d1548e7f28ee",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-rejected",
-                  "pairId": "7d596f0f-2529-470d-8a5a-9e2f1a9ad63f",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-capacity",
-                  "pairId": "92e5bb80-0e7e-4a1d-a03e-77d4144ce161",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                }
-              ],
-              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334"
-            },
-            {
-              "mode": "repair",
-              "coverage": {
-                "http": 17,
-                "sqlite": 20,
-                "requiredHttp": 17,
-                "requiredSqlite": 20
-              },
               "gates": [
                 {
                   "gate": "G0",
@@ -1114,33 +712,33 @@
                   ]
                 }
               ],
-              "pairs": [
-                {
-                  "scenarioId": "workshop-business",
-                  "pairId": "44992224-a5f5-4728-a8d3-bd305006236b",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-rejected",
-                  "pairId": "69f07d4a-deed-470e-b99a-e2bfbd1c1647",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-capacity",
-                  "pairId": "e07a4b91-387d-449a-b565-16a3fd3572f0",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                }
-              ],
-              "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121"
-            },
-            {
               "mode": "repair",
               "coverage": {
                 "http": 17,
                 "sqlite": 20,
                 "requiredHttp": 17,
                 "requiredSqlite": 20
-              },
+              }
+            },
+            {
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "pairs": [
+                {
+                  "scenarioId": "workshop-business",
+                  "pairId": "ab135801-810b-4fce-9767-807dab43573e",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-rejected",
+                  "pairId": "719855b1-7aeb-4593-b4b4-136190bf6b02",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-capacity",
+                  "pairId": "056dfe89-b875-44be-ab96-c11ec50a4976",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                }
+              ],
               "gates": [
                 {
                   "gate": "G0",
@@ -1251,28 +849,89 @@
                   ]
                 }
               ],
-              "pairs": [
-                {
-                  "scenarioId": "workshop-business",
-                  "pairId": "72a1b16a-85fe-4e4e-a3a4-a91d4680a434",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-rejected",
-                  "pairId": "ab06ca55-2381-4f1e-9f0c-264e355ef01f",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                },
-                {
-                  "scenarioId": "workshop-capacity",
-                  "pairId": "0152d0a4-7584-46d3-9e28-b4ee0a694e69",
-                  "cleanup": "VERIFIED_ZERO_RESOURCES"
-                }
-              ],
-              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334"
+              "mode": "repair",
+              "coverage": {
+                "http": 17,
+                "sqlite": 20,
+                "requiredHttp": 17,
+                "requiredSqlite": 20
+              }
             }
           ],
+          "targetImage": "sha256:427137f825c810f1345b9de234a4d4f2f8d01058f3eddd378ffa0f815936e07a",
+          "phpImage": "sha256:799cc725cdcac59b120be07d0f8a3e0715aab963bb3a163fb36f9113289815fc"
+        }
+      },
+      "driverSha": "d9b5f62a9313e2b40727a7f9407662d98c6ec85e",
+      "attempt": 1,
+      "artifactName": "agent-workshop-public",
+      "expiresAt": "2026-11-05T16:04:55Z",
+      "zipBytes": 5458,
+      "artifactId": 12912557116,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "971c114339a9360eef92461ac6f9566855a6ed223a22730b068ec031645849c0",
+      "members": [
+        {
+          "sha256": "4de24fb92569aeb3f824004c8fa3adddabd1368fab5cf8f97e2cd0a84d1ee22d",
+          "name": "summary.json",
+          "size": 34142
+        },
+        {
+          "sha256": "dcbf028515f542edd900a30ccd25fdc0b954e106260f3288b979b984c7a0b833",
+          "name": "finalizer.json",
+          "size": 165
+        },
+        {
+          "sha256": "053fa5501369a30b03d88694fb859e84ac49e5cde3d2f6db4f9e5fb5cdcf194e",
+          "name": "compiler-control.json",
+          "size": 3634
+        }
+      ]
+    },
+    {
+      "jobId": 123632038035,
+      "runId": 40926137817,
+      "createdAt": "2026-10-29T18:04:23Z",
+      "apiDigestMatches": true,
+      "observations": {
+        "compiler-control.json": {
+          "g1": "FAIL",
+          "cleanup": {
+            "status": "VERIFIED_ZERO_RESOURCES",
+            "containers": 0,
+            "volumes": 0,
+            "emergencyRemoved": 0
+          },
+          "execution": "SYNTHETIC_CANDIDATE_REAL_DOCKER",
+          "metaRequests": 0,
+          "status": "PASS"
+        },
+        "finalizer.json": {
+          "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          },
+          "emergencyRemoved": 0,
+          "status": "PASS"
+        },
+        "summary.json": {
+          "completion": {
+            "cleanup": "VERIFIED_ZERO_RESOURCES",
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0,
+            "provenancePack": {
+              "id": "oracle-ZFXJof",
+              "sha256": "42649aec0495743e454158074cc413211331e87e71e7039295e0109f24eee05b"
+            }
+          },
+          "status": "PASS_SCOPED",
+          "aiGeneration": "AI_GENERATION_NOT_RUN",
           "liveProvider": "NOT_RUN",
-          "errorCode": null,
+          "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
           "runtimeControls": [
             {
               "id": "candidate-aux-enospc",
@@ -1311,22 +970,437 @@
               "execution": "REAL_DOCKER"
             }
           ],
-          "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0"
-        },
-        "compiler-control.json": {
-          "execution": "SYNTHETIC_CANDIDATE_REAL_DOCKER",
-          "metaRequests": 0,
-          "status": "PASS",
-          "cleanup": {
-            "status": "VERIFIED_ZERO_RESOURCES",
-            "containers": 0,
-            "volumes": 0,
-            "emergencyRemoved": 0
-          },
-          "g1": "FAIL"
+          "errorCode": null,
+          "attempts": [
+            {
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "pairs": [
+                {
+                  "scenarioId": "workshop-business",
+                  "pairId": "eabedfa2-b664-4dce-b93d-d1548e7f28ee",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-rejected",
+                  "pairId": "7d596f0f-2529-470d-8a5a-9e2f1a9ad63f",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-capacity",
+                  "pairId": "92e5bb80-0e7e-4a1d-a03e-77d4144ce161",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                }
+              ],
+              "gates": [
+                {
+                  "gate": "G0",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [],
+                  "findingCodes": [
+                    "G0_NOT_ESTABLISHED"
+                  ]
+                },
+                {
+                  "gate": "G1",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:typecheck",
+                    "workshop-business:build",
+                    "workshop-rejected:typecheck",
+                    "workshop-rejected:build",
+                    "workshop-capacity:typecheck",
+                    "workshop-capacity:build"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "workshop-business:http-positive",
+                    "workshop-business:http-key-order",
+                    "workshop-business:http-status-mutant",
+                    "workshop-business:http-type-mutant",
+                    "workshop-business:http-missing-mutant",
+                    "workshop-business:http-order-mutant",
+                    "workshop-business:db-positive",
+                    "workshop-business:db-row-mutant",
+                    "workshop-business:db-sequence-mutant",
+                    "workshop-rejected:http-positive",
+                    "workshop-rejected:http-key-order",
+                    "workshop-rejected:http-status-mutant",
+                    "workshop-rejected:http-type-mutant",
+                    "workshop-rejected:http-missing-mutant",
+                    "workshop-rejected:http-order-mutant",
+                    "workshop-rejected:db-positive",
+                    "workshop-rejected:db-row-mutant",
+                    "workshop-rejected:db-sequence-mutant",
+                    "workshop-capacity:http-positive",
+                    "workshop-capacity:http-key-order",
+                    "workshop-capacity:http-status-mutant",
+                    "workshop-capacity:http-type-mutant",
+                    "workshop-capacity:http-missing-mutant",
+                    "workshop-capacity:http-order-mutant",
+                    "workshop-capacity:db-positive",
+                    "workshop-capacity:db-row-mutant",
+                    "workshop-capacity:db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ],
+              "mode": "known-good",
+              "coverage": {
+                "http": 17,
+                "sqlite": 20,
+                "requiredHttp": 17,
+                "requiredSqlite": 20
+              }
+            },
+            {
+              "candidateSha": "1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121",
+              "pairs": [
+                {
+                  "scenarioId": "workshop-business",
+                  "pairId": "44992224-a5f5-4728-a8d3-bd305006236b",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-rejected",
+                  "pairId": "69f07d4a-deed-470e-b99a-e2bfbd1c1647",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-capacity",
+                  "pairId": "e07a4b91-387d-449a-b565-16a3fd3572f0",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                }
+              ],
+              "gates": [
+                {
+                  "gate": "G0",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [],
+                  "findingCodes": [
+                    "G0_NOT_ESTABLISHED"
+                  ]
+                },
+                {
+                  "gate": "G1",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:typecheck",
+                    "workshop-business:build",
+                    "workshop-rejected:typecheck",
+                    "workshop-rejected:build",
+                    "workshop-capacity:typecheck",
+                    "workshop-capacity:build"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G2",
+                  "verdict": "FAIL",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": [
+                    "HTTP_JSON_LENGTH"
+                  ]
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "FAIL",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": [
+                    "HTTP_JSON_LENGTH",
+                    "DB_STATE"
+                  ]
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "workshop-business:http-positive",
+                    "workshop-business:http-key-order",
+                    "workshop-business:http-status-mutant",
+                    "workshop-business:http-type-mutant",
+                    "workshop-business:http-missing-mutant",
+                    "workshop-business:http-order-mutant",
+                    "workshop-business:db-positive",
+                    "workshop-business:db-row-mutant",
+                    "workshop-business:db-sequence-mutant",
+                    "workshop-rejected:http-positive",
+                    "workshop-rejected:http-key-order",
+                    "workshop-rejected:http-status-mutant",
+                    "workshop-rejected:http-type-mutant",
+                    "workshop-rejected:http-missing-mutant",
+                    "workshop-rejected:http-order-mutant",
+                    "workshop-rejected:db-positive",
+                    "workshop-rejected:db-row-mutant",
+                    "workshop-rejected:db-sequence-mutant",
+                    "workshop-capacity:http-positive",
+                    "workshop-capacity:http-key-order",
+                    "workshop-capacity:http-status-mutant",
+                    "workshop-capacity:http-type-mutant",
+                    "workshop-capacity:http-missing-mutant",
+                    "workshop-capacity:http-order-mutant",
+                    "workshop-capacity:db-positive",
+                    "workshop-capacity:db-row-mutant",
+                    "workshop-capacity:db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ],
+              "mode": "repair",
+              "coverage": {
+                "http": 17,
+                "sqlite": 20,
+                "requiredHttp": 17,
+                "requiredSqlite": 20
+              }
+            },
+            {
+              "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+              "pairs": [
+                {
+                  "scenarioId": "workshop-business",
+                  "pairId": "72a1b16a-85fe-4e4e-a3a4-a91d4680a434",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-rejected",
+                  "pairId": "ab06ca55-2381-4f1e-9f0c-264e355ef01f",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                },
+                {
+                  "scenarioId": "workshop-capacity",
+                  "pairId": "0152d0a4-7584-46d3-9e28-b4ee0a694e69",
+                  "cleanup": "VERIFIED_ZERO_RESOURCES"
+                }
+              ],
+              "gates": [
+                {
+                  "gate": "G0",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [],
+                  "findingCodes": [
+                    "G0_NOT_ESTABLISHED"
+                  ]
+                },
+                {
+                  "gate": "G1",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:typecheck",
+                    "workshop-business:build",
+                    "workshop-rejected:typecheck",
+                    "workshop-rejected:build",
+                    "workshop-capacity:typecheck",
+                    "workshop-capacity:build"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G2",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G3",
+                  "verdict": "PASS",
+                  "executedTestIds": [
+                    "workshop-business:initial",
+                    "workshop-business:step-0",
+                    "workshop-business:step-1",
+                    "workshop-business:step-2",
+                    "workshop-business:step-3",
+                    "workshop-business:step-4",
+                    "workshop-business:step-5",
+                    "workshop-rejected:initial",
+                    "workshop-rejected:step-0",
+                    "workshop-rejected:step-1",
+                    "workshop-rejected:step-2",
+                    "workshop-rejected:step-3",
+                    "workshop-rejected:step-4",
+                    "workshop-capacity:initial",
+                    "workshop-capacity:step-0",
+                    "workshop-capacity:step-1",
+                    "workshop-capacity:step-2",
+                    "workshop-capacity:step-3",
+                    "workshop-capacity:step-4",
+                    "workshop-capacity:step-5"
+                  ],
+                  "findingCodes": []
+                },
+                {
+                  "gate": "G4",
+                  "verdict": "INCONCLUSIVE",
+                  "executedTestIds": [
+                    "workshop-business:http-positive",
+                    "workshop-business:http-key-order",
+                    "workshop-business:http-status-mutant",
+                    "workshop-business:http-type-mutant",
+                    "workshop-business:http-missing-mutant",
+                    "workshop-business:http-order-mutant",
+                    "workshop-business:db-positive",
+                    "workshop-business:db-row-mutant",
+                    "workshop-business:db-sequence-mutant",
+                    "workshop-rejected:http-positive",
+                    "workshop-rejected:http-key-order",
+                    "workshop-rejected:http-status-mutant",
+                    "workshop-rejected:http-type-mutant",
+                    "workshop-rejected:http-missing-mutant",
+                    "workshop-rejected:http-order-mutant",
+                    "workshop-rejected:db-positive",
+                    "workshop-rejected:db-row-mutant",
+                    "workshop-rejected:db-sequence-mutant",
+                    "workshop-capacity:http-positive",
+                    "workshop-capacity:http-key-order",
+                    "workshop-capacity:http-status-mutant",
+                    "workshop-capacity:http-type-mutant",
+                    "workshop-capacity:http-missing-mutant",
+                    "workshop-capacity:http-order-mutant",
+                    "workshop-capacity:db-positive",
+                    "workshop-capacity:db-row-mutant",
+                    "workshop-capacity:db-sequence-mutant"
+                  ],
+                  "findingCodes": [
+                    "HELD_OUT_NOT_RUN"
+                  ]
+                }
+              ],
+              "mode": "repair",
+              "coverage": {
+                "http": 17,
+                "sqlite": 20,
+                "requiredHttp": 17,
+                "requiredSqlite": 20
+              }
+            }
+          ],
+          "targetImage": "sha256:476084de8a904ca6da98dcb16d30c86f4f86b77ebd9d2560c851a1fe20ea1016",
+          "phpImage": "sha256:03dcd3694e74341caef68af6b5a007e13810a8f0f69b4dc3d83f6dd77e6d799c"
         }
       },
-      "jobId": 123632038035,
+      "driverSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+      "attempt": 1,
+      "artifactName": "agent-workshop-public",
+      "expiresAt": "2026-11-05T18:04:22Z",
+      "zipBytes": 5800,
+      "artifactId": 12921071895,
+      "provenance": "HISTORICAL_RECEIPT",
+      "zipSha256": "7c75f35855c1650011ab7da4f6347fba4ba74170a0a499d16c5ade54975da77e",
       "members": [
         {
           "sha256": "4bf3cc2747cce7e74da884887618043e6e20eb39fca121899bbac0e07922a2f3",
@@ -1343,14 +1417,7 @@
           "name": "finalizer.json",
           "size": 165
         }
-      ],
-      "zipSha256": "7c75f35855c1650011ab7da4f6347fba4ba74170a0a499d16c5ade54975da77e",
-      "artifactName": "agent-workshop-public",
-      "expiresAt": "2026-11-05T18:04:22Z",
-      "apiDigestMatches": true,
-      "attempt": 1,
-      "runId": 40926137817
+      ]
     }
-  ],
-  "format": "mmp083-public-artifact-custody-v1"
+  ]
 }

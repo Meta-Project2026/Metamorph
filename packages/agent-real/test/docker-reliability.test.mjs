@@ -128,6 +128,13 @@ for (const [name, options, operationCode, gateCode, verdict] of [
     "ERROR",
   ],
   [
+    "Docker stdout overflow with outer exit 2",
+    { envelope: { exitCode: 2, overflow: true } },
+    "BUILD_FAILED",
+    "ENVIRONMENT_ERROR",
+    "ERROR",
+  ],
+  [
     "container created then transport fails",
     { envelope: { exitCode: 125, stdout: "" } },
     "ENVIRONMENT_ERROR",
