@@ -1,0 +1,115 @@
+{
+  "format": "mmp082-review-followup-artifact-audit-v1",
+  "runId": 40926137817,
+  "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+  "status": "PASS",
+  "fileIntegrity": [
+    {
+      "name": "summary.json",
+      "bytes": 44810,
+      "sha256": "4bf3cc2747cce7e74da884887618043e6e20eb39fca121899bbac0e07922a2f3"
+    },
+    {
+      "name": "compiler-control.json",
+      "bytes": 3634,
+      "sha256": "6ee5798f00b148e3c44a3a674a49c402472e9d03873d8e0846e42ed170b128b3"
+    },
+    {
+      "name": "finalizer.json",
+      "bytes": 165,
+      "sha256": "1afec5e1118eb003d95d23fd2cf65cf424880ec4f89c0b35396204d42f1b8175"
+    },
+    {
+      "name": "admission-trial.json",
+      "bytes": 1251,
+      "sha256": "8d4abbc30d271940853b6e8695175ac14d945618918a5e9a18be4620c4fd2c40"
+    }
+  ],
+  "originalProof": {
+    "status": "PASS_SCOPED",
+    "attempts": 3,
+    "pairs": 9,
+    "httpComparisons": 51,
+    "sqliteComparisons": 60,
+    "runtimeControls": [
+      {
+        "id": "candidate-aux-enospc",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      },
+      {
+        "id": "candidate-wal-full",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      },
+      {
+        "id": "corrupt-db-rejected",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      },
+      {
+        "id": "hung-socket-timeout",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      },
+      {
+        "id": "process-crash",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      },
+      {
+        "id": "cancel-readiness",
+        "outcome": "PASS",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "execution": "REAL_DOCKER"
+      }
+    ]
+  },
+  "compilerControl": {
+    "status": "PASS",
+    "metaRequests": 0,
+    "g1": "FAIL",
+    "diagnostic": [
+      {
+        "phase": "typecheck",
+        "code": "TS2322",
+        "path": "src/main.ts",
+        "line": 1,
+        "column": 14
+      }
+    ]
+  },
+  "finalizer": {
+    "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0,
+    "status": "PASS"
+  },
+  "admission": {
+    "modelGeneration": "NOT_RUN",
+    "generatedRequests": 0,
+    "budgetAuth": "NOT_ADMITTED"
+  },
+  "checks": [
+    "exact_head_identity_all_four_payloads",
+    "original_positive_negative_and_repair_controls",
+    "all_six_real_docker_runtime_controls",
+    "compiler_fail_and_sidecar_identity",
+    "all_cleanup_zero_without_emergency_removal",
+    "model_admission_not_run",
+    "raw_data_secret_marker_and_private_path_scan"
+  ],
+  "limitations": [
+    "author_validation_not_independent_review",
+    "previous_intermittent_failure_root_cause_unknown",
+    "product_not_established"
+  ]
+}

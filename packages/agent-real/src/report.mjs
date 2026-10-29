@@ -1,7 +1,8 @@
 import { VerificationReportSchema } from "@metamorph/agent";
 import { GateResultSchema } from "@metamorph/contracts";
-import { MANIFEST } from "@metamorph/oracle";
+import { MANIFEST, SOURCE } from "@metamorph/oracle";
 import { POLICY } from "../../target-worker/src/controller.mjs";
+import { publicCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import { check } from "./source.mjs";
 
 export const CODES = new Set([
@@ -337,6 +338,15 @@ export function publicAttempt(attempt) {
       packs: p.packs.map((pack) => ({ id: pack.id, sha256: pack.sha256 })),
       cleanup: p.cleanup,
       targetLifetimePolicyMs: POLICY.lifetimeMs,
+      compilerDiagnostics: p.build
+        ? publicCompilerDiagnostics(p.compilerDiagnostics, {
+            sourceSha: SOURCE.commit,
+            candidateSha: attempt.candidateSha,
+            attemptId: attempt.attemptId,
+            pairId: p.pairId,
+            g1Verdict: p.build.verdict,
+          })
+        : null,
       gates:
         p.gates?.map((g) => ({
           gate: g.gate,

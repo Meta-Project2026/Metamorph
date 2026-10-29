@@ -1,0 +1,26 @@
+{
+  "format": "mmp082-review-followup-preflight-v1",
+  "mainSha": "d21376747c7147043ca618e149fac87c0df80111",
+  "reviewedPrHead": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+  "prBranch": "Vladimir/mmp-082-safe-g1-diagnostics",
+  "worktreeCleanBeforeDispatch": true,
+  "fullDiffReviewedPaths": 18,
+  "workflow": ".github/workflows/agent-workshop-compose.yml",
+  "input": {
+    "model_provider": "none"
+  },
+  "metaSecretMapping": "ABSENT",
+  "paidEnvironment": "ABSENT",
+  "signedMetaPostAuthorization": "NOT_SUPPLIED",
+  "providerNoneBehavior": "MISSING_PROVIDER_NOT_ADMITTED_BEFORE_GENERATE",
+  "protectedDiffExitCode": 0,
+  "previousTestedCodeDiffExitCode": 0,
+  "dispatchExitCode": 0,
+  "dispatchCount": 1,
+  "dispatchRunId": 40926137817,
+  "realMetaGetPost": "NOT_RUN",
+  "paidWorkflowDispatch": "NOT_RUN",
+  "historicalPaidRerun": "NOT_RUN",
+  "rawSecretRead": "NOT_RUN",
+  "independentReview": "EXTERNAL_PENDING"
+}

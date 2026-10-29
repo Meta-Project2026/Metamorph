@@ -1,0 +1,71 @@
+{
+  "format": "mmp082-local-checks-v1",
+  "platform": "win32",
+  "node": "22.23.1",
+  "pnpm": "11.25.0",
+  "checks": [
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "counters": []
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "counters": []
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "counters": [
+        "# tests 438",
+        "# pass 336",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 102",
+        "# todo 0"
+      ]
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "counters": []
+    },
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "exitCode": 0,
+      "counters": [
+        "# tests 56",
+        "# pass 55",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 1",
+        "# todo 0"
+      ]
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "exitCode": 0,
+      "counters": [
+        "# tests 69",
+        "# pass 69",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0"
+      ]
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exitCode": 0,
+      "counters": [
+        "# tests 122",
+        "# pass 77",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 45",
+        "# todo 0"
+      ]
+    }
+  ]
+}

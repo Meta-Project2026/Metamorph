@@ -73,6 +73,9 @@ jobs:
       - name: Original deterministic replay and negative Docker controls (not AI generation)
         if: ${{ !cancelled() && steps.boundaries.outcome == 'success' }}
         run: pnpm --filter @metamorph/agent-real proof
+      - name: MMP-082 synthetic compiler diagnostic control (no provider or credential)
+        if: ${{ !cancelled() && steps.boundaries.outcome == 'success' }}
+        run: node research/mmp-082/docker-proof.mjs
       - name: Independent final inventory even after interruption
         if: always()
         run: mkdir -p "$AGENT_PUBLIC_OUTPUT" && node packages/differential/src/workshop-finalizer.mjs
@@ -83,6 +86,7 @@ jobs:
           path: |
             ${{ env.AGENT_PUBLIC_OUTPUT }}/summary.json
             ${{ env.AGENT_PUBLIC_OUTPUT }}/finalizer.json
+            ${{ env.AGENT_PUBLIC_OUTPUT }}/compiler-control.json
           if-no-files-found: error
           retention-days: 7
       - uses: actions/upload-artifact@v4
