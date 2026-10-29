@@ -1,0 +1,405 @@
+{
+  "format": "mmp082-review-followup-workflow-v1",
+  "runId": 40926137817,
+  "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+  "event": "workflow_dispatch",
+  "modelProvider": "none",
+  "status": "completed",
+  "conclusion": "success",
+  "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40926137817",
+  "startedAt": "2026-10-29T17:56:51Z",
+  "updatedAt": "2026-10-29T18:04:27Z",
+  "job": {
+    "id": 123632038035,
+    "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40926137817/job/123632038035",
+    "status": "completed",
+    "conclusion": "success",
+    "steps": [
+      {
+        "number": 1,
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:56:55Z",
+        "completedAt": "2026-10-29T17:56:57Z"
+      },
+      {
+        "number": 2,
+        "name": "Set safe output directories",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:56:57Z",
+        "completedAt": "2026-10-29T17:56:57Z"
+      },
+      {
+        "number": 3,
+        "name": "Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:56:57Z",
+        "completedAt": "2026-10-29T17:56:58Z"
+      },
+      {
+        "number": 4,
+        "name": "Verify exact checked-out SHA",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:56:58Z",
+        "completedAt": "2026-10-29T17:56:58Z"
+      },
+      {
+        "number": 5,
+        "name": "MMP-078 current policy using actual hosted GITHUB_TOKEN (no Meta credential)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:56:58Z",
+        "completedAt": "2026-10-29T17:57:00Z"
+      },
+      {
+        "number": 6,
+        "name": "Run actions/setup-node@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:57:00Z",
+        "completedAt": "2026-10-29T17:57:00Z"
+      },
+      {
+        "number": 7,
+        "name": "Run pnpm/action-setup@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:57:00Z",
+        "completedAt": "2026-10-29T17:57:01Z"
+      },
+      {
+        "number": 8,
+        "name": "Run pnpm install --frozen-lockfile",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:57:01Z",
+        "completedAt": "2026-10-29T17:57:04Z"
+      },
+      {
+        "number": 9,
+        "name": "Fast checks and original boundary regressions",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:57:04Z",
+        "completedAt": "2026-10-29T17:59:01Z"
+      },
+      {
+        "number": 10,
+        "name": "MMP-061 source-bound model admission (NOT_RUN is explicit)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:59:01Z",
+        "completedAt": "2026-10-29T17:59:01Z"
+      },
+      {
+        "number": 11,
+        "name": "Original deterministic replay and negative Docker controls (not AI generation)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T17:59:01Z",
+        "completedAt": "2026-10-29T18:04:14Z"
+      },
+      {
+        "number": 12,
+        "name": "MMP-082 synthetic compiler diagnostic control (no provider or credential)",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:14Z",
+        "completedAt": "2026-10-29T18:04:21Z"
+      },
+      {
+        "number": 13,
+        "name": "Independent final inventory even after interruption",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:21Z",
+        "completedAt": "2026-10-29T18:04:22Z"
+      },
+      {
+        "number": 14,
+        "name": "Run actions/upload-artifact@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:22Z",
+        "completedAt": "2026-10-29T18:04:23Z"
+      },
+      {
+        "number": 15,
+        "name": "Run actions/upload-artifact@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:23Z",
+        "completedAt": "2026-10-29T18:04:24Z"
+      },
+      {
+        "number": 28,
+        "name": "Post Run pnpm/action-setup@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:24Z",
+        "completedAt": "2026-10-29T18:04:24Z"
+      },
+      {
+        "number": 29,
+        "name": "Post Run actions/setup-node@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:24Z",
+        "completedAt": "2026-10-29T18:04:25Z"
+      },
+      {
+        "number": 30,
+        "name": "Post Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:25Z",
+        "completedAt": "2026-10-29T18:04:25Z"
+      },
+      {
+        "number": 31,
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "startedAt": "2026-10-29T18:04:25Z",
+        "completedAt": "2026-10-29T18:04:25Z"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "id": 12921071895,
+      "name": "agent-workshop-public",
+      "sizeInBytes": 5800,
+      "digest": "sha256:7c75f35855c1650011ab7da4f6347fba4ba74170a0a499d16c5ade54975da77e",
+      "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+      "expired": false,
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40926137817/artifacts/12921071895"
+    },
+    {
+      "id": 12920772617,
+      "name": "mmp061-model-public",
+      "sizeInBytes": 829,
+      "digest": "sha256:bc61348f311dac4b04f44a9c146739fe7629901559a0548d3421ac6a768fe975",
+      "headSha": "c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0",
+      "expired": false,
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/40926137817/artifacts/12920772617"
+    }
+  ],
+  "commandExitCodes": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm --filter @metamorph/oracle test:reference",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm --filter @metamorph/target-worker test",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm --filter @metamorph/differential test",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "pnpm --filter @metamorph/agent-real test",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "node research/mmp-061/run-e2e.mjs none",
+      "exitCode": 2,
+      "workflowStepExitCode": 0,
+      "basis": "verified_NOT_RUN_marker_only_emitted_by_case_2"
+    },
+    {
+      "command": "pnpm --filter @metamorph/agent-real proof",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "node research/mmp-082/docker-proof.mjs",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "node packages/differential/src/workshop-finalizer.mjs",
+      "exitCode": 0,
+      "basis": "successful_bash_e_step"
+    },
+    {
+      "command": "synthetic candidate Docker build wrapper",
+      "exitCode": 2,
+      "basis": "inferred_from_unchanged_pinned_recipe_and_verified_G1_FAIL_receipt",
+      "note": "expected negative control; harness exits 0; raw per-phase numeric exit codes are not published"
+    },
+    {
+      "command": "local structural artifact audit",
+      "exitCode": 0,
+      "basis": "actual_local_process_exit"
+    }
+  ],
+  "sanitizedHostedMarkers": [
+    "HOSTED_GITHUB_TOKEN_POLICY VERIFIED; reviewers=0; branch=main; Meta_GET=0; Meta_POST=0",
+    "AI_GENERATION_NOT_RUN code=MISSING_PROVIDER; requests=0; model candidate absent.",
+    "AI_GENERATION_NOT_RUN: provider admission unavailable; see mmp061-model-public artifact.",
+    "Agent known-good: INCONCLUSIVE; attempts=1; public structural receipts retained.",
+    "Agent repair: INCONCLUSIVE; attempts=2; public structural receipts retained.",
+    "Agent composition scoped proof complete; G0/G4 remain INCONCLUSIVE; paid calls=0."
+  ],
+  "tapCounters": [
+    {
+      "field": "tests",
+      "count": 438
+    },
+    {
+      "field": "pass",
+      "count": 435
+    },
+    {
+      "field": "fail",
+      "count": 0
+    },
+    {
+      "field": "cancelled",
+      "count": 0
+    },
+    {
+      "field": "skipped",
+      "count": 3
+    },
+    {
+      "field": "todo",
+      "count": 0
+    },
+    {
+      "field": "tests",
+      "count": 56
+    },
+    {
+      "field": "pass",
+      "count": 56
+    },
+    {
+      "field": "fail",
+      "count": 0
+    },
+    {
+      "field": "cancelled",
+      "count": 0
+    },
+    {
+      "field": "skipped",
+      "count": 0
+    },
+    {
+      "field": "todo",
+      "count": 0
+    },
+    {
+      "field": "tests",
+      "count": 69
+    },
+    {
+      "field": "pass",
+      "count": 69
+    },
+    {
+      "field": "fail",
+      "count": 0
+    },
+    {
+      "field": "cancelled",
+      "count": 0
+    },
+    {
+      "field": "skipped",
+      "count": 0
+    },
+    {
+      "field": "todo",
+      "count": 0
+    },
+    {
+      "field": "tests",
+      "count": 122
+    },
+    {
+      "field": "pass",
+      "count": 122
+    },
+    {
+      "field": "fail",
+      "count": 0
+    },
+    {
+      "field": "cancelled",
+      "count": 0
+    },
+    {
+      "field": "skipped",
+      "count": 0
+    },
+    {
+      "field": "todo",
+      "count": 0
+    },
+    {
+      "field": "tests",
+      "count": 205
+    },
+    {
+      "field": "pass",
+      "count": 205
+    },
+    {
+      "field": "fail",
+      "count": 0
+    },
+    {
+      "field": "cancelled",
+      "count": 0
+    },
+    {
+      "field": "skipped",
+      "count": 0
+    },
+    {
+      "field": "todo",
+      "count": 0
+    }
+  ],
+  "notes": [
+    "Original hosted logs retained locally only; public record contains fixed markers/counters and metadata.",
+    "Successful bash -e steps establish zero exit codes for their commands; admission exit 2 is explicitly handled."
+  ]
+}

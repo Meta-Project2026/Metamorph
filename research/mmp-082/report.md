@@ -1,5 +1,12 @@
 # MMP-082 — safe G1 compiler diagnostics
 
+2026-10-29 review follow-up: one new exact-head offline run completed with
+original proof PASS_SCOPED, compiler control PASS and finalizer PASS (0/0/0).
+See [review-followup.md](review-followup.md) for current evidence and limits.
+The earlier results below are retained as the original delivery record;
+the intermittent failure's root cause remains UNKNOWN and external re-review
+remains pending.
+
 Issue: <https://github.com/Meta-Project2026/Metamorph/issues/82>.
 Base main, freshly fetched: `d21376747c7147043ca618e149fac87c0df80111`.
 Code commit (including corrected manual driver): `d9b5f62a9313e2b40727a7f9407662d98c6ec85e`.
