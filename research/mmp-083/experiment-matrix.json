@@ -1,0 +1,26 @@
+{
+  "format": "mmp083-docker-reliability-v1",
+  "baseSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+  "driverSha": "84de165f6d1da5bd99fba3ad250319a0c3ae9a89",
+  "plannedTrials": 3,
+  "maximumTrialsWithoutNewEvidence": 3,
+  "workflowReruns": 0,
+  "provider": "none",
+  "productionFix": "NONE",
+  "verdict84": "PENDING_BOUNDED_TRIALS",
+  "verdict34": "BLOCKED_NOT_RUN",
+  "trials": [
+    { "id": "docker-1", "runId": 40956644174, "provenance": "REAL_DOCKER", "status": "IN_PROGRESS" },
+    { "id": "docker-2", "provenance": "REAL_DOCKER", "status": "NOT_RUN" },
+    { "id": "docker-3", "provenance": "REAL_DOCKER", "status": "NOT_RUN" }
+  ],
+  "syntheticControls": {
+    "provenance": "SYNTHETIC_UNIT_ONLY",
+    "command": "node --test packages/agent-real/test/docker-reliability.test.mjs",
+    "pass": 10, "fail": 0, "skip": 0, "exit": 0,
+    "firstDevelopmentRun": { "pass": 9, "fail": 1, "cause": "Synthetic FAIL fixture lacked required evidence reference; fixed fixture only" }
+  },
+  "newHistorical34Execution": "NOT_RUN_EXACT_ORIGINAL_CASE_UNAVAILABLE",
+  "product": "NOT_ESTABLISHED",
+  "aiGeneration": "AI_GENERATION_NOT_RUN"
+}
