@@ -14,6 +14,8 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  deployments: read
 
 concurrency:
   group: agent-workshop-compose-${{ github.ref }}
@@ -39,6 +41,10 @@ jobs:
           ref: ${{ github.sha }}
       - name: Verify exact checked-out SHA
         run: test "$(git rev-parse HEAD)" = "$AGENT_HEAD_SHA" && git rev-parse HEAD
+      - name: MMP-078 current policy using actual hosted GITHUB_TOKEN (no Meta credential)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node research/mmp-078/verify-hosted-policy.mjs
       - uses: actions/setup-node@v4
         with:
           node-version: '24'

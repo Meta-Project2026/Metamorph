@@ -1,0 +1,105 @@
+name: Meta paid migration
+on:
+  workflow_dispatch:
+    inputs:
+      reviewed_sha:
+        description: 'Exact reviewed main SHA; public workshop source only'
+        required: true
+        type: string
+      confirm_paid:
+        description: 'One possibly billable attempt; estimate is NOT a hard dollar cap. Timeout may be billed; no retry.'
+        required: true
+        type: choice
+        default: NOT_CONFIRMED
+        options: [NOT_CONFIRMED, I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP]
+      max_estimated_usd:
+        description: 'Maximum pre-send USD projection at locked Standard tariff; NOT settled cost or provider cap'
+        required: true
+        type: choice
+        default: '1.00'
+        options: ['0.10', '0.20', '0.25', '0.50', '0.75', '1.00']
+      model_provider:
+        description: 'Fixed Meta Muse Spark 1.3 Standard; one POST, zero repairs/retries'
+        type: choice
+        default: meta
+        options: [meta]
+permissions:
+  contents: read
+  actions: read
+  deployments: read
+concurrency:
+  group: meta-paid-${{ github.actor }}
+  cancel-in-progress: false
+jobs:
+  guard:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify exact checkout and current GitHub policy without Meta credentials
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node research/mmp-078/guard.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta-paid-policy-${{ github.run_id }}
+          path: ${{ runner.temp }}/meta-paid-public/policy.json
+          retention-days: 7
+  generate-and-verify:
+    needs: guard
+    if: ${{ github.ref == 'refs/heads/main' && inputs.reviewed_sha == github.sha && (github.actor == 'barbalatv' || github.actor == 'l1ncolny') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    environment: META_API_KEY
+    permissions:
+      contents: read
+      actions: read
+      deployments: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - name: Install and build trusted code before mapping any Meta credential
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+      - name: One signed-identity-authorized bounded Meta POST; no code execution
+        id: generation
+        env:
+          MODEL_API_KEY: ${{ secrets.META }}
+          GH_TOKEN: ${{ github.token }}
+        run: node research/mmp-078/paid-run.mjs
+      - name: Independent Docker Oracle in fresh process without Meta credential
+        if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
+        run: node research/mmp-078/validate-candidate.mjs
+      - name: Final owned-resource inventory without credential
+        if: always()
+        env:
+          WORKSHOP_PUBLIC_OUTPUT: ${{ runner.temp }}/meta-paid-public
+          PILOT_HEAD_SHA: ${{ github.sha }}
+        run: node packages/differential/src/workshop-finalizer.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta-paid-public-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/meta-paid-public/generation.json
+            ${{ runner.temp }}/meta-paid-public/trial.json
+            ${{ runner.temp }}/meta-paid-public/finalizer.json
+            ${{ runner.temp }}/mmp078-${{ github.run_id }}-attempt.json
+          if-no-files-found: error
+          retention-days: 7

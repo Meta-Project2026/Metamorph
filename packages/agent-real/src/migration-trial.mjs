@@ -1,5 +1,5 @@
-import { randomUUID } from "node:crypto";
-import { runAgent } from "@metamorph/agent";
+import { ModelResponseSchema } from "@metamorph/agent";
+import { admitDirectory } from "../../target-worker/src/admission.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 import { createProductionMigrationProvider } from "./migration-provider.mjs";
 import { publicAttempt } from "./report.mjs";
@@ -12,15 +12,20 @@ import { createSourceSession } from "./source.mjs";
 export async function runPublicMigration({
   context,
   selection = "none",
-  root,
   parent,
   headSha,
-  config,
   signal,
+  authorization,
+  checkpoint,
 }) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
   insist(/^[a-f0-9]{40}$/.test(headSha), "HEAD_IDENTITY");
-  const selected = createProductionMigrationProvider(context, selection);
+  const selected = createProductionMigrationProvider(
+    context,
+    selection,
+    authorization,
+    checkpoint,
+  );
   const result = {
     format: "mmp061-public-trial-v1",
     headSha,
@@ -54,34 +59,130 @@ export async function runPublicMigration({
     blockers: [selected.status.code],
   };
   if (!selected.status.admitted) return result;
-  // Deliberately dormant until a reviewed production provider can issue genuine
-  // admission. There is no runtime flag or config number that can reach this path.
+  insist(headSha === selected.status.authorization.headSha, "HEAD_IDENTITY");
+  // Separate explicit estimate policy. Never pass an estimate as the guaranteed
+  // dollar-bound required by legacy runAgent/ModelProvider. Shared API unchanged.
+  result.format = "mmp078-public-paid-trial-v1";
+  result.budgetAuth = selected.status.authorization;
+  result.admittedMaxEstimatedRequestCostUsd =
+    selected.status.maxEstimatedRequestCostUsd;
+  result.trialRunId = selected.status.authorization.runId;
+  result.blockers = [];
+  const session = createSourceSession(parent);
+  try {
+    const response = ModelResponseSchema.parse(
+      await selected.provider.generate(
+        {
+          unitId: "workshop-api",
+          tier: "spark",
+          action: "generate",
+          attempt: 1,
+          repairFeedback: null,
+        },
+        signal,
+      ),
+    );
+    await session.writer.write(response.changes, signal);
+    const lease = await session.acquire(session.writer.root, signal);
+    result.candidateSha = lease.bundle.candidateSha;
+    insist(
+      result.candidateSha === selected.receipts()[0]?.candidateSha,
+      "SOURCE_IDENTITY",
+    );
+    await lease.release();
+    result.modelGeneration = "GENERATED";
+    result.aiGeneration = "REAL_INFERENCE_GENERATED";
+    result.blockers = ["PUBLIC_DOCKER_VALIDATION_PENDING"];
+    Object.defineProperty(result, "candidateRoot", {
+      value: session.writer.root,
+    });
+  } catch (error) {
+    result.modelGeneration = "ERROR";
+    result.aiGeneration = "REAL_INFERENCE_ERROR";
+    result.blockers = [
+      selected.receipts()[0]?.code ??
+        (error.code === "SOURCE_IDENTITY"
+          ? "SOURCE_IDENTITY"
+          : "GENERATION_OR_WRITE_ERROR"),
+    ];
+  } finally {
+    await selected.waitForIdle();
+    result.modelReceipts = selected.receipts();
+    result.generatedRequests = result.modelReceipts.reduce(
+      (n, r) => n + r.attemptedRequests,
+      0,
+    );
+    result.estimatedCostUsd = result.modelReceipts[0]?.estimatedCostUsd ?? null;
+    result.chargedCostUsd = null;
+    result.totalCostUsd = null;
+  }
+  return result;
+}
+
+/** Fresh process after the secret-bearing step. No provider or credentials here.
+ * Only the original restricted writer and independent network-off Docker verifier
+ * may execute this candidate. All gates/coverage/finalizers retain their meaning. */
+export async function validateGeneratedMigration({
+  context,
+  root,
+  parent,
+  headSha,
+  candidateRoot,
+  candidateSha,
+  signal,
+}) {
   insist(
-    process.platform === "linux" && config && signal,
-    "LINUX_ADMISSION_REQUIRED",
+    !process.env.MODEL_API_KEY && process.platform === "linux",
+    "CREDENTIAL_ISOLATION",
   );
+  insist(
+    isMigrationContext(context) && /^[a-f0-9]{40}$/.test(headSha),
+    "SOURCE_IDENTITY",
+  );
+  const candidate = await admitDirectory(candidateRoot, candidateSha);
+  const session = createSourceSession(parent);
+  await session.writer.write(
+    candidate.files.map(({ path, content }) => ({ path, content })),
+    signal,
+  );
+  const result = {
+    candidateSha,
+    attempts: [],
+    publicG1: "NOT_RUN",
+    publicG2: "NOT_RUN",
+    publicG3: "NOT_RUN",
+    G0: "INCONCLUSIVE",
+    G4: "INCONCLUSIVE",
+    product: "NOT_ESTABLISHED",
+    blockers: [],
+    cleanup: {
+      status: "NOT_RUN",
+      containers: null,
+      volumes: null,
+      emergencyRemoved: null,
+    },
+  };
   let environment;
   let verifier;
   try {
     environment = createEnvironment(root, parent, headSha);
     await environment.prepare(signal);
-    const session = createSourceSession(parent);
     verifier = new RealVerifier(environment, session);
-    const run = await runAgent({
-      runId: `mmp061-${randomUUID()}`,
-      config,
-      benchmark: context.benchmark(),
-      provider: selected.provider,
-      writer: session.writer,
-      verifier,
-      signal,
-    });
+    const report = await verifier.verify(session.writer.root, signal);
     await verifier.waitForIdle();
-    environment.record("model-run", run);
     result.attempts = verifier.attempts.map(publicAttempt);
-    // A future live admission must supply correlated model receipts and budget
-    // settlement here before this scaffold can claim MODEL_GENERATION PASS.
-    result.blockers = ["LIVE_RECEIPT_ADMISSION_NOT_IMPLEMENTED"];
+    for (const gate of ["G1", "G2", "G3"])
+      result[`public${gate}`] =
+        report.results.find((g) => g.gate === gate)?.verdict ?? "INCONCLUSIVE";
+    result.blockers = [
+      ...new Set(
+        report.results
+          .filter((g) => ["G1", "G2", "G3"].includes(g.gate))
+          .flatMap((g) => g.findings.map((f) => f.code)),
+      ),
+    ];
+  } catch {
+    result.blockers = ["PUBLIC_DOCKER_ERROR"];
   } finally {
     await verifier?.waitForIdle();
     const completion = await environment?.finish();

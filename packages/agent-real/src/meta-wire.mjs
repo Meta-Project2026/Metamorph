@@ -40,6 +40,8 @@ const codes = new Set([
   "REVIEW_REQUIRED",
   "PAID_DISPATCH_NOT_AUTHORIZED",
   "BILLING_CAP_NOT_ESTABLISHED",
+  "ESTIMATED_BUDGET_BLOCKED",
+  "USAGE_BOUND_EXCEEDED",
 ]);
 export class MetaWireError extends Error {
   constructor(code) {

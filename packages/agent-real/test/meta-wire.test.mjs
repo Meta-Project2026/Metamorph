@@ -223,7 +223,7 @@ test("secret workflow is manual/main/exact-SHA, dependency-free GET step only", 
   assert.match(text, /inputs.reviewed_sha == github.sha/);
   assert.match(text, /environment: META_API_KEY/);
   assert.match(text, /needs: guard/);
-  assert.match(text, /ENVIRONMENT_PROTECTION_REQUIRED/);
+  assert.match(text, /research\/mmp-078\/guard.mjs/);
   assert.equal((text.match(/secrets\.META/g) ?? []).length, 1);
   assert.doesNotMatch(
     text,

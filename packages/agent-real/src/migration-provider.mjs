@@ -2,6 +2,7 @@ import { ModelResponseSchema } from "@metamorph/agent";
 import { fields, strictJson } from "../../differential/src/strict.mjs";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import { createMetaMigrationProvider } from "./meta-migration.mjs";
+import { paidAdmission } from "./meta-paid-authorization.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 
 const RESPONSE_LIMIT = 1024 * 1024 + 64 * 1024;
@@ -27,8 +28,16 @@ export function migrationFailure(error) {
 /** Production admission has no caller-supplied cap and performs no network IO.
  * A future paid transport needs independently enforceable billing admission.
  * A real local model cannot be disguised as billing:synthetic. */
-export function migrationProviderStatus(selection = "none") {
+export function migrationProviderStatus(
+  selection = "none",
+  authorization,
+  context,
+) {
   insist(["none", "meta", "local"].includes(selection), "PROVIDER_DENIED");
+  const admission =
+    selection === "meta" && authorization
+      ? paidAdmission(authorization, context)
+      : null;
   return Object.freeze({
     provider:
       selection === "meta"
@@ -37,19 +46,34 @@ export function migrationProviderStatus(selection = "none") {
           ? "local-unconfigured"
           : null,
     modelId: selection === "meta" ? "muse-spark-1.3" : null,
-    admitted: false,
+    admitted: Boolean(admission),
     maxRequestCostUsd: null,
-    code:
-      selection === "meta"
+    maxEstimatedRequestCostUsd: admission?.worstCaseEstimatedUsd ?? null,
+    authorization: admission,
+    code: admission
+      ? "MANUAL_PAID_ESTIMATE_ADMITTED"
+      : selection === "meta"
         ? "BILLING_CAP_NOT_ESTABLISHED"
         : selection === "local"
           ? "LOCAL_RUNTIME_AND_BILLING_CONTRACT_REQUIRED"
           : "MISSING_PROVIDER",
   });
 }
-export function createProductionMigrationProvider(context, selection) {
+export function createProductionMigrationProvider(
+  context,
+  selection,
+  authorization,
+  checkpoint,
+) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
-  const status = migrationProviderStatus(selection);
+  const status = migrationProviderStatus(selection, authorization, context);
+  if (status.admitted) {
+    const live = createMetaMigrationProvider(context, {
+      authorization,
+      checkpoint,
+    });
+    return Object.freeze({ ...live, status });
+  }
   const blocked =
     selection === "meta" ? createMetaMigrationProvider(context) : null;
   return Object.freeze({
