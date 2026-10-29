@@ -32,6 +32,7 @@ import {
   TargetWorker,
 } from "../../target-worker/src/controller.mjs";
 import { buildTrustedRuntime } from "../../target-worker/src/runtime-broker.mjs";
+import { summarizeCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import { aggregateAttempt, safeCode, validatePublication } from "./report.mjs";
 import { check, isSourceSession } from "./source.mjs";
 
@@ -40,6 +41,7 @@ export const MANIFEST_PIN =
 export const RECIPE_PIN =
   "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3";
 const readyEnvironments = new WeakSet();
+const compilerDiagnostics = new WeakMap();
 const frozenSource = JSON.stringify(SOURCE);
 const digest = (path) => sha256(readFileSync(path));
 
@@ -258,8 +260,18 @@ export function buildReceipt(worker, scenarioId) {
     result.executedTestIds.push(`${scenarioId}:${phase.phase}`);
     if (phase.exitCode !== 0) failed = true;
   }
-  if (failed)
-    return { ...result, verdict: "FAIL", findingCodes: ["BUILD_FAILED"] };
+  if (failed) {
+    const failure = {
+      ...result,
+      verdict: "FAIL",
+      findingCodes: ["BUILD_FAILED"],
+    };
+    compilerDiagnostics.set(
+      failure,
+      summarizeCompilerDiagnostics(output.checks, worker.bundle),
+    );
+    return failure;
+  }
   check(
     receipt.exitCode === 0 &&
       output.checks.length === 2 &&
@@ -267,6 +279,12 @@ export function buildReceipt(worker, scenarioId) {
     "EVIDENCE_ERROR",
   );
   return { ...result, verdict: "PASS", findingCodes: [] };
+}
+
+// Gate API stays unchanged; diagnostic data travels in a separate sidecar.
+export function observeBuild(worker, scenarioId) {
+  const build = buildReceipt(worker, scenarioId);
+  return { build, compilerDiagnostics: compilerDiagnostics.get(build) };
 }
 
 export function validateTargetBudget(worker) {
@@ -314,7 +332,8 @@ async function runPair(context, lease, attemptId, scenario, signal) {
   let gates = [],
     failure = null,
     cleanup = "CLEANUP_ERROR",
-    build;
+    build,
+    diagnostics;
   try {
     context.check();
     await lease.assertUnchanged();
@@ -375,7 +394,9 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       failure = "CLEANUP_ERROR";
     }
     try {
-      build = buildReceipt(worker, scenario.id);
+      const observed = observeBuild(worker, scenario.id);
+      build = observed.build;
+      diagnostics = observed.compilerDiagnostics;
       await lease.assertUnchanged();
       context.check();
     } catch (error) {
@@ -396,6 +417,7 @@ async function runPair(context, lease, attemptId, scenario, signal) {
     ...identity,
     gates,
     build,
+    compilerDiagnostics: diagnostics,
     cleanup,
     errorCode: failure,
     packs: [context.seal(phpPack), context.seal(bridge)],
