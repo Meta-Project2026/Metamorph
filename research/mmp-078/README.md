@@ -95,7 +95,8 @@ verifier; candidate code runs exclusively in its original bounded network-off
 worker, with no key, GitHub token or reference mounts. No secret was added to
 agent-workshop-compose, pushes or PR CI.
 
-Only explicit sanitized policy/generation/trial/finalizer JSON files are uploaded,
+Only explicit sanitized policy/generation/trial/finalizer JSON and the durable
+per-run attempt ledger are uploaded,
 with seven-day retention. Raw prompts/responses, candidate source, provider error
 bodies, private raw packs, transfer metadata and auth are not public artifacts.
 Candidate sources remain transient in runner private directories. The public
@@ -108,6 +109,11 @@ historical private AUDIT_FAIL unchanged, product NOT_ESTABLISHED.
 
 See [settings plan/rollback](settings-plan.md), original and reread metadata files,
 [owner commands](MMP-078-HUMAN.md), and [validation](validation.md).
+The paid workflow also has validate_only=true: the secret-mapped POST step is
+skipped, no provider/session is constructed, and real GitHub OIDC admission is
+checked in a process without MODEL_API_KEY. Only a sanitized authorization receipt
+is produced. This mode performs no Meta request and no candidate generation.
+
 The read-only GET workflow now accepts the no-reviewer/main-only policy; it remains
 a separately authorized GET and does not authorize paid inference. This task
 performs **Meta GET=0 / POST=0**; no live entitlement or model trial is established.

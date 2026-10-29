@@ -42,3 +42,10 @@ gh api repos/Meta-Project2026/Metamorph/environments/META_API_KEY --jq '{name,ca
 gh api repos/Meta-Project2026/Metamorph/environments/META_API_KEY/deployment-branch-policies
 gh api repos/Meta-Project2026/Metamorph/environments/META_API_KEY/secrets --jq '.secrets | map({name})'
 ```
+
+Nonbillable real-runner admission verification after merge: use the same exact
+reviewed main SHA/inputs above **with `-f validate_only=true`**. This explicitly
+skips the secret-mapped network step and candidate/Docker validation; it checks
+real GitHub OIDC/metadata and publishes authorization.json, Meta GET/POST=0/0.
+The production default is validate_only=false. A validation run issues but never
+consumes the opaque capability and cannot be rerun as a paid attempt (reruns block).

@@ -576,4 +576,15 @@ test("workflow maps one secret to one step only; per-owner queue and explicit pu
   assert.match(yml, /id-token: write/);
   assert.ok(yml.indexOf("pnpm build") < yml.indexOf("MODEL_API_KEY:"));
   assert.match(yml, /retention-days: 7/);
+  const networkStep = yml.split("id: generation")[1].split("- name:")[0];
+  assert.match(networkStep, /if: \$\{\{ !inputs.validate_only \}\}/);
+  const validation = readFileSync(
+    join(root, "research/mmp-078/validate-authorization.mjs"),
+    "utf8",
+  );
+  assert.doesNotMatch(
+    validation,
+    /createMetaMigrationProvider|runPublicMigration|metaHttpsExchange/,
+  );
+  assert.match(validation, /authorizePaidWorkflow\(context\)/);
 });
