@@ -49,6 +49,8 @@ protected execution mechanism instead.
   strict true with required properties and additionalProperties false.
 - [Models](https://dev.meta.ai/docs/models): muse-spark-1.3, Standard mode;
   documented context 1,048,576 tokens. Actual account entitlement NOT_VERIFIED.
+- [Reasoning](https://dev.meta.ai/docs/reasoning): Muse Spark rejects `reasoning_effort=none` with HTTP 400; `low` is supported, and reasoning tokens consume output budget/billing.
+- [Chat Completions](https://dev.meta.ai/docs/protocols/chat-completions): request parameter and reasoning-effort constraints.
 - [Pricing](https://dev.meta.ai/docs/pricing-rate-limits): Standard per-million
   input/cached/output USD 1.25/0.15/4.25. Contributor IDs/rates are different and
   not selected. Rates are a dated estimate snapshot, never a charge guarantee.
@@ -74,13 +76,18 @@ The private session contains the real native POST path; the entry gate is closed
 in code, with no enable flag or caller-supplied monetary override. The offline
 harness exercises the same wire mapping and is marked SYNTHETIC_WIRE_TEST.
 
-Proposed first-call policy mmp061-meta-manual-v1: Standard muse-spark-1.3, no tools,
+Proposed first-call policy mmp061-meta-manual-v2: Standard muse-spark-1.3, no tools,
 no streaming/store, reasoning_effort=none, one request, no repair/retry/failover,
 128 KiB prompt bytes, 16,384 output tokens, 2 MiB response, 180s request deadline,
 240s session TTL. Target file limits remain 64 files / 256 KiB each / 1 MiB total.
 These are application proposals, not provider-default assertions. Whole public
-PHP fits the prompt, unlike legacy 2048-byte/128-output-token probe limits. Output
-cap covers reasoning as documented; none avoids spending this pilot on reasoning.
+PHP fits the prompt, unlike legacy 2048-byte/128-output-token probe limits. The
+request explicitly sets `reasoning_effort=low`: Muse Spark 1.3 rejects `none`
+with HTTP 400 according to the official Meta reasoning and Chat Completions docs.
+Reasoning tokens count toward the same 16,384 completion-token cap as visible
+output and toward billed output tokens. A low effort limits relative reasoning
+work but does not guarantee any zero-reasoning or fixed cost. The existing
+one-request/no-retry paid admission remains closed.
 
 Input-token caveat: no verified provider tokenizer/preflight token-count API is
 implemented. The adapter enforces prompt bytes before sending and validates at
