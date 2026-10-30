@@ -1,8 +1,10 @@
 # MMP-089 plan and current execution map
 
 Status: owner public recipient and separate explicit data-policy approval in
-[spec.md](spec.md) received in this chat. Implementation/qualification in
-progress; no upload or paid request has occurred.
+[spec.md](spec.md) received in this chat. Implementation and the required
+executor/independent offline controls completed; [validation.md](validation.md)
+retains the initial environment timeout and additional PARTIAL baseline proof.
+No upload or paid request occurred. Delivery CI/review are recorded on the PR.
 
 On continuation, remote main had advanced to
 `59a6266801956a3048a4c1ceb915bc1fb0f773a9` (PR90 CI coverage and PR91 Docker
@@ -47,7 +49,7 @@ were unchanged by that main update.
    persist until the ephemeral runner is destroyed; normal Docker cleanup does
    not erase them. New plaintext staging needs its own checked cleanup.
 
-## Authorized progress before the missing owner inputs
+## Historical preparation before owner inputs
 
 - Fresh-main worktree prepared without changing the user's original checkout.
 - Current source, issue/review, recipient requirements and public destination
@@ -55,7 +57,7 @@ were unchanged by that main update.
 - Concrete minimal policy, data boundary and acceptance matrix prepared.
 - Independent security review of this design only; no runtime/crypto PASS claim.
 
-## Work after recipient-pin and policy approval
+## Implementation sequence after recipient-pin and policy approval
 
 1. Independently validate/pin supplied recipient and upstream age binary,
    version/hash/provenance. Keep the private key outside CI/GitHub.
@@ -82,7 +84,7 @@ were unchanged by that main update.
 Independent review may require revisions; tests/receipts must distinguish
 executor runs, hosted CI and independent execution. Missing checks are NOT_RUN.
 
-## Preparation evidence
+## Historical preparation evidence (before implementation)
 
 Observed 2026-10-29; these are read-only/preparation checks, not new runtime proof.
 

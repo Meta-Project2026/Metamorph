@@ -18,16 +18,25 @@
 - [x] Independently verified age archive/binary/version/LICENSE pins; executor
   Sigsum proof and exact public-recipient tool acceptance exit 0 (separate from
   decryption/roundtrip controls).
-- [ ] Implement bounded collection/encryption/failure-aware ordering and cleanup.
-- [ ] Synthetic positive/negative/crash/canary controls and independent crypto
+- [x] Implement bounded collection/encryption/failure-aware ordering and cleanup.
+- [x] Synthetic positive/negative/crash/canary controls and independent crypto
   roundtrip/hash-equality, wrong-key/tamper tests.
 - [ ] Optional later operational confirmation: owner independently decrypts a
   harmless challenge outside CI; no owner private key disclosed. Not a new
   current approval gate and not a substitute for independent crypto tests.
-- [ ] Independently execute actual Linux Docker G1 FAIL and cleanup controls.
-- [ ] Fast checks, sanitized evidence, commit/push/PR and exact-SHA Node22/24 CI.
-- [ ] Independent exact-pushed-SHA ChatGPT security review; no unreviewed merge.
+- [x] Independently execute actual Linux Docker G1 FAIL and cleanup controls:
+  executor and independent reviewer each 20/20 on the same code head.
+- [x] Run fast checks and retain sanitized evidence, including initial compiler
+  timeout and the additional unchanged baseline's PARTIAL result.
+- [x] Remove the task-owned Linux helper/container and private data volume;
+  verify absence after extracting only allowlisted public reports.
 
-Current outcome: **POLICY APPROVED; IMPLEMENTATION / QUALIFICATION IN PROGRESS**.
+Delivery procedure: push, open PR, inspect exact-SHA Node22/24 CI and request
+independent exact-pushed-SHA ChatGPT review. Their outcomes live in PR checks
+and the final delivery comment, avoiding a self-referential evidence commit.
+No unreviewed merge. The optional owner-key challenge is not a task blocker.
+
+Current outcome: **CORE DIAGNOSTIC SLICE IMPLEMENTED / OFFLINE QUALIFIED**.
 No Meta API call, workflow dispatch, private upload, merge or paid-v2 approval.
-Crypto tests, new Docker controls and branch CI: **NOT_RUN**.
+Actual artifact upload/owner-key decryption: **NOT_RUN**. Baseline full repair
+proof: **PARTIAL**, not PASS. G0/G4 INCONCLUSIVE; product NOT_ESTABLISHED.

@@ -1,0 +1,43 @@
+{
+  "format": "mmp089-independent-decryption-v1",
+  "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+  "status": "PASS",
+  "failedStage": null,
+  "cases": [
+    {
+      "id": "independent-decrypt",
+      "exitCode": 0,
+      "processError": "NONE",
+      "signal": null
+    },
+    {
+      "id": "source-manifest-and-compiler-equality",
+      "status": "PASS"
+    },
+    {
+      "id": "independent-wrong-key-refusal",
+      "exitCode": 1,
+      "processError": "NONE",
+      "signal": null,
+      "stdoutBytes": 0
+    },
+    {
+      "id": "independent-tamper-refusal",
+      "exitCode": 1,
+      "processError": "NONE",
+      "signal": null,
+      "stdoutBytes": 0
+    }
+  ],
+  "observed": {
+    "plaintextSha256": "06befc25817c98b449370ee491c299924e440491cff0dbf090f7b9820e5847a0",
+    "ciphertextSha256": "3eefeeb9984bbc6ba9b5ffa1d82c58d73bdbd795dc8139950c9d28dc46e156e8",
+    "candidateSha": "c0c3559424fa1050959b88e49dfc796d0b9c0d84ecfb7ad9f783703ecea1fbc8",
+    "compilerSha256": "694ee80c66d2044983840bd221ad3e97e0ffa2458fe32916c05e733dd62eb018"
+  },
+  "identity": "THROWAWAY_TEST_ONLY",
+  "ownerPrivateKeyAccess": "NONE",
+  "ownerRecipientDecryptability": "NOT_ESTABLISHED",
+  "artifactUpload": "NOT_RUN",
+  "product": "NOT_ESTABLISHED"
+}

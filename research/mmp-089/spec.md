@@ -1,6 +1,8 @@
 # MMP-089: owner-only diagnostic preservation
 
-Status: **B SELECTED; RECIPIENT AND DATA POLICY APPROVED; IMPLEMENTATION / QUALIFICATION IN PROGRESS**.
+Status: **B APPROVED / IMPLEMENTED; CORE OFFLINE CONTROLS PASS**.
+Exact delivery CI/review status is recorded in the PR checks and delivery
+comment; execution evidence and its limits are in [validation.md](validation.md).
 The owner selected option B in this chat on 2026-10-29. This selects the
 mechanism. The owner then supplied the public recipient below and separately
 approved this recipient and the proposed access/retention/destination policy in this

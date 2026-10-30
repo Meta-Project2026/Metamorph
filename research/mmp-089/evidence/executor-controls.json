@@ -1,0 +1,124 @@
+{
+  "format": "mmp089-offline-controls-v1",
+  "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+  "status": "PASS",
+  "execution": "ACTUAL_VALIDATOR_REAL_NETWORK_OFF_DOCKER_SYNTHETIC_INPUT",
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "metaRequests": 0,
+  "validatorExitCode": 1,
+  "cases": [
+    {
+      "id": "authentic-network-off-g1-fail",
+      "status": "PASS"
+    },
+    {
+      "id": "exact-source-and-authentic-phase-receipts-selected",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-head",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-source",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-candidate",
+      "status": "PASS"
+    },
+    {
+      "id": "missing-source-pack-id",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-index-sha",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-pair",
+      "status": "PASS"
+    },
+    {
+      "id": "normal-cleanup-error",
+      "status": "PASS"
+    },
+    {
+      "id": "throwaway-key-encryption-and-exact-decryption-hash-equality",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-identity-refused",
+      "status": "PASS"
+    },
+    {
+      "id": "tampered-ciphertext-refused",
+      "status": "PASS"
+    },
+    {
+      "id": "wrong-recipient-pin-refused",
+      "status": "PASS"
+    },
+    {
+      "id": "oversized-plaintext-refused",
+      "status": "PASS"
+    },
+    {
+      "id": "encryptor-process-crash-cleanup",
+      "status": "PASS"
+    },
+    {
+      "id": "encryptor-abort-cleanup",
+      "status": "PASS"
+    },
+    {
+      "id": "no-plaintext-in-public-record-schema",
+      "status": "PASS"
+    },
+    {
+      "id": "production-preserver-cli-fixed-owner-recipient-no-upload",
+      "status": "PASS"
+    },
+    {
+      "id": "independent-finalizer-zero-resources",
+      "status": "PASS"
+    },
+    {
+      "id": "production-upload-gate-after-actual-finalizer-no-upload",
+      "status": "PASS"
+    }
+  ],
+  "finalizer": {
+    "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0,
+    "status": "PASS"
+  },
+  "preservation": {
+    "format": "mmp089-preservation-v1",
+    "status": "ENCRYPTED_PENDING_UPLOAD",
+    "identity": {
+      "runId": "890001",
+      "runAttempt": "1",
+      "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "candidateSha": "c0c3559424fa1050959b88e49dfc796d0b9c0d84ecfb7ad9f783703ecea1fbc8",
+      "attemptId": "3a50b137-c4a0-4a48-8780-0bfc8768968c",
+      "pairId": "b3c76108-c728-4e8e-9fab-cc265804d6de"
+    },
+    "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+    "ageVersion": "v1.3.2",
+    "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+    "ciphertextSha256": "c05980481f3bd47160c843d77d25d5175d2e4ec80b4191ac116840e91c04fbe0",
+    "ciphertextBytes": 1458,
+    "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+    "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+    "upload": "NOT_RUN"
+  },
+  "privateKey": "THROWAWAY_ONLY_NEVER_OWNER_IDENTITY",
+  "ownerRecipientDecryptability": "NOT_ESTABLISHED",
+  "product": "NOT_ESTABLISHED"
+}

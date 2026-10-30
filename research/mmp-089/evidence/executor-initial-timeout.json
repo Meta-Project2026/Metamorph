@@ -1,0 +1,27 @@
+{
+  "format": "mmp089-offline-controls-v1",
+  "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+  "status": "FAIL",
+  "execution": "ACTUAL_VALIDATOR_REAL_NETWORK_OFF_DOCKER_SYNTHETIC_INPUT",
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "metaRequests": 0,
+  "validatorExitCode": 1,
+  "cases": [
+    {
+      "id": "independent-finalizer-zero-resources",
+      "status": "PASS"
+    }
+  ],
+  "finalizer": {
+    "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0,
+    "status": "PASS"
+  },
+  "privateKey": "THROWAWAY_ONLY_NEVER_OWNER_IDENTITY",
+  "ownerRecipientDecryptability": "NOT_ESTABLISHED",
+  "product": "NOT_ESTABLISHED"
+}
