@@ -2,17 +2,25 @@ import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
 import { PINS } from "./pins.mjs";
+import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 
 const routes = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
-  ...["viewer.mjs", "adapter.mjs", "pins.mjs"].map((name) => [
-    `/${name}`,
-    [name, "text/javascript; charset=utf-8"],
-  ]),
+  ...[
+    "viewer.mjs",
+    "adapter.mjs",
+    "pins.mjs",
+    "real-ai-adapter.mjs",
+    "real-ai-pins.mjs",
+  ].map((name) => [`/${name}`, [name, "text/javascript; charset=utf-8"]]),
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
   ...Object.keys(PINS.files).map((name) => [
     `/evidence/${name}`,
     [`evidence/${name}`, "application/json; charset=utf-8"],
+  ]),
+  ...Object.keys(REAL_AI_PINS.files).map((name) => [
+    `/${REAL_AI_PINS.directory}/${name}`,
+    [`${REAL_AI_PINS.directory}/${name}`, "application/json; charset=utf-8"],
   ]),
 ]);
 export function makeServer() {
