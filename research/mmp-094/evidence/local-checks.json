@@ -1,0 +1,97 @@
+{
+  "format": "mmp094-local-checks-v1",
+  "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+  "platform": "Windows",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "checks": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 3.5621257
+    },
+    {
+      "command": "pnpm build",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 15.087757
+    },
+    {
+      "command": "node --import <local-network-deny> research/mmp-086/audit-request.mjs <audit-output>",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 1,
+      "seconds": 0.1260718
+    },
+    {
+      "command": "node --import <local-network-deny> research/mmp-086/audit-request.mjs <audit-output>",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 1.9283419
+    },
+    {
+      "command": "pnpm lint",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 1.4503047
+    },
+    {
+      "command": "pnpm typecheck",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 32.3916167
+    },
+    {
+      "command": "pnpm test",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 19.4909387,
+      "tests": 459,
+      "pass": 357,
+      "fail": 0,
+      "skipped": 102
+    },
+    {
+      "command": "pnpm build",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 13.3322929
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 4.0027242
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+      "exit": 0,
+      "seconds": 0.1566397
+    }
+  ],
+  "initialAuditLauncherErrors": {
+    "count": 2,
+    "exit": 1,
+    "code": "ERR_UNSUPPORTED_ESM_URL_SCHEME",
+    "scope": "local wrapper failed before loading repository audit; corrected --import to file URL; repository code unchanged"
+  },
+  "syntax": {
+    "checked": 63,
+    "failed": 0,
+    "exit": 0
+  },
+  "coverage": {
+    "status": "VALID",
+    "researchModules": 64,
+    "syntaxRule": "63 active modules; one archived module excluded by existing contract"
+  },
+  "newDocker": "NOT_RUN_REUSED_PUBLISHED_RECEIPTS",
+  "newCrypto": "NOT_RUN",
+  "ownerKey": "NOT_ACCESSED",
+  "ownerDecrypt": "NOT_VERIFIED",
+  "paidDispatches": 0,
+  "workflowReruns": 0,
+  "metaApiCalls": 0,
+  "ciphertextUploads": 0
+}

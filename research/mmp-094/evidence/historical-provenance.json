@@ -1,0 +1,193 @@
+{
+  "format": "mmp094-historical-custody-v1",
+  "mainSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+  "executionSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+  "receipts": [
+    {
+      "path": "research/mmp-089/evidence/executor-controls.json",
+      "gitBlob": "8d70bd56716b1df399222db485038e8ccb041867",
+      "blobSha256": "118678e908760ca4b6a1db1c34e6fb8e8945a44f4bbae346e5264c13d64335da",
+      "bytes": 3226,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PASS",
+      "caseCount": 20,
+      "validatorExitCode": 1,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-controls.json",
+      "gitBlob": "b2f46b29c2e0b53be1e42003d86cfe55f14fb0ca",
+      "blobSha256": "c4489be39716cbc83370885e709ebd88ff01143559e92a330f0188f3165ab676",
+      "bytes": 3226,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PASS",
+      "caseCount": 20,
+      "validatorExitCode": 1,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-decryption.json",
+      "gitBlob": "bdb1b7a6b1fd74f9586b619b4f32f9ed1a326af0",
+      "blobSha256": "5eddf88e96e360bb179271c0b8cd3af9c04a2071f7bef7b536f98c3f635de71d",
+      "bytes": 1251,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PASS",
+      "caseCount": 4,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-execution.json",
+      "gitBlob": "dc256a1baf10767e7f42ae3f9be89144964f77eb",
+      "blobSha256": "764dd5005fd2d625e7a74ec852a3ae92eddf2d7ead6557933c418752b7867037",
+      "bytes": 3721,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "SEE_ORIGINAL_RECEIPT",
+      "caseCount": null,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/executor-initial-timeout.json",
+      "gitBlob": "cf3e33bb74d9ad96bb72e38227656ee1036366ef",
+      "blobSha256": "12827e63cedfd76c87751e887e19c91667943e8af7190611114023b653d38bf6",
+      "bytes": 729,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "FAIL",
+      "caseCount": 1,
+      "validatorExitCode": 1,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-baseline-triage.json",
+      "gitBlob": "781acea9463d4e9f1c3df5c5d9066b4fe3c933e8",
+      "blobSha256": "e51cde8d181aa00e56d97cca5a750b6d23fba2ace770e0c30ad3fc2e7691ba11",
+      "bytes": 2709,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PARTIAL",
+      "caseCount": null,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-baseline-partial.json",
+      "gitBlob": "e949feb6217d704f482b2c5e52267c519660b3b0",
+      "blobSha256": "a27cb239d2584bd754dc6510b7673b88a2fae80276cc2437bc2e021a77199dda",
+      "bytes": 24565,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PARTIAL",
+      "caseCount": null,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/independent-baseline-finalizer.json",
+      "gitBlob": "dea25cfd97a3088aa5d33d022c5ec7601056a20c",
+      "blobSha256": "d6fbe82fa2078b22dff91e6deafc5fad02977f55d6fdcce880848178a5999e74",
+      "bytes": 165,
+      "executionHead": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+      "status": "PASS",
+      "caseCount": null,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    },
+    {
+      "path": "research/mmp-089/evidence/helper-cleanup.json",
+      "gitBlob": "faf636ff2d69b8f9185173332359e3811433ab9b",
+      "blobSha256": "2324337fb33cd559a4102ada5c7a15a10ce141fc286c84e069c847303b3f6298",
+      "bytes": 734,
+      "executionHead": "SEE_ORIGINAL_RECEIPT",
+      "status": "SEE_ORIGINAL_RECEIPT",
+      "caseCount": null,
+      "validatorExitCode": null,
+      "source": "COMMITTED_PUBLIC_RECEIPT_NOT_NEW_EXECUTION"
+    }
+  ],
+  "independentReceiptHashesMatch": true,
+  "codeBindings": [
+    {
+      "path": "packages/agent-real/src/private-diagnostics.mjs",
+      "executionGitObject": "7876374cd34222ddfe4ccbbff835ac81d7745aed",
+      "mainGitObject": "7876374cd34222ddfe4ccbbff835ac81d7745aed",
+      "identical": true
+    },
+    {
+      "path": "packages/agent-real/src/encrypt-diagnostics.mjs",
+      "executionGitObject": "877522724845748f0a028d879b98f9b4b9a03afc",
+      "mainGitObject": "877522724845748f0a028d879b98f9b4b9a03afc",
+      "identical": true
+    },
+    {
+      "path": "packages/agent-real/src/migration-trial.mjs",
+      "executionGitObject": "d48b94b5c23011a1352c7b843686003219d3f975",
+      "mainGitObject": "d48b94b5c23011a1352c7b843686003219d3f975",
+      "identical": true
+    },
+    {
+      "path": "packages/agent-real/src/runtime.mjs",
+      "executionGitObject": "8a567d4fc15bf00e868c8bbbf96c336d8ed2d6d2",
+      "mainGitObject": "8a567d4fc15bf00e868c8bbbf96c336d8ed2d6d2",
+      "identical": true
+    },
+    {
+      "path": "research/mmp-078/validate-candidate.mjs",
+      "executionGitObject": "18e37635bdbfb502d95e72c396092a9064ff0cdb",
+      "mainGitObject": "18e37635bdbfb502d95e72c396092a9064ff0cdb",
+      "identical": true
+    },
+    {
+      "path": "research/mmp-089/preserve.mjs",
+      "executionGitObject": "7305c6424675f636427211c8d6c29752182a6d7f",
+      "mainGitObject": "7305c6424675f636427211c8d6c29752182a6d7f",
+      "identical": true
+    },
+    {
+      "path": "research/mmp-089/prepare-upload.mjs",
+      "executionGitObject": "d64a02d98271107039640c7e09a6fc871a1e8e5d",
+      "mainGitObject": "d64a02d98271107039640c7e09a6fc871a1e8e5d",
+      "identical": true
+    },
+    {
+      "path": "research/mmp-089/record-upload.mjs",
+      "executionGitObject": "7131d4ada89d75f19d6c9526d63006baa8ae066c",
+      "mainGitObject": "7131d4ada89d75f19d6c9526d63006baa8ae066c",
+      "identical": true
+    },
+    {
+      "path": "research/mmp-089/offline-controls.mjs",
+      "executionGitObject": "9c6cfdaf145a25f22c1089484f7f920bc3534d96",
+      "mainGitObject": "9c6cfdaf145a25f22c1089484f7f920bc3534d96",
+      "identical": true
+    },
+    {
+      "path": ".github/workflows/meta-paid-migration.yml",
+      "executionGitObject": "0869d7144fa0e77bd61e3acb0b597822cc3415b8",
+      "mainGitObject": "0869d7144fa0e77bd61e3acb0b597822cc3415b8",
+      "identical": true
+    }
+  ],
+  "dockerControls": {
+    "executor": "20/20 PASS",
+    "independentReviewer": "20/20 PASS",
+    "environment": "independently executed local Linux Docker, not hosted Actions Docker",
+    "actualCiphertextUpload": "NOT_RUN",
+    "ownerRecipientDecryption": "NOT_ESTABLISHED"
+  },
+  "unresolvedBaseline": {
+    "status": "PARTIAL",
+    "errorCode": "EVIDENCE_ERROR",
+    "underlying": "compiler build phase ETIMEDOUT / SIGTERM",
+    "proofCliExit": "NOT_RECOVERED",
+    "sourceImpliedExit": 1,
+    "sourceImpliedExitIsInference": true,
+    "rerun": "NOT_RUN",
+    "issue": 84
+  },
+  "originalPaidRun": {
+    "runId": 40900698372,
+    "g1": "FAIL_BUILD_FAILED",
+    "candidateSource": "UNAVAILABLE",
+    "compilerErrors": "UNAVAILABLE",
+    "rootCause": "UNKNOWN"
+  }
+}
