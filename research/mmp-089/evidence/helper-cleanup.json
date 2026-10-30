@@ -1,0 +1,14 @@
+{
+  "format": "mmp089-helper-cleanup-v1",
+  "containerIdVerified": "efb4504f1b16b798d665f0453f225d78c483f11065bc51add7ffcbba34a56af9",
+  "volumeNameVerified": "mmp089-runner-data",
+  "volumeMountpointVerified": "/var/lib/docker/volumes/mmp089-runner-data/_data",
+  "containerRemovalExitCode": 0,
+  "volumeRemovalExitCode": 0,
+  "after": { "taskHelperContainers": 0, "taskHelperVolumes": 0 },
+  "privateTestData": "REMOVED_WITH_TASK_VOLUME",
+  "publicEvidenceOnlyExtracted": true,
+  "ownerPrivateKeyAccess": "NONE",
+  "trustedImageCaches": "Not execution resources; no global prune or unrelated resource deletion",
+  "independentPublicWindowsToolDownloads": "REMAIN_IN_TEMP_AFTER_AUTOMATIC_REVIEW_REJECTED_CLEANUP_BLOCKED_BY_POLICY"
+}

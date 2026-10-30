@@ -1,0 +1,32 @@
+{
+  "format": "mmp089-environment-observation-v1",
+  "headSha": "dc28ac9b94617e95dd7aab2712b6eaf03fe4fc9b",
+  "controlCommandExitCode": 1,
+  "validatorCommandExitCode": 1,
+  "G1": "ERROR",
+  "G2": "ERROR",
+  "G3": "ERROR",
+  "classification": "ENVIRONMENT_ERROR_WITH_TRUSTED_TYPECHECK_TIMEOUT",
+  "trustedBuildReceipt": {
+    "exitCode": 2,
+    "signal": null,
+    "spawnError": null,
+    "timedOut": false,
+    "cancelled": false,
+    "overflow": false,
+    "elapsedMs": 12954.072291,
+    "stdoutBytes": 129,
+    "stderrBytes": 0,
+    "phases": [{ "phase": "typecheck", "exitCode": null, "error": "ETIMEDOUT", "signal": "SIGTERM", "stdoutBytes": 0, "stderrBytes": 0 }]
+  },
+  "normalCleanup": { "status": "VERIFIED_ZERO_RESOURCES", "containers": 0, "volumes": 0, "emergencyRemoved": 0 },
+  "independentFinalizer": { "status": "PASS", "containers": 0, "volumes": 0, "emergencyRemoved": 0 },
+  "sourceOrCompilerTextPublished": false,
+  "overlappedWindowsFastChecks": true,
+  "causeOfTimeout": "NOT_ESTABLISHED",
+  "subsequentControl": "Separate synthetic attempt after fast checks finished; unchanged recipe, budgets and gates; first observation retained",
+  "modelGeneration": "AI_GENERATION_NOT_RUN",
+  "metaRequests": 0,
+  "remainingCryptoControlsInThisAttempt": "NOT_RUN",
+  "product": "NOT_ESTABLISHED"
+}

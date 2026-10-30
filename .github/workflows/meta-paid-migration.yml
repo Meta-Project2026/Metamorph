@@ -81,6 +81,9 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
           pnpm build
+      - name: Prepare pinned private diagnostic tools before mapping any Meta credential
+        if: ${{ !inputs.validate_only }}
+        run: node research/mmp-089/install-age.mjs
       - name: One signed-identity-authorized bounded Meta POST; no code execution
         id: generation
         if: ${{ !inputs.validate_only }}
@@ -94,14 +97,41 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: node research/mmp-078/validate-authorization.mjs
       - name: Independent Docker Oracle in fresh process without Meta credential
+        id: validation
         if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
         run: node research/mmp-078/validate-candidate.mjs
+      - name: Preserve one attributable G1 failure with approved public recipient
+        id: preservation
+        if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
+        run: node research/mmp-089/preserve.mjs
       - name: Final owned-resource inventory without credential
+        id: finalizer
         if: always()
         env:
           WORKSHOP_PUBLIC_OUTPUT: ${{ runner.temp }}/meta-paid-public
           PILOT_HEAD_SHA: ${{ github.sha }}
         run: node packages/differential/src/workshop-finalizer.mjs
+      - name: Require encryption and both normal and independent cleanup proofs
+        id: diagnostic-gate
+        if: ${{ !cancelled() && steps.generation.outcome == 'success' && steps.preservation.outcome == 'success' && steps.finalizer.outcome == 'success' }}
+        env:
+          MMP089_PRESERVE_OUTCOME: ${{ steps.preservation.outcome }}
+          MMP089_FINALIZER_OUTCOME: ${{ steps.finalizer.outcome }}
+        run: node research/mmp-089/prepare-upload.mjs
+      - name: Upload only approved authenticated ciphertext for seven days
+        id: diagnostic-upload
+        if: ${{ !cancelled() && steps.diagnostic-gate.outcome == 'success' && steps.diagnostic-gate.outputs.eligible == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmp089-private-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/mmp089-private-diagnostics/candidate-diagnostics.age
+          if-no-files-found: error
+          retention-days: 7
+      - name: Record preservation only after artifact upload completes
+        if: ${{ !cancelled() && (steps.diagnostic-upload.outcome == 'success' || steps.diagnostic-upload.outcome == 'failure') }}
+        env:
+          MMP089_UPLOAD_OUTCOME: ${{ steps.diagnostic-upload.outcome }}
+        run: node research/mmp-089/record-upload.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -111,6 +141,7 @@ jobs:
             ${{ runner.temp }}/meta-paid-public/trial.json
             ${{ runner.temp }}/meta-paid-public/finalizer.json
             ${{ runner.temp }}/meta-paid-public/authorization.json
+            ${{ runner.temp }}/meta-paid-public/preservation.json
             ${{ runner.temp }}/mmp078-${{ github.run_id }}-attempt.json
           if-no-files-found: error
           retention-days: 7

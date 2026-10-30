@@ -1,0 +1,44 @@
+{
+  "format": "mmp089-age-provenance-v1",
+  "observedDate": "2026-10-29",
+  "upstream": "https://github.com/FiloSottile/age/releases/tag/v1.3.2",
+  "archive": {
+    "url": "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz",
+    "bytes": 19405817,
+    "sha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+    "apiDigestMatchesDownloadedBytes": true
+  },
+  "proof": {
+    "url": "https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz.proof",
+    "sha256": "98402fa59b4e433426156b4a7e74a32e44902e0434c61158f7de18ffc84f1f97",
+    "verificationExitCode": 0,
+    "verificationCommand": "sigsum-verify -k /tools/age-sigsum-key.pub -P sigsum-generic-2025-1 /tools/age-v1.3.2-linux-amd64.tar.gz.proof < /tools/age-v1.3.2-linux-amd64.tar.gz",
+    "keySource": "https://raw.githubusercontent.com/FiloSottile/age/v1.3.2/SIGSUM.md",
+    "verifierModule": "sigsum.org/sigsum-go/cmd/sigsum-verify@v0.13.1",
+    "verifierExecutableSha256": "1d12a454675e2e1b4f256cc11c8e7cbf2b46f84a307d343492d86d38f1edb247",
+    "network": "none"
+  },
+  "executables": {
+    "age": { "version": "v1.3.2", "versionExitCode": 0, "sha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c" },
+    "age-keygen": { "version": "v1.3.2", "versionExitCode": 0, "sha256": "0a0009db842259d6717f7eeb30acb6b90d2a2eb924c6acd0a0db0ca1f1537899" }
+  },
+  "license": {
+    "sha256": "afbdb4e07a359499db587ae632815809b1fc1670a92d5449af112ce9a67833a2",
+    "bytes": 2975,
+    "retention": "Complete upstream age/LICENSE retained beside installed tools; includes age BSD-3-Clause and Go notices"
+  },
+  "ownerPublicRecipient": {
+    "recipient": "age1yvf40njrznnr7emg5j76azu62579z38gzh2jqss72l2u9308n5essrvy6f",
+    "utf8Sha256WithoutNewline": "f829a274ca293c96d0fb80b2e6873eaa6e8ea7070e1d22f6342c8802bbd30917",
+    "decodedPublicKeySha256": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+    "executorNodeEncodingCheckExitCode": 0,
+    "independentPythonEncodingCheckExitCode": 0,
+    "ageToolAcceptsRecipientExitCode": 0,
+    "ageToolAcceptanceCommand": "age --encrypt --recipient <exact approved public recipient> --output /dev/null < /dev/null",
+    "ownerPrivateKeyAccess": "NONE",
+    "ownerDecryption": "NOT_RUN_NOT_ESTABLISHED"
+  },
+  "qualificationBoundary": "Trusted tool/provenance/recipient-encoding qualification only; candidate encryption, roundtrip and Docker G1 controls recorded separately",
+  "independentArchiveAndVersionQualification": "PASS: independent HTTPS download, archive/executable/LICENSE hashes and both v1.3.2 version runs exit 0 in restricted pinned Node container; Sigsum and owner-recipient age acceptance were executor observations",
+  "independentToolTempCleanup": "NOT_COMPLETED: automatic approval review rejected bounded cleanup attempts with reason blocked by policy; only downloaded public tools/archive/LICENSE remain in the reviewer's task TEMP directory"
+}
