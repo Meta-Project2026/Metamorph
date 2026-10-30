@@ -1,0 +1,72 @@
+{
+  "format": "mmp094-request-audit-v1",
+  "headSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "manifestPin": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "recipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "contextSha256": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+  "requestSha256": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+  "requestBytes": 22762,
+  "messageBytes": 21209,
+  "userMessageSha256": "60a14a7d0881b3919dd970fdf2f5f976fa1fca20a28ceb0aefccd80f2c0b4b4e",
+  "model": "muse-spark-1.3",
+  "reasoningEffort": "low",
+  "maxCompletionTokens": 16384,
+  "projection": {
+    "method": "serialized-utf8-bytes-times-4-plus-32768-v1",
+    "inputTokensUpperEstimate": 123816,
+    "maxOutputTokens": 16384,
+    "worstCaseEstimatedUsd": 0.224402
+  },
+  "responseSchemaSha256": "46fc42d2a145d3f2098acb2ce1881c05db8df2937c9e4c8c9ebc2b299c46af25",
+  "sourceFiles": [
+    {
+      "path": "api.php",
+      "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77",
+      "bytes": 11956
+    },
+    {
+      "path": "config.php",
+      "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd",
+      "bytes": 4331
+    }
+  ],
+  "timeoutMs": 180000,
+  "sessionTtlMs": 240000,
+  "responseBytes": 2097152,
+  "observedInputTokenLimit": 65536,
+  "inputLimitNote": "post-response validation, not pre-send tokenizer guarantee",
+  "providerHardCap": false,
+  "proposedEstimateSelectorUsd": 0.25,
+  "chargedCostUsd": null,
+  "encoder": "prepareMetaMigration: same serializer and request fields in admission and production session",
+  "comparisonWithMmp086": "ALL_REQUEST_CONTEXT_SOURCE_MANIFEST_RECIPE_VALUES_UNCHANGED; current head is not part of request/context bytes",
+  "network": {
+    "format": "mmp094-audit-network-v1",
+    "blockedAttempts": 0,
+    "networkPolicy": "DENY_ALL_IN_AUDIT_PROCESS",
+    "metaRequests": 0,
+    "credentialMapping": false
+  },
+  "auditProcess": {
+    "format": "mmp094-audit-process-v1",
+    "command": "node --import <network-deny> research/mmp-086/audit-request.mjs <local-safe-audit.json>",
+    "exit": 0,
+    "signal": null,
+    "environmentNames": [
+      "PATH",
+      "Path",
+      "SystemRoot",
+      "SYSTEMROOT",
+      "SystemDrive",
+      "ComSpec",
+      "PATHEXT",
+      "TEMP",
+      "TMP"
+    ],
+    "modelProviderConstructed": false,
+    "ownerKeyAccess": "NOT_RUN"
+  }
+}
