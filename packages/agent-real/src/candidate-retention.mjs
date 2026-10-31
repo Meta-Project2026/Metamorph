@@ -47,7 +47,11 @@ function finishedGate(gate, name, ids) {
           ? /^HTTP_(STATUS|HEADER|JSON_TYPE|JSON_VALUE|JSON_MISSING|JSON_LENGTH|BODY)$/.test(
               code,
             )
-          : name === "G3" && ["DB_SCHEMA", "DB_STATE"].includes(code),
+          : name === "G3" &&
+            (["DB_SCHEMA", "DB_STATE"].includes(code) ||
+              /^HTTP_(STATUS|HEADER|JSON_TYPE|JSON_VALUE|JSON_MISSING|JSON_LENGTH|BODY)$/.test(
+                code,
+              )),
       ),
   );
 }

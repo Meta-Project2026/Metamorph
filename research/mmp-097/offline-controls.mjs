@@ -135,7 +135,9 @@ try {
     const id =
       g2 === "BUILD_FAILED"
         ? "legacy-g1-build-failed"
-        : `g1-pass-g2-${g2.toLowerCase()}-g3-${g3.toLowerCase()}`;
+        : g2 === "FAIL" && g3 === "PASS"
+          ? "http-only-fault"
+          : `g1-pass-g2-${g2.toLowerCase()}-g3-${g3.toLowerCase()}`;
     const runner = join(parent, id);
     mkdirSync(join(runner, "meta-paid-public"), {
       recursive: true,
@@ -269,7 +271,15 @@ try {
       assert.equal(validation.status, g2 === "PASS" && g3 === "PASS" ? 0 : 1);
       assert.equal(trial.publicG1, g2 === "BUILD_FAILED" ? "FAIL" : "PASS");
       assert.equal(trial.publicG2, g2 === "BUILD_FAILED" ? "INCONCLUSIVE" : g2);
-      assert.equal(trial.publicG3, g2 === "BUILD_FAILED" ? "INCONCLUSIVE" : g3);
+      // The unchanged Oracle's G3 includes HTTP findings. HTTP-only mutation
+      // therefore yields G2 FAIL/G3 FAIL; requested FAIL/PASS is unreachable.
+      assert.equal(
+        trial.publicG3,
+        g2 === "BUILD_FAILED" ? "INCONCLUSIVE" : g2 === "FAIL" ? "FAIL" : g3,
+      );
+      if (id === "http-only-fault")
+        row.requestedCombination =
+          "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
       requireNormalCleanup(trial.cleanup);
       if (g2 !== "BUILD_FAILED")
         assert.deepEqual(trial.attempts[0].coverage, {
@@ -485,6 +495,7 @@ try {
     ownerKey: "NEVER_ACCESSED",
     ownerDecrypt: "NOT_VERIFIED",
     G1ErrorTimeoutCancelActualCases: "NOT_TESTED",
+    requestedMatrixGap: "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
     product: "NOT_ESTABLISHED",
   });
   console.log(

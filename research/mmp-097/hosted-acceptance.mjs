@@ -216,6 +216,8 @@ try {
     assert.equal(result.cases.length, 5);
     result.decision = "PASS_SCOPED / MERGE_NO_GO";
     result.fullNegativeMatrix = "NOT_TESTED";
+    result.requestedMatrixGap =
+      "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
   }
 } catch (error) {
   const prior = result.cases.find((row) => row.status === "ERROR");

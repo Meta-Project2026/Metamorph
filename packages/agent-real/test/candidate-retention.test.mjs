@@ -33,6 +33,27 @@ function fixture(body, g2 = "PASS", g3 = "PASS") {
   }
 }
 
+test("completed G3 accepts actual stateful HTTP findings inherited from G2", () =>
+  fixture(
+    (root, f) => {
+      for (const [i, pair] of f.trial.attempts[0].pairs.entries()) {
+        if (pair.gates[0].verdict === "FAIL") {
+          pair.gates[1].findingCodes = ["HTTP_STATUS"];
+          f.receipts[i].parity[1].findingCodes = ["HTTP_STATUS"];
+        }
+      }
+      f.trial.attempts[0].gates.find((g) => g.gate === "G3").findingCodes = [
+        "HTTP_STATUS",
+      ];
+      writeCompletedPacks(root, f);
+      const payload = collectPreservationPackage(f.trial, f.expected, root);
+      assert.equal(payload.format, "mmp097-candidate-only-v1");
+      assert.deepEqual(payload.files, f.source.files);
+    },
+    "FAIL",
+    "FAIL",
+  ));
+
 for (const [g2, g3] of [
   ["FAIL", "PASS"],
   ["PASS", "FAIL"],

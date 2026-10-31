@@ -11,7 +11,7 @@ const choice = (s, allowed) => {
 export function publicCase(row, headSha) {
   assert.match(
     row.id,
-    /^(legacy-g1-build-failed|g1-pass-g2-(pass|fail)-g3-(pass|fail))$/,
+    /^(http-only-fault|legacy-g1-build-failed|g1-pass-g2-(pass|fail)-g3-(pass|fail))$/,
   );
   const result = {
     id: row.id,
@@ -23,6 +23,10 @@ export function publicCase(row, headSha) {
       "ERROR",
     ]),
   };
+  if (row.requestedCombination)
+    result.requestedCombination = choice(row.requestedCombination, [
+      "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
+    ]);
   if (row.stage)
     result.stage = choice(row.stage, [
       "VALIDATION",
