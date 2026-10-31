@@ -1,0 +1,102 @@
+{
+  "format": "mmp099-local-checks-v1",
+  "headSha": "ef2e0db352f55bd22bb48f5ab931a5a81222e763",
+  "date": "2026-11-01",
+  "platform": "Windows x64",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "cleanTrackedCheckout": true,
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "logSha256": "911e82a1047db8cb93bfb2bee73026aa3d530dd31187caed570452ad15d7335f"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "logSha256": "63664648a7b01f44ec6dc5f7b296218dbcc503fa6f1111766bd6925aecf6539b"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "logSha256": "4a0b4c76422adcaaae410a1720e278a678c1af9383b0bed4963f066476c1d04a"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "logSha256": "c8ae2fc8ddaeef6aaa5543d50d152a25f991c8cf66192c846b35a2713e73cce0"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "logSha256": "4e479a8f7be6b699e2e72c863a7be2cb906d5ddbdbef7e79649cd5625d2a3a6a"
+    },
+    {
+      "command": "pnpm exec biome check research/mmp-097",
+      "exitCode": 0,
+      "logSha256": "2cc2fc40b7b873ac9675eadb693a58ab672eb113587eb8dcd2e91abedab4869d"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exitCode": 0,
+      "logSha256": "650697e047d267902f7af6fdbd051f8a6ff7e39815563c1778ddb6a9570d2b90"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "exitCode": 0,
+      "logSha256": "ac1feaa7ba512fa0f72a33ced409d4635bd8ea68668622f387ac1989532e6c25"
+    },
+    {
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "exitCode": 0,
+      "logSha256": "f023b79e1460e52f706b6b8456201f19b1fc5fbf4e42c7870dda849709dc1a4e"
+    }
+  ],
+  "rootTests": {
+    "pass": 428,
+    "skip": 103,
+    "tests": 531,
+    "fail": 0
+  },
+  "referenceTests": {
+    "pass": 55,
+    "exitCode": 0,
+    "skip": 1,
+    "tests": 56,
+    "fail": 0
+  },
+  "targetWorkerTests": {
+    "initialSandboxAttempt": {
+      "classification": "ENVIRONMENT_ERROR_WINDOWS_SANDBOX_HARDLINK_EPERM",
+      "exitCode": 1,
+      "testChange": false
+    },
+    "skip": 0,
+    "fail": 0,
+    "tests": 69,
+    "exitCode": 0,
+    "pass": 69
+  },
+  "differentialTests": {
+    "pass": 77,
+    "exitCode": 0,
+    "skip": 45,
+    "tests": 122,
+    "fail": 0
+  },
+  "researchSyntax": {
+    "failed": 0,
+    "checked": 76
+  },
+  "coverage": {
+    "pass": 45,
+    "modules": 77,
+    "fail": 0,
+    "status": "VALID",
+    "tests": 45
+  },
+  "countsOverlapNotAdded": true,
+  "actualDocker": "HOSTED_SEPARATE_NOT_LOCAL",
+  "ownerKeyAccess": "NEVER_ACCESSED"
+}

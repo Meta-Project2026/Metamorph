@@ -1,0 +1,192 @@
+{
+  "runId": 41251591683,
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41251591683",
+  "jobId": 124686076289,
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41251591683/job/124686076289",
+  "headSha": "e44d3d39023de00f5c3b4f9c151e72caa53c1614",
+  "receipt": {
+    "format": "mmp099-hosted-receipt-v1",
+    "headSha": "e44d3d39023de00f5c3b4f9c151e72caa53c1614",
+    "decision": "NO_GO",
+    "node": "v24.22.1",
+    "commands": [
+      {
+        "command": "node research/mmp-089/install-age.mjs",
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      {
+        "command": "node research/mmp-097/offline-controls.mjs",
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false
+      }
+    ],
+    "cases": [
+      {
+        "id": "http-only-fault",
+        "status": "ERROR",
+        "requestedCombination": "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
+        "stage": "CRYPTO",
+        "cause": "HARNESS_ERROR",
+        "validatorExit": 1,
+        "preserverExit": null,
+        "finalizerExit": 0,
+        "uploadGateExit": null,
+        "gates": {
+          "G1": "PASS",
+          "G2": "FAIL",
+          "G3": "FAIL"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "finalizer": {
+          "headSha": "e44d3d39023de00f5c3b4f9c151e72caa53c1614",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      }
+    ],
+    "actualDocker": "EXECUTED",
+    "actualCrypto": "EXECUTED",
+    "modelRequests": 0,
+    "liveCiphertextUploads": 0,
+    "ownerDecrypt": "NOT_VERIFIED",
+    "product": "NOT_ESTABLISHED",
+    "docker": {
+      "version": "28.0.4",
+      "os": "linux",
+      "arch": "amd64"
+    },
+    "pins": {
+      "ageVersion": "v1.3.2",
+      "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+      "archiveSha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+      "encryptionImage": "node@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+      "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3"
+    },
+    "preparation": {
+      "status": "PASS",
+      "commands": [
+        {
+          "command": "PHP_PREPARATION",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "PHP_PREPARATION",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "image-build.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "image-inspect.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "runtime-provenance.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "provenance-cleanup.json",
+          "exitCode": 0,
+          "timedOut": false
+        }
+      ],
+      "cleanup": {
+        "status": "VERIFIED_ZERO_RESOURCES",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0
+      }
+    },
+    "cryptoControls": [
+      "wrong-recipient-pin-rejected",
+      "oversize-rejected",
+      {
+        "control": "crash-input",
+        "status": "REJECTED",
+        "errorCode": "DIAGNOSTIC_ENCRYPTION_ERROR",
+        "cleanup": "VERIFIED_ZERO_RESOURCES",
+        "elapsedMs": 180,
+        "underlyingCause": "NOT_INDEPENDENTLY_ESTABLISHED"
+      }
+    ],
+    "negativeControls": {
+      "status": "NOT_TESTED",
+      "scope": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI_NOT_NEW_G1_ENVIRONMENT_EXECUTIONS",
+      "cases": []
+    },
+    "failure": {
+      "status": "ERROR",
+      "stage": "CRYPTO",
+      "cause": "HARNESS_ERROR"
+    },
+    "finalizer": {
+      "exitCode": 0,
+      "status": "PASS",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0
+    },
+    "privateCleanup": "PRIVATE_TEMP_REMOVED_NOT_SECURE_ERASE"
+  }
+}

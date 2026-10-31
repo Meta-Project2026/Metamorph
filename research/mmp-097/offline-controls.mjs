@@ -107,7 +107,10 @@ const cryptoFaultControls = [];
 let runtimeControls = { status: "NOT_TESTED", cases: [] };
 let processControls = { status: "NOT_TESTED", cases: [] };
 let firstCompleted;
+let parityPositiveCompleted;
 let status = "PASS";
+let activeStage = "VALIDATION";
+let driverFailure;
 const cli = (file, extra, timeout = 10000) =>
   spawnSync(process.execPath, [join(root, file)], {
     cwd: root,
@@ -475,8 +478,10 @@ try {
     }
     if (status !== "PASS") break; // Keep original failure; no silent retries.
     if (number === 0) firstCompleted = { root, runner, expected, env };
+    if (number === 3) parityPositiveCompleted = { root, runner, expected, env };
   }
   if (status === "PASS" && firstCompleted) {
+    activeStage = "PRESERVATION";
     negativeControls = receiptNegativeControls(firstCompleted);
     assert.equal(negativeControls.status, "PASS");
     for (const mode of [
@@ -485,6 +490,7 @@ try {
       "ciphertext-cap",
       "cleanup-fault",
     ]) {
+      activeStage = "CRYPTO";
       const child = spawnSync(
         process.execPath,
         [join(root, "research/mmp-097/crypto-fault-control.mjs"), mode],
@@ -499,16 +505,25 @@ try {
           maxBuffer: 1024 * 1024,
         },
       );
+      const childExit = observedExit(child);
       const marker = child.stdout
         ?.toString()
         .split("\n")
         .find((line) => line.startsWith("MMP099_CRYPTO "));
-      assert.ok(marker && marker.length < 8192);
+      if (!marker || marker.length >= 8192) {
+        const error = new Error("CONTROL_REPORT_MISSING");
+        if (childExit !== 0) {
+          error.code = "CONTROL_PROCESS_ERROR";
+          error.processError = "EXIT_NONZERO";
+        }
+        throw error;
+      }
       const fault = JSON.parse(marker.slice("MMP099_CRYPTO ".length));
       cryptoFaultControls.push(fault);
-      assert.equal(observedExit(child), 0);
+      assert.equal(childExit, 0);
       assert.equal(fault.status, "PASS");
     }
+    activeStage = "VALIDATION";
     runtimeControls = await runtimeNegativeControls({
       root,
       parent,
@@ -517,10 +532,13 @@ try {
       env,
     });
     assert.equal(runtimeControls.status, "PASS");
-    processControls = processFaultControls(firstCompleted);
+    assert.ok(parityPositiveCompleted);
+    activeStage = "FINALIZER";
+    processControls = processFaultControls(parityPositiveCompleted);
     assert.equal(processControls.status, "PASS");
   }
-} catch {
+} catch (error) {
+  driverFailure = controlFailure(activeStage, error);
   status = "NO_GO";
 } finally {
   if (results.length !== 5 || results.some((r) => r.status !== "PASS"))
@@ -529,19 +547,28 @@ try {
     format: "mmp097-offline-controls-v1",
     headSha,
     scopedStatus: status === "PASS" ? "PASS_SCOPED" : status,
-    acceptance: "NO_GO_PENDING_FULL_MATRIX",
+    acceptance:
+      status === "PASS"
+        ? "REQUIRED_OFFLINE_CONTROLS_PASS_PENDING_INDEPENDENT_REVIEW"
+        : "NO_GO",
     cases: results,
     cryptoControls,
     cryptoFaultControls,
     runtimeControls,
     processControls,
+    driverFailure,
     negativeControls,
     aiGeneration: "AI_GENERATION_NOT_RUN",
     metaRequests: 0,
     liveUpload: "NOT_RUN",
     ownerKey: "NEVER_ACCESSED",
     ownerDecrypt: "NOT_VERIFIED",
-    G1ErrorTimeoutCancelActualCases: "NOT_TESTED",
+    G1ErrorTimeoutCancelActualCases:
+      runtimeControls.status === "PASS" ? "EXECUTED_PASS" : "NOT_ESTABLISHED",
+    processFaultCases:
+      processControls.status === "PASS"
+        ? "EXECUTED_PASS_WITH_EXPLICIT_PRE_ENTRY_HARNESS_LIMITATION"
+        : "NOT_ESTABLISHED",
     requestedMatrixGap: "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
     product: "NOT_ESTABLISHED",
   });

@@ -8,6 +8,7 @@ import {
   publicFaults,
   publicProcesses,
 } from "../../../research/mmp-097/hosted-receipt.mjs";
+import { requirePreparationCleanup } from "../../../research/mmp-097/preparation-probe.mjs";
 
 test("milestone Docker workflow is PR98 same-repository exact-head and token-free", () => {
   const text = readFileSync(
@@ -73,6 +74,22 @@ test("fault receipt projections reject arbitrary child metadata", () => {
       ],
     }),
   );
+});
+
+test("preparation cannot pass after cleanup failure or emergency recovery", () => {
+  const clean = {
+    cleanup: "VERIFIED_ZERO_RESOURCES",
+    inventory: { containers: 0, volumes: 0 },
+    emergencyRemoved: 0,
+  };
+  assert.doesNotThrow(() => requirePreparationCleanup(clean));
+  for (const bad of [
+    { ...clean, cleanup: "CLEANUP_ERROR" },
+    { ...clean, emergencyRemoved: 1 },
+    { ...clean, inventory: { containers: 1, volumes: 0 } },
+    { ...clean, inventory: { containers: 0, volumes: 1 } },
+  ])
+    assert.throws(() => requirePreparationCleanup(bad));
 });
 
 test("hosted receipt refuses arbitrary statuses and exports only categorical fields", () => {

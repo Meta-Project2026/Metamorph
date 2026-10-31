@@ -221,8 +221,30 @@ export function publicFaults(rows, kind) {
   return rows.map((row) => {
     const result = {
       id: choice(row.id, ids),
-      status: choice(row.status, ["PASS", "ERROR", "PENDING_FINALIZER"]),
+      status: choice(row.status, [
+        "PASS",
+        "FAIL",
+        "ERROR",
+        "PENDING_FINALIZER",
+      ]),
     };
+    if (row.stage)
+      result.stage = choice(row.stage, [
+        "VALIDATION",
+        "PRESERVATION",
+        "FINALIZER",
+        "UPLOAD_GATE",
+      ]);
+    if (row.cause)
+      result.cause = choice(row.cause, [
+        "TIMEOUT",
+        "CANCELLED",
+        "ENVIRONMENT_ERROR",
+        "EVIDENCE_ERROR",
+        "CLEANUP_ERROR",
+        "HARNESS_ERROR",
+        "ACCEPTANCE_MISMATCH",
+      ]);
     if (row.execution)
       result.execution = choice(row.execution, [
         "ACTUAL_ENCRYPTION_WITH_REAL_CHILD_CLEANUP_FAULT_HARNESS",
@@ -344,7 +366,7 @@ export function publicCrypto(rows) {
 export function publicNegatives(controls) {
   assert.ok(Array.isArray(controls.cases) && controls.cases.length <= 100);
   return {
-    status: choice(controls.status, ["NOT_TESTED", "PASS", "FAIL"]),
+    status: choice(controls.status, ["NOT_TESTED", "PASS", "FAIL", "ERROR"]),
     scope:
       "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI_NOT_NEW_G1_ENVIRONMENT_EXECUTIONS",
     cases: controls.cases.map((row) => {
@@ -354,6 +376,21 @@ export function publicNegatives(controls) {
         kind: choice(row.kind, ["ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI"]),
         status: choice(row.status, ["PASS", "FAIL", "ERROR"]),
       };
+      if (row.stage)
+        result.stage = choice(row.stage, [
+          "SELECTION",
+          "PRESERVATION",
+          "UPLOAD_GATE",
+        ]);
+      if (row.cause)
+        result.cause = choice(row.cause, [
+          "TIMEOUT",
+          "ENVIRONMENT_ERROR",
+          "EVIDENCE_ERROR",
+          "CLEANUP_ERROR",
+          "HARNESS_ERROR",
+          "ACCEPTANCE_MISMATCH",
+        ]);
       for (const key of ["preserverExit", "gateExit", "exitCode"])
         if (row[key] !== undefined) {
           integer(row[key], 255);
@@ -379,7 +416,7 @@ export function publicNegatives(controls) {
 export function publicProcesses(controls) {
   assert.ok(Array.isArray(controls.cases) && controls.cases.length <= 8);
   return {
-    status: choice(controls.status, ["PASS", "ERROR", "NOT_TESTED"]),
+    status: choice(controls.status, ["PASS", "FAIL", "ERROR", "NOT_TESTED"]),
     cases: controls.cases.map((row) => {
       assert.match(
         row.id,
@@ -391,7 +428,7 @@ export function publicProcesses(controls) {
           "REAL_CHILD_PRE_ENTRY_FAULT_HARNESS",
           "ACTUAL_FINALIZER_WITH_OWN_STOPPED_DOCKER_SENTINEL",
         ]),
-        status: choice(row.status, ["PASS", "ERROR"]),
+        status: choice(row.status, ["PASS", "FAIL", "ERROR"]),
       };
       for (const key of [
         "exitCode",
@@ -418,6 +455,14 @@ export function publicProcesses(controls) {
           "ENVIRONMENT_ERROR",
           "CLEANUP_ERROR",
           "EVIDENCE_ERROR",
+          "ACCEPTANCE_MISMATCH",
+          "HARNESS_ERROR",
+        ]);
+      if (row.stage)
+        result.stage = choice(row.stage, [
+          "PRESERVATION",
+          "FINALIZER",
+          "UPLOAD_GATE",
         ]);
       if (row.eligible !== undefined) {
         assert.equal(row.eligible, false);
@@ -429,5 +474,23 @@ export function publicProcesses(controls) {
         ]);
       return result;
     }),
+  };
+}
+
+export function publicFailure(value) {
+  const projected = publicCase(
+    {
+      id: "http-only-fault",
+      status: value.status,
+      stage: value.stage,
+      cause: value.cause,
+    },
+    "a".repeat(40),
+  );
+  assert.ok(["ERROR", "FAIL"].includes(projected.status));
+  return {
+    status: projected.status,
+    stage: projected.stage,
+    cause: projected.cause,
   };
 }

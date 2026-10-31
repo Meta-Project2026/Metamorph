@@ -15,6 +15,7 @@ import { sha256 } from "../../packages/target-worker/src/admission.mjs";
 import {
   publicCase,
   publicCrypto,
+  publicFailure,
   publicFaults,
   publicNegatives,
   publicProcesses,
@@ -201,6 +202,8 @@ try {
     const controls = read(join(output, "controls.json"));
     assert.equal(controls.headSha, env.AGENT_HEAD_SHA);
     assert.equal(controls.format, "mmp097-offline-controls-v1");
+    if (controls.driverFailure)
+      result.driverFailure = publicFailure(controls.driverFailure);
     // Select only controlled public metadata; never serialize the raw envelope.
     for (const row of controls.cases) {
       result.cases.push(publicCase(row, env.AGENT_HEAD_SHA));
@@ -226,16 +229,40 @@ try {
     assert.equal(observedExit(driver), 0);
     assert.equal(controls.scopedStatus, "PASS_SCOPED");
     assert.equal(result.cases.length, 5);
+    assert.ok(result.cases.every((row) => row.status === "PASS"));
+    assert.equal(result.negativeControls.status, "PASS");
+    assert.equal(result.cryptoFaultControls.length, 4);
+    assert.ok(result.cryptoFaultControls.every((row) => row.status === "PASS"));
+    assert.equal(result.runtimeControls.status, "PASS");
+    assert.equal(result.runtimeControls.cases.length, 6);
+    assert.equal(result.processControls.status, "PASS");
+    assert.equal(result.processControls.cases.length, 8);
     result.decision = "PASS_SCOPED / MERGE_NO_GO";
+    result.offlineAcceptance =
+      "REQUIRED_OFFLINE_CONTROLS_PASS_PENDING_SEPARATE_CI_AND_INDEPENDENT_REVIEW";
     result.fullNegativeMatrix =
       "EXECUTED_WITH_EXPLICIT_PRE_ENTRY_PROCESS_HARNESS_LIMITATION";
     result.requestedMatrixGap =
       "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
   }
 } catch (error) {
-  const prior = result.cases.find((row) => row.status === "ERROR");
+  const prior = [
+    ...result.cases,
+    ...(result.negativeControls?.cases ?? []),
+    ...(result.processControls?.cases ?? []),
+    ...(result.runtimeControls?.cases ?? []),
+    ...(result.cryptoFaultControls ?? []).map((row) => ({
+      ...row,
+      stage: "CRYPTO",
+    })),
+    ...(result.driverFailure ? [result.driverFailure] : []),
+  ].find((row) => row.status === "ERROR");
   result.failure = prior
-    ? { status: "ERROR", stage: prior.stage, cause: prior.cause }
+    ? {
+        status: "ERROR",
+        stage: prior.stage ?? "HARNESS",
+        cause: prior.cause ?? "HARNESS_ERROR",
+      }
     : result.preparation?.status === "ERROR"
       ? {
           status: "ERROR",

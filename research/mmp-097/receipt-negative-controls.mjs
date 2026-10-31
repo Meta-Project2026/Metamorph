@@ -19,7 +19,7 @@ import {
   readPrivateJson,
 } from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { sha256 } from "../../packages/target-worker/src/admission.mjs";
-import { observedExit } from "./qualification-outcome.mjs";
+import { controlFailure, observedExit } from "./qualification-outcome.mjs";
 
 export function receiptNegativeControls({ root, runner, expected, env }) {
   const output = join(runner, "meta-paid-public");
@@ -207,17 +207,22 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
     [
       "source-unsafe-path",
       (c) => {
-        c.source((s) => {
-          s.files[0].path = "src/oracle/main.ts";
+        c.rebindSource((files) => {
+          const content = "export const harmless = 1;\n";
+          files.push({
+            path: "src/oracle/probe.ts",
+            content,
+            sha256: sha256(content),
+          });
         });
       },
     ],
     [
       "source-over-cap",
       (c) => {
-        c.source((s) => {
-          s.files[0].content = "x".repeat(256 * 1024 + 1);
-          s.files[0].sha256 = sha256(s.files[0].content);
+        c.rebindSource((files) => {
+          files[0].content = "x".repeat(256 * 1024 + 1);
+          files[0].sha256 = sha256(files[0].content);
         });
       },
     ],
@@ -314,6 +319,64 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
           (p) => p.id === selected.packId,
         ).sha256 = sha256(indexBytes);
       },
+      rebindSource(change) {
+        const sourcePath = join(
+          selected.directory,
+          `${selected.source.id}.json`,
+        );
+        const files = structuredClone(readPrivateJson(sourcePath).value.files);
+        change(files);
+        // Compute the admission canonical hash without admitting or executing
+        // deliberately forbidden source. Keep the real src/main.ts entry.
+        const canonical = files
+          .map(({ path, content, sha256: digest }) => ({
+            path,
+            sha256: digest,
+            content,
+          }))
+          .sort((a, b) => a.path.localeCompare(b.path, "en"));
+        const candidateSha = sha256(JSON.stringify(canonical));
+        const rebind = (value) => {
+          if (Array.isArray(value)) return value.map(rebind);
+          if (value && typeof value === "object")
+            return Object.fromEntries(
+              Object.entries(value).map(([key, v]) => [
+                key,
+                key === "candidateSha" ? candidateSha : rebind(v),
+              ]),
+            );
+          return value;
+        };
+        context.trial = rebind(context.trial);
+        for (const pair of context.trial.attempts[0].pairs)
+          for (const pack of pair.packs) {
+            const directory = join(
+              runner,
+              "meta-paid-verification",
+              attemptId,
+              pair.pairId,
+              pack.id,
+            );
+            const index = readPrivateJson(join(directory, "index.json")).value;
+            for (const entry of index.entries.filter(
+              (e) =>
+                e.id === "provenance" ||
+                /^pair-[0-9]+-(source|retention)$/.test(e.id),
+            )) {
+              const path = join(directory, `${entry.id}.json`);
+              let value = rebind(readPrivateJson(path).value);
+              if (/^pair-[0-9]+-source$/.test(entry.id))
+                value = { files: canonical, candidateSha };
+              const bytes = JSON.stringify(value);
+              write(path, bytes);
+              entry.bytes = Buffer.byteLength(bytes);
+              entry.sha256 = sha256(bytes);
+            }
+            const bytes = JSON.stringify(index);
+            write(join(directory, "index.json"), bytes);
+            pack.sha256 = sha256(bytes);
+          }
+      },
     };
     const row = {
       id,
@@ -325,6 +388,7 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
     const cipherDirectory = join(runner, "mmp089-private-diagnostics");
     const savedCipherDirectory = join(runner, "mmp099-saved-ciphertext");
     let moved = false;
+    let stage = "SELECTION";
     try {
       mutate(context);
       writeFileSync(paths.trial, JSON.stringify(context.trial), {
@@ -337,6 +401,7 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
       if (options.producer !== false) {
         renameSync(cipherDirectory, savedCipherDirectory);
         moved = true;
+        stage = "PRESERVATION";
         const preservation = cli("preserve");
         row.preserverExit = observedExit(preservation);
         const record = readPrivateJson(paths.record).value;
@@ -355,6 +420,7 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
       // Test the gate against the original real ciphertext, not inert fixtures.
       writeFileSync(paths.record, original.record, { mode: 0o600 });
       const stepOutput = join(runner, `mmp099-gate-${id}.txt`);
+      stage = "UPLOAD_GATE";
       const gate = cli("prepare-upload", {
         GITHUB_OUTPUT: stepOutput,
         MMP089_PRESERVE_OUTCOME: producer,
@@ -366,8 +432,8 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
       assert.equal(row.eligible, false);
       assert.notEqual(readPrivateJson(paths.record).value.status, "PRESERVED");
       row.status = "PASS";
-    } catch {
-      row.status = "FAIL";
+    } catch (error) {
+      Object.assign(row, controlFailure(stage, error));
       failed = true;
     } finally {
       if (moved) {
@@ -423,8 +489,8 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
         );
         assert.equal(sha256(readFileSync(paths.trial)), sha256(original.trial));
         row.status = "PASS";
-      } catch {
-        row.status = "FAIL";
+      } catch (error) {
+        Object.assign(row, controlFailure("UPLOAD_GATE", error));
         failed = true;
       } finally {
         writeFileSync(paths.record, original.record, { mode: 0o600 });
@@ -433,7 +499,11 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
   }
   for (const bytes of Object.values(original)) bytes.fill(0);
   return {
-    status: failed ? "FAIL" : "PASS",
+    status: records.some((row) => row.status === "ERROR")
+      ? "ERROR"
+      : failed
+        ? "FAIL"
+        : "PASS",
     cases: records,
     limitation:
       "RECEIPT_POLICY_AND_FILESYSTEM_CONTROLS_NOT_NEW_G1_ENVIRONMENT_EXECUTIONS",

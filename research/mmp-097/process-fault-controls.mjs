@@ -14,6 +14,12 @@ export function processFaultControls({ root, runner, expected, env }) {
   const trialPath = join(output, "trial.json");
   const finalPath = join(output, "finalizer.json");
   const trialSha = sha256(readFileSync(trialPath));
+  const trial = JSON.parse(readFileSync(trialPath));
+  assert.ok(
+    [trial.publicG1, trial.publicG2, trial.publicG3].every(
+      (gate) => gate === "PASS",
+    ),
+  );
   const originalFinal = readFileSync(finalPath);
   const baseEnv = {
     ...env,
@@ -38,6 +44,8 @@ export function processFaultControls({ root, runner, expected, env }) {
       maxBuffer: 1024 * 1024,
     });
   const records = [];
+  let activeRow;
+  let activeStage = "PRESERVATION";
   const gate = (id, extra = {}) => {
     const path = join(runner, `${id}-output.txt`);
     const result = run([join(root, "research/mmp-089/prepare-upload.mjs")], {
@@ -62,6 +70,8 @@ export function processFaultControls({ root, runner, expected, env }) {
           status: "ERROR",
         };
         records.push(row);
+        activeRow = row;
+        activeStage = stage;
         const preload = join(runner, `${row.id}-preload.mjs`);
         const step = join(runner, `${row.id}-step.txt`);
         writeFileSync(
@@ -89,13 +99,15 @@ export function processFaultControls({ root, runner, expected, env }) {
         if (mode === "timeout") assert.equal(classified.cause, "TIMEOUT");
         row.cause = classified.cause;
         if (stage === "UPLOAD_GATE") assert.equal(existsSync(step), false);
-        else
+        else {
+          activeStage = "UPLOAD_GATE";
           gate(
             row.id,
             stage === "PRESERVATION"
               ? { MMP089_PRESERVE_OUTCOME: "failure" }
               : { MMP089_FINALIZER_OUTCOME: "failure" },
           );
+        }
         assert.equal(sha256(readFileSync(trialPath)), trialSha);
         row.eligible = false;
         row.status = "PASS";
@@ -110,6 +122,8 @@ export function processFaultControls({ root, runner, expected, env }) {
         status: "ERROR",
       };
       records.push(row);
+      activeRow = row;
+      activeStage = "FINALIZER";
       const name = `mmp007-mmp099-${randomUUID()}`;
       assert.equal(
         observedExit(
@@ -172,11 +186,17 @@ export function processFaultControls({ root, runner, expected, env }) {
         }
         // Even an incorrectly reported successful producer cannot admit the
         // real ERROR/missing finalizer receipt after genuine G1/G2/G3 completion.
+        activeStage = "UPLOAD_GATE";
         gate(row.id);
         gate(`${row.id}-producer`, { MMP089_FINALIZER_OUTCOME: "failure" });
         row.eligible = false;
         row.status = "PASS";
+      } catch (error) {
+        Object.assign(row, controlFailure(activeStage, error));
+        row.hasPrimaryFailure = true;
+        throw error;
       } finally {
+        activeStage = "FINALIZER";
         if (failure) {
           const recovery = run([
             join(root, "packages/differential/src/workshop-finalizer.mjs"),
@@ -198,8 +218,11 @@ export function processFaultControls({ root, runner, expected, env }) {
       }
     }
     return { status: "PASS", cases: records };
-  } catch {
-    return { status: "ERROR", cases: records };
+  } catch (error) {
+    const failure = controlFailure(activeStage, error);
+    if (activeRow?.hasPrimaryFailure) activeRow.terminalFailure = failure;
+    else if (activeRow) Object.assign(activeRow, failure);
+    return { status: activeRow?.status ?? failure.status, cases: records };
   } finally {
     writeFileSync(finalPath, originalFinal, { mode: 0o600 });
     originalFinal.fill(0);

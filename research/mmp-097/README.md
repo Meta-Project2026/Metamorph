@@ -7,7 +7,7 @@ private temporary source/keys/ciphertext after projecting sanitized receipts to
 the job log. This is separate milestone execution, not Fast CI expansion or paid
 workflow dispatch. Actual observed results are recorded after execution below.
 
-Status: **IMPLEMENTED / NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE**.
+Status: **PASS_SCOPED / MERGE_NO_GO — final additional controls and review pending**.
 Tracking: [#97](https://github.com/Meta-Project2026/Metamorph/issues/97).
 Base: fresh `origin/main@38aa818e4afe75512e4555390246f44b5d7798db`, after PR95/87.
 Branch: `codex/mmp097-option-a-retention`.
@@ -56,15 +56,18 @@ worker recipe/budgets, reference, comparator and hidden tests are unchanged.
 - [x] Add separate source-only case, sealed metadata and upload binding.
 - [x] Add synthetic positive/adversarial source and CLI tests.
 - [x] Supply bounded manual real-Docker/crypto driver and coverage registration.
-- [ ] Execute complete actual Linux Docker/crypto acceptance matrix.
+- [x] Execute five actual Linux Docker/crypto cases plus real validator/encryptor faults.
+- [ ] Finish additional process/finalizer controls and exact-head independent review.
 - [ ] Exact-pushed-SHA independent security and final ChatGPT review.
 - [ ] Reviewed merge; no self-approval or issue closure.
 
-Docker/crypto acceptance: **NOT_TESTED / NO_GO**. See [validation.md](validation.md)
-and [acceptance.json](acceptance.json). Green CI cannot close it. #61 remains
+Actual Docker/crypto passed on `b6f9abe46542bfd99ba6bc3211cba1b3cafd896b`,
+[run 41252167119](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119).
+See [validation.md](validation.md) and [acceptance.json](acceptance.json).
+This is milestone execution separate from Fast CI. #61 remains
 NOT_ESTABLISHED, G0/G4 INCONCLUSIVE; owner roundtrip remains NOT_VERIFIED.
 
-## Manual reproduction — not dispatched here
+## Reproduction and observed scope
 
 On an authorized disposable Linux Docker host, use a clean exact commit, frozen
 install/build and qualified MMP089 tools. Supply fresh absolute paths and no
@@ -79,20 +82,30 @@ env -i PATH=/usr/local/bin:/usr/bin:/bin \
   node research/mmp-097/offline-controls.mjs
 ```
 
-The unexecuted driver runs validator -> preserver -> independent finalizer ->
-upload gate for four parity combinations and legacy build failure. Candidates
+The driver runs validator -> preserver -> independent finalizer -> upload gate
+for HTTP-only, SQLite-only, combined, parity-positive and legacy build failure. Candidates
 adapt the unchanged public workshop fixture and retain its MIT notice. HTTP
 status mutation changes responses; a post-request extra table changes state
-after the initial snapshot. These intended outcomes are not observations.
+after the initial snapshot. Actual receipts retain gate verdicts and complete coverage.
 Real age uses throwaway keys for exact source/manifest roundtrip, wrong-key and
 tamper rejection, recipient/size/crash/deadline controls. No uploader is called.
-Negative crypto controls require the encryption-error category and successful
-internal cleanup; deadline input also requires compatible elapsed time. The
-underlying process-crash/timer cause stays NOT_INDEPENDENTLY_ESTABLISHED, rather
-than being inferred from any rejection. Driver receipts distinguish observed
-ERROR/timeouts/cancellation from proven FAIL with fixed stage/cause codes.
-Even five successful scoped cases leave actual G1 error/cancellation and the
-complete matrix pending; the driver labels that boundary explicitly.
+Separate trusted crypto harnesses observe actual child exit23, deadline SIGKILL,
+output cap and cleanup-child exit42. Cleanup refusal requires the distinct
+DIAGNOSTIC_CLEANUP_ERROR after actual successful encryption. Its intentional
+one-container recovery is explicitly separate from normal finalizer 0/0/0.
+Actual validator controls kill/pause a Docker build, cancel with SIGTERM, run
+an admitted secret-marker candidate, inject one real cleanup-child failure,
+and time out a real Node pre-entry harness. All six passed on the linked run.
+Receipt/file controls invoke production CLIs against actual validated packs
+and real ciphertext; they are not new G1 environment executions. Additional
+process/finalizer controls and their limits are tracked in validation.
+
+The unchanged Oracle includes HTTP findings in G3. G2 FAIL / G3 PASS is therefore
+unreachable. On 1 November the owner explicitly accepted testing HTTP-only
+coupling plus all other reachable cases. Actual HTTP-only G1 PASS / G2 FAIL /
+G3 FAIL executes 17 HTTP and 20 SQLite IDs; G3 has HTTP_STATUS and no DB finding.
+The new selector now accepts those finite inherited HTTP codes; Oracle scoring,
+coverage, trusted bindings and cleanup requirements remain unchanged.
 
 Public receipts contain categorical statuses/identities/digests only. Private
 roots, keys, ciphertext, plaintext and raw output must never be committed or

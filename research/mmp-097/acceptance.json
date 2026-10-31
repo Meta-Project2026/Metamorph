@@ -1,22 +1,139 @@
 {
   "format": "mmp097-acceptance-status-v1",
+  "date": "2026-11-01",
   "baseSha": "38aa818e4afe75512e4555390246f44b5d7798db",
-  "decision": "NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE",
-  "actualDocker": "NOT_TESTED",
-  "actualCrypto": "NOT_TESTED",
-  "actualCleanupInventory": null,
-  "reason": "Windows host: Docker command and standard executable absent, no running Docker process/pipe observed, no installed WSL distribution. Historical MMP089 evidence is not current execution.",
+  "decision": "PASS_SCOPED / MERGE_NO_GO",
+  "executedHeadSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119",
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119/job/124687753782",
+  "actualDocker": "EXECUTED_PASS_SCOPED",
+  "actualCrypto": "EXECUTED_PASS",
+  "actualCleanupInventory": {
+    "exitCode": 0,
+    "status": "PASS",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0
+  },
   "matrix": [
-    { "case": "G1_PASS_G2_FAIL_G3_PASS", "actual": "NOT_TESTED" },
-    { "case": "G1_PASS_G2_PASS_G3_FAIL", "actual": "NOT_TESTED" },
-    { "case": "G1_PASS_G2_FAIL_G3_FAIL", "actual": "NOT_TESTED" },
-    { "case": "G1_PASS_G2_PASS_G3_PASS", "actual": "NOT_TESTED" },
-    { "case": "G1_BUILD_FAILED_REGRESSION", "actual": "NOT_TESTED" },
-    { "case": "G1_ERROR_TIMEOUT_CANCEL_PARTIAL", "actual": "NOT_TESTED" },
-    { "case": "THROWAWAY_ROUNDTRIP_WRONG_KEY_TAMPER", "actual": "NOT_TESTED" },
-    { "case": "ENCRYPTOR_CRASH_TIMEOUT_CLEANUP", "actual": "NOT_TESTED" }
+    {
+      "case": "http-only-fault",
+      "actual": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "cryptoRoundtrip": "PASS",
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+    },
+    {
+      "case": "g1-pass-g2-pass-g3-fail",
+      "actual": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "PASS",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "cryptoRoundtrip": "PASS",
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+    },
+    {
+      "case": "g1-pass-g2-fail-g3-fail",
+      "actual": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "cryptoRoundtrip": "PASS",
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+    },
+    {
+      "case": "g1-pass-g2-pass-g3-pass",
+      "actual": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "PASS",
+        "G3": "PASS"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "cryptoRoundtrip": "PASS",
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+    },
+    {
+      "case": "legacy-g1-build-failed",
+      "actual": "PASS",
+      "gates": {
+        "G1": "FAIL",
+        "G2": "INCONCLUSIVE",
+        "G3": "INCONCLUSIVE"
+      },
+      "coverage": {
+        "http": 0,
+        "sqlite": 0,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "cryptoRoundtrip": "PASS",
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+    }
   ],
-  "unitEvidenceKind": "SYNTHETIC_ENVELOPES_AND_INERT_CIPHERTEXT_NOT_DOCKER_OR_CRYPTO",
+  "unreachableRow": {
+    "case": "G1_PASS_G2_FAIL_G3_PASS",
+    "ownerDecision": "Recognize unreachable row; verify HTTP-only coupling and other reachable cases",
+    "replacement": "http-only-fault",
+    "actual": "UNREACHABLE_UNDER_UNCHANGED_ORACLE"
+  },
+  "negativeControls": {
+    "actualReceiptCli": 27,
+    "actualValidatorControls": 6,
+    "status": "PASS_SCOPED_PENDING_CAUSE_ISOLATION_CORRECTIONS_AND_ADDITIONAL_PROCESS_FINALIZER_EVIDENCE",
+    "additionalExactSha": "ef2e0db352f55bd22bb48f5ab931a5a81222e763",
+    "actualEncryptorFaults": 4,
+    "additionalResult": "NOT_ESTABLISHED",
+    "limitations": [
+      "Source path/cap and secret-marker prerequisites require corrected new-SHA execution after independent review.",
+      "Node pre-entry fault harnesses do not prove inner tool timers.",
+      "Paused Docker build proves unchanged outer build-command deadline.",
+      "Intentional crypto cleanup fault recovered one owned stopped container; normal finalizers0/0/0."
+    ],
+    "additionalRunUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358030"
+  },
+  "fastCi": {
+    "headSha": "ef2e0db352f55bd22bb48f5ab931a5a81222e763",
+    "node24": "SUCCESS",
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358052",
+    "node22": "SUCCESS"
+  },
+  "independentSecurityReview": "IN_PROGRESS_CORRECTIONS_PENDING_NEW_SHA_EXECUTION",
+  "finalChatGptReview": "PENDING",
+  "unitEvidenceKind": "SYNTHETIC_ENVELOPES_AND_INERT_CIPHERTEXT_DISTINCT_FROM_ACTUAL_HOSTED_EVIDENCE",
   "ownerKeyAccess": "NEVER_ACCESSED",
   "ownerDecrypt": "NOT_VERIFIED",
   "modelRequests": 0,

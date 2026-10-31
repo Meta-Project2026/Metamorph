@@ -1,0 +1,1084 @@
+{
+  "runId": 41252167119,
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119",
+  "jobId": 124687753782,
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119/job/124687753782",
+  "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+  "receipt": {
+    "format": "mmp099-hosted-receipt-v1",
+    "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+    "decision": "PASS_SCOPED / MERGE_NO_GO",
+    "node": "v24.22.1",
+    "commands": [
+      {
+        "command": "node research/mmp-089/install-age.mjs",
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      {
+        "command": "node research/mmp-097/offline-controls.mjs",
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      }
+    ],
+    "cases": [
+      {
+        "id": "http-only-fault",
+        "status": "PASS",
+        "requestedCombination": "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
+        "stage": "UPLOAD_GATE",
+        "validatorExit": 1,
+        "preserverExit": 0,
+        "finalizerExit": 0,
+        "uploadGateExit": 0,
+        "gates": {
+          "G1": "PASS",
+          "G2": "FAIL",
+          "G3": "FAIL"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "findingCodes": {
+          "G1": [],
+          "G2": ["HTTP_STATUS"],
+          "G3": ["HTTP_STATUS"]
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "preservation": {
+          "format": "mmp097-preservation-v1",
+          "status": "ENCRYPTED_PENDING_UPLOAD",
+          "identity": {
+            "runId": "970001",
+            "runAttempt": "1",
+            "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "43eb3aeb392a65da325a5433246609c1a0d01c9b03633feeaf08a6d44a3e59f9",
+            "attemptId": "88b03dc4-7f74-4a5c-9bb2-2505b0b45d16",
+            "pairId": "2487ed74-660a-4818-94fc-749f8ddf1fb9",
+            "case": "G1_PASS_COMPLETED",
+            "bindingsSha256": "867fe1a8b2b382414fa629f85583e49d0a0c1f318119297608b1e1e58d5dc82d"
+          },
+          "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+          "ageVersion": "v1.3.2",
+          "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+          "ciphertextSha256": "8d03a23156426a8fbe59fb30534e7a15db80d7b36e516d58cd65a27c9b516f71",
+          "ciphertextBytes": 15038,
+          "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+          "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+          "upload": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      },
+      {
+        "id": "g1-pass-g2-pass-g3-fail",
+        "status": "PASS",
+        "stage": "UPLOAD_GATE",
+        "validatorExit": 1,
+        "preserverExit": 0,
+        "finalizerExit": 0,
+        "uploadGateExit": 0,
+        "gates": {
+          "G1": "PASS",
+          "G2": "PASS",
+          "G3": "FAIL"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "findingCodes": {
+          "G1": [],
+          "G2": [],
+          "G3": ["DB_SCHEMA", "DB_STATE"]
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "preservation": {
+          "format": "mmp097-preservation-v1",
+          "status": "ENCRYPTED_PENDING_UPLOAD",
+          "identity": {
+            "runId": "970002",
+            "runAttempt": "1",
+            "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "ff7095e119ac29aae2b1ef6e19d177df143b3b4643e4d0428e56fea37605fd82",
+            "attemptId": "c59cb154-d086-4fd0-b268-f0d523619cb1",
+            "pairId": "90fee3ea-c380-4625-bf8a-bd2c1438edbd",
+            "case": "G1_PASS_COMPLETED",
+            "bindingsSha256": "696a30a10273eeec2e480e08643956df80571917e0f8f2eba24f59f2d02545d6"
+          },
+          "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+          "ageVersion": "v1.3.2",
+          "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+          "ciphertextSha256": "c2b3745a5c96d74fe0fd062349878fd694c63f896b3dad37697d85bd0a8fac67",
+          "ciphertextBytes": 15085,
+          "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+          "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+          "upload": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      },
+      {
+        "id": "g1-pass-g2-fail-g3-fail",
+        "status": "PASS",
+        "stage": "UPLOAD_GATE",
+        "validatorExit": 1,
+        "preserverExit": 0,
+        "finalizerExit": 0,
+        "uploadGateExit": 0,
+        "gates": {
+          "G1": "PASS",
+          "G2": "FAIL",
+          "G3": "FAIL"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "findingCodes": {
+          "G1": [],
+          "G2": ["HTTP_STATUS"],
+          "G3": ["HTTP_STATUS", "DB_SCHEMA", "DB_STATE"]
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "preservation": {
+          "format": "mmp097-preservation-v1",
+          "status": "ENCRYPTED_PENDING_UPLOAD",
+          "identity": {
+            "runId": "970003",
+            "runAttempt": "1",
+            "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "dfe2258b749eb0cf9b0113e08e823ff5b36b38fffbf790820e89d4e21e41e855",
+            "attemptId": "d55cd699-5823-4e94-8db1-e50b032d98c0",
+            "pairId": "97d1a174-0e18-4a70-8311-5e5fb341b5c3",
+            "case": "G1_PASS_COMPLETED",
+            "bindingsSha256": "10d5aa568f0d1639aaa9d460f793994fa43bdad681089e0e7e666b12aac46686"
+          },
+          "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+          "ageVersion": "v1.3.2",
+          "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+          "ciphertextSha256": "9471021649164b5f3252eb11c66d6faac9a7ca60465610116a76200e3a4d7c01",
+          "ciphertextBytes": 15110,
+          "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+          "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+          "upload": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      },
+      {
+        "id": "g1-pass-g2-pass-g3-pass",
+        "status": "PASS",
+        "stage": "UPLOAD_GATE",
+        "validatorExit": 0,
+        "preserverExit": 0,
+        "finalizerExit": 0,
+        "uploadGateExit": 0,
+        "gates": {
+          "G1": "PASS",
+          "G2": "PASS",
+          "G3": "PASS"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 17,
+          "sqlite": 20,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "findingCodes": {
+          "G1": [],
+          "G2": [],
+          "G3": []
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "preservation": {
+          "format": "mmp097-preservation-v1",
+          "status": "ENCRYPTED_PENDING_UPLOAD",
+          "identity": {
+            "runId": "970004",
+            "runAttempt": "1",
+            "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+            "attemptId": "30287e79-a812-4a2e-8feb-451033afe82f",
+            "pairId": "af5fe0ea-892c-40ba-92d5-536870a2680a",
+            "case": "G1_PASS_COMPLETED",
+            "bindingsSha256": "3772ab332f7ad507372e28fc608c6841ccd50bc26bc537e996c6a484903d3def"
+          },
+          "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+          "ageVersion": "v1.3.2",
+          "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+          "ciphertextSha256": "ea20be7575747a4f7b863017433b575d4e56f47b67b9d313b2c4ae73c4c0fd0f",
+          "ciphertextBytes": 15013,
+          "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+          "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+          "upload": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      },
+      {
+        "id": "legacy-g1-build-failed",
+        "status": "PASS",
+        "stage": "UPLOAD_GATE",
+        "validatorExit": 1,
+        "preserverExit": 0,
+        "finalizerExit": 0,
+        "uploadGateExit": 0,
+        "gates": {
+          "G1": "FAIL",
+          "G2": "INCONCLUSIVE",
+          "G3": "INCONCLUSIVE"
+        },
+        "network": {
+          "sourceFetches": 1,
+          "blockedRequests": 0
+        },
+        "preparation": [
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "PHP_PREPARATION",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-build.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "image-inspect.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "runtime-provenance.json",
+            "exitCode": 0,
+            "timedOut": false
+          },
+          {
+            "command": "provenance-cleanup.json",
+            "exitCode": 0,
+            "timedOut": false
+          }
+        ],
+        "coverage": {
+          "http": 0,
+          "sqlite": 0,
+          "requiredHttp": 17,
+          "requiredSqlite": 20
+        },
+        "findingCodes": {
+          "G1": ["BUILD_FAILED"],
+          "G2": ["MISSING_COVERAGE"],
+          "G3": ["MISSING_COVERAGE"]
+        },
+        "throwawayRoundtrip": "PASS",
+        "wrongKey": "REJECTED",
+        "tamperedCiphertext": "REJECTED",
+        "preservation": {
+          "format": "mmp089-preservation-v1",
+          "status": "ENCRYPTED_PENDING_UPLOAD",
+          "identity": {
+            "runId": "970005",
+            "runAttempt": "1",
+            "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "d5c6d898cf11e2a832b680fe38e2ddacc5c5bf9e4ad584da7c9c333dc0394131",
+            "attemptId": "f3a8e978-e7c9-4694-bd58-adbbdf2212cb",
+            "pairId": "8c8d2710-341d-4649-90c2-0fff4ad68b10"
+          },
+          "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+          "ageVersion": "v1.3.2",
+          "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+          "ciphertextSha256": "2ae58371a9b89c8f741633ea75699ad9657b2ef0dc00512d16cc05c47a7e7095",
+          "ciphertextBytes": 1451,
+          "plaintextStaging": "MEMORY_AND_PIPE_ONLY",
+          "collectorCleanup": "VERIFIED_ZERO_RESOURCES",
+          "upload": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      }
+    ],
+    "actualDocker": "EXECUTED",
+    "actualCrypto": "EXECUTED",
+    "modelRequests": 0,
+    "liveCiphertextUploads": 0,
+    "ownerDecrypt": "NOT_VERIFIED",
+    "product": "NOT_ESTABLISHED",
+    "docker": {
+      "version": "28.0.4",
+      "os": "linux",
+      "arch": "amd64"
+    },
+    "pins": {
+      "ageVersion": "v1.3.2",
+      "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+      "archiveSha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+      "encryptionImage": "node@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+      "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3"
+    },
+    "preparation": {
+      "status": "PASS",
+      "commands": [
+        {
+          "command": "PHP_PREPARATION",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "PHP_PREPARATION",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "image-build.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "image-inspect.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "runtime-provenance.json",
+          "exitCode": 0,
+          "timedOut": false
+        },
+        {
+          "command": "provenance-cleanup.json",
+          "exitCode": 0,
+          "timedOut": false
+        }
+      ],
+      "cleanup": {
+        "status": "VERIFIED_ZERO_RESOURCES",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0
+      }
+    },
+    "cryptoControls": ["wrong-recipient-pin-rejected", "oversize-rejected"],
+    "negativeControls": {
+      "status": "PASS",
+      "scope": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI_NOT_NEW_G1_ENVIRONMENT_EXECUTIONS",
+      "cases": [
+        {
+          "id": "wrong-head",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "wrong-source",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "wrong-candidate",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "wrong-attempt",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "wrong-pair",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "partial-http-fail-coverage",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "false-aggregate-pass",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "normal-cleanup-error",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "g1-error-policy",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 0,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "NOT_APPLICABLE"
+        },
+        {
+          "id": "incomplete-policy",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 0,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "NOT_APPLICABLE"
+        },
+        {
+          "id": "unfinished-parity-policy",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 0,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "NOT_APPLICABLE"
+        },
+        {
+          "id": "missing-trusted-index",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "malformed-index",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "altered-index-sha",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "changed-source-file",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "missing-trusted-sidecar",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "source-symlink",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "source-unsafe-path",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "source-over-cap",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "source-unexpected-field",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false,
+          "preservationStatus": "REJECTED"
+        },
+        {
+          "id": "finalizer-failed-outcome",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false
+        },
+        {
+          "id": "finalizer-error-receipt",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false
+        },
+        {
+          "id": "finalizer-nonzero-inventory",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false
+        },
+        {
+          "id": "ciphertext-tamper",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false
+        },
+        {
+          "id": "ciphertext-over-cap",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "gateExit": 0,
+          "eligible": false,
+          "expectedEligible": false
+        },
+        {
+          "id": "record-upload-failure",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "exitCode": 0,
+          "preservationStatus": "UPLOAD_FAILED"
+        },
+        {
+          "id": "record-upload-skipped",
+          "kind": "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI",
+          "status": "PASS",
+          "exitCode": 1,
+          "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+        }
+      ]
+    },
+    "cryptoFaultControls": [
+      {
+        "id": "crash",
+        "status": "PASS",
+        "execution": "ACTUAL_DOCKER_ENCRYPTOR_FAULT_WORKER",
+        "elapsedMs": 210,
+        "intentionalFaultRecoveryRemoved": 0,
+        "postRecoveryInventory": 0,
+        "observedError": "DIAGNOSTIC_ENCRYPTION_ERROR",
+        "run": {
+          "exitCode": 23,
+          "signal": null,
+          "killed": false,
+          "bytes": 0
+        }
+      },
+      {
+        "id": "deadline",
+        "status": "PASS",
+        "execution": "ACTUAL_DOCKER_ENCRYPTOR_FAULT_WORKER",
+        "elapsedMs": 30099,
+        "intentionalFaultRecoveryRemoved": 0,
+        "postRecoveryInventory": 0,
+        "observedError": "DIAGNOSTIC_ENCRYPTION_ERROR",
+        "run": {
+          "exitCode": null,
+          "signal": "SIGKILL",
+          "killed": true,
+          "bytes": 0
+        }
+      },
+      {
+        "id": "ciphertext-cap",
+        "status": "PASS",
+        "execution": "ACTUAL_DOCKER_ENCRYPTOR_FAULT_WORKER",
+        "elapsedMs": 303,
+        "intentionalFaultRecoveryRemoved": 0,
+        "postRecoveryInventory": 0,
+        "observedError": "DIAGNOSTIC_ENCRYPTION_ERROR",
+        "run": {
+          "exitCode": null,
+          "signal": "SIGKILL",
+          "killed": true,
+          "bytes": 5242903
+        }
+      },
+      {
+        "id": "cleanup-fault",
+        "status": "PASS",
+        "execution": "ACTUAL_ENCRYPTION_WITH_REAL_CHILD_CLEANUP_FAULT_HARNESS",
+        "elapsedMs": 243,
+        "injectedCleanupExit": 42,
+        "intentionalFaultRecoveryRemoved": 1,
+        "postRecoveryInventory": 0,
+        "observedError": "DIAGNOSTIC_CLEANUP_ERROR",
+        "run": {
+          "exitCode": 0,
+          "signal": null,
+          "killed": false,
+          "bytes": 244
+        }
+      }
+    ],
+    "runtimeControls": {
+      "status": "PASS",
+      "cases": [
+        {
+          "id": "kill-build",
+          "status": "PASS",
+          "execution": "ACTUAL_VALIDATOR_DOCKER_BUILD_FAULT",
+          "afterInjectionMs": 385,
+          "injectionExitCode": 0,
+          "preserverExit": 0,
+          "gateExit": 0,
+          "process": {
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "gates": {
+            "G1": "ERROR",
+            "G2": "ERROR",
+            "G3": "ERROR"
+          },
+          "findingCodes": ["ENVIRONMENT_ERROR"],
+          "preservationStatus": "NOT_APPLICABLE",
+          "eligible": false,
+          "normalCleanup": "VERIFIED_ZERO_RESOURCES",
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        },
+        {
+          "id": "pause-build",
+          "status": "PASS",
+          "execution": "ACTUAL_VALIDATOR_DOCKER_BUILD_FAULT",
+          "afterInjectionMs": 35333,
+          "injectionExitCode": 0,
+          "preserverExit": 0,
+          "gateExit": 0,
+          "process": {
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "gates": {
+            "G1": "ERROR",
+            "G2": "ERROR",
+            "G3": "ERROR"
+          },
+          "findingCodes": ["TIMEOUT"],
+          "preservationStatus": "NOT_APPLICABLE",
+          "eligible": false,
+          "normalCleanup": "VERIFIED_ZERO_RESOURCES",
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        },
+        {
+          "id": "cancel-validator",
+          "status": "PASS",
+          "execution": "ACTUAL_VALIDATOR_DOCKER_BUILD_FAULT",
+          "afterInjectionMs": 421,
+          "preserverExit": 0,
+          "gateExit": 0,
+          "process": {
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "gates": {
+            "G1": "ERROR",
+            "G2": "ERROR",
+            "G3": "ERROR"
+          },
+          "findingCodes": ["BUILD_NOT_RUN", "CANCELLED"],
+          "preservationStatus": "NOT_APPLICABLE",
+          "eligible": false,
+          "normalCleanup": "VERIFIED_ZERO_RESOURCES",
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        },
+        {
+          "id": "incomplete-entry",
+          "status": "PASS",
+          "execution": "REAL_NODE_PRE_ENTRY_TIMEOUT_HARNESS",
+          "preserverExit": 0,
+          "gateExit": 0,
+          "process": {
+            "exitCode": null,
+            "signal": "SIGTERM",
+            "timedOut": true,
+            "classification": {
+              "status": "ERROR",
+              "stage": "VALIDATION",
+              "cause": "TIMEOUT"
+            }
+          },
+          "preservationStatus": "NOT_APPLICABLE",
+          "eligible": false,
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        },
+        {
+          "id": "secret-source",
+          "status": "PASS",
+          "execution": "ACTUAL_VALIDATOR_SECRET_MARKER_CANDIDATE",
+          "preserverExit": 1,
+          "gateExit": 0,
+          "process": {
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false
+          },
+          "gates": {
+            "G1": "PASS",
+            "G2": "PASS",
+            "G3": "PASS"
+          },
+          "preservationStatus": "REJECTED",
+          "eligible": false,
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        },
+        {
+          "id": "cleanup-fault",
+          "status": "PASS",
+          "execution": "ACTUAL_VALIDATOR_WITH_REAL_CHILD_CLEANUP_FAULT",
+          "injectedCleanupExit": 42,
+          "preserverExit": 0,
+          "gateExit": 0,
+          "process": {
+            "exitCode": 1,
+            "signal": null,
+            "timedOut": false
+          },
+          "gates": {
+            "G1": "ERROR",
+            "G2": "ERROR",
+            "G3": "ERROR"
+          },
+          "preservationStatus": "NOT_APPLICABLE",
+          "eligible": false,
+          "finalizer": {
+            "exitCode": 0,
+            "inventory": {
+              "containers": 0,
+              "volumes": 0
+            },
+            "emergencyRemoved": 0
+          }
+        }
+      ]
+    },
+    "fullNegativeMatrix": "PARTIAL_PENDING_PROCESS_AND_FINALIZER_FAULT_CONTROLS",
+    "requestedMatrixGap": "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE",
+    "finalizer": {
+      "exitCode": 0,
+      "status": "PASS",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0
+    },
+    "privateCleanup": "PRIVATE_TEMP_REMOVED_NOT_SECURE_ERASE"
+  }
+}

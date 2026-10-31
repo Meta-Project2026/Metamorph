@@ -1,7 +1,14 @@
 // Real trusted validator + disposable Docker fault injection. Budgets unchanged.
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  chmodSync,
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 import {
   DIAGNOSTIC_POLICY,
@@ -93,6 +100,7 @@ export async function runtimeNegativeControls({
       });
     const row = {
       id: mode,
+      stage: "VALIDATION",
       execution:
         mode === "incomplete-entry"
           ? "REAL_NODE_PRE_ENTRY_TIMEOUT_HARNESS"
@@ -311,6 +319,17 @@ export async function runtimeNegativeControls({
         }
       }
       const before = sha256(readFileSync(trialPath));
+      row.stage = "PRESERVATION";
+      // Keep a valid encryption path behind secret rejection: absence of age
+      // must not accidentally satisfy this source-policy negative control.
+      if (mode === "secret-source") {
+        const tools = join(runner, "mmp089-tools");
+        mkdirSync(tools, { mode: 0o700 });
+        const tool = join(tools, "age");
+        copyFileSync(process.env.MMP089_AGE_PATH, tool);
+        chmodSync(tool, 0o755);
+        assert.equal(sha256(readFileSync(tool)), DIAGNOSTIC_POLICY.ageSha256);
+      }
       const preserver = cli("research/mmp-089/preserve.mjs");
       row.preserverExit = observedExit(preserver);
       assert.equal(preserver.status, mode === "secret-source" ? 1 : 0);
@@ -330,8 +349,8 @@ export async function runtimeNegativeControls({
       row.preservationStatus = preservation.status;
       assert.equal(sha256(readFileSync(trialPath)), before);
       row.status = "PENDING_FINALIZER";
-    } catch {
-      row.status = "ERROR";
+    } catch (error) {
+      Object.assign(row, controlFailure(row.stage, error));
     } finally {
       clearTimeout(rescue);
       if (buildName) docker(["unpause", buildName]); // only this owned test resource, if still present
@@ -343,6 +362,7 @@ export async function runtimeNegativeControls({
         },
         60000,
       );
+      let terminalStage = "FINALIZER";
       try {
         assert.equal(observedExit(finalized), 0);
         const finalizer = JSON.parse(
@@ -357,6 +377,7 @@ export async function runtimeNegativeControls({
           emergencyRemoved: 0,
         };
         if (row.status === "PENDING_FINALIZER") {
+          terminalStage = "UPLOAD_GATE";
           const step = join(runner, "gate-output.txt");
           const gate = cli("research/mmp-089/prepare-upload.mjs", {
             GITHUB_OUTPUT: step,
@@ -370,8 +391,10 @@ export async function runtimeNegativeControls({
           row.eligible = false;
           row.status = "PASS";
         }
-      } catch {
-        row.status = "ERROR";
+      } catch (error) {
+        if (["ERROR", "FAIL"].includes(row.status))
+          row.terminalFailure = controlFailure(terminalStage, error);
+        else Object.assign(row, controlFailure(terminalStage, error));
         row.cleanup = "ERROR";
       }
     }

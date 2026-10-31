@@ -1,0 +1,87 @@
+{
+  "runId": 41250245202,
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41250245202",
+  "jobId": 124682066366,
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41250245202/job/124682066366",
+  "headSha": "4d0724721fb6aa4264a8af8a84c4036c8f5fb2a9",
+  "receipt": {
+    "format": "mmp099-hosted-receipt-v1",
+    "headSha": "4d0724721fb6aa4264a8af8a84c4036c8f5fb2a9",
+    "decision": "NO_GO",
+    "node": "v24.22.1",
+    "commands": [
+      {
+        "command": "node research/mmp-089/install-age.mjs",
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false
+      },
+      {
+        "command": "node research/mmp-097/offline-controls.mjs",
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false
+      }
+    ],
+    "cases": [
+      {
+        "id": "g1-pass-g2-fail-g3-pass",
+        "status": "ERROR",
+        "stage": "VALIDATION",
+        "cause": "ENVIRONMENT_ERROR",
+        "validatorExit": 1,
+        "preserverExit": null,
+        "finalizerExit": 0,
+        "uploadGateExit": null,
+        "gates": {
+          "G1": "NOT_RUN",
+          "G2": "NOT_RUN",
+          "G3": "NOT_RUN"
+        },
+        "finalizer": {
+          "headSha": "4d0724721fb6aa4264a8af8a84c4036c8f5fb2a9",
+          "status": "PASS",
+          "emergencyRemoved": 0,
+          "inventory": {
+            "containers": 0,
+            "volumes": 0
+          }
+        }
+      }
+    ],
+    "actualDocker": "EXECUTED",
+    "actualCrypto": "NOT_ESTABLISHED",
+    "modelRequests": 0,
+    "liveCiphertextUploads": 0,
+    "ownerDecrypt": "NOT_VERIFIED",
+    "product": "NOT_ESTABLISHED",
+    "docker": {
+      "version": "28.0.4",
+      "os": "linux",
+      "arch": "amd64"
+    },
+    "pins": {
+      "ageVersion": "v1.3.2",
+      "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+      "archiveSha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+      "encryptionImage": "node@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+      "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3"
+    },
+    "cryptoControls": [],
+    "failure": {
+      "status": "FAIL",
+      "stage": "VALIDATION",
+      "cause": "ACCEPTANCE_MISMATCH"
+    },
+    "finalizer": {
+      "exitCode": 0,
+      "status": "PASS",
+      "inventory": {
+        "containers": 0,
+        "volumes": 0
+      },
+      "emergencyRemoved": 0
+    },
+    "privateCleanup": "PRIVATE_TEMP_REMOVED_NOT_SECURE_ERASE"
+  }
+}

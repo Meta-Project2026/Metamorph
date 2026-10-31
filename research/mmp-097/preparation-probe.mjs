@@ -1,7 +1,10 @@
 // Trusted preparation only: no candidate/reference business execution or raw output.
 import { mkdirSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readPrivateJson } from "../../packages/agent-real/src/private-diagnostics.mjs";
+import {
+  readPrivateJson,
+  requireNormalCleanup,
+} from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { createEnvironment } from "../../packages/agent-real/src/runtime.mjs";
 
 export function validationPreparation(parent, headSha) {
@@ -61,6 +64,14 @@ export function validationPreparation(parent, headSha) {
   return reports;
 }
 
+export function requirePreparationCleanup(completion) {
+  requireNormalCleanup({
+    status: completion.cleanup,
+    ...completion.inventory,
+    emergencyRemoved: completion.emergencyRemoved,
+  });
+}
+
 export async function preparationProbe(root, parent, headSha) {
   mkdirSync(parent, { mode: 0o700 });
   const report = { status: "ERROR", commands: [] };
@@ -108,6 +119,13 @@ export async function preparationProbe(root, parent, headSha) {
           inventory: completion.inventory,
           emergencyRemoved: completion.emergencyRemoved,
         };
+        try {
+          requirePreparationCleanup(completion);
+        } catch {
+          report.status = "ERROR";
+          report.cause ??= "CLEANUP_ERROR";
+          report.cleanupFailure = "CLEANUP_ERROR";
+        }
         const path = join(parent, completion.provenancePack.id);
         const index = readPrivateJson(join(path, "index.json")).value;
         for (const entry of index.entries) {
@@ -167,8 +185,9 @@ export async function preparationProbe(root, parent, headSha) {
           report.commands.push(row);
         }
       } catch {
-        report.cleanup = { status: "ERROR" };
+        report.cleanup ??= { status: "ERROR" };
         report.status = "ERROR";
+        report.cause ??= "CLEANUP_ERROR";
       }
     }
   }

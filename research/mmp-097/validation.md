@@ -1,116 +1,65 @@
-# MMP-097 validation — 2026-10-31
+# MMP-097 / MMP-099 validation — 2026-11-01
 
 Base: `38aa818e4afe75512e4555390246f44b5d7798db`.
-Decision: **NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE**.
+Current decision: **PASS_SCOPED / MERGE_NO_GO**, pending additional process/finalizer evidence and independent review. This file distinguishes executed SHAs from later delivery commits.
 
-Windows x64, Node v24.21.0, pnpm 11.25.0. Docker command/standard executable
-are absent; no Docker process/pipe or installed WSL distribution was observed.
-No actual candidate/reference execution, age encryption, decryption, cleanup
-inventory, provider request, workflow dispatch or ciphertext upload occurred.
-Owner key was not accessed; owner roundtrip remains NOT_VERIFIED. Prior Docker
-receipts cannot qualify this patch. [Acceptance matrix](acceptance.json).
+## Actual Linux Docker and age
 
-Targeted new suite: 65 tests, 64 PASS / 1 Windows symlink SKIP / 0 FAIL,
-exit0 after fixture corrections. These are synthetic envelope/source and inert
-ciphertext CLI tests, not Docker or crypto evidence. Existing G1 diagnostics
-suite passed 9/9 in the initial targeted run. Initial development failures were
-a research helper's workspace import resolution and a shared synthetic-object
-alias masking a negative test; both were corrected before final validation.
+Exact executed SHA: `b6f9abe46542bfd99ba6bc3211cba1b3cafd896b`.
+[Run 41252167119](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119), [job 124687753782](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119/job/124687753782), ordinary `pull_request`, **SUCCESS**.
+[Committed sanitized receipt](evidence/mmp099/41252167119.json). Node v24.22.1, Docker 28.0.4 linux/amd64. The receipt includes pinned age v1.3.2 binary/archive hashes and encryption image/recipe SHA.
 
-Syntax check: 68 active research modules parsed, 0 failures; never executed.
-Coverage inventory: VALID, 69 discovered modules including archive, privileged
-runner NOT_RUN. New MMP097 registration claims syntax only in Fast CI, with
-package unit tests separately discovered.
+The PR98 same-repo workflow checks out the actual PR head with no persisted credentials and contents:read. Installer/driver use an exact environment allowlist. Candidate TS executes only in the unchanged Docker sandbox. No artifact uploader, Meta/model request, workflow dispatch, owner private key, paid rerun/repair or live ciphertext upload is used. Actions infrastructure cost is not established as zero.
 
-## Complete local checks on implementation 8091a96
+| Actual case              | G1 / G2 / G3                       | HTTP / SQLite coverage | Package / outcome                                     |
+| ------------------------ | ---------------------------------- | ---------------------- | ----------------------------------------------------- |
+| HTTP-only mutation       | PASS / FAIL / FAIL                 | 17/17; 20/20           | candidate-only; roundtrip PASS; eligible=true         |
+| SQLite-only mutation     | PASS / PASS / FAIL                 | 17/17; 20/20           | candidate-only; roundtrip PASS; eligible=true         |
+| Both mutations           | PASS / FAIL / FAIL                 | 17/17; 20/20           | candidate-only; roundtrip PASS; eligible=true         |
+| Unchanged public fixture | PASS / PASS / PASS                 | 17/17; 20/20           | candidate-only; roundtrip PASS; eligible=true         |
+| Genuine compiler failure | FAIL / INCONCLUSIVE / INCONCLUSIVE | 0/17; 0/20, expected   | legacy source+compiler; roundtrip PASS; eligible=true |
 
-Exact implementation SHA: `8091a96f84b2d4da4cd98fd43d20040d7d111da4`.
-All commands below actually exited **0**. Source checkout remained clean.
-Logs remain in the local workspace `.tmp-mmp097`; sanitized command/exit/log-hash
-metadata is committed in [evidence/local-checks.json](evidence/local-checks.json).
+All five cases observed validator exit1 except the parity-positive exit0, preserver exit0, independent finalizer exit0 and gate exit0. Every preservation record remains ENCRYPTED_PENDING_UPLOAD. There is no uploader action and no false PRESERVED. Source plaintext SHA, canonical candidate SHA and every per-file manifest entry were checked after real decrypt exit0; wrong key and tampered ciphertext each exited1. Failed streaming output was discarded. Normal cleanup and each independent/global finalizer show 0 containers / 0 volumes / 0 emergency removals. Fresh temporary source, ciphertext and throwaway keys were removed; no secure erase is claimed.
 
-| Command                                                   | Observed result                                                                                                                  |
-| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile`                          | PASS; no lockfile change                                                                                                         |
-| `pnpm lint`                                               | PASS                                                                                                                             |
-| `pnpm typecheck`                                          | PASS in configured scope                                                                                                         |
-| `pnpm test`                                               | 524 tests: 421 PASS / 103 SKIP / 0 FAIL                                                                                          |
-| `pnpm build`                                              | PASS                                                                                                                             |
-| `pnpm --filter @metamorph/oracle test:reference`          | 55 PASS / 1 SKIP / 0 FAIL                                                                                                        |
-| `pnpm --filter @metamorph/target-worker test`             | 69 PASS / 0 FAIL                                                                                                                 |
-| `pnpm --filter @metamorph/differential test`              | 77 PASS / 45 SKIP / 0 FAIL                                                                                                       |
-| `pnpm --filter @metamorph/workshop-audit test`            | 53 PASS / 1 SKIP / 0 FAIL                                                                                                        |
-| `pnpm exec biome check research/mmp-097`                  | PASS; six then-current configured files                                                                                          |
-| `node research/mmp-069/check-syntax.mjs`                  | 68 active modules parsed, 0 FAIL                                                                                                 |
-| `node research/mmp-069/validate.mjs`                      | VALID; privileged runner NOT_RUN                                                                                                 |
-| `node --test research/mmp-069/validate.test.mjs`          | 45 PASS                                                                                                                          |
-| `node --test research/mmp-054-connected/history.test.mjs` | 2 PASS                                                                                                                           |
-| `node --test research/mmp-054-connected/verify.test.mjs`  | 21 PASS                                                                                                                          |
-| `node --test research/demo-readiness/*.test.mjs`          | 83 PASS                                                                                                                          |
-| Protected-path `git diff --exit-code BASE -- ...`         | PASS; contracts/oracle/differential/target-worker/public source/MMP078/model encoder/signed admission/Fast CI/lockfile unchanged |
-| `git diff --check`                                        | PASS                                                                                                                             |
+### Owner clarification and selector correction
 
-Suites overlap; counts are not added. SKIP is not PASS. No candidate source
-was compiled/imported/executed on the host. Package test fixtures and ciphertext
-are synthetic; no actual cryptographic or Docker cleanup claim follows.
+The requested G2 FAIL / G3 PASS row is unreachable under unchanged `packages/oracle/src/runner.ts`: G3 includes HTTP findings. The owner explicitly answered on 1 November: recognize the row as unreachable and verify HTTP-only coupling plus remaining reachable cases. No Oracle, normalization, reference, comparator, G4 or benchmark change was made. The actual HTTP-only case verifies G3 HTTP_STATUS with no DB findings. The new retention selector previously rejected these genuine completed G3 findings; it now accepts the existing finite HTTP codes alongside DB_SCHEMA/DB_STATE. All identity, source, coverage, compiler and cleanup requirements remain.
 
-## Hosted CI
+### Negative controls actually executed
 
-[Fast CI 41245415423](https://github.com/Meta-Project2026/Metamorph/actions/runs/41245415423)
-on exact `8091a96...`: Node22 and Node24 **SUCCESS**, ordinary pull_request event,
-no dispatch. Independently read Node24 job `124667706116` log: root 521 PASS /
-3 SKIP / 0 FAIL; reference56, target69, differential122, qualification2, audit54,
-coverage45, history2, connected21 and demo83 PASS. The new Linux symlink test
-passed there. Fast CI executes no actual candidate/crypto acceptance matrix.
-Final pushed documentation SHA and its CI are tracked in PR98; this receipt
-does not silently relabel implementation execution as a later commit.
+- **27 PASS** receipt/filesystem/record controls: wrong head/source/candidate/attempt/pair, partial HTTP IDs, false aggregate, cleanup-error metadata, G1 ERROR/NOT_RUN/unfinished parity, missing/malformed/altered pack/index/sidecar, changed source, actual Linux symlink, unsafe path, oversized source, unexpected field, finalizer producer/error/nonzero metadata, real ciphertext tamper/cap, and record-upload failure/skipped. Production CLIs consume actual validated files and real ciphertext; metadata mutations are explicitly not new runtime faults. Trial bytes are unchanged by record paths.
+- **4 PASS** independent encryptor faults: actual Docker worker crash exit23; unchanged 30-second deadline produced SIGKILL at 30,099 ms; ciphertext cap observed 5,242,903 output bytes and killed the child; actual successful production age encryption followed by a real injected cleanup child exit42 produced DIAGNOSTIC_CLEANUP_ERROR. That intentional cleanup fault required recovery of one owned stopped container, explicitly reported as such; post-recovery inventory0. Other crypto controls used normal zero-resource cleanup. Wrong recipient pin and oversized plaintext also refused.
+- **6 PASS** validator controls: killed build -> G1/G2/G3 ERROR with ENVIRONMENT_ERROR; paused build -> ERROR/TIMEOUT after 35,333 ms at the unchanged outer build deadline; SIGTERM cancellation -> ERROR/CANCELLED; pre-entry real Node timeout -> ERROR/TIMEOUT with unfinished NOT_RUN trial; genuine admitted secret-marker candidate -> all public gates PASS but preserver REJECTED; real cleanup child exit42 -> G1 ERROR/CLEANUP_ERROR. All upload gates remained closed and independent finalizers0/0/0.
 
-No fixture, reference, comparator, hidden input, recipe, compiler timeout,
-provider encoder, signed admission, billing/retry/repair policy or fast CI
-workflow was modified. The paid workflow only has a corrected display label;
-conditions, fixed ciphertext path/retention and permissions are unchanged.
+The paused-build test proves the existing Docker build-command deadline; it does not claim the separate inner compiler timer fired. Pre-entry Node timeout/crash harnesses exercise process-boundary classification, not inner tool execution. Fault injection programs are trusted harness code; candidate/worker recipes and budgets are unchanged.
 
-Separate astra6/max review inspected all 16 changed files at exact `8091a96...`
-and ran combined legacy/new units, whitespace and syntax checks (exit0). No
-confirmed production security bypass was found. Two P2 findings concerned the
-manual driver: generic crypto rejection could credit an unrelated failure, and
-combined FAIL_OR_ENVIRONMENT_ERROR lost required classification.
+Additional partial-SQLite, preserver/finalizer/gate process-boundary failures, actual finalizer emergency removal and actual nonzero-inventory refusal are currently executing at exact `ef2e0db352f55bd22bb48f5ab931a5a81222e763`, [run 41252358030](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358030). NOT_ESTABLISHED until its receipt is read. A subsequent hardening gives the secret-marker control a valid pinned age path so missing tooling cannot accidentally satisfy rejection; that patch must execute before final readiness.
 
-Corrections require DIAGNOSTIC_ENCRYPTION_ERROR (not cleanup failure), a bounded
-30-second-compatible elapsed window for deadline input, and explicitly retain
-underlying cause NOT_INDEPENDENTLY_ESTABLISHED. No immediate Docker failure can
-credit that timing control. Wrong-key/tamper checks require age exit1 without
-signal/process error. Categorical stages/causes distinguish observed environment
-ERROR/timeouts/cancellation from proven assertion FAIL; a later cleanup error
-does not overwrite the original observation. Two dedicated regression tests
-actually passed, exit0. These helpers/driver changes do not alter production
-selection, scoring or compiler budgets. Active syntax count is now 69.
+## Local and Fast CI checks
 
-After these corrections, `pnpm lint` and `pnpm test` both actually exited0:
-**526 tests, 423 PASS / 103 SKIP / 0 FAIL**. Research MMP097 lint exited0;
-coverage VALID now discovers 70 research modules (69 active syntax-checked).
-The two new qualification-reporting tests are part of the root test glob.
-These working-tree results are committed with the corrections; final exact
-correction SHA/CI and independent re-review are recorded on PR98.
+Exact locally checked SHA: `ef2e0db352f55bd22bb48f5ab931a5a81222e763`, clean tracked checkout, Windows x64, Node v24.21.0, pnpm11.25.0.
+[Command/exit/hash receipt](evidence/mmp099/local-ef2e0db.json).
 
-Exact correction-commit re-review and final ChatGPT review remain pending.
-No merge or issue closure. G0/G4 INCONCLUSIVE; product #61 NOT_ESTABLISHED.
+All nine required commands exited0: frozen install, lint, typecheck, test, build, MMP097 Biome, active syntax, coverage validation and coverage-validator tests. Root tests531: 428 PASS / 103 SKIP / 0 FAIL. Syntax76 active modules; inventory77 including archive. Coverage-validator45 PASS. Reference56:55 PASS/1 SKIP; target-worker69 PASS; differential122:77 PASS/45 SKIP. Counts overlap and are not added. The first sandboxed target-worker attempt exited1 because Windows denied hardlink creation (EPERM); the unchanged suite passed outside that filesystem restriction. No candidate TS ran on the Windows host.
 
-The first correction re-review at `f5f10f71e1d564cc4c31b64ad1d7227ecf2c8013`
-closed the crypto finding but reproduced a remaining preservation-child timeout
-classification defect. The subsequent correction uses `observedExit` before
-asserting every active validator/decrypt/preserver/finalizer/gate child result;
-its bounded process-error category travels with the failure, rather than using
-the previous finalizer's error. Direct synchronous decrypt ETIMEDOUT is also
-recognized. A real bounded trusted Node-child timeout (not a candidate or Docker
-execution) now verifies ERROR/TIMEOUT after prior successful gates at all four
-later stages. All three qualification regression tests actually passed, exit0;
-syntax69 and whitespace checks passed. Exact final correction SHA, hosted CI
-and independent closure are recorded on PR98; the full Docker matrix remains
-NOT_TESTED throughout.
+[Fast CI 41252358052](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358052) on exact `ef2e0db...`: Node22 and24 **SUCCESS**. Fast CI remains unchanged and distinct from actual Docker/crypto qualification.
 
-Threat model/limits: [README](README.md#trust-limits) and updated
-[owner runbook](../mmp-089/RUNBOOK.md). All new selection/fixture/driver code is
-original project work. Intended runtime candidates reuse the already-admitted
-public workshop fixture and retain its upstream MIT notice. Existing pinned age
-provenance, recipient and encryptor are unchanged; no new dependency is added.
+## Earlier real attempts, retained honestly
+
+| Run                                                                                   | Observed result                                                                                                                          |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| [41250245202](https://github.com/Meta-Project2026/Metamorph/actions/runs/41250245202) | Validator preparation ERROR; gates NOT_RUN; crypto not established; final0/0/0                                                           |
+| [41250618249](https://github.com/Meta-Project2026/Metamorph/actions/runs/41250618249) | Separate trusted prep PASS; validator preparation ERROR; final0/0/0                                                                      |
+| [41250887175](https://github.com/Meta-Project2026/Metamorph/actions/runs/41250887175) | Actual PHP build PERMISSION_DENIED because host-only HOME=/nonexistent; final0/0/0                                                       |
+| [41251133850](https://github.com/Meta-Project2026/Metamorph/actions/runs/41251133850) | Fresh credential-free writable host HOME fixed Buildx; actual HTTP-only G1PASS/G2FAIL/G3FAIL exposed impossible expected row; final0/0/0 |
+| [41251591683](https://github.com/Meta-Project2026/Metamorph/actions/runs/41251591683) | Actual first source roundtrip/wrong-key/tamper PASS; synthetic fault worker unreadable under umask077; harness ERROR; final0/0/0         |
+
+Each immutable run/job/head receipt is in [evidence/mmp099](evidence/mmp099). Corrective commits trigger ordinary new PR jobs; no rerun API or workflow_dispatch is used. Historical MMP097 synthetic-only validation remains in Git history and `evidence/local-checks.json`; it is not relabelled as actual execution.
+
+## Independent review and remaining gates
+
+Prior astra6/max review at `bdbe856...` closed the original two driver-reporting findings. A new independent astra6/max review of exact `ef2e0db...` is requested after the successful actual Docker execution; result pending. Final ChatGPT exact-SHA review, reviewed merge and issue closure remain separate owner/project-brain actions. PR98 stays Draft.
+
+G0/G4 INCONCLUSIVE; product/#61 NOT_ESTABLISHED; AI_GENERATION_NOT_RUN; OWNER_DECRYPT_NOT_VERIFIED. Owner harmless recipient roundtrip remains a separate future paid-request gate; no private key should be shared. Trust limits: same trusted host/daemon and no concurrent same-UID/root writer, SHA seals are not signatures, finite secret-marker rejection cannot detect all encoded secrets. Original harness/selector code is project work; the public workshop fixture and its MIT notice are reused unchanged. No new dependency or crypto primitive is introduced.
+
+The new independent review of immutable ef2 identified three qualification findings (no confirmed production bypass): process faults could be collapsed into aggregate FAIL; secret/path/cap controls had unrelated rejection prerequisites; preparation PASS could survive cleanup failure/emergency recovery. Pending corrections preserve active stage/cause through every new helper/supervisor, supply valid pinned age behind secret rejection, rebind the intentionally invalid source across every trusted pair/identity/seal without executing it, and enforce prep completion0/0/0. Process/finalizer tests now require an actually all-PASS trial. Seven targeted reporting/projection regressions pass, including all preparation cleanup violations. These findings remain open for actual corrected-head execution and exact-SHA re-review.
