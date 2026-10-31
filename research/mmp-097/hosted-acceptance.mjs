@@ -199,6 +199,7 @@ try {
       signal: driver.signal,
       timedOut: driver.error?.code === "ETIMEDOUT",
     });
+    const driverExit = observedExit(driver);
     const controls = read(join(output, "controls.json"));
     assert.equal(controls.headSha, env.AGENT_HEAD_SHA);
     assert.equal(controls.format, "mmp097-offline-controls-v1");
@@ -226,7 +227,7 @@ try {
     )
       ? "EXECUTED"
       : "NOT_ESTABLISHED";
-    assert.equal(observedExit(driver), 0);
+    assert.equal(driverExit, 0);
     assert.equal(controls.scopedStatus, "PASS_SCOPED");
     assert.equal(result.cases.length, 5);
     assert.ok(result.cases.every((row) => row.status === "PASS"));
