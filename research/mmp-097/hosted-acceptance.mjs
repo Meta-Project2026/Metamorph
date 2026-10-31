@@ -12,7 +12,11 @@ import { isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { sha256 } from "../../packages/target-worker/src/admission.mjs";
-import { publicCase, publicCrypto } from "./hosted-receipt.mjs";
+import {
+  publicCase,
+  publicCrypto,
+  publicNegatives,
+} from "./hosted-receipt.mjs";
 import { preparationProbe } from "./preparation-probe.mjs";
 import { controlFailure, observedExit } from "./qualification-outcome.mjs";
 
@@ -200,6 +204,7 @@ try {
       result.cases.push(publicCase(row, env.AGENT_HEAD_SHA));
     }
     result.cryptoControls = publicCrypto(controls.cryptoControls);
+    result.negativeControls = publicNegatives(controls.negativeControls);
     result.actualDocker = result.cases.length ? "EXECUTED" : "NOT_ESTABLISHED";
     result.actualCrypto = result.cases.some(
       (row) => row.throwawayRoundtrip === "PASS",

@@ -145,15 +145,24 @@ export async function preparationProbe(root, parent, headSha) {
           const stderr = receipt.stderrBase64
             ? Buffer.from(receipt.stderrBase64, "base64").toString()
             : (receipt.stderr ?? "");
-          if (/toomanyrequests|pull rate limit/i.test(stderr))
+          if (
+            receipt.exitCode !== 0 &&
+            /toomanyrequests|pull rate limit/i.test(stderr)
+          )
             row.publicToolCategory = "REGISTRY_RATE_LIMIT";
-          else if (/manifest unknown|not found|failed to resolve/i.test(stderr))
+          else if (
+            receipt.exitCode !== 0 &&
+            /manifest unknown|not found|failed to resolve/i.test(stderr)
+          )
             row.publicToolCategory = "PUBLIC_DEPENDENCY_UNAVAILABLE";
-          else if (/permission denied/i.test(stderr))
+          else if (receipt.exitCode !== 0 && /permission denied/i.test(stderr))
             row.publicToolCategory = "PERMISSION_DENIED";
-          else if (/timeout|timed out/i.test(stderr))
+          else if (receipt.exitCode !== 0 && /timeout|timed out/i.test(stderr))
             row.publicToolCategory = "TIMEOUT";
-          else if (/network|connection|certificate|TLS/i.test(stderr))
+          else if (
+            receipt.exitCode !== 0 &&
+            /network|connection|certificate|TLS/i.test(stderr)
+          )
             row.publicToolCategory = "PUBLIC_TOOL_NETWORK_ERROR";
           report.commands.push(row);
         }

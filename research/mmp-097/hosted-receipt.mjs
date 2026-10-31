@@ -162,3 +162,38 @@ export function publicCrypto(rows) {
     };
   });
 }
+
+export function publicNegatives(controls) {
+  assert.ok(Array.isArray(controls.cases) && controls.cases.length <= 100);
+  return {
+    status: choice(controls.status, ["NOT_TESTED", "PASS", "FAIL"]),
+    scope:
+      "ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI_NOT_NEW_G1_ENVIRONMENT_EXECUTIONS",
+    cases: controls.cases.map((row) => {
+      assert.match(row.id, /^[a-z0-9-]{1,64}$/);
+      const result = {
+        id: row.id,
+        kind: choice(row.kind, ["ACTUAL_VALIDATED_FILES_AND_PRODUCTION_CLI"]),
+        status: choice(row.status, ["PASS", "FAIL", "ERROR"]),
+      };
+      for (const key of ["preserverExit", "gateExit", "exitCode"])
+        if (row[key] !== undefined) {
+          integer(row[key], 255);
+          result[key] = row[key];
+        }
+      for (const key of ["eligible", "expectedEligible"])
+        if (row[key] !== undefined) {
+          assert.equal(typeof row[key], "boolean");
+          result[key] = row[key];
+        }
+      if (row.preservationStatus)
+        result.preservationStatus = choice(row.preservationStatus, [
+          "REJECTED",
+          "NOT_APPLICABLE",
+          "UPLOAD_FAILED",
+          "ENCRYPTED_PENDING_UPLOAD",
+        ]);
+      return result;
+    }),
+  };
+}

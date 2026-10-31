@@ -29,6 +29,7 @@ import {
   encryptionRefusal,
   observedExit,
 } from "./qualification-outcome.mjs";
+import { receiptNegativeControls } from "./receipt-negative-controls.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 assert.equal(process.platform, "linux");
@@ -71,9 +72,13 @@ assert.equal(sha256(readFileSync(agePath)), DIAGNOSTIC_POLICY.ageSha256);
 assert.equal(sha256(readFileSync(keygen)), DIAGNOSTIC_POLICY.keygenSha256);
 const env = {
   PATH: "/usr/local/bin:/usr/bin:/bin",
-  HOME: "/nonexistent",
+  HOME: join(parent, "trusted-home"),
   TZ: "UTC",
 };
+// Docker Buildx preparation needs writable state. This fresh host-only HOME
+// contains no credentials, is never mounted into candidate/encryptor workers,
+// and is removed with the private runner root. Worker environments are unchanged.
+mkdirSync(env.HOME, { mode: 0o700 });
 const key = join(parent, "throwaway-key.txt");
 const wrongKey = join(parent, "wrong-key.txt");
 for (const path of [key, wrongKey])
@@ -99,6 +104,8 @@ const baseline = await admitDirectory(
 );
 const results = [];
 const cryptoControls = [];
+let negativeControls = { status: "NOT_TESTED", cases: [] };
+let firstCompleted;
 let status = "PASS";
 const cli = (file, extra, timeout = 10000) =>
   spawnSync(process.execPath, [join(root, file)], {
@@ -453,6 +460,11 @@ try {
       }
     }
     if (status !== "PASS") break; // Keep original failure; no silent retries.
+    if (number === 0) firstCompleted = { root, runner, expected, env };
+  }
+  if (status === "PASS" && firstCompleted) {
+    negativeControls = receiptNegativeControls(firstCompleted);
+    assert.equal(negativeControls.status, "PASS");
   }
 } catch {
   status = "NO_GO";
@@ -466,6 +478,7 @@ try {
     acceptance: "NO_GO_PENDING_FULL_MATRIX",
     cases: results,
     cryptoControls,
+    negativeControls,
     aiGeneration: "AI_GENERATION_NOT_RUN",
     metaRequests: 0,
     liveUpload: "NOT_RUN",
