@@ -2,11 +2,11 @@
   "format": "mmp097-acceptance-status-v1",
   "date": "2026-11-01",
   "baseSha": "38aa818e4afe75512e4555390246f44b5d7798db",
-  "decision": "PASS_SCOPED / MERGE_NO_GO",
-  "executedHeadSha": "b6f9abe46542bfd99ba6bc3211cba1b3cafd896b",
-  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119",
-  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119/job/124687753782",
-  "actualDocker": "EXECUTED_PASS_SCOPED",
+  "decision": "READY_FOR_INDEPENDENT_MERGE_REVIEW",
+  "executedHeadSha": "cc7a21eaeccbb2e660bab05759fd5fe4acc0a944",
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424861",
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424861/job/124691524318",
+  "actualDocker": "EXECUTED_PASS_REQUIRED_MATRIX",
   "actualCrypto": "EXECUTED_PASS",
   "actualCleanupInventory": {
     "exitCode": 0,
@@ -33,7 +33,38 @@
         "requiredSqlite": 20
       },
       "cryptoRoundtrip": "PASS",
-      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "bindings": {
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "43eb3aeb392a65da325a5433246609c1a0d01c9b03633feeaf08a6d44a3e59f9",
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "69db93c7-f722-44c8-b0b3-d2fa6796299c",
+            "packSeals": [
+              "123a06c837756edd2c214b2982c5258f866f9457a9edd322b6ae06e3a609bca2",
+              "e39747d4a5dd995d1cbf00015b05c24b5126206cccc3284f0b4a53d34f993361"
+            ]
+          },
+          {
+            "scenarioId": "workshop-rejected",
+            "pairId": "b625d94e-2d5f-4164-b2c8-438c8502698f",
+            "packSeals": [
+              "00ecdf0d7757240f82bbc9308150d94077d81e4673aaca1990443cb652957628",
+              "511d1fc66f1167423fdcae96027a517e3fdaad5f346467c103766fdbe37c1e40"
+            ]
+          },
+          {
+            "scenarioId": "workshop-capacity",
+            "pairId": "3ccd53a1-9819-42d2-b8ef-b803dc0bf094",
+            "packSeals": [
+              "0a07d20f21ff78e063c76dc213cd38974f5c8adb1803d8a88784185cd6a330a1",
+              "73e78260208530a5b1712b665351a17530f84c284b01bc8c63b1e46cf771e4c3"
+            ]
+          }
+        ],
+        "attemptId": "07c22659-1c42-449a-b155-aa162b7461c8"
+      }
     },
     {
       "case": "g1-pass-g2-pass-g3-fail",
@@ -50,7 +81,38 @@
         "requiredSqlite": 20
       },
       "cryptoRoundtrip": "PASS",
-      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "bindings": {
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "ff7095e119ac29aae2b1ef6e19d177df143b3b4643e4d0428e56fea37605fd82",
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "9d40a1d8-43ce-4e1a-b7e3-02e23ab42165",
+            "packSeals": [
+              "b087779391b3b521319eed04e6f0d733c85c986832f4728f90f8dec51e2d0cfb",
+              "12462f7e60fa49d1b81d0d3230cd5b8dad26500f2e04021ea7f960968bfda871"
+            ]
+          },
+          {
+            "scenarioId": "workshop-rejected",
+            "pairId": "95c89857-412a-4fdc-a05b-9474906108d9",
+            "packSeals": [
+              "65f5f56294a22bb25599650d2662506406a4f459f99149945c2e9c04e201698c",
+              "8fbe4726c6e22c230e4d6a9ee037f6a6f6bf6a5d518af9baf317ab40d4b25dba"
+            ]
+          },
+          {
+            "scenarioId": "workshop-capacity",
+            "pairId": "6a7cacf7-7ebe-4068-b4ec-7f3c518f67ea",
+            "packSeals": [
+              "2f46c168b7112a4dce08e5da6b5276f177b979c2edad07c14b26dda6a137d1e5",
+              "fe69975322137b80118e99d7b02e48db41c227a2e6634989b989c40ced157aac"
+            ]
+          }
+        ],
+        "attemptId": "5059f839-1445-4f4f-a4a2-e406b8ad0855"
+      }
     },
     {
       "case": "g1-pass-g2-fail-g3-fail",
@@ -67,7 +129,38 @@
         "requiredSqlite": 20
       },
       "cryptoRoundtrip": "PASS",
-      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "bindings": {
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "dfe2258b749eb0cf9b0113e08e823ff5b36b38fffbf790820e89d4e21e41e855",
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "500cfc6a-7cc1-4e18-8ae9-c38ee188834e",
+            "packSeals": [
+              "4ba37f1a184d99682af467fda4f54b57c5ef0b6034b379e96d2c4daf148f41fe",
+              "227e4107e1d32da472289c9aca76d3905d1ad2c8b04303211dd57a3b2b2a74e3"
+            ]
+          },
+          {
+            "scenarioId": "workshop-rejected",
+            "pairId": "2ed8d026-f566-4514-8de7-009d74ab922d",
+            "packSeals": [
+              "d66d9faffc6e88de51aa0d76a990abe1e9d4f2cb893b66bee921b7656fecf4b5",
+              "daf33794fbf7d3e64d77820f7afead0003ef882d98b17f68033b619d3c118ca0"
+            ]
+          },
+          {
+            "scenarioId": "workshop-capacity",
+            "pairId": "5f06dc45-c897-4604-ae95-457bb253daaf",
+            "packSeals": [
+              "21d71222ee7f33f133dd6375f9fa1b7b45d685157f8e981266304285f9285026",
+              "0d95a10e5dc2649c12b5db9ae9c2899c08ee06b9588b03b5a4f886b35a66ac1a"
+            ]
+          }
+        ],
+        "attemptId": "7fac57ee-b18b-46b2-b27d-00635aaf7abf"
+      }
     },
     {
       "case": "g1-pass-g2-pass-g3-pass",
@@ -84,7 +177,38 @@
         "requiredSqlite": 20
       },
       "cryptoRoundtrip": "PASS",
-      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "bindings": {
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "f458d4bf-0769-49c0-a991-0c24dca48360",
+            "packSeals": [
+              "c7d0f6ccc00ab392ad46d8519e57237822471beed6479b19a398491c970f7bec",
+              "37282eeec7f7d5361f359fe2cf80486ee4b3dcb3e9c8a0e90b654334ec0ba90a"
+            ]
+          },
+          {
+            "scenarioId": "workshop-rejected",
+            "pairId": "e62b69dc-2f8b-402b-b686-d7ba0d7f721a",
+            "packSeals": [
+              "8c752e7f847af497669b39f23b9679d9e8ef1496be6793ea858efdb2a6602db8",
+              "c0762e4eb5d5fc13660dfa02b4d6d724fe901c086f52418ba940444a89e9ce14"
+            ]
+          },
+          {
+            "scenarioId": "workshop-capacity",
+            "pairId": "fcecb307-4a4c-44a6-8b7d-b1aafa43afd3",
+            "packSeals": [
+              "8aaa9371a87456cab79df28df97b77ed912137bd8431838fb29471d85db00bd2",
+              "80f2baae237cb859774097003ae05b945a28c02aca95fabc9363cf0d7c8b3db7"
+            ]
+          }
+        ],
+        "attemptId": "d7e87c43-c5d8-4160-b988-959b486ba0cb"
+      }
     },
     {
       "case": "legacy-g1-build-failed",
@@ -101,7 +225,22 @@
         "requiredSqlite": 20
       },
       "cryptoRoundtrip": "PASS",
-      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD"
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "bindings": {
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "d5c6d898cf11e2a832b680fe38e2ddacc5c5bf9e4ad584da7c9c333dc0394131",
+        "pairs": [
+          {
+            "scenarioId": "workshop-business",
+            "pairId": "4660eaed-fe07-4265-9240-a3a91ea76fa3",
+            "packSeals": [
+              "002bf93082076b7d92cae7e26f9a1bc66713b530e932c2126b85d192ce00738a",
+              "45554bcf9a27b54ce5cd5a4dc13ef5a4901b2e76a45205ab74951023b38ebc1f"
+            ]
+          }
+        ],
+        "attemptId": "ac06c5ea-90e1-4797-acf0-fc5ee7be1475"
+      }
     }
   ],
   "unreachableRow": {
@@ -111,27 +250,41 @@
     "actual": "UNREACHABLE_UNDER_UNCHANGED_ORACLE"
   },
   "negativeControls": {
-    "actualReceiptCli": 27,
-    "actualValidatorControls": 6,
-    "status": "PASS_SCOPED_PENDING_CAUSE_ISOLATION_CORRECTIONS_AND_ADDITIONAL_PROCESS_FINALIZER_EVIDENCE",
-    "additionalExactSha": "ef2e0db352f55bd22bb48f5ab931a5a81222e763",
+    "actualReceiptCli": 28,
     "actualEncryptorFaults": 4,
-    "additionalResult": "NOT_ESTABLISHED",
+    "actualValidatorControls": 6,
+    "actualProcessFinalizerControls": 8,
+    "status": "REQUIRED_CONTROLS_EXECUTED_PASS",
     "limitations": [
-      "Source path/cap and secret-marker prerequisites require corrected new-SHA execution after independent review.",
-      "Node pre-entry fault harnesses do not prove inner tool timers.",
-      "Paused Docker build proves unchanged outer build-command deadline.",
-      "Intentional crypto cleanup fault recovered one owned stopped container; normal finalizers0/0/0."
+      "Preserver/finalizer/gate crash and timeout controls are real Node pre-entry boundary harnesses, not inner tool timer evidence.",
+      "Paused Docker build proves the unchanged 35-second outer build-command deadline.",
+      "Intentional negative cleanup faults recover one owned stopped container per fault; normal prep/cases/global finalizers remain0/0/0."
     ],
-    "additionalRunUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358030"
+    "receipt": "evidence/mmp099/41253424861.json",
+    "sourceCauseIsolation": "VALID_PINNED_AGE_BEHIND_SECRET_REJECTION_AND_ALL_PAIR_REBIND_FOR_PATH_CAP",
+    "allPassTrialBeforeProcessFinalizerFaults": true
   },
   "fastCi": {
-    "headSha": "ef2e0db352f55bd22bb48f5ab931a5a81222e763",
+    "headSha": "cc7a21eaeccbb2e660bab05759fd5fe4acc0a944",
+    "node22": "SUCCESS",
     "node24": "SUCCESS",
-    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41252358052",
-    "node22": "SUCCESS"
+    "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424862",
+    "rootTests": {
+      "pass": 529,
+      "scope": "Node24 observed counts; both Node jobs SUCCESS",
+      "skip": 3,
+      "fail": 0,
+      "tests": 532
+    }
   },
-  "independentSecurityReview": "IN_PROGRESS_CORRECTIONS_PENDING_NEW_SHA_EXECUTION",
+  "independentSecurityReview": {
+    "reviewedHeadSha": "cc7a21eaeccbb2e660bab05759fd5fe4acc0a944",
+    "status": "STATIC_FINDINGS_CLOSED_NO_CONFIRMED_PRODUCTION_BYPASS",
+    "reviewer": "astra6/max",
+    "receipt": "evidence/mmp099/security-cc7a21e.json",
+    "latestDynamicReceiptFollowup": "NOT_RUN_REVIEWER_SESSION_USAGE_LIMIT",
+    "finalChatGptExactShaReview": "PENDING"
+  },
   "finalChatGptReview": "PENDING",
   "unitEvidenceKind": "SYNTHETIC_ENVELOPES_AND_INERT_CIPHERTEXT_DISTINCT_FROM_ACTUAL_HOSTED_EVIDENCE",
   "ownerKeyAccess": "NEVER_ACCESSED",
@@ -141,5 +294,7 @@
   "liveCiphertextUploads": 0,
   "product": "NOT_ESTABLISHED",
   "G0": "INCONCLUSIVE",
-  "G4": "INCONCLUSIVE"
+  "G4": "INCONCLUSIVE",
+  "deliveryRule": "Evidence and documentation delivery commits identify execution SHA separately. Final delivery SHA and its real CI/Docker job URLs are recorded in PR98 and Issues99/97 after completion. No merge approval.",
+  "offlineReceiptDecision": "Raw supervisor receipt remains PASS_SCOPED / MERGE_NO_GO because that process does not observe separate CI/reviewer state; aggregate readiness combines actual required matrix, CI and completed static security review."
 }

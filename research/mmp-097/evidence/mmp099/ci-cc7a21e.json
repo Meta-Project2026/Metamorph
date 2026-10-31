@@ -1,0 +1,39 @@
+{
+  "format": "mmp099-hosted-ci-v1",
+  "headSha": "cc7a21eaeccbb2e660bab05759fd5fe4acc0a944",
+  "runId": 41253424862,
+  "runUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424862",
+  "event": "pull_request",
+  "jobs": [
+    {
+      "id": 124691723478,
+      "name": "quick (22)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424862/job/124691723478"
+    },
+    {
+      "id": 124691723644,
+      "name": "quick (24)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424862/job/124691723644"
+    }
+  ],
+  "observedRootTotals": [
+    {
+      "metric": "tests",
+      "value": 532
+    },
+    {
+      "metric": "pass",
+      "value": 529
+    },
+    {
+      "metric": "fail",
+      "value": 0
+    },
+    {
+      "metric": "skipped",
+      "value": 3
+    }
+  ]
+}

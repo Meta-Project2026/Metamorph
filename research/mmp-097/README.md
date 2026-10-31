@@ -7,7 +7,8 @@ private temporary source/keys/ciphertext after projecting sanitized receipts to
 the job log. This is separate milestone execution, not Fast CI expansion or paid
 workflow dispatch. Actual observed results are recorded after execution below.
 
-Status: **PASS_SCOPED / MERGE_NO_GO — final additional controls and review pending**.
+Status: **READY_FOR_INDEPENDENT_MERGE_REVIEW** for the offline retention slice;
+PR98 remains Draft and final ChatGPT exact-SHA review is pending.
 Tracking: [#97](https://github.com/Meta-Project2026/Metamorph/issues/97).
 Base: fresh `origin/main@38aa818e4afe75512e4555390246f44b5d7798db`, after PR95/87.
 Branch: `codex/mmp097-option-a-retention`.
@@ -57,12 +58,12 @@ worker recipe/budgets, reference, comparator and hidden tests are unchanged.
 - [x] Add synthetic positive/adversarial source and CLI tests.
 - [x] Supply bounded manual real-Docker/crypto driver and coverage registration.
 - [x] Execute five actual Linux Docker/crypto cases plus real validator/encryptor faults.
-- [ ] Finish additional process/finalizer controls and exact-head independent review.
+- [x] Execute required additional process/finalizer controls and close static security findings.
 - [ ] Exact-pushed-SHA independent security and final ChatGPT review.
 - [ ] Reviewed merge; no self-approval or issue closure.
 
-Actual Docker/crypto passed on `b6f9abe46542bfd99ba6bc3211cba1b3cafd896b`,
-[run 41252167119](https://github.com/Meta-Project2026/Metamorph/actions/runs/41252167119).
+Actual required Docker/crypto matrix passed on `cc7a21eaeccbb2e660bab05759fd5fe4acc0a944`,
+[run 41253424861](https://github.com/Meta-Project2026/Metamorph/actions/runs/41253424861).
 See [validation.md](validation.md) and [acceptance.json](acceptance.json).
 This is milestone execution separate from Fast CI. #61 remains
 NOT_ESTABLISHED, G0/G4 INCONCLUSIVE; owner roundtrip remains NOT_VERIFIED.
@@ -98,7 +99,13 @@ an admitted secret-marker candidate, inject one real cleanup-child failure,
 and time out a real Node pre-entry harness. All six passed on the linked run.
 Receipt/file controls invoke production CLIs against actual validated packs
 and real ciphertext; they are not new G1 environment executions. Additional
-process/finalizer controls and their limits are tracked in validation.
+process/finalizer controls also passed: six real child pre-entry crash/timeout
+boundaries plus two actual finalizer sentinel faults after genuine all-PASS
+validation. All 28 file/receipt/record negatives passed with corrected causal
+prerequisites. These boundary harnesses do not establish inner tool timeouts.
+Independent astra6/max statically closed the qualification findings at cc7a21e;
+its follow-up comparison of the latest dynamic receipt could not run because
+that reviewer session reached its usage limit. Final ChatGPT review is pending.
 
 The unchanged Oracle includes HTTP findings in G3. G2 FAIL / G3 PASS is therefore
 unreachable. On 1 November the owner explicitly accepted testing HTTP-only
