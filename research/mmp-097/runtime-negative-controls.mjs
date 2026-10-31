@@ -230,7 +230,6 @@ export async function runtimeNegativeControls({
             const list = docker([
               "container",
               "ls",
-              "--all",
               "--filter",
               "label=metamorph.target-worker=true",
               "--format",

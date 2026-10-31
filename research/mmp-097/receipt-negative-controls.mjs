@@ -121,6 +121,14 @@ export function receiptNegativeControls({ root, runner, expected, env }) {
       },
     ],
     [
+      "partial-sqlite-fail-coverage",
+      (c) => {
+        c.trial.attempts[0].pairs[0].gates
+          .find((g) => g.gate === "G3")
+          .executedTestIds.pop();
+      },
+    ],
+    [
       "false-aggregate-pass",
       (c) => {
         c.trial.publicG2 = "PASS";

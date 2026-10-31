@@ -1,6 +1,7 @@
 // Fresh public projection. No source, key, stdout/stderr or arbitrary child text.
 import assert from "node:assert/strict";
 import { preservationRecord } from "../../packages/agent-real/src/private-diagnostics.mjs";
+import { MANIFEST } from "../../packages/oracle/dist/index.js";
 
 const integer = (n, max) =>
   assert.ok(Number.isSafeInteger(n) && n >= 0 && n <= max);
@@ -113,6 +114,34 @@ export function publicCase(row, headSha) {
       }),
     );
   if (row.findingCodes) result.findingCodes = publicFindings(row.findingCodes);
+  if (row.bindings) {
+    const b = row.bindings;
+    assert.match(b.sourceSha, /^[a-f0-9]{40}$/);
+    assert.match(b.candidateSha, /^[a-f0-9]{64}$/);
+    assert.ok(Array.isArray(b.pairs) && b.pairs.length <= MANIFEST.length);
+    result.bindings = {
+      sourceSha: b.sourceSha,
+      candidateSha: b.candidateSha,
+      pairs: b.pairs.map((p) => {
+        choice(
+          p.scenarioId,
+          MANIFEST.map((s) => s.id),
+        );
+        assert.match(p.pairId, /^[a-f0-9-]{36}$/);
+        assert.ok(Array.isArray(p.packSeals) && p.packSeals.length <= 10);
+        for (const seal of p.packSeals) assert.match(seal, /^[a-f0-9]{64}$/);
+        return {
+          scenarioId: p.scenarioId,
+          pairId: p.pairId,
+          packSeals: [...p.packSeals],
+        };
+      }),
+    };
+    if (b.attemptId) {
+      assert.match(b.attemptId, /^[a-f0-9-]{36}$/);
+      result.bindings.attemptId = b.attemptId;
+    }
+  }
   for (const key of ["throwawayRoundtrip", "wrongKey", "tamperedCiphertext"])
     if (row[key] !== undefined)
       result[key] = choice(
@@ -341,6 +370,62 @@ export function publicNegatives(controls) {
           "NOT_APPLICABLE",
           "UPLOAD_FAILED",
           "ENCRYPTED_PENDING_UPLOAD",
+        ]);
+      return result;
+    }),
+  };
+}
+
+export function publicProcesses(controls) {
+  assert.ok(Array.isArray(controls.cases) && controls.cases.length <= 8);
+  return {
+    status: choice(controls.status, ["PASS", "ERROR", "NOT_TESTED"]),
+    cases: controls.cases.map((row) => {
+      assert.match(
+        row.id,
+        /^(preservation|finalizer|upload_gate)-(timeout|crash)$|^finalizer-real-(nonzero-inventory|emergency-removal)$/,
+      );
+      const result = {
+        id: row.id,
+        execution: choice(row.execution, [
+          "REAL_CHILD_PRE_ENTRY_FAULT_HARNESS",
+          "ACTUAL_FINALIZER_WITH_OWN_STOPPED_DOCKER_SENTINEL",
+        ]),
+        status: choice(row.status, ["PASS", "ERROR"]),
+      };
+      for (const key of [
+        "exitCode",
+        "finalizerExit",
+        "observedInventory",
+        "intentionalFaultRecoveryRemoved",
+      ])
+        if (row[key] !== undefined) {
+          if (row[key] !== null) integer(row[key], 255);
+          result[key] = row[key];
+        }
+      if (row.signal !== undefined)
+        result.signal =
+          row.signal === null
+            ? null
+            : choice(row.signal, ["SIGTERM", "SIGKILL"]);
+      if (row.timedOut !== undefined) {
+        assert.equal(typeof row.timedOut, "boolean");
+        result.timedOut = row.timedOut;
+      }
+      if (row.cause)
+        result.cause = choice(row.cause, [
+          "TIMEOUT",
+          "ENVIRONMENT_ERROR",
+          "CLEANUP_ERROR",
+          "EVIDENCE_ERROR",
+        ]);
+      if (row.eligible !== undefined) {
+        assert.equal(row.eligible, false);
+        result.eligible = false;
+      }
+      if (row.postRecoveryFinalizer)
+        result.postRecoveryFinalizer = choice(row.postRecoveryFinalizer, [
+          "PASS_ZERO_ZERO_ZERO",
         ]);
       return result;
     }),

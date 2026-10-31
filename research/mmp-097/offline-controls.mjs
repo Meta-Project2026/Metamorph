@@ -24,6 +24,7 @@ import {
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
 import { validationPreparation } from "./preparation-probe.mjs";
+import { processFaultControls } from "./process-fault-controls.mjs";
 import { controlFailure, observedExit } from "./qualification-outcome.mjs";
 import { receiptNegativeControls } from "./receipt-negative-controls.mjs";
 import { runtimeNegativeControls } from "./runtime-negative-controls.mjs";
@@ -104,6 +105,7 @@ const cryptoControls = [];
 let negativeControls = { status: "NOT_TESTED", cases: [] };
 const cryptoFaultControls = [];
 let runtimeControls = { status: "NOT_TESTED", cases: [] };
+let processControls = { status: "NOT_TESTED", cases: [] };
 let firstCompleted;
 let status = "PASS";
 const cli = (file, extra, timeout = 10000) =>
@@ -234,6 +236,17 @@ try {
           validation.error.code === "ETIMEDOUT" ? "ETIMEDOUT" : "SPAWN_ERROR";
       observedExit(validation);
       const trial = JSON.parse(readFileSync(trialPath));
+      row.bindings = {
+        sourceSha: trial.sourceSha,
+        candidateSha: trial.candidateSha,
+        attemptId: trial.attempts?.[0]?.attemptId,
+        pairs:
+          trial.attempts?.[0]?.pairs.map((p) => ({
+            scenarioId: p.scenarioId,
+            pairId: p.pairId,
+            packSeals: p.packs.map((pack) => pack.sha256),
+          })) ?? [],
+      };
       row.blockers = (trial.blockers ?? []).filter((code) =>
         [
           "TIMEOUT",
@@ -504,6 +517,8 @@ try {
       env,
     });
     assert.equal(runtimeControls.status, "PASS");
+    processControls = processFaultControls(firstCompleted);
+    assert.equal(processControls.status, "PASS");
   }
 } catch {
   status = "NO_GO";
@@ -519,6 +534,7 @@ try {
     cryptoControls,
     cryptoFaultControls,
     runtimeControls,
+    processControls,
     negativeControls,
     aiGeneration: "AI_GENERATION_NOT_RUN",
     metaRequests: 0,

@@ -17,6 +17,7 @@ import {
   publicCrypto,
   publicFaults,
   publicNegatives,
+  publicProcesses,
 } from "./hosted-receipt.mjs";
 import { preparationProbe } from "./preparation-probe.mjs";
 import { controlFailure, observedExit } from "./qualification-outcome.mjs";
@@ -215,6 +216,7 @@ try {
         controls.runtimeControls.status === "PASS" ? "PASS" : "NOT_ESTABLISHED",
       cases: publicFaults(controls.runtimeControls.cases, "runtime"),
     };
+    result.processControls = publicProcesses(controls.processControls);
     result.actualDocker = result.cases.length ? "EXECUTED" : "NOT_ESTABLISHED";
     result.actualCrypto = result.cases.some(
       (row) => row.throwawayRoundtrip === "PASS",
@@ -226,7 +228,7 @@ try {
     assert.equal(result.cases.length, 5);
     result.decision = "PASS_SCOPED / MERGE_NO_GO";
     result.fullNegativeMatrix =
-      "PARTIAL_PENDING_PROCESS_AND_FINALIZER_FAULT_CONTROLS";
+      "EXECUTED_WITH_EXPLICIT_PRE_ENTRY_PROCESS_HARNESS_LIMITATION";
     result.requestedMatrixGap =
       "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
   }

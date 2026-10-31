@@ -5,6 +5,8 @@ import { parseDocument } from "yaml";
 import {
   publicCase,
   publicCrypto,
+  publicFaults,
+  publicProcesses,
 } from "../../../research/mmp-097/hosted-receipt.mjs";
 
 test("milestone Docker workflow is PR98 same-repository exact-head and token-free", () => {
@@ -44,6 +46,33 @@ test("milestone Docker workflow is PR98 same-repository exact-head and token-fre
   ))
     assert.match(step.run, /env -i/);
   assert.equal(workflow.jobs.offline.steps.at(-1).if, "always()");
+});
+
+test("fault receipt projections reject arbitrary child metadata", () => {
+  const fault = {
+    id: "crash",
+    status: "PASS",
+    run: { exitCode: 23, signal: null, bytes: 0 },
+    stdout: "RAW_PRIVATE",
+  };
+  assert.doesNotMatch(
+    JSON.stringify(publicFaults([fault], "crypto")),
+    /RAW_PRIVATE|stdout/,
+  );
+  assert.throws(() =>
+    publicFaults(
+      [{ ...fault, run: { ...fault.run, signal: "RAW_PRIVATE" } }],
+      "crypto",
+    ),
+  );
+  assert.throws(() =>
+    publicProcesses({
+      status: "PASS",
+      cases: [
+        { id: "finalizer-crash", status: "PASS", execution: "RAW_PRIVATE" },
+      ],
+    }),
+  );
 });
 
 test("hosted receipt refuses arbitrary statuses and exports only categorical fields", () => {
