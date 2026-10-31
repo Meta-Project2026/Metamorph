@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { sha256 } from "../../packages/target-worker/src/admission.mjs";
 import { publicCase, publicCrypto } from "./hosted-receipt.mjs";
+import { preparationProbe } from "./preparation-probe.mjs";
 import { controlFailure, observedExit } from "./qualification-outcome.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -35,6 +36,7 @@ assert.ok(
 );
 const parent = join(temp, "mmp099-private");
 const output = join(temp, "mmp099-output");
+const probe = join(temp, "mmp099-probe");
 assert.equal(parent, process.env.MMP097_PRIVATE_PARENT);
 assert.equal(output, process.env.MMP097_PUBLIC_OUTPUT);
 assert.equal(process.env.MMP089_AGE_PATH, join(temp, "mmp089-tools/age"));
@@ -66,11 +68,12 @@ const read = (path) => {
 };
 const cleanup = () => {
   // Only exact fresh task children of the actual runner temp; never checkout.
-  for (const path of [parent, output]) {
-    assert.equal(
-      resolve(path),
-      join(temp, path === parent ? "mmp099-private" : "mmp099-output"),
-    );
+  for (const [name, path] of [
+    ["mmp099-private", parent],
+    ["mmp099-output", output],
+    ["mmp099-probe", probe],
+  ]) {
+    assert.equal(resolve(path), join(temp, name));
     assert.ok(
       relative(root, path).startsWith("..") &&
         !relative(temp, path).startsWith(".."),
@@ -172,6 +175,12 @@ try {
       encryptionImage: DIAGNOSTIC_POLICY.image,
       recipeSha256: DIAGNOSTIC_POLICY.recipeSha,
     };
+    result.preparation = await preparationProbe(
+      root,
+      probe,
+      env.AGENT_HEAD_SHA,
+    );
+    assert.equal(result.preparation.status, "PASS");
     stage = "VALIDATION";
     const driver = run(
       [join(root, "research/mmp-097/offline-controls.mjs")],
@@ -204,7 +213,16 @@ try {
     result.fullNegativeMatrix = "NOT_TESTED";
   }
 } catch (error) {
-  result.failure = controlFailure(stage, error);
+  const prior = result.cases.find((row) => row.status === "ERROR");
+  result.failure = prior
+    ? { status: "ERROR", stage: prior.stage, cause: prior.cause }
+    : result.preparation?.status === "ERROR"
+      ? {
+          status: "ERROR",
+          stage: "PREPARATION",
+          cause: result.preparation.cause ?? "ENVIRONMENT_ERROR",
+        }
+      : controlFailure(stage, error);
   process.exitCode = 1;
 } finally {
   try {
