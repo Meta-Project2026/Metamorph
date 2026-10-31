@@ -2,7 +2,7 @@
 // No owner identity, candidate execution on host, artifact or raw output.
 import assert from "node:assert/strict";
 import childProcess from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, writeFileSync } from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,6 +40,9 @@ if (mode !== "cleanup-fault") {
         : 'process.stdout.write("age-encryption.org/v1\\n"); process.stdout.write(Buffer.alloc(5 * 1024 * 1024 + 1)); setInterval(() => {}, 1000);\n',
     { mode: 0o644 },
   );
+  // Parent deliberately uses umask 077; Docker's uid 65534 must read this
+  // harmless trusted fault program through its single-file readonly bind.
+  chmodSync(workerPath, 0o644);
 }
 const originalSpawn = childProcess.spawn;
 const run = { exitCode: null, signal: null, bytes: 0, killed: false };

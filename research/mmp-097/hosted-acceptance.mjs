@@ -15,6 +15,7 @@ import { sha256 } from "../../packages/target-worker/src/admission.mjs";
 import {
   publicCase,
   publicCrypto,
+  publicFaults,
   publicNegatives,
 } from "./hosted-receipt.mjs";
 import { preparationProbe } from "./preparation-probe.mjs";
@@ -205,6 +206,15 @@ try {
     }
     result.cryptoControls = publicCrypto(controls.cryptoControls);
     result.negativeControls = publicNegatives(controls.negativeControls);
+    result.cryptoFaultControls = publicFaults(
+      controls.cryptoFaultControls,
+      "crypto",
+    );
+    result.runtimeControls = {
+      status:
+        controls.runtimeControls.status === "PASS" ? "PASS" : "NOT_ESTABLISHED",
+      cases: publicFaults(controls.runtimeControls.cases, "runtime"),
+    };
     result.actualDocker = result.cases.length ? "EXECUTED" : "NOT_ESTABLISHED";
     result.actualCrypto = result.cases.some(
       (row) => row.throwawayRoundtrip === "PASS",
@@ -215,7 +225,8 @@ try {
     assert.equal(controls.scopedStatus, "PASS_SCOPED");
     assert.equal(result.cases.length, 5);
     result.decision = "PASS_SCOPED / MERGE_NO_GO";
-    result.fullNegativeMatrix = "NOT_TESTED";
+    result.fullNegativeMatrix =
+      "PARTIAL_PENDING_PROCESS_AND_FINALIZER_FAULT_CONTROLS";
     result.requestedMatrixGap =
       "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
   }

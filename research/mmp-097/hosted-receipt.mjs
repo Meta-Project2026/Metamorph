@@ -112,6 +112,7 @@ export function publicCase(row, headSha) {
         return [key, row.coverage[key]];
       }),
     );
+  if (row.findingCodes) result.findingCodes = publicFindings(row.findingCodes);
   for (const key of ["throwawayRoundtrip", "wrongKey", "tamperedCiphertext"])
     if (row[key] !== undefined)
       result[key] = choice(
@@ -147,6 +148,150 @@ export function publicCase(row, headSha) {
     };
   }
   return result;
+}
+
+const codes = [
+  "HTTP_STATUS",
+  "HTTP_HEADER",
+  "HTTP_BODY",
+  "HTTP_JSON_TYPE",
+  "HTTP_JSON_VALUE",
+  "HTTP_JSON_MISSING",
+  "HTTP_JSON_LENGTH",
+  "DB_SCHEMA",
+  "DB_STATE",
+  "BUILD_FAILED",
+  "TIMEOUT",
+  "CANCELLED",
+  "ENVIRONMENT_ERROR",
+  "BUILD_NOT_RUN",
+  "MISSING_COVERAGE",
+  "CLEANUP_ERROR",
+];
+function publicFindings(value) {
+  return Object.fromEntries(
+    ["G1", "G2", "G3"].map((gate) => {
+      assert.ok(Array.isArray(value[gate]) && value[gate].length <= 30);
+      return [gate, value[gate].map((code) => choice(code, codes))];
+    }),
+  );
+}
+export function publicFaults(rows, kind) {
+  assert.ok(Array.isArray(rows) && rows.length <= 30);
+  const ids =
+    kind === "crypto"
+      ? ["crash", "deadline", "ciphertext-cap", "cleanup-fault"]
+      : [
+          "kill-build",
+          "pause-build",
+          "cancel-validator",
+          "incomplete-entry",
+          "secret-source",
+          "cleanup-fault",
+        ];
+  return rows.map((row) => {
+    const result = {
+      id: choice(row.id, ids),
+      status: choice(row.status, ["PASS", "ERROR", "PENDING_FINALIZER"]),
+    };
+    if (row.execution)
+      result.execution = choice(row.execution, [
+        "ACTUAL_ENCRYPTION_WITH_REAL_CHILD_CLEANUP_FAULT_HARNESS",
+        "ACTUAL_DOCKER_ENCRYPTOR_FAULT_WORKER",
+        "REAL_NODE_PRE_ENTRY_TIMEOUT_HARNESS",
+        "ACTUAL_VALIDATOR_SECRET_MARKER_CANDIDATE",
+        "ACTUAL_VALIDATOR_WITH_REAL_CHILD_CLEANUP_FAULT",
+        "ACTUAL_VALIDATOR_DOCKER_BUILD_FAULT",
+      ]);
+    for (const key of [
+      "elapsedMs",
+      "afterInjectionMs",
+      "injectedCleanupExit",
+      "intentionalFaultRecoveryRemoved",
+      "postRecoveryInventory",
+      "injectionExitCode",
+      "preserverExit",
+      "gateExit",
+    ])
+      if (row[key] !== undefined && row[key] !== null) {
+        integer(row[key], 1200000);
+        result[key] = row[key];
+      }
+    if (row.observedError)
+      result.observedError = choice(row.observedError, [
+        "DIAGNOSTIC_ENCRYPTION_ERROR",
+        "DIAGNOSTIC_CLEANUP_ERROR",
+      ]);
+    for (const key of ["run", "process"])
+      if (row[key]) {
+        const p = row[key];
+        if (p.exitCode !== null) integer(p.exitCode, 255);
+        result[key] = {
+          exitCode: p.exitCode,
+          signal:
+            p.signal === null || p.signal === undefined
+              ? null
+              : choice(p.signal, ["SIGKILL", "SIGTERM"]),
+        };
+        for (const k of ["killed", "timedOut"])
+          if (p[k] !== undefined) {
+            assert.equal(typeof p[k], "boolean");
+            result[key][k] = p[k];
+          }
+        if (p.bytes !== undefined) {
+          integer(p.bytes, 10 * 1024 * 1024);
+          result[key].bytes = p.bytes;
+        }
+        if (p.classification)
+          result[key].classification = {
+            status: choice(p.classification.status, ["ERROR"]),
+            stage: choice(p.classification.stage, ["VALIDATION"]),
+            cause: choice(p.classification.cause, ["TIMEOUT"]),
+          };
+      }
+    if (row.gates)
+      result.gates = Object.fromEntries(
+        ["G1", "G2", "G3"].map((k) => [
+          k,
+          choice(row.gates[k], [
+            "PASS",
+            "FAIL",
+            "ERROR",
+            "INCONCLUSIVE",
+            "NOT_RUN",
+          ]),
+        ]),
+      );
+    if (row.findingCodes)
+      result.findingCodes = row.findingCodes.map((code) => choice(code, codes));
+    if (row.preservationStatus)
+      result.preservationStatus = choice(row.preservationStatus, [
+        "REJECTED",
+        "NOT_APPLICABLE",
+      ]);
+    if (row.eligible !== undefined) {
+      assert.equal(row.eligible, false);
+      result.eligible = false;
+    }
+    if (row.normalCleanup)
+      result.normalCleanup = choice(row.normalCleanup, [
+        "VERIFIED_ZERO_RESOURCES",
+      ]);
+    if (row.finalizer) {
+      assert.deepEqual(row.finalizer, {
+        exitCode: 0,
+        inventory: { containers: 0, volumes: 0 },
+        emergencyRemoved: 0,
+      });
+      result.finalizer = {
+        exitCode: 0,
+        inventory: { containers: 0, volumes: 0 },
+        emergencyRemoved: 0,
+      };
+    }
+    if (row.cleanup) result.cleanup = choice(row.cleanup, ["ERROR"]);
+    return result;
+  });
 }
 export function publicCrypto(rows) {
   assert.ok(Array.isArray(rows) && rows.length <= 10);

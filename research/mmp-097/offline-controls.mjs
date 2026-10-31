@@ -24,12 +24,9 @@ import {
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
 import { validationPreparation } from "./preparation-probe.mjs";
-import {
-  controlFailure,
-  encryptionRefusal,
-  observedExit,
-} from "./qualification-outcome.mjs";
+import { controlFailure, observedExit } from "./qualification-outcome.mjs";
 import { receiptNegativeControls } from "./receipt-negative-controls.mjs";
+import { runtimeNegativeControls } from "./runtime-negative-controls.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 assert.equal(process.platform, "linux");
@@ -105,6 +102,8 @@ const baseline = await admitDirectory(
 const results = [];
 const cryptoControls = [];
 let negativeControls = { status: "NOT_TESTED", cases: [] };
+const cryptoFaultControls = [];
+let runtimeControls = { status: "NOT_TESTED", cases: [] };
 let firstCompleted;
 let status = "PASS";
 const cli = (file, extra, timeout = 10000) =>
@@ -252,6 +251,13 @@ try {
         G3: trial.publicG3,
       };
       row.coverage = trial.attempts?.[0]?.coverage ?? null;
+      row.findingCodes = Object.fromEntries(
+        ["G1", "G2", "G3"].map((gate) => [
+          gate,
+          trial.attempts?.[0]?.gates.find((g) => g.gate === gate)
+            ?.findingCodes ?? [],
+        ]),
+      );
       try {
         row.preparation = validationPreparation(
           join(runner, "meta-paid-verification"),
@@ -280,6 +286,11 @@ try {
       if (id === "http-only-fault")
         row.requestedCombination =
           "G2_FAIL_G3_PASS_UNREACHABLE_UNDER_UNCHANGED_ORACLE";
+      if (id === "http-only-fault") {
+        assert.ok(row.findingCodes.G3.includes("HTTP_STATUS"));
+        assert.ok(!row.findingCodes.G3.some((code) => code.startsWith("DB_")));
+      }
+      if (g3 === "FAIL") assert.ok(row.findingCodes.G3.includes("DB_SCHEMA"));
       requireNormalCleanup(trial.cleanup);
       if (g2 !== "BUILD_FAILED")
         assert.deepEqual(trial.attempts[0].coverage, {
@@ -375,26 +386,6 @@ try {
             { message: "DIAGNOSTIC_REJECTED" },
           );
           cryptoControls.push("oversize-rejected");
-          const crash = join(parent, "crash-worker.mjs");
-          writeFileSync(crash, "process.exit(23);\n", { mode: 0o644 });
-          const observeRefusal = async (control, workerPath) => {
-            const started = performance.now();
-            let refusal;
-            try {
-              await encrypt(plaintext, { workerPath });
-            } catch (error) {
-              refusal = error;
-            }
-            cryptoControls.push(
-              encryptionRefusal(control, refusal, performance.now() - started),
-            );
-          };
-          await observeRefusal("crash-input", crash);
-          const hang = join(parent, "hang-worker.mjs");
-          writeFileSync(hang, "setInterval(() => {}, 1000);\n", {
-            mode: 0o644,
-          });
-          await observeRefusal("deadline-input", hang);
         }
       } finally {
         plaintext.fill(0);
@@ -475,6 +466,44 @@ try {
   if (status === "PASS" && firstCompleted) {
     negativeControls = receiptNegativeControls(firstCompleted);
     assert.equal(negativeControls.status, "PASS");
+    for (const mode of [
+      "crash",
+      "deadline",
+      "ciphertext-cap",
+      "cleanup-fault",
+    ]) {
+      const child = spawnSync(
+        process.execPath,
+        [join(root, "research/mmp-097/crypto-fault-control.mjs"), mode],
+        {
+          cwd: root,
+          env: {
+            ...env,
+            MMP089_AGE_PATH: agePath,
+            MMP099_FAULT_PARENT: join(parent, `crypto-${mode}`),
+          },
+          timeout: 90000,
+          maxBuffer: 1024 * 1024,
+        },
+      );
+      const marker = child.stdout
+        ?.toString()
+        .split("\n")
+        .find((line) => line.startsWith("MMP099_CRYPTO "));
+      assert.ok(marker && marker.length < 8192);
+      const fault = JSON.parse(marker.slice("MMP099_CRYPTO ".length));
+      cryptoFaultControls.push(fault);
+      assert.equal(observedExit(child), 0);
+      assert.equal(fault.status, "PASS");
+    }
+    runtimeControls = await runtimeNegativeControls({
+      root,
+      parent,
+      headSha,
+      baseline,
+      env,
+    });
+    assert.equal(runtimeControls.status, "PASS");
   }
 } catch {
   status = "NO_GO";
@@ -488,6 +517,8 @@ try {
     acceptance: "NO_GO_PENDING_FULL_MATRIX",
     cases: results,
     cryptoControls,
+    cryptoFaultControls,
+    runtimeControls,
     negativeControls,
     aiGeneration: "AI_GENERATION_NOT_RUN",
     metaRequests: 0,
