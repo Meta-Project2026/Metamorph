@@ -1,6 +1,21 @@
 // Pure categorical reporting helpers. No candidate data or raw errors escape.
 import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 
+export function observedExit(result) {
+  if (result.error || result.signal || !Number.isInteger(result.status)) {
+    const error = new Error("CONTROL_PROCESS_ERROR");
+    error.code = "CONTROL_PROCESS_ERROR";
+    error.processError =
+      result.error?.code === "ETIMEDOUT"
+        ? "ETIMEDOUT"
+        : result.signal
+          ? "SIGNAL"
+          : "SPAWN_ERROR";
+    throw error;
+  }
+  return result.status;
+}
+
 export function encryptionRefusal(control, error, elapsedMs) {
   if (
     !["crash-input", "deadline-input"].includes(control) ||
@@ -39,8 +54,14 @@ export function controlFailure(stage, error, observation = {}) {
   const blockers = Array.isArray(observation.blockers)
     ? observation.blockers
     : [];
+  const processError =
+    error?.code === "CONTROL_PROCESS_ERROR"
+      ? error.processError
+      : error?.code === "ETIMEDOUT"
+        ? "ETIMEDOUT"
+        : observation.processError;
   let cause;
-  if (observation.processError === "ETIMEDOUT" || blockers.includes("TIMEOUT"))
+  if (processError === "ETIMEDOUT" || blockers.includes("TIMEOUT"))
     cause = "TIMEOUT";
   else if (blockers.includes("CANCELLED")) cause = "CANCELLED";
   else if (safeStage === "FINALIZER" || blockers.includes("CLEANUP_ERROR"))
@@ -48,7 +69,7 @@ export function controlFailure(stage, error, observation = {}) {
   else if (safeStage === "UPLOAD_GATE" || blockers.includes("EVIDENCE_ERROR"))
     cause = "EVIDENCE_ERROR";
   else if (
-    observation.processError ||
+    processError ||
     Object.values(observation.gates ?? {}).includes("ERROR") ||
     blockers.includes("ENVIRONMENT_ERROR") ||
     blockers.includes("PUBLIC_DOCKER_ERROR")

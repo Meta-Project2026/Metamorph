@@ -1,9 +1,36 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import {
   controlFailure,
   encryptionRefusal,
+  observedExit,
 } from "../../../research/mmp-097/qualification-outcome.mjs";
+
+test("actual bounded child timeout after validation stays ERROR at every active stage", () => {
+  const child = spawnSync(
+    process.execPath,
+    ["-e", "setInterval(() => {}, 1000)"],
+    { env: {}, timeout: 100, stdio: "ignore" },
+  );
+  assert.equal(child.error?.code, "ETIMEDOUT");
+  for (const stage of ["PRESERVATION", "CRYPTO", "UPLOAD_GATE", "FINALIZER"]) {
+    let failure;
+    try {
+      observedExit(child);
+    } catch (error) {
+      failure = error;
+    }
+    assert.deepEqual(
+      controlFailure(stage, failure, {
+        gates: { G1: "PASS", G2: "PASS", G3: "PASS" },
+      }),
+      { status: "ERROR", stage, cause: "TIMEOUT" },
+    );
+  }
+  assert.throws(() => observedExit({ status: null, signal: "SIGTERM" }));
+  assert.equal(observedExit({ status: 1, signal: null }), 1);
+});
 
 test("deadline control refuses immediate Docker errors and never credits failed cleanup", () => {
   const error = new Error("DIAGNOSTIC_ENCRYPTION_ERROR");

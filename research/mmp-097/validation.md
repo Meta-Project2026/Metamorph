@@ -96,6 +96,19 @@ correction SHA/CI and independent re-review are recorded on PR98.
 Exact correction-commit re-review and final ChatGPT review remain pending.
 No merge or issue closure. G0/G4 INCONCLUSIVE; product #61 NOT_ESTABLISHED.
 
+The first correction re-review at `f5f10f71e1d564cc4c31b64ad1d7227ecf2c8013`
+closed the crypto finding but reproduced a remaining preservation-child timeout
+classification defect. The subsequent correction uses `observedExit` before
+asserting every active validator/decrypt/preserver/finalizer/gate child result;
+its bounded process-error category travels with the failure, rather than using
+the previous finalizer's error. Direct synchronous decrypt ETIMEDOUT is also
+recognized. A real bounded trusted Node-child timeout (not a candidate or Docker
+execution) now verifies ERROR/TIMEOUT after prior successful gates at all four
+later stages. All three qualification regression tests actually passed, exit0;
+syntax69 and whitespace checks passed. Exact final correction SHA, hosted CI
+and independent closure are recorded on PR98; the full Docker matrix remains
+NOT_TESTED throughout.
+
 Threat model/limits: [README](README.md#trust-limits) and updated
 [owner runbook](../mmp-089/RUNBOOK.md). All new selection/fixture/driver code is
 original project work. Intended runtime candidates reuse the already-admitted

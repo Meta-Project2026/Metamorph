@@ -23,7 +23,11 @@ import {
   sha256,
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
-import { controlFailure, encryptionRefusal } from "./qualification-outcome.mjs";
+import {
+  controlFailure,
+  encryptionRefusal,
+  observedExit,
+} from "./qualification-outcome.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 assert.equal(process.platform, "linux");
@@ -219,6 +223,7 @@ try {
       if (validation.error)
         row.processError =
           validation.error.code === "ETIMEDOUT" ? "ETIMEDOUT" : "SPAWN_ERROR";
+      observedExit(validation);
       const trial = JSON.parse(readFileSync(trialPath));
       row.blockers = (trial.blockers ?? []).filter((code) =>
         [
@@ -320,8 +325,7 @@ try {
               maxBuffer: DIAGNOSTIC_POLICY.plaintextBytes,
             },
           );
-          assert.equal(denied.error, undefined);
-          assert.equal(denied.status, 1);
+          assert.equal(observedExit(denied), 1);
           assert.equal(denied.signal, null);
           denied.stdout?.fill(0);
         }
@@ -376,7 +380,7 @@ try {
         90000,
       );
       row.preserverExit = preservation.status;
-      assert.equal(preservation.status, 0);
+      assert.equal(observedExit(preservation), 0);
       const record = JSON.parse(
         readFileSync(join(runner, "meta-paid-public/preservation.json")),
       );
@@ -402,6 +406,7 @@ try {
       row.finalizerExit = finalizer.status;
       let finalStage = "FINALIZER";
       try {
+        assert.equal(observedExit(finalizer), 0);
         const record = JSON.parse(
           readFileSync(join(runner, "meta-paid-public/finalizer.json")),
         );
@@ -420,15 +425,13 @@ try {
             MMP089_FINALIZER_OUTCOME: "success",
           });
           row.uploadGateExit = gate.status;
-          assert.equal(gate.status, 0);
+          assert.equal(observedExit(gate), 0);
           assert.equal(readFileSync(stepOutput, "utf8"), "eligible=true\n");
           row.status = "PASS";
           row.stage = "UPLOAD_GATE";
         }
       } catch (error) {
-        const terminal = controlFailure(finalStage, error, {
-          processError: finalizer.error?.code,
-        });
+        const terminal = controlFailure(finalStage, error);
         // Preserve an earlier mismatch/environment observation if cleanup also fails.
         if (["FAIL", "ERROR"].includes(row.status))
           row.terminalFailure = terminal;
