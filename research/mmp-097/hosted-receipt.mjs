@@ -68,6 +68,39 @@ export function publicCase(row, headSha) {
         ]),
       ]),
     );
+  if (row.network)
+    result.network = Object.fromEntries(
+      ["sourceFetches", "blockedRequests"].map((key) => {
+        integer(row.network[key], 10);
+        return [key, row.network[key]];
+      }),
+    );
+  if (row.preparation) {
+    assert.ok(Array.isArray(row.preparation) && row.preparation.length <= 20);
+    result.preparation = row.preparation.map((r) => {
+      const entry = {
+        command: choice(r.command, [
+          "PHP_PREPARATION",
+          "image-build.json",
+          "image-inspect.json",
+          "runtime-provenance.json",
+          "provenance-cleanup.json",
+          "TRUSTED_PREPARATION",
+        ]),
+        exitCode: r.exitCode,
+        timedOut: Boolean(r.timedOut),
+      };
+      if (r.exitCode !== null) integer(r.exitCode, 255);
+      if (r.category)
+        entry.category = choice(r.category, [
+          "PERMISSION_DENIED",
+          "BUILD_PLUGIN_ERROR",
+          "NETWORK_ERROR",
+          "PROCESS_ERROR",
+        ]);
+      return entry;
+    });
+  }
   if (row.coverage)
     result.coverage = Object.fromEntries(
       ["http", "sqlite", "requiredHttp", "requiredSqlite"].map((key) => {

@@ -23,6 +23,7 @@ import {
   sha256,
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
+import { validationPreparation } from "./preparation-probe.mjs";
 import {
   controlFailure,
   encryptionRefusal,
@@ -242,6 +243,21 @@ try {
         G3: trial.publicG3,
       };
       row.coverage = trial.attempts?.[0]?.coverage ?? null;
+      try {
+        row.preparation = validationPreparation(
+          join(runner, "meta-paid-verification"),
+          headSha,
+        );
+      } catch {
+        row.preparation = [];
+      }
+      const network = JSON.parse(
+        readFileSync(join(runner, "meta-paid-public/network.json")),
+      );
+      row.network = {
+        sourceFetches: network.sourceFetches,
+        blockedRequests: network.blockedRequests,
+      };
       assert.equal(validation.error, undefined);
       assert.equal(validation.status, g2 === "PASS" && g3 === "PASS" ? 0 : 1);
       assert.equal(trial.publicG1, g2 === "BUILD_FAILED" ? "FAIL" : "PASS");
@@ -255,9 +271,6 @@ try {
           requiredHttp: 17,
           requiredSqlite: 20,
         });
-      const network = JSON.parse(
-        readFileSync(join(runner, "meta-paid-public/network.json")),
-      );
       assert.equal(network.sourceFetches, 1);
       assert.equal(network.blockedRequests, 0);
       row.stage = "SELECTION";
