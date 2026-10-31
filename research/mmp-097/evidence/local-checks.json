@@ -1,0 +1,106 @@
+{
+  "checks": [
+    {
+      "logSha256": "8610dec451e90f114551aa738006e34485982afe4f916089d10532a1b57d3b62",
+      "exit": 0,
+      "command": "pnpm install --frozen-lockfile"
+    },
+    {
+      "logSha256": "defc28d5ebb390336240ca4ed33c7e7b6a3c943e4c16033ce470762272f267a7",
+      "exit": 0,
+      "command": "pnpm lint"
+    },
+    {
+      "logSha256": "1a76338cba500f8ec70dc6f2a56056df02c5023c3875c1973fdf553fd9ab4c53",
+      "exit": 0,
+      "command": "pnpm typecheck"
+    },
+    {
+      "logSha256": "9de8cb4c01351cdd4409d35883deb1b0071307557473f130fd8ba2cf7dbeae9b",
+      "exit": 0,
+      "command": "pnpm test"
+    },
+    {
+      "logSha256": "d72721fc9b91916a7694c8fbb8b3db5c3a2ccb4b0e8a0055d93818c2d8edc12c",
+      "exit": 0,
+      "command": "pnpm build"
+    },
+    {
+      "logSha256": "d8ba5f64e1328a3c282ed7ddaa4778da0ab121065966b62e86500027bb5a174f",
+      "exit": 0,
+      "command": "oracle reference"
+    },
+    {
+      "logSha256": "aa62d77ff7b8ff3ae511256e2e07a0c67636b31822143221e82ae8b8a40a4976",
+      "exit": 0,
+      "command": "target worker"
+    },
+    {
+      "logSha256": "07be9720f4fb5c039534b9c0041de57b08df0e6ecae93017724fbb8d1f00d651",
+      "exit": 0,
+      "command": "differential"
+    },
+    {
+      "logSha256": "80123dabeb5282b387614d2086b69b816e7c2a866e7db5d7d91e73e32c5af9b6",
+      "exit": 0,
+      "command": "workshop audit"
+    },
+    {
+      "logSha256": "501f572061b2b58832544c065501fad3121936009b87de35d2d40dff1685de68",
+      "exit": 0,
+      "command": "research MMP097 lint"
+    },
+    {
+      "logSha256": "e4416fa784d0d603528c5809ec067c317a72cb46c2a527282fabe334a038978e",
+      "exit": 0,
+      "command": "research syntax"
+    },
+    {
+      "logSha256": "43eb2378de22c09107afafa5a2a41c5cf8d280fcb39d817c48a9726ddb3969b1",
+      "exit": 0,
+      "command": "research coverage"
+    },
+    {
+      "logSha256": "59a2d105817878d4c32c67eda14760beb2999b4f82206c69b61b4b7f3781fd93",
+      "exit": 0,
+      "command": "coverage validator tests"
+    },
+    {
+      "logSha256": "a71c783b038ec8a59002f2085608205786b5afacc5f6c0e0bff1fbeb4ad0859f",
+      "exit": 0,
+      "command": "history tests"
+    },
+    {
+      "logSha256": "65c5eb415a4e45255fdcbab70e512225b05f983129c6fd39daf067bd55adf825",
+      "exit": 0,
+      "command": "connected tests"
+    },
+    {
+      "logSha256": "58c06c8224cffe53b875f29251cc2f1285f57d562c0faff5542dd83fceaba8d2",
+      "exit": 0,
+      "command": "demo tests"
+    }
+  ],
+  "rootTests": {
+    "tests": 524,
+    "skip": 103,
+    "fail": 0,
+    "pass": 421
+  },
+  "baseSha": "38aa818e4afe75512e4555390246f44b5d7798db",
+  "actualDocker": "NOT_TESTED",
+  "node": "v24.21.0",
+  "platform": "Windows x64",
+  "newUnitTests": {
+    "tests": 65,
+    "skip": 1,
+    "fail": 0,
+    "pass": 64
+  },
+  "executionSha": "8091a96f84b2d4da4cd98fd43d20040d7d111da4",
+  "format": "mmp097-local-checks-v1",
+  "pnpm": "11.25.0",
+  "verdict": "NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE",
+  "actualCrypto": "NOT_TESTED",
+  "inventory": null
+}

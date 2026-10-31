@@ -23,6 +23,7 @@ import {
   sha256,
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
+import { controlFailure, encryptionRefusal } from "./qualification-outcome.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 assert.equal(process.platform, "linux");
@@ -191,6 +192,7 @@ try {
     const row = {
       id,
       status: "NOT_TESTED",
+      stage: "VALIDATION",
       execution: "REAL_DOCKER_SYNTHETIC_SOURCE",
       validatorExit: null,
       preserverExit: null,
@@ -214,7 +216,21 @@ try {
         },
       );
       row.validatorExit = validation.status;
+      if (validation.error)
+        row.processError =
+          validation.error.code === "ETIMEDOUT" ? "ETIMEDOUT" : "SPAWN_ERROR";
       const trial = JSON.parse(readFileSync(trialPath));
+      row.blockers = (trial.blockers ?? []).filter((code) =>
+        [
+          "TIMEOUT",
+          "CANCELLED",
+          "ENVIRONMENT_ERROR",
+          "PUBLIC_DOCKER_ERROR",
+          "EVIDENCE_ERROR",
+          "CLEANUP_ERROR",
+          "BUILD_FAILED",
+        ].includes(code),
+      );
       row.gates = {
         G1: trial.publicG1,
         G2: trial.publicG2,
@@ -239,6 +255,7 @@ try {
       );
       assert.equal(network.sourceFetches, 1);
       assert.equal(network.blockedRequests, 0);
+      row.stage = "SELECTION";
       const payload = collectPreservationPackage(
         trial,
         expected,
@@ -253,6 +270,7 @@ try {
       assert.deepEqual(payload.files, source.files);
       const plaintext = Buffer.from(JSON.stringify(payload));
       try {
+        row.stage = "CRYPTO";
         const encrypted = await encrypt(plaintext);
         assert.equal(encrypted.cleanup, "VERIFIED_ZERO_RESOURCES");
         const restored = execFileSync(
@@ -303,7 +321,8 @@ try {
             },
           );
           assert.equal(denied.error, undefined);
-          assert.notEqual(denied.status, 0);
+          assert.equal(denied.status, 1);
+          assert.equal(denied.signal, null);
           denied.stdout?.fill(0);
         }
         row.throwawayRoundtrip = "PASS";
@@ -314,27 +333,40 @@ try {
             encrypt(plaintext, {
               policy: { ...throwawayPolicy, recipientSha256: "f".repeat(64) },
             }),
+            { message: "DIAGNOSTIC_REJECTED" },
           );
           cryptoControls.push("wrong-recipient-pin-rejected");
           await assert.rejects(
             encrypt(Buffer.alloc(DIAGNOSTIC_POLICY.plaintextBytes + 1)),
+            { message: "DIAGNOSTIC_REJECTED" },
           );
           cryptoControls.push("oversize-rejected");
           const crash = join(parent, "crash-worker.mjs");
           writeFileSync(crash, "process.exit(23);\n", { mode: 0o644 });
-          await assert.rejects(encrypt(plaintext, { workerPath: crash }));
-          cryptoControls.push("encryptor-crash-rejected");
+          const observeRefusal = async (control, workerPath) => {
+            const started = performance.now();
+            let refusal;
+            try {
+              await encrypt(plaintext, { workerPath });
+            } catch (error) {
+              refusal = error;
+            }
+            cryptoControls.push(
+              encryptionRefusal(control, refusal, performance.now() - started),
+            );
+          };
+          await observeRefusal("crash-input", crash);
           const hang = join(parent, "hang-worker.mjs");
           writeFileSync(hang, "setInterval(() => {}, 1000);\n", {
             mode: 0o644,
           });
-          await assert.rejects(encrypt(plaintext, { workerPath: hang }));
-          cryptoControls.push("encryptor-real-30s-deadline-rejected");
+          await observeRefusal("deadline-input", hang);
         }
       } finally {
         plaintext.fill(0);
       }
       const tools = join(runner, "mmp089-tools");
+      row.stage = "PRESERVATION";
       mkdirSync(tools, { mode: 0o700 });
       copyFileSync(agePath, join(tools, "age"));
       chmodSync(join(tools, "age"), 0o755);
@@ -355,8 +387,8 @@ try {
       );
       row.preservation = record;
       row.status = "PENDING_FINALIZER";
-    } catch {
-      row.status = "FAIL_OR_ENVIRONMENT_ERROR";
+    } catch (error) {
+      Object.assign(row, controlFailure(row.stage, error, row));
       status = "NO_GO";
     } finally {
       const finalizer = cli(
@@ -368,6 +400,7 @@ try {
         60000,
       );
       row.finalizerExit = finalizer.status;
+      let finalStage = "FINALIZER";
       try {
         const record = JSON.parse(
           readFileSync(join(runner, "meta-paid-public/finalizer.json")),
@@ -378,6 +411,7 @@ try {
         assert.equal(record.emergencyRemoved, 0);
         assert.deepEqual(record.inventory, { containers: 0, volumes: 0 });
         if (row.status === "PENDING_FINALIZER") {
+          finalStage = "UPLOAD_GATE";
           const stepOutput = join(runner, "gate-output.txt");
           const gate = cli("research/mmp-089/prepare-upload.mjs", {
             ...boundEnv,
@@ -389,9 +423,16 @@ try {
           assert.equal(gate.status, 0);
           assert.equal(readFileSync(stepOutput, "utf8"), "eligible=true\n");
           row.status = "PASS";
+          row.stage = "UPLOAD_GATE";
         }
-      } catch {
-        row.status = "FINALIZER_OR_UPLOAD_GATE_ERROR";
+      } catch (error) {
+        const terminal = controlFailure(finalStage, error, {
+          processError: finalizer.error?.code,
+        });
+        // Preserve an earlier mismatch/environment observation if cleanup also fails.
+        if (["FAIL", "ERROR"].includes(row.status))
+          row.terminalFailure = terminal;
+        else Object.assign(row, terminal);
         status = "NO_GO";
       }
     }

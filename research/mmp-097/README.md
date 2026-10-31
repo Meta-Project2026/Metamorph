@@ -79,6 +79,11 @@ status mutation changes responses; a post-request extra table changes state
 after the initial snapshot. These intended outcomes are not observations.
 Real age uses throwaway keys for exact source/manifest roundtrip, wrong-key and
 tamper rejection, recipient/size/crash/deadline controls. No uploader is called.
+Negative crypto controls require the encryption-error category and successful
+internal cleanup; deadline input also requires compatible elapsed time. The
+underlying process-crash/timer cause stays NOT_INDEPENDENTLY_ESTABLISHED, rather
+than being inferred from any rejection. Driver receipts distinguish observed
+ERROR/timeouts/cancellation from proven FAIL with fixed stage/cause codes.
 Even five successful scoped cases leave actual G1 error/cancellation and the
 complete matrix pending; the driver labels that boundary explicitly.
 
