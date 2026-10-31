@@ -1,5 +1,19 @@
 # Owner-only source diagnostics
 
+MMP-097 adds a separate candidate-only payload for **G1_PASS_COMPLETED** after
+all manifest pairs finish G2/G3 with PASS/FAIL and normal cleanup. It uses
+`mmp097-candidate-only-v1`, with no compiler/runtime/HTTP/DB data. Its identity
+case and bindingsSha256 must match the trusted public preservation receipt;
+recompute every source hash/byte manifest and canonical candidateSha. There is
+no compilerSha256 in this variant. Legacy **G1_BUILD_FAILED** remains
+`mmp089-private-diagnostics-v1`, with the compiler checks described below.
+Missing/unknown formats or cross-variant receipts must be refused.
+
+The approved recipient/limits/fixed artifact/seven-day policy stay unchanged.
+Actual new-case Docker/crypto acceptance remains NOT_TESTED and owner-key
+decryption NOT_VERIFIED; see [MMP-097](../mmp-097/README.md). No paid call or
+workflow dispatch is authorized by this extension.
+
 The approved recipient is pinned in [spec.md](spec.md). Only its public key is
 in this repository; the owner private key stays on the owner's own device.
 No diagnostic task, reviewer or CI step needs that private key.

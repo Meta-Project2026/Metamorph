@@ -1,0 +1,28 @@
+{
+  "format": "mmp097-acceptance-status-v1",
+  "baseSha": "38aa818e4afe75512e4555390246f44b5d7798db",
+  "decision": "NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE",
+  "actualDocker": "NOT_TESTED",
+  "actualCrypto": "NOT_TESTED",
+  "actualCleanupInventory": null,
+  "reason": "Windows host: Docker command and standard executable absent, no running Docker process/pipe observed, no installed WSL distribution. Historical MMP089 evidence is not current execution.",
+  "matrix": [
+    { "case": "G1_PASS_G2_FAIL_G3_PASS", "actual": "NOT_TESTED" },
+    { "case": "G1_PASS_G2_PASS_G3_FAIL", "actual": "NOT_TESTED" },
+    { "case": "G1_PASS_G2_FAIL_G3_FAIL", "actual": "NOT_TESTED" },
+    { "case": "G1_PASS_G2_PASS_G3_PASS", "actual": "NOT_TESTED" },
+    { "case": "G1_BUILD_FAILED_REGRESSION", "actual": "NOT_TESTED" },
+    { "case": "G1_ERROR_TIMEOUT_CANCEL_PARTIAL", "actual": "NOT_TESTED" },
+    { "case": "THROWAWAY_ROUNDTRIP_WRONG_KEY_TAMPER", "actual": "NOT_TESTED" },
+    { "case": "ENCRYPTOR_CRASH_TIMEOUT_CLEANUP", "actual": "NOT_TESTED" }
+  ],
+  "unitEvidenceKind": "SYNTHETIC_ENVELOPES_AND_INERT_CIPHERTEXT_NOT_DOCKER_OR_CRYPTO",
+  "ownerKeyAccess": "NEVER_ACCESSED",
+  "ownerDecrypt": "NOT_VERIFIED",
+  "modelRequests": 0,
+  "workflowDispatches": 0,
+  "liveCiphertextUploads": 0,
+  "product": "NOT_ESTABLISHED",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE"
+}

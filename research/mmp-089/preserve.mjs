@@ -4,8 +4,9 @@ import { spawn } from "node:child_process";
 import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { collectDiagnosticPackage, DIAGNOSTIC_POLICY, preservationRecord, readPrivateJson, requireDiagnostic } from "../../packages/agent-real/src/private-diagnostics.mjs";
+import { DIAGNOSTIC_POLICY, preservationRecord, readPrivateJson, requireDiagnostic } from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { encryptDiagnostic } from "../../packages/agent-real/src/encrypt-diagnostics.mjs";
+import { collectPreservationPackage } from "../../packages/agent-real/src/candidate-retention.mjs";
 import { sha256 } from "../../packages/target-worker/src/admission.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -40,11 +41,11 @@ if (process.argv[2] !== "--isolated") {
     requireDiagnostic(!existsSync(privateOutput));
     mkdirSync(privateOutput, { mode: 0o700 });
     const trial = readPrivateJson(join(output, "trial.json"), 4 * 1024 * 1024).value;
-    if (trial.modelGeneration === "GENERATED" && ["PASS", "ERROR", "INCONCLUSIVE", "NOT_RUN"].includes(trial.publicG1)) {
+    if (trial.modelGeneration === "GENERATED" && (["ERROR", "INCONCLUSIVE", "NOT_RUN"].includes(trial.publicG1) || (trial.publicG1 === "PASS" && ![trial.publicG2, trial.publicG3].every((g) => ["PASS", "FAIL"].includes(g))))) {
       record = preservationRecord("NOT_APPLICABLE");
     } else {
       const expected = { runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, headSha: process.env.GITHUB_SHA };
-      const pack = collectDiagnosticPackage(trial, expected, join(temp, "meta-paid-verification"));
+      const pack = collectPreservationPackage(trial, expected, join(temp, "meta-paid-verification"));
       // Plaintext package never touches disk. Only these exact allowlisted bytes
       // enter the isolated encryptor. No transfer/provider/Oracle data is passed.
       plaintext = Buffer.from(JSON.stringify(pack));

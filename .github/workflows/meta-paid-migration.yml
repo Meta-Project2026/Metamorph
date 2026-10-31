@@ -100,7 +100,7 @@ jobs:
         id: validation
         if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
         run: node research/mmp-078/validate-candidate.mjs
-      - name: Preserve one attributable G1 failure with approved public recipient
+      - name: Preserve one attributable candidate under approved encrypted export policy
         id: preservation
         if: ${{ !cancelled() && steps.generation.outcome == 'success' }}
         run: node research/mmp-089/preserve.mjs

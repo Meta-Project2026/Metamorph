@@ -291,6 +291,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Research scripts receive syntax-only Fast CI coverage. Package private-diagnostics tests run through pnpm test, including bounded CLI controls; actual Docker/crypto controls are separately observed offline. Paid workflow dispatch and artifact upload are not Fast CI tests."
+    },
+    {
+      "path": "research/mmp-097",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Package candidate-retention unit and CLI controls run through pnpm test with synthetic envelopes/ciphertext only. The manual real-Docker/age driver is syntax-checked but NOT_RUN in Fast CI. Actual crypto/worker acceptance is NOT_TESTED until separately observed on a disposable Linux Docker host. No paid dispatch or live upload."
     }
   ],
   "skips": [
