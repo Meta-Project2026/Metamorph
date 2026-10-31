@@ -1,5 +1,12 @@
 # MMP-097 — Option A candidate-only encrypted retention
 
+MMP-099 (1 November) authorizes the separate PR98-only Ubuntu Docker acceptance
+workflow on ordinary `pull_request`, exact head checkout, read-only contents and
+credential-free installer/driver processes. It uploads no artifacts, and removes
+private temporary source/keys/ciphertext after projecting sanitized receipts to
+the job log. This is separate milestone execution, not Fast CI expansion or paid
+workflow dispatch. Actual observed results are recorded after execution below.
+
 Status: **IMPLEMENTED / NO_GO_PENDING_ACTUAL_DOCKER_ACCEPTANCE**.
 Tracking: [#97](https://github.com/Meta-Project2026/Metamorph/issues/97).
 Base: fresh `origin/main@38aa818e4afe75512e4555390246f44b5d7798db`, after PR95/87.
