@@ -5,6 +5,8 @@ import {
   readFuture,
 } from "./adapter.mjs";
 import { PINS } from "./pins.mjs";
+import { REAL_AI_NAMES, readRealBundle } from "./real-ai-adapter.mjs";
+import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 
 const byId = (id) => document.getElementById(id);
 let bundle = null;
@@ -27,6 +29,13 @@ function reset() {
   byId("evidence").hidden = true;
   byId("future").hidden = true;
   for (const id of [
+    "historical-model",
+    "historical-replay",
+    "historical-context",
+    "real-ai",
+  ])
+    byId(id).hidden = true;
+  for (const id of [
     "attempts",
     "raw",
     "future-content",
@@ -38,11 +47,20 @@ function reset() {
     "cleanup",
     "scope",
     "identities",
+    "real-metrics",
+    "real-gates",
+    "real-timeline",
+    "real-identities",
   ])
     byId(id).replaceChildren();
 }
-function render(value) {
-  bundle = value;
+function renderHistorical(value) {
+  for (const id of [
+    "historical-model",
+    "historical-replay",
+    "historical-context",
+  ])
+    byId(id).hidden = false;
   byId("model-label").textContent = value.model.label;
   byId("model-alias").textContent =
     `Producer receipt: ${value.model.receiptLabel} / modelGeneration=NOT_RUN`;
@@ -107,10 +125,69 @@ function render(value) {
       ],
     ]),
   );
-  for (const name of RECEIPT_NAMES) {
-    const option = element("option", name);
-    option.value = name;
-    byId("receipt").append(option);
+}
+function renderReal(value) {
+  const g = value.generation;
+  byId("real-metrics").append(
+    definitions([
+      ["Model / generation", `${g.modelId} / ${g.status} (generation only)`],
+      [
+        "Attempted requests / confirmed responses",
+        `${g.attemptedRequests} / ${g.confirmedResponseCount}`,
+      ],
+      ["Input / output tokens", `${g.inputTokens} / ${g.outputTokens}`],
+      ["Estimated cost USD (ESTIMATE_ONLY)", g.estimatedCostUsd],
+      [
+        "Charged cost USD",
+        g.chargedCostUsd === null
+          ? "null / unknown — settled charge unavailable"
+          : g.chargedCostUsd,
+      ],
+    ]),
+  );
+  for (const [gate, status] of Object.entries(value.gates))
+    byId("real-gates").append(
+      element("span", `${gate} ${status}`, `verdict-${status}`),
+    );
+  for (const text of [
+    `Source frozen: ${REAL_AI_PINS.sourceSha}.`,
+    `One authorized request on 29 October 2026: ${g.provider} / ${g.modelId}.`,
+    `One model response; TS candidate ${g.candidateSha}. Generation PASS.`,
+    "Isolated Docker typecheck: G1 FAIL / BUILD_FAILED. Original compiler diagnostics UNKNOWN.",
+    `HTTP ${value.coverage.http}/${value.coverage.requiredHttp} and SQLite ${value.coverage.sqlite}/${value.coverage.requiredSqlite}: not executed; G2/G3 INCONCLUSIVE / MISSING_COVERAGE.`,
+    `Cleanup ${value.trial.cleanup.status}: 0 containers / 0 volumes / 0 emergency removals. Independent finalizer ${value.finalizer.status}: 0/0/0.`,
+  ])
+    byId("real-timeline").append(element("li", text));
+  byId("real-identities").append(
+    definitions([
+      ["Actual MMP-081 run", REAL_AI_PINS.runId],
+      ["Execution head SHA", REAL_AI_PINS.headSha],
+      ["Frozen source SHA", REAL_AI_PINS.sourceSha],
+      ["Generated candidate SHA", REAL_AI_PINS.candidateSha],
+      [
+        "Original artifact ID / ZIP SHA-256",
+        `${REAL_AI_PINS.artifactId} / ${REAL_AI_PINS.zipSha256}`,
+      ],
+    ]),
+  );
+  byId("real-ai").hidden = false;
+}
+function renderBundles(historical, real) {
+  bundle = { receipts: {} };
+  if (historical) renderHistorical(historical);
+  if (real) renderReal(real);
+  for (const [label, value] of [
+    ["Historical #70", historical],
+    ["Real AI #81", real],
+  ]) {
+    if (!value) continue;
+    for (const [name, receipt] of Object.entries(value.receipts)) {
+      const key = `${label} / ${name}`;
+      bundle.receipts[key] = receipt;
+      const option = element("option", key);
+      option.value = key;
+      byId("receipt").append(option);
+    }
   }
   showRaw();
   byId("evidence").hidden = false;
@@ -129,20 +206,37 @@ async function load(getFiles) {
   byId("status").className = "";
   byId("status").textContent = "Validating selected files…";
   try {
-    const files = await getFiles();
-    let result;
-    if (files.length === 1 && files[0].name === "future-model.json")
-      result = readFuture(files[0].name, files[0].bytes);
-    else result = await readBundle(files);
+    const input = await getFiles();
+    let future;
+    let historical;
+    let real;
+    if (Array.isArray(input)) {
+      if (input.length === 1 && input[0].name === "future-model.json")
+        future = readFuture(input[0].name, input[0].bytes);
+      else if (
+        input.some(
+          (file) =>
+            file.name === "generation.json" ||
+            file.name === "mmp078-40900698372-attempt.json",
+        )
+      )
+        real = await readRealBundle(input);
+      else historical = await readBundle(input);
+    } else {
+      // All bundled tracks are validated before displaying any results.
+      [historical, real] = await Promise.all([
+        readBundle(input.historical),
+        readRealBundle(input.real),
+      ]);
+    }
     if (current !== generation) return;
-    if (result.verification === "NOT_VERIFIED") {
-      byId("future-content").textContent = JSON.stringify(result, null, 2);
+    if (future) {
+      byId("future-content").textContent = JSON.stringify(future, null, 2);
       byId("future").hidden = false;
-    } else render(result);
-    byId("status").textContent =
-      result.verification === "NOT_VERIFIED"
-        ? "NOT_VERIFIED — declaration only; no independent execution established."
-        : "PINNED_PUBLIC_SNAPSHOT — 5 exact public receipts loaded. This viewer has executed no model or Oracle run.";
+    } else renderBundles(historical, real);
+    byId("status").textContent = future
+      ? "NOT_VERIFIED — declaration only; no independent execution established."
+      : `PINNED_PUBLIC_SNAPSHOT — ${historical ? "historical A/B (5 receipts)" : ""}${historical && real ? " + " : ""}${real ? "PINNED_REAL_AI_SNAPSHOT C (4 receipts)" : ""}. Recorded evidence; this viewer executes no model or Oracle run.`;
   } catch (error) {
     if (current !== generation) return;
     reset();
@@ -155,43 +249,49 @@ async function load(getFiles) {
   }
 }
 byId("load").addEventListener("click", () =>
-  load(async () =>
-    Promise.all(
-      RECEIPT_NAMES.map(async (name) => {
-        const response = await fetch(`/evidence/${name}`, {
-          credentials: "omit",
-          redirect: "error",
-          cache: "no-store",
-        });
-        if (
-          !response.ok ||
-          Number(response.headers.get("Content-Length")) > MAX_BYTES
-        )
-          throw new Error("MISSING_OR_OVERSIZED_RECEIPT");
-        // Bounded streaming prevents a replaced local server from forcing an unbounded allocation.
-        const reader = response.body.getReader();
-        const chunks = [];
-        let size = 0;
-        for (;;) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          size += value.byteLength;
-          if (size > MAX_BYTES) {
-            await reader.cancel();
-            throw new Error("SIZE_LIMIT");
+  load(async () => {
+    const fetchFiles = (names, directory) =>
+      Promise.all(
+        names.map(async (name) => {
+          const response = await fetch(`/${directory}/${name}`, {
+            credentials: "omit",
+            redirect: "error",
+            cache: "no-store",
+          });
+          if (
+            !response.ok ||
+            Number(response.headers.get("Content-Length")) > MAX_BYTES
+          )
+            throw new Error("MISSING_OR_OVERSIZED_RECEIPT");
+          // Bounded streaming prevents a replaced local server from forcing an unbounded allocation.
+          const reader = response.body.getReader();
+          const chunks = [];
+          let size = 0;
+          for (;;) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            size += value.byteLength;
+            if (size > MAX_BYTES) {
+              await reader.cancel();
+              throw new Error("SIZE_LIMIT");
+            }
+            chunks.push(value);
           }
-          chunks.push(value);
-        }
-        const bytes = new Uint8Array(size);
-        let offset = 0;
-        for (const chunk of chunks) {
-          bytes.set(chunk, offset);
-          offset += chunk.length;
-        }
-        return { name, bytes };
-      }),
-    ),
-  ),
+          const bytes = new Uint8Array(size);
+          let offset = 0;
+          for (const chunk of chunks) {
+            bytes.set(chunk, offset);
+            offset += chunk.length;
+          }
+          return { name, bytes };
+        }),
+      );
+    const [historical, real] = await Promise.all([
+      fetchFiles(RECEIPT_NAMES, "evidence"),
+      fetchFiles(REAL_AI_NAMES, REAL_AI_PINS.directory),
+    ]);
+    return { historical, real };
+  }),
 );
 byId("files").addEventListener("change", (event) => {
   const selected = Array.from(event.target.files);
@@ -203,6 +303,7 @@ byId("files").addEventListener("change", (event) => {
       selected.some(
         (file) =>
           !RECEIPT_NAMES.includes(file.name) &&
+          !REAL_AI_NAMES.includes(file.name) &&
           file.name !== "future-model.json",
       )
     )
