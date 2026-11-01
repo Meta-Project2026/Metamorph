@@ -1,0 +1,38 @@
+{
+  "format": "mmp100-recipe-platform-observation-v1",
+  "auditedMainSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "gitRecipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "windowsCheckoutRecipeSha256": "bd2296fcbb502f1788bc4eaee6de5c3adc49ec30b712d9caaf5bfc93a52680c3",
+  "initialLocalValidateRuntimeRecipe": {
+    "exitCode": 1,
+    "code": "ENVIRONMENT_ERROR",
+    "stage": "READ_ONLY_HASH_CHECK_NO_DOCKER",
+    "trustedFilesModified": false
+  },
+  "differentFiles": [
+    {
+      "name": "Dockerfile",
+      "gitHash": "dea37c3264516b8e544b5cbbe513285c6b61c0cb8871616a0038aa85d8db1b76",
+      "localHash": "12e37de8edd51cc27aff69ee67a42a3d5beab7b26a19ecc5b14c8a331258f279",
+      "gitBytes": 568,
+      "localBytes": 582,
+      "localCrlf": true,
+      "equal": false
+    }
+  ],
+  "canonicalSource": "git show exact-main:path; LF git blobs match Linux checkout",
+  "gitHashes": {
+    "Dockerfile": "dea37c3264516b8e544b5cbbe513285c6b61c0cb8871616a0038aa85d8db1b76",
+    "build.mjs": "25fa4fa9b91a8f7abaf2d67815ecbe3ab33c75e69ad936fd741374ebee49c6bb",
+    "clock.mjs": "6778b68119616e3bfc7803228ece2c0df90b0fe49d0b85cd4989f110ad0a6adb",
+    "inspect.mjs": "795b27c30381de565602d6e658510ec1fa9e4c261e74d520600c07dbecb69e07",
+    "launch.mjs": "ea5858e91fa62ba62ac9519f6c7bb359a0ae21c9751a244cc1cb010b865e24a3",
+    "package-lock.json": "af2bc4f0e80a37e8d330d95355e8972a2bd6c75e38f14e0dd36b3c60020396f8",
+    "package.json": "b00017ce23cdecc5cdab15fa0050a80527716cdd86e35819c4c08d24e46ce97d",
+    "profile.mjs": "b37a7994c3564dc30507c8b13aea5042a3887acd886454ba7c5293316aff7096",
+    "provenance.mjs": "e0a38c0111418956f2b0a8ef14f605462c94272fa8817d445dfba24a523cc506",
+    "quota.mjs": "2ee9ee285ff1656eee9ed1fda34805e90f9f716d2e2e15016729d65de58a523a",
+    "sqlite-value.mjs": "f4ed14c4709e275aeb92b7bcdbb8767f2a5ee31701c95a0d182bc276e096de00",
+    "unit-smoke.mjs": "eb8568bf0575d22507924335f05f41ce525e4f005d2504e0d060e9e76fc4259a"
+  }
+}
