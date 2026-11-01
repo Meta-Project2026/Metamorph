@@ -62,13 +62,25 @@ blocked by the $0.10 default admission.
 the task card forbids editing it in parallel: registration of
 `research/mmp-120` is therefore **deferred to the post-#117 rebase**. Until
 that one JSON entry lands, the unregistered `research/mmp-120/audit.mjs`
-trips `RESEARCH_INVENTORY_DRIFT` in three Fast CI steps that all share this
-root cause: `Validate coverage matrix`, `Active research syntax` (its entry
-script imports `validate()` first), and `Coverage validator negative controls`
-(two "clean copy" assertions). `pnpm lint/typecheck/test` and the focused
-22-test suite are unaffected and green. The completing edit at rebase time is
-a single `research` array entry (the syntax step then covers `audit.mjs`
-automatically):
+trips `RESEARCH_INVENTORY_DRIFT`, which is thrown at module load by
+`check-syntax.mjs` (it imports `validate()` first). Observed hosted effect —
+one failed step and seven skipped steps per Node leg (the job stops at the
+first failure), all one root cause:
+
+- FAIL: `Active research syntax`
+- SKIPPED: `Validate coverage matrix`, `Coverage validator negative controls`,
+  `Connected history bootstrap`, `Shallow history negative control`,
+  `Connected adversarial tests`, `Demo-readiness tests`,
+  `MMP-108 first-step negative controls`
+
+First-push hosted evidence: Fast CI run
+[`41364132058`](https://github.com/Meta-Project2026/Metamorph/actions/runs/41364132058)
+at head `4b6681fcc1b2772abb905c3de71fe2aab4872737` — both `quick (22)` and
+`quick (24)` legs passed every step up to and including `Active research lint`
+and `pnpm test` (the 22 new controls ran green on hosted Node 22 and 24),
+then hit exactly the gate above. Local Windows results are identical in kind.
+The completing edit at rebase time is a single `research` array entry (the
+syntax step then covers `audit.mjs` automatically):
 
 ```json
 {

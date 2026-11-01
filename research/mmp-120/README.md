@@ -26,5 +26,7 @@ Fast CI reach: the negative controls run through the agent-real test glob in
 `node research/mmp-069/check-syntax.mjs`. Registering `research/mmp-120` in
 `research/mmp-069/coverage-matrix.json` is deliberately **deferred to the
 post-#117 rebase** (that file is part of the open custody PR's diff); until
-then `node research/mmp-069/validate.mjs` reports `RESEARCH_INVENTORY_DRIFT` —
-see VALIDATION.md.
+then the unregistered directory trips `RESEARCH_INVENTORY_DRIFT`, which fails
+the `Active research syntax` step and skips the seven downstream research
+steps in each Node leg — one documented root cause, details and the completing
+one-entry fix in [VALIDATION.md](VALIDATION.md).
