@@ -73,13 +73,13 @@ first-step response mismatch.
 Five deterministic controls over the unchanged real `verifyPair` (synthetic
 adapters, no Docker, sealed evidence in every case):
 
-| Control | G2 | G3 | Shape |
-| --- | --- | --- | --- |
-| candidate first-request failure | ERROR `VERIFIER_ERROR`, 0 executed | ERROR, 1 (`:initial`) | historical aggregate shape |
-| reference first-request failure | ERROR, 0 executed | ERROR, 1 (`:initial`) | same shape |
-| malformed observation | ERROR, 0 executed | ERROR, 1 (`:initial`) | same shape |
-| comparator status mismatch | FAIL `HTTP_STATUS`, 17 executed | FAIL, 20 executed | scored FAIL, full coverage |
-| worker teardown fault | ERROR after 17/20 executed | ERROR after 20/20 | cleanup fault surfaces as ERROR |
+| Control                         | G2                                 | G3                    | Shape                           |
+| ------------------------------- | ---------------------------------- | --------------------- | ------------------------------- |
+| candidate first-request failure | ERROR `VERIFIER_ERROR`, 0 executed | ERROR, 1 (`:initial`) | historical aggregate shape      |
+| reference first-request failure | ERROR, 0 executed                  | ERROR, 1 (`:initial`) | same shape                      |
+| malformed observation           | ERROR, 0 executed                  | ERROR, 1 (`:initial`) | same shape                      |
+| comparator status mismatch      | FAIL `HTTP_STATUS`, 17 executed    | FAIL, 20 executed     | scored FAIL, full coverage      |
+| worker teardown fault           | ERROR after 17/20 executed         | ERROR after 20/20     | cleanup fault surfaces as ERROR |
 
 ## Findings and their limits
 
@@ -92,12 +92,12 @@ adapters, no Docker, sealed evidence in every case):
    happened in run #41327197036.
 2. The historical public receipt shape (per-pair G1 PASS; G2/G3
    `VERIFIER_ERROR`; 0/17 HTTP; 1/20 SQLite) is reproduced **only after the
-   initial SQLite observation** by a first-HTTP-request fault from *either*
+   initial SQLite observation** by a first-HTTP-request fault from _either_
    side or a malformed observation — the public shape alone cannot attribute
    candidate vs reference vs harness, consistent with MMP-104/PR #106.
 3. Diagnostic observation from this task's development (pre-evidence local
    attempt, retained as a finding, not as acceptance evidence): a stale bind
-   source in the *research harness* (`inspector.php` path invisible to the
+   source in the _research harness_ (`inspector.php` path invisible to the
    daemon, a pure environment/plumbing defect with the known-good candidate
    untouched) produced per-pair G1 PASS and G2/G3 `VERIFIER_ERROR` with **zero
    executed observations** — the same categorical fail-closed shape, at the

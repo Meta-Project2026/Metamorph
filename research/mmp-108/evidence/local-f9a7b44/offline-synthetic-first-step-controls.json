@@ -11,9 +11,7 @@
         "executedCount": 0,
         "executedFirst": null,
         "executedLast": null,
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "G3": {
         "gate": "G3",
@@ -21,9 +19,7 @@
         "executedCount": 1,
         "executedFirst": "workshop-business:initial",
         "executedLast": "workshop-business:initial",
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "sealedEvidence": true
     },
@@ -35,9 +31,7 @@
         "executedCount": 0,
         "executedFirst": null,
         "executedLast": null,
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "G3": {
         "gate": "G3",
@@ -45,9 +39,7 @@
         "executedCount": 1,
         "executedFirst": "workshop-business:initial",
         "executedLast": "workshop-business:initial",
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "sealedEvidence": true
     },
@@ -59,9 +51,7 @@
         "executedCount": 0,
         "executedFirst": null,
         "executedLast": null,
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "G3": {
         "gate": "G3",
@@ -69,9 +59,7 @@
         "executedCount": 1,
         "executedFirst": "workshop-business:initial",
         "executedLast": "workshop-business:initial",
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "sealedEvidence": true
     },
@@ -83,9 +71,7 @@
         "executedCount": 17,
         "executedFirst": "workshop-business:step-0",
         "executedLast": "workshop-capacity:step-5",
-        "findingCodes": [
-          "HTTP_STATUS"
-        ]
+        "findingCodes": ["HTTP_STATUS"]
       },
       "G3": {
         "gate": "G3",
@@ -93,9 +79,7 @@
         "executedCount": 20,
         "executedFirst": "workshop-business:initial",
         "executedLast": "workshop-capacity:step-5",
-        "findingCodes": [
-          "HTTP_STATUS"
-        ]
+        "findingCodes": ["HTTP_STATUS"]
       },
       "sealedEvidence": true
     },
@@ -107,9 +91,7 @@
         "executedCount": 17,
         "executedFirst": "workshop-business:step-0",
         "executedLast": "workshop-capacity:step-5",
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "G3": {
         "gate": "G3",
@@ -117,9 +99,7 @@
         "executedCount": 20,
         "executedFirst": "workshop-business:initial",
         "executedLast": "workshop-capacity:step-5",
-        "findingCodes": [
-          "VERIFIER_ERROR"
-        ]
+        "findingCodes": ["VERIFIER_ERROR"]
       },
       "sealedEvidence": true
     }

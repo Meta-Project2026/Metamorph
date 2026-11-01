@@ -34,9 +34,7 @@
       "executedCount": 27,
       "executedFirst": "workshop-business:http-positive",
       "executedLast": "workshop-capacity:db-sequence-mutant",
-      "findingCodes": [
-        "HELD_OUT_NOT_RUN"
-      ]
+      "findingCodes": ["HELD_OUT_NOT_RUN"]
     }
   },
   "coverage": {
