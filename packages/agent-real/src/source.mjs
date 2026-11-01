@@ -7,9 +7,10 @@ export function check(value, code) {
   if (!value) throw Object.assign(new Error(code), { code });
 }
 const sessions = new WeakSet();
-const leases = new WeakSet();
+const leases = new WeakMap();
 export const isSourceSession = (value) => sessions.has(value);
 export const isSourceLease = (value) => leases.has(value);
+export const sourceLeaseRoot = (value) => leases.get(value);
 
 /** A directory issued here is backed by the unchanged createCandidateWriter.
  * Exclusive host ownership is required; the provider receives no filesystem path. */
@@ -62,7 +63,7 @@ export function createSourceSession(parent) {
             }
           },
         });
-        leases.add(lease);
+        leases.set(lease, root);
         return lease;
       } catch (error) {
         busy = false;

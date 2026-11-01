@@ -1,14 +1,23 @@
 // Trusted public-source custody contract. Never import or execute candidate text.
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { lstatSync, readFileSync, realpathSync } from "node:fs";
+import { join } from "node:path";
 import { types } from "node:util";
 import { MANIFEST_SHA256, SOURCE } from "@metamorph/oracle";
 import { strictJson } from "../../differential/src/strict.mjs";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
+import { prepareMetaMigration } from "./meta-migration.mjs";
 import { paidAdmission } from "./meta-paid-authorization.mjs";
-import { isMigrationContext } from "./migration-context.mjs";
-import { DIAGNOSTIC_POLICY, rejectSecrets } from "./private-diagnostics.mjs";
-import { isSourceLease } from "./source.mjs";
+import {
+  bindMigrationContext,
+  isMigrationContext,
+} from "./migration-context.mjs";
+import {
+  DIAGNOSTIC_POLICY,
+  readPrivateBytes,
+  rejectSecrets,
+} from "./private-diagnostics.mjs";
+import { isSourceLease, sourceLeaseRoot } from "./source.mjs";
 
 export const CUSTODY = Object.freeze({
   format: "mmp107-candidate-only-v1",
@@ -117,6 +126,16 @@ const source = JSON.parse(
   ),
 );
 requireCustody(sha256(source.license) === SOURCE.licenseSha256);
+const publicContext = bindMigrationContext(JSON.stringify(source));
+const publicBodySha256 = sha256(
+  prepareMetaMigration(publicContext, {
+    unitId: "workshop-api",
+    tier: "spark",
+    action: "generate",
+    attempt: 1,
+    repairFeedback: null,
+  }),
+);
 const license = Object.freeze({
   spdx: "MIT",
   sourceSha: SOURCE.commit,
@@ -141,6 +160,10 @@ export function validateCapsule(input, expected) {
       v.attemptKind === "GENERATION_CUSTODY",
   );
   custodyIdentity(v.identity, expected);
+  requireCustody(
+    v.admission.contextSha256 === publicContext.contextSha256 &&
+      v.admission.requestBodySha256 === publicBodySha256,
+  );
   exact(v.admission, [
     "generationAttempt",
     "requestBodySha256",
@@ -169,6 +192,11 @@ export function validateCapsule(input, expected) {
     bundle.files.some((f) => f.content.includes(source.license.trim())),
   );
   for (const f of bundle.files) {
+    requireCustody(
+      new TextDecoder("utf-8", { fatal: true }).decode(
+        Buffer.from(f.content),
+      ) === f.content,
+    );
     rejectSecrets(f.content);
     requireCustody(
       !f.content.includes("<?php") &&
@@ -194,6 +222,35 @@ export async function capsuleFromLease(token, lease, receipt) {
   requireCustody(a && !a.used && isSourceLease(lease));
   a.used = true;
   await lease.assertUnchanged();
+  const sourceRoot = sourceLeaseRoot(lease),
+    before = lstatSync(sourceRoot);
+  requireCustody(
+    realpathSync(sourceRoot) === sourceRoot &&
+      before.isDirectory() &&
+      !before.isSymbolicLink(),
+  );
+  if (process.platform === "linux")
+    requireCustody(
+      before.uid === process.getuid() && (before.mode & 0o077) === 0,
+    );
+  for (const file of lease.bundle.files) {
+    const bytes = readPrivateBytes(join(sourceRoot, file.path), 256 * 1024);
+    try {
+      requireCustody(
+        bytes.equals(Buffer.from(file.content)) &&
+          sha256(bytes) === file.sha256,
+      );
+    } finally {
+      bytes.fill(0);
+    }
+  }
+  const after = lstatSync(sourceRoot);
+  requireCustody(
+    before.ino === after.ino &&
+      before.dev === after.dev &&
+      before.mode === after.mode &&
+      realpathSync(sourceRoot) === sourceRoot,
+  );
   const r = plainData(receipt),
     auth = a.auth;
   requireCustody(
