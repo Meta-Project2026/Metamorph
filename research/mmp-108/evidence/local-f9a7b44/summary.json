@@ -1,0 +1,261 @@
+{
+  "format": "mmp108-first-step-proof-v1",
+  "headSha": "f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c",
+  "engine": {
+    "version": "29.9.2",
+    "os": "linux",
+    "arch": "amd64"
+  },
+  "driver": {
+    "node": "v24.22.2",
+    "platform": "linux",
+    "manifestPin": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+    "recipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+    "sourcePin": {
+      "repository": "tanjilaafsarirubina/car-workshop",
+      "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4"
+    },
+    "candidatePin": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334"
+  },
+  "network": {
+    "sourceFetches": 2,
+    "blockedRequests": 0
+  },
+  "cases": [
+    {
+      "id": "known-good-real-docker-first-step",
+      "status": "PASS",
+      "execution": "REAL_DOCKER_PINNED_PUBLIC_KNOWN_GOOD",
+      "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+      "gates": {
+        "G1": {
+          "gate": "G1",
+          "verdict": "PASS",
+          "executedCount": 6,
+          "executedFirst": "workshop-business:typecheck",
+          "executedLast": "workshop-capacity:build",
+          "findingCodes": []
+        },
+        "G2": {
+          "gate": "G2",
+          "verdict": "PASS",
+          "executedCount": 17,
+          "executedFirst": "workshop-business:step-0",
+          "executedLast": "workshop-capacity:step-5",
+          "findingCodes": []
+        },
+        "G3": {
+          "gate": "G3",
+          "verdict": "PASS",
+          "executedCount": 20,
+          "executedFirst": "workshop-business:initial",
+          "executedLast": "workshop-capacity:step-5",
+          "findingCodes": []
+        },
+        "G4": {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedCount": 27,
+          "executedFirst": "workshop-business:http-positive",
+          "executedLast": "workshop-capacity:db-sequence-mutant",
+          "findingCodes": ["HELD_OUT_NOT_RUN"]
+        }
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "stageOrdinals": {
+        "firstInitialDb": "workshop-business:initial",
+        "firstHttpStep": "workshop-business:step-0",
+        "firstPostRequestDb": "workshop-business:step-0"
+      },
+      "pairs": 3,
+      "cleanup": {
+        "status": "VERIFIED_ZERO_RESOURCES",
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "status": "PASS",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0
+      },
+      "licenceNotice": "MIT notice verified in src/schema.ts"
+    },
+    {
+      "id": "first-step-http-fault-real-docker",
+      "status": "PASS",
+      "execution": "REAL_DOCKER_SYNTHETIC_FIRST_STEP_FAULT",
+      "candidateSha": "43eb3aeb392a65da325a5433246609c1a0d01c9b03633feeaf08a6d44a3e59f9",
+      "mutation": "res.statusCode = 503 before first response (mmp-097 pattern)",
+      "gates": {
+        "G1": {
+          "gate": "G1",
+          "verdict": "PASS",
+          "executedCount": 6,
+          "executedFirst": "workshop-business:typecheck",
+          "executedLast": "workshop-capacity:build",
+          "findingCodes": []
+        },
+        "G2": {
+          "gate": "G2",
+          "verdict": "FAIL",
+          "executedCount": 17,
+          "executedFirst": "workshop-business:step-0",
+          "executedLast": "workshop-capacity:step-5",
+          "findingCodes": ["HTTP_STATUS"]
+        },
+        "G3": {
+          "gate": "G3",
+          "verdict": "FAIL",
+          "executedCount": 20,
+          "executedFirst": "workshop-business:initial",
+          "executedLast": "workshop-capacity:step-5",
+          "findingCodes": ["HTTP_STATUS"]
+        }
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "pairs": 3,
+      "cleanup": {
+        "status": "VERIFIED_ZERO_RESOURCES",
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "status": "PASS",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0
+      }
+    },
+    {
+      "id": "offline-synthetic-first-step-controls",
+      "status": "PASS",
+      "execution": "OFFLINE_SYNTHETIC_ADAPTERS_REAL_VERIFYPAIR",
+      "cases": [
+        {
+          "id": "candidate-first-request-failure",
+          "G2": {
+            "gate": "G2",
+            "verdict": "ERROR",
+            "executedCount": 0,
+            "executedFirst": null,
+            "executedLast": null,
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "G3": {
+            "gate": "G3",
+            "verdict": "ERROR",
+            "executedCount": 1,
+            "executedFirst": "workshop-business:initial",
+            "executedLast": "workshop-business:initial",
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "sealedEvidence": true
+        },
+        {
+          "id": "reference-first-request-failure",
+          "G2": {
+            "gate": "G2",
+            "verdict": "ERROR",
+            "executedCount": 0,
+            "executedFirst": null,
+            "executedLast": null,
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "G3": {
+            "gate": "G3",
+            "verdict": "ERROR",
+            "executedCount": 1,
+            "executedFirst": "workshop-business:initial",
+            "executedLast": "workshop-business:initial",
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "sealedEvidence": true
+        },
+        {
+          "id": "malformed-observation",
+          "G2": {
+            "gate": "G2",
+            "verdict": "ERROR",
+            "executedCount": 0,
+            "executedFirst": null,
+            "executedLast": null,
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "G3": {
+            "gate": "G3",
+            "verdict": "ERROR",
+            "executedCount": 1,
+            "executedFirst": "workshop-business:initial",
+            "executedLast": "workshop-business:initial",
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "sealedEvidence": true
+        },
+        {
+          "id": "comparator-status-fault",
+          "G2": {
+            "gate": "G2",
+            "verdict": "FAIL",
+            "executedCount": 17,
+            "executedFirst": "workshop-business:step-0",
+            "executedLast": "workshop-capacity:step-5",
+            "findingCodes": ["HTTP_STATUS"]
+          },
+          "G3": {
+            "gate": "G3",
+            "verdict": "FAIL",
+            "executedCount": 20,
+            "executedFirst": "workshop-business:initial",
+            "executedLast": "workshop-capacity:step-5",
+            "findingCodes": ["HTTP_STATUS"]
+          },
+          "sealedEvidence": true
+        },
+        {
+          "id": "worker-teardown-fault",
+          "G2": {
+            "gate": "G2",
+            "verdict": "ERROR",
+            "executedCount": 17,
+            "executedFirst": "workshop-business:step-0",
+            "executedLast": "workshop-capacity:step-5",
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "G3": {
+            "gate": "G3",
+            "verdict": "ERROR",
+            "executedCount": 20,
+            "executedFirst": "workshop-business:initial",
+            "executedLast": "workshop-capacity:step-5",
+            "findingCodes": ["VERIFIER_ERROR"]
+          },
+          "sealedEvidence": true
+        }
+      ],
+      "shapeNote": "candidate/reference/malformed first-request faults reproduce the historical aggregate shape (0 HTTP executed, initial DB only) as fail-closed ERROR; a scored comparator mismatch yields FAIL with complete coverage; teardown faults surface as ERROR after full execution"
+    }
+  ],
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "modelRequests": 0,
+  "product": "NOT_ESTABLISHED",
+  "status": "PASS"
+}

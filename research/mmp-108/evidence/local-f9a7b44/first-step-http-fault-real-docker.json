@@ -1,0 +1,54 @@
+{
+  "id": "first-step-http-fault-real-docker",
+  "status": "PASS",
+  "execution": "REAL_DOCKER_SYNTHETIC_FIRST_STEP_FAULT",
+  "candidateSha": "43eb3aeb392a65da325a5433246609c1a0d01c9b03633feeaf08a6d44a3e59f9",
+  "mutation": "res.statusCode = 503 before first response (mmp-097 pattern)",
+  "gates": {
+    "G1": {
+      "gate": "G1",
+      "verdict": "PASS",
+      "executedCount": 6,
+      "executedFirst": "workshop-business:typecheck",
+      "executedLast": "workshop-capacity:build",
+      "findingCodes": []
+    },
+    "G2": {
+      "gate": "G2",
+      "verdict": "FAIL",
+      "executedCount": 17,
+      "executedFirst": "workshop-business:step-0",
+      "executedLast": "workshop-capacity:step-5",
+      "findingCodes": ["HTTP_STATUS"]
+    },
+    "G3": {
+      "gate": "G3",
+      "verdict": "FAIL",
+      "executedCount": 20,
+      "executedFirst": "workshop-business:initial",
+      "executedLast": "workshop-capacity:step-5",
+      "findingCodes": ["HTTP_STATUS"]
+    }
+  },
+  "coverage": {
+    "http": 17,
+    "sqlite": 20,
+    "requiredHttp": 17,
+    "requiredSqlite": 20
+  },
+  "pairs": 3,
+  "cleanup": {
+    "status": "VERIFIED_ZERO_RESOURCES",
+    "containers": 0,
+    "volumes": 0,
+    "emergencyRemoved": 0
+  },
+  "finalizer": {
+    "status": "PASS",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0
+  }
+}

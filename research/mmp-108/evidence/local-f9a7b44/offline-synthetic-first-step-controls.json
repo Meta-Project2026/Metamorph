@@ -1,0 +1,108 @@
+{
+  "id": "offline-synthetic-first-step-controls",
+  "status": "PASS",
+  "execution": "OFFLINE_SYNTHETIC_ADAPTERS_REAL_VERIFYPAIR",
+  "cases": [
+    {
+      "id": "candidate-first-request-failure",
+      "G2": {
+        "gate": "G2",
+        "verdict": "ERROR",
+        "executedCount": 0,
+        "executedFirst": null,
+        "executedLast": null,
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "G3": {
+        "gate": "G3",
+        "verdict": "ERROR",
+        "executedCount": 1,
+        "executedFirst": "workshop-business:initial",
+        "executedLast": "workshop-business:initial",
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "sealedEvidence": true
+    },
+    {
+      "id": "reference-first-request-failure",
+      "G2": {
+        "gate": "G2",
+        "verdict": "ERROR",
+        "executedCount": 0,
+        "executedFirst": null,
+        "executedLast": null,
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "G3": {
+        "gate": "G3",
+        "verdict": "ERROR",
+        "executedCount": 1,
+        "executedFirst": "workshop-business:initial",
+        "executedLast": "workshop-business:initial",
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "sealedEvidence": true
+    },
+    {
+      "id": "malformed-observation",
+      "G2": {
+        "gate": "G2",
+        "verdict": "ERROR",
+        "executedCount": 0,
+        "executedFirst": null,
+        "executedLast": null,
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "G3": {
+        "gate": "G3",
+        "verdict": "ERROR",
+        "executedCount": 1,
+        "executedFirst": "workshop-business:initial",
+        "executedLast": "workshop-business:initial",
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "sealedEvidence": true
+    },
+    {
+      "id": "comparator-status-fault",
+      "G2": {
+        "gate": "G2",
+        "verdict": "FAIL",
+        "executedCount": 17,
+        "executedFirst": "workshop-business:step-0",
+        "executedLast": "workshop-capacity:step-5",
+        "findingCodes": ["HTTP_STATUS"]
+      },
+      "G3": {
+        "gate": "G3",
+        "verdict": "FAIL",
+        "executedCount": 20,
+        "executedFirst": "workshop-business:initial",
+        "executedLast": "workshop-capacity:step-5",
+        "findingCodes": ["HTTP_STATUS"]
+      },
+      "sealedEvidence": true
+    },
+    {
+      "id": "worker-teardown-fault",
+      "G2": {
+        "gate": "G2",
+        "verdict": "ERROR",
+        "executedCount": 17,
+        "executedFirst": "workshop-business:step-0",
+        "executedLast": "workshop-capacity:step-5",
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "G3": {
+        "gate": "G3",
+        "verdict": "ERROR",
+        "executedCount": 20,
+        "executedFirst": "workshop-business:initial",
+        "executedLast": "workshop-capacity:step-5",
+        "findingCodes": ["VERIFIER_ERROR"]
+      },
+      "sealedEvidence": true
+    }
+  ],
+  "shapeNote": "candidate/reference/malformed first-request faults reproduce the historical aggregate shape (0 HTTP executed, initial DB only) as fail-closed ERROR; a scored comparator mismatch yields FAIL with complete coverage; teardown faults surface as ERROR after full execution"
+}

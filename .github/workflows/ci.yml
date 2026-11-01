@@ -59,3 +59,5 @@ jobs:
         run: node --test research/mmp-054-connected/verify.test.mjs
       - name: Demo-readiness tests
         run: node --test research/demo-readiness/*.test.mjs
+      - name: MMP-108 first-step negative controls
+        run: node --test research/mmp-108/*.test.mjs

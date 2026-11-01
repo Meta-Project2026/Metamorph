@@ -72,6 +72,10 @@ export const STEPS = [
     name: "Demo-readiness tests",
     run: "node --test research/demo-readiness/*.test.mjs",
   },
+  {
+    name: "MMP-108 first-step negative controls",
+    run: "node --test research/mmp-108/*.test.mjs",
+  },
 ];
 export function check(condition, code) {
   if (!condition) throw new Error(code);
