@@ -8,10 +8,18 @@ under `specs/`. The implemented foundation is described in
 
 ## Code and proposals
 
-MMP-001 implements `packages/contracts/` (typed, runtime-validated boundaries) and
-`apps/server/` (Fastify health), with fast checks. Web UI is deferred. Migration
-generation, Meta integration, PHP execution and Oracle are not implemented; no
-benchmark is selected. Recheck code and executed results before claiming status.
+Implemented so far: `packages/contracts/` (typed, runtime-validated boundaries),
+`apps/server/` (Fastify health), the Oracle comparison foundation, the bounded
+agent lifecycle, the real Agent/Oracle integration loop, the disposable TS
+target worker, the PHP/TS differential bridge, the real-model workshop
+composition with an independent audit, encrypted evidence retention and the
+offline read-only evidence viewer under `research/demo-readiness/`. Real PHP 7.4
+qualification ran on an isolated hosted Docker runner (MMP-005). One authorized
+paid model generation ran on 2026-10-29 and produced a candidate that failed
+G1 build/typecheck; a successful migration, formal G4 and product acceptance
+remain NOT established. No benchmark is registered (definition proposed for
+agreement, not selected). Web UI is deferred. There is no automatic or standing
+paid model request. Recheck code and executed results before claiming status.
 
 The imported [overview](metamorph-architecture-v0.1/docs/architecture/overview.md),
 [Oracle contract](metamorph-architecture-v0.1/docs/architecture/oracle-contract.md),
