@@ -58,3 +58,41 @@ are recorded in GitHub rather than predicted in this file.
 - [ ] Human timed 90-second / ~4-minute and disconnected-laptop rehearsal: NOT_RUN.
 
 Actual executed results and remaining limits belong to VALIDATION-085.md.
+
+
+## MMP-118 — compact additive spec / plan / tasks (2026-11-02)
+
+Base current main `d87a7029abf23c3d222bc309741d9185e502313e`; branch
+glm/mmp118-demo-track-d. Only research/demo-readiness/ changes; research/mmp-104/
+is read-only input. Existing MMP-071/MMP-085 records above are historical.
+
+Acceptance: preserve A/B/C bytes, pins and negative controls; add track D — the
+strictly pinned committed `research/mmp-104/incident.json` derived summary of real
+paid run 41327197036 (2026-11-01): generation PASS, first per-pair G1 PASS,
+aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN, G2/G3 ERROR / VERIFIER_ERROR (0/17,
+1/20), cleanup/finalizer 0/0/0, preservation NOT_APPLICABLE, candidate source
+UNAVAILABLE, historical root cause UNKNOWN, charged cost null. D stays distinct
+from C; no ORACLE_PASS / VERIFIED_REAL_CANDIDATE / product PASS; bundled load is
+atomic across A/B/C/D. Offline; no paid calls, dispatch, reruns or new evidence.
+
+Design: one fixed allowlisted serve route to `../mmp-104/incident.json`;
+`incident-pins.mjs` (byte size + SHA-256 + member identities of the committed
+summary); `incident-adapter.mjs` (digest before parse, bounded strict parser with
+a one-name public-field allowance for `privateOperationPacks`, exact key sets and
+exact historical fact binds, fixed error codes); viewer track D section, atomic
+three-source bundled load, lone-`incident.json` picker support, cleared stale DOM;
+`incident.test.mjs` positive + adversarial negative controls; README/RUNBOOK/
+PROVENANCE narration with 90-second / ~4-minute target pacing.
+
+- [x] Study demo-readiness code, tests, CI wiring and mmp-104 incident inputs.
+- [x] Branch from freshly fetched canonical main d87a7029…; verify incident.json
+  bytes (4785, SHA-256 93729a0e…) against the committed file.
+- [x] Pins/adapter/route/viewer/UI for track D; atomic A/B/C/D bundled load.
+- [x] Adversarial tests: byte tampering, forged PASS/coverage/identities, charge
+  substitution, cleanup/preservation/telemetry forgery, canaries, HTTP allowlist.
+- [x] Russian narration refresh: four tracks, #115 production proof pending,
+  #116 on hold, no planned paid request.
+- [x] Local checks: install/lint/typecheck/test/build, demo suites, loopback HTTP
+  smoke; results recorded in the delivery PR.
+- [ ] Independent ChatGPT review; leave PR open, no self-merge.
+- [ ] Human timed 90-second / ~4-minute and disconnected-laptop rehearsal: NOT_RUN.

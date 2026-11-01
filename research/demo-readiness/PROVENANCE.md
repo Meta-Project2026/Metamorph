@@ -3,6 +3,8 @@
 MMP-085 adds C independently of historical A/B below. The five original historical
 files, pins.mjs, adapter.mjs and demo.test.mjs are byte-identical to the base.
 C is a review candidate; independent ChatGPT review is pending.
+MMP-118 adds track D (2026-11-02) from the committed MMP-104 derived summary;
+only demo-readiness presentation files change and no existing A/B/C bytes move.
 
 ## Historical A/B — MMP-071 / PR #70
 
@@ -158,13 +160,14 @@ VERIFIED_ZERO_RESOURCES and finalizer PASS, both 0/0/0. Generation PASS does not
 mean candidate build PASS. Estimate is not a settled charge. This work incurs no
 new Meta calls/spend and establishes no repair, private audit or product PASS.
 
-Original compiler diagnostics UNKNOWN. Three distinct evidence identities:
+Original compiler diagnostics UNKNOWN. Four distinct evidence identities after MMP-118:
 
 | Concept | Run / execution head | Candidate SHA |
 | --- | --- | --- |
 | Historical #70 deterministic known-good / scripted repair | `40793819074` / `6ab6e36f813673756af157bc0de2265964c26071` | `34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334` |
 | Historical deliberate mutation | same historical #70 run/head | `1fd6c3547691a2593a58932e78946a8338061ec07cc46f9fb5b9422825591121` |
-| Actual MMP-081 model generation / G1 FAIL | `40900698372` / `d21376747c7147043ca618e149fac87c0df80111` | `afd9f726bcbc2a9dfc2f67128871db307fbd00f2ba4febdc41b5633da98dad8f` |
+| Actual MMP-081 model generation / G1 FAIL (track C) | `40900698372` / `d21376747c7147043ca618e149fac87c0df80111` | `afd9f726bcbc2a9dfc2f67128871db307fbd00f2ba4febdc41b5633da98dad8f` |
+| Actual MMP-104 paid-v2 run / verifier error (track D) | `41327197036` / `d199510fd802693d4af852bd5ed8498b5461d185` | `1120249ee45c0aa3efe73d57d01e813d522a9c2252fcd3e2d984a4000b9d9d2d` |
 | MMP-082 synthetic compiler diagnostic control (not ingested by viewer) | `40926137817` / `c1fc7183d3ea6388c122b1885aed80f1cc0e7bf0` | `47bc850883ded819c2092fac18743e404c85c581b639cf789e4a572db370d4e2` |
 
 Synthetic identity read from `research/mmp-082/evidence/40926137817/compiler-control.json`
@@ -174,3 +177,59 @@ to original C receipts. Public pack IDs/hashes are references only; private pack
 were not retrieved or independently validated. Historical PR #31 AUDIT_FAIL stays
 unchanged. Exact-byte identity, code review, owner approval and product acceptance
 remain separate facts.
+
+
+## D — MMP-104 derived incident summary, verifier error (1 November 2026)
+
+Sole data source: the committed
+[`research/mmp-104/incident.json`](../mmp-104/incident.json)
+(`format=mmp104-public-incident-v1`, added to main in commit `2dd2da8`),
+produced by [`research/mmp-104/inspect-incident.mjs`](../mmp-104/inspect-incident.mjs)
+as an allowlisted projection of the two public artifacts of
+[run 41327197036](https://github.com/Meta-Project2026/Metamorph/actions/runs/41327197036)
+(job 124909546925, workflow_dispatch by barbalatv, run_attempt 1,
+completed/failure on 2026-11-01). It is **not** the original ZIPs, not raw
+private receipts, not a reconstructed candidate and not a new verification.
+This viewer changes nothing in `research/mmp-104/**` and performs no artifact
+download, rerun, dispatch, inference or paid request.
+
+Committed summary identity: 4785 bytes, SHA-256
+`93729a0e6c2339835247d226ba5067de2c02b0e9b8014a6aa092869b7025392a`
+(`incident-pins.mjs`, which also restates the eight pinned member identities
+listed inside the summary). Served from one fixed allowlisted route
+`/evidence/mmp-104/incident.json` targeting exactly `../mmp-104/incident.json`;
+unknown paths, traversal, queries and directory access fail 404.
+
+Adapter policy (`incident-adapter.mjs`): exact byte size and SHA-256 are checked
+**before** parsing; the bounded strict parser from `adapter.mjs` then rejects
+duplicate keys, prototype keys, unsafe numbers, invalid UTF-8 and secret-like
+field names (the producer fact-field name `privateOperationPacks` is allowlisted
+for this path only; its value is the status "UNAVAILABLE", not a credential).
+After parsing, exact key sets and exact expected values bind every displayed
+fact: run/job/head/source/archive/context/manifest/request/candidate identities,
+the eight member identities, generation PASS (muse-spark-1.3, one POST, HTTP 200,
+1 confirmed response, tokens 5985/9870, estimate USD 0.04942875,
+`chargedCostUsd=null`), aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN with only
+`workshop-business:typecheck` + `workshop-business:build` executed, G2/G3 ERROR /
+VERIFIER_ERROR with executed IDs `[]` and `["workshop-business:initial"]`,
+coverage 0/17 + 1/20, first pair workshop-business G1 PASS /
+DIAGNOSTIC_UNAVAILABLE, cleanup VERIFIED_ZERO_RESOURCES and finalizer PASS 0/0/0,
+preservation NOT_APPLICABLE / upload NOT_RUN, attempt ledger UNKNOWN with
+`chargedCostUsd=null`, product NOT_ESTABLISHED, `historicalRootCause=UNKNOWN`,
+`historicalCandidateSource=UNAVAILABLE`, `privateOperationPacks=UNAVAILABLE`,
+`stageClassification=NOT_RECORDED`.
+
+Trust limits: a matching hash establishes **identity of the derived allowlisted
+summary only**. It is not cryptographic verification of the original ZIPs (whose
+GitHub artifacts expire 2026-11-08), not authentication of any third-party file,
+not independent executor attestation and not new execution of code. The hash of
+the generated candidate (`1120249e…`) refers to content whose source files are
+UNAVAILABLE — it cannot be inspected and is not equal to available sources. Zero
+completed HTTP comparisons does not establish that no HTTP request reached either
+service. D's aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN is distinct from C's G1
+FAIL / BUILD_FAILED; run, job, head, candidate, cost, receipts and events are
+never mixed across B, C and D. Track D claims no production stage telemetry:
+`stageClassification=NOT_RECORDED` in this historical run; production telemetry
+was added later. No ORACLE_PASS, VERIFIED_REAL_CANDIDATE or product PASS is
+displayed for D. A future incident summary (different run) must never reuse
+these pins; it requires a separate reviewed content/adapter update.
