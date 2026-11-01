@@ -550,6 +550,31 @@ test("no Oracle source access before a genuine stored-checkpoint capability", as
   );
   assert.equal(touched, 0);
 });
+test("actual known credential value echo is rejected without serializing or forwarding it", async (t) => {
+  const dir = temp(t),
+    f = await offlinePaid(t, dir),
+    session = createSourceSession(dir),
+    signal = new AbortController().signal;
+  await session.writer.write(
+    f.capsule.files.map(({ path, content }) => ({
+      path,
+      content: `${content}\n// ${f.values.MODEL_API_KEY}`,
+    })),
+    signal,
+  );
+  const lease = await session.acquire(session.writer.root, signal);
+  await assert.rejects(
+    capsuleFromLease(
+      beginCustody(f.context, f.authorization),
+      lease,
+      boundReceipt(f, lease),
+    ),
+    { message: "CUSTODY_REJECTED" },
+  );
+  assert.equal(fs.existsSync(join(dir, "mmp115-custody")), false);
+  assert.equal(f.calls.length, 0);
+  await lease.release();
+});
 test("real read-time source mutation is rejected before collector handoff", async (t) => {
   const dir = temp(t),
     f = await offlinePaid(t, dir),

@@ -38,9 +38,10 @@ Plan/tasks: implement identity+lease capture → private atomic ciphertext → i
 checkpoint → authenticated readback/one-use Oracle permit → real test-key age/restore
 acceptance → negatives and frozen checks → exact-head CI and independent review.
 Current implementation/check evidence is recorded in the PR as it arrives.
-**Offline synthetic readiness: NO_GO until real Linux age/restore controls and required
-checks pass. Production/paid readiness: NO_GO until independent exact-head security review
-and a separately authorized live synthetic transport proof.** No new paid proposal is
+**Offline crypto/capture/cleanup controls: PASS** (see validation.md and recorded real
+Linux evidence). **End-to-end durable custody and production/paid readiness: NO_GO until
+independent exact-head security review and a separately authorized live synthetic transport
+proof.** No new paid proposal is
 issued before production acceptance. Historical source UNAVAILABLE, cause UNKNOWN,
 PRODUCT_NOT_ESTABLISHED. The response-to-durable-ack loss window remains accepted risk.
 
@@ -52,8 +53,14 @@ retain a local controlled copy, and run:
 node packages/agent-real/src/custody-restore.mjs /qualified/age /owner/private-identity /owner/candidate.age /owner/stored.json
 ```
 
-The executable checks binary/permissions/links, decrypts into bounded memory, validates
+Prepare a new owner-only directory (0700), install owned copies of both qualified pinned
+`age` and `age-keygen` there, and set the identity/ciphertext/receipt files to 0600.
+The executable checks both binary pins/permissions/links and derives the identity's public
+recipient with qualified age-keygen, requiring the production fixed recipient. It decrypts
+into bounded memory and validates
 the exact capsule identity/license/manifest and canonical original source digest, and emits
 only a structural MATCH/UNVERIFIED receipt. No plaintext file or fallback is written. The
 private key stays on that owner's machine. Only generated ephemeral TEST identities may
 be used by this task's offline exercise; a test restore is not owner-key possession proof.
+The module-only testRecipient parameter is for trusted generated-key controls; the CLI
+has no recipient override and never reads one from a capsule or environment.

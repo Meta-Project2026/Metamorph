@@ -227,6 +227,21 @@ export async function capsuleFromLease(token, lease, receipt) {
   requireCustody(a && !a.used && isSourceLease(lease));
   a.used = true;
   await lease.assertUnchanged();
+  // Known credential echo is checked only in the trusted generation adapter.
+  // Values never enter the capsule, collector, model context or public error.
+  const secrets = [
+    "MODEL_API_KEY",
+    "GH_TOKEN",
+    "ACTIONS_ID_TOKEN_REQUEST_TOKEN",
+    "ACTIONS_RUNTIME_TOKEN",
+  ]
+    .map((name) => process.env[name])
+    .filter((value) => typeof value === "string" && value.length >= 16);
+  requireCustody(
+    lease.bundle.files.every((file) =>
+      secrets.every((secret) => !file.content.includes(secret)),
+    ),
+  );
   const sourceRoot = sourceLeaseRoot(lease),
     before = lstatSync(sourceRoot);
   requireCustody(
