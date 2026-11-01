@@ -149,6 +149,43 @@ The tests run in Fast CI (`node --test research/mmp-108/*.test.mjs`, one new
 CI step registered in `research/mmp-069/coverage-matrix.json` and the pinned
 CI step list).
 
+## Review round 2 corrections (B4–B6)
+
+After the first re-review confirmed B1/B3 fixed and B2 improved, three
+further research-harness blockers were corrected:
+
+1. **B4 — fresh image build and correct entrypoint restored.** The Dockerfile
+   again explicitly names the entrypoint
+   (`COPY run-inner.sh /usr/local/bin/mmp108-run` plus the guard), and
+   `run-host.sh` builds the exact image first under a run-scoped tag
+   (`metamorph-mmp108-harness:<RUN_ID>`) and executes that tag — a stale
+   cached image can never run, and fresh hosts always build. A build-only
+   local smoke verified the fixed image builds and both entrypoints exist
+   (recorded in validation.md; no migration replay). Static wiring tests
+   assert the COPY/chmod lines, build-before-provision ordering and that the
+   primary run executes the built tag with Git-Bash path conversion intact.
+2. **B5 — guaranteed owned-volume cleanup on every exit path.** An EXIT trap
+   removes only the volumes this run created (owner label re-verified by
+   volume-guard.sh) — including failures before any receipt exists, partial
+   volume-create failures and build failures. Removal errors are reported
+   (`MMP108_CLEANUP_FAILURE`) and turn a successful run nonzero without
+   masking an already-failing status. Receipt copying is conditional on a
+   successful harness run and uses `docker create/cp` (no host-path bind
+   conversion).
+3. **B6 — no overwriting or mixing of runs' evidence.** Receipts land in a
+   run-scoped directory `evidence/local-<shorthash>-<RUN_ID>` that is
+   refused if it already exists; the historical `local-f9a7b44` receipts are
+   untouched. The reworked host script itself has NOT been exercised
+   end-to-end against a real engine and no such claim is made — its
+   lifecycle is covered by mocked-docker controls (successful run, driver
+   failure with no receipt copy, partial create, foreign volume, build
+   failure).
+
+The negative-control suite now counts 16 tests (driver receipt-integrity,
+CLI-mode integrity, volume ownership, harness wiring and run-host lifecycle
+scenarios), all CI-gated via the existing
+`node --test research/mmp-108/*.test.mjs` step.
+
 ## NOT_RUN
 
 - Hosted-runner (GitHub) real Docker replay and any `workflow_dispatch` —

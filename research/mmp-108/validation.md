@@ -61,6 +61,27 @@ volume-guard stub initially ignored its `existing`/`labels` parameters
 (hardcoded behavior); it is now genuinely parameterized, and the tests still
 pass with the real guard logic.
 
+## Re-review round 2 checks (B4–B6, post-review head)
+
+| Command (post-review head)                                                                                                          | Result                                                                                                                                                                                                                                                                                                                                    |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node --test research/mmp-108/*.test.mjs` (after `pnpm build`)                                                                      | exit 0 — 16/16 PASS: 9 receipt/mode/ownership controls + 7 new harness wiring and lifecycle controls                                                                                                                                                                                                                                      |
+| `docker build -f research/mmp-108/harness/Dockerfile -t metamorph-mmp108-harness:smoke research/mmp-108/harness` (build-only smoke) | exit 0; `docker run --rm --entrypoint sh … -c 'test -x /usr/local/bin/mmp108-run && test -x /usr/local/bin/volume-guard.sh'` printed `ENTRYPOINTS-OK`; smoke image removed. No migration replay                                                                                                                                           |
+| harness wiring static assertions                                                                                                    | entrypoint COPY lines, chmod coverage, build-before-provision ordering, primary run uses the built run-scoped tag, Git-Bash conversion preserved on the primary run                                                                                                                                                                       |
+| mocked-docker run-host lifecycle scenarios (stateful stub, no real daemon)                                                          | successful run → receipts copied to the unique `local-<sha>-<RUN_ID>` dir, all three owned volumes removed; driver failure → no receipt copy, no evidence dir, volumes still removed; partial create → only the created volume removed; foreign preexisting volume → run refused, nothing removed; build failure → no provisioning at all |
+| `pnpm lint` (root `biome check .`)                                                                                                  | exit 0                                                                                                                                                                                                                                                                                                                                    |
+| `node research/mmp-069/validate.mjs` / `check-syntax.mjs`                                                                           | VALID / PASS 85 modules                                                                                                                                                                                                                                                                                                                   |
+| `sh -n` on all three harness scripts                                                                                                | exit 0                                                                                                                                                                                                                                                                                                                                    |
+
+Two test-side defects were caught locally and fixed before push: the harness
+wiring tests initially never invoked their docker stub (the real engine was
+contacted for one build attempt — no harness state was created or harmed) and
+one receipt-copy assertion used a wrong path pattern. The reworked
+`run-host.sh` has NOT been executed end-to-end against a real engine; its
+lifecycle evidence comes from the mocked-docker controls above, and the
+recorded real-Docker evidence stays pinned to execution head
+`f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c`.
+
 ## NOT_RUN
 
 Root `pnpm lint/typecheck/test/build` were not executed on the host for this
