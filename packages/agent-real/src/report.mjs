@@ -1,9 +1,60 @@
 import { VerificationReportSchema } from "@metamorph/agent";
 import { GateResultSchema } from "@metamorph/contracts";
-import { MANIFEST, SOURCE } from "@metamorph/oracle";
+import {
+  isFailureTelemetryContext,
+  MANIFEST,
+  projectFailureTelemetry,
+  SOURCE,
+  unavailableFailureTelemetry,
+} from "@metamorph/oracle";
 import { POLICY } from "../../target-worker/src/controller.mjs";
 import { publicCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import { check } from "./source.mjs";
+
+// Only the trusted runtime registers pair contexts. JSON serialization cannot
+// reconstruct this association; a worker field never creates a publication right.
+const pairTelemetryContexts = new WeakMap();
+export function bindPairFailureTelemetry(pair, context) {
+  pairTelemetryContexts.set(pair, context);
+  return pair;
+}
+function publicPairFailureTelemetry(pair, attempt, scenarioIndex) {
+  if (!pairTelemetryContexts.has(pair)) return {};
+  const context = pairTelemetryContexts.get(pair);
+  try {
+    if (
+      isFailureTelemetryContext(context) &&
+      (context.binding.sourceSha !== SOURCE.commit ||
+        context.binding.candidateSha !== attempt.candidateSha ||
+        context.binding.attemptId !== attempt.attemptId ||
+        context.binding.pairId !== pair.pairId ||
+        context.binding.headSha !==
+          Object.getOwnPropertyDescriptor(pair, "headSha")?.value ||
+        context.scenarioIndex !== scenarioIndex)
+    )
+      return {
+        failureTelemetry: unavailableFailureTelemetry(
+          context,
+          "FOREIGN_BINDING",
+        ),
+      };
+    const descriptor = Object.getOwnPropertyDescriptor(
+      pair,
+      "failureTelemetry",
+    );
+    if (descriptor && !Object.hasOwn(descriptor, "value"))
+      return {
+        failureTelemetry: unavailableFailureTelemetry(context, "MALFORMED"),
+      };
+    return {
+      failureTelemetry: projectFailureTelemetry(descriptor?.value, context),
+    };
+  } catch {
+    return {
+      failureTelemetry: unavailableFailureTelemetry(context, "INTERNAL_ERROR"),
+    };
+  }
+}
 
 export const CODES = new Set([
   "DB_SCHEMA",
@@ -332,7 +383,7 @@ export function publicAttempt(attempt) {
       requiredHttp: 17,
       requiredSqlite: 20,
     },
-    pairs: attempt.pairs.map((p) => ({
+    pairs: attempt.pairs.map((p, i) => ({
       scenarioId: p.scenarioId,
       pairId: p.pairId,
       packs: p.packs.map((pack) => ({ id: pack.id, sha256: pack.sha256 })),
@@ -347,6 +398,7 @@ export function publicAttempt(attempt) {
             g1Verdict: p.build.verdict,
           })
         : null,
+      ...publicPairFailureTelemetry(p, attempt, i),
       gates:
         p.gates?.map((g) => ({
           gate: g.gate,

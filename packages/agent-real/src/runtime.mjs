@@ -8,14 +8,17 @@ import {
 } from "node:fs";
 import { basename, join, relative } from "node:path";
 import {
+  createFailureTelemetry,
   DockerReferenceTransport,
   dockerCommand,
+  finishFailureTelemetry,
   MANIFEST,
   MANIFEST_SHA256,
   PhpReferenceWorker,
   PrivateEvidence,
   provisionRuntime,
   SOURCE,
+  unavailableFailureTelemetry,
   verifyPair,
 } from "@metamorph/oracle";
 import { validateTargetClock } from "../../differential/src/clock.mjs";
@@ -34,7 +37,12 @@ import {
 import { buildTrustedRuntime } from "../../target-worker/src/runtime-broker.mjs";
 import { completedRetentionReceipt } from "./candidate-retention.mjs";
 import { summarizeCompilerDiagnostics } from "./compiler-diagnostics.mjs";
-import { aggregateAttempt, safeCode, validatePublication } from "./report.mjs";
+import {
+  aggregateAttempt,
+  bindPairFailureTelemetry,
+  safeCode,
+  validatePublication,
+} from "./report.mjs";
 import { check, isSourceSession } from "./source.mjs";
 
 export const MANIFEST_PIN =
@@ -43,6 +51,7 @@ export const RECIPE_PIN =
   "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3";
 const readyEnvironments = new WeakSet();
 const compilerDiagnostics = new WeakMap();
+const environmentTelemetry = new WeakMap();
 const frozenSource = JSON.stringify(SOURCE);
 const digest = (path) => sha256(readFileSync(path));
 
@@ -186,6 +195,16 @@ export function createEnvironment(root, parent, headSha) {
       };
     },
   };
+  // Trusted host metadata only; missing/mismatched CI identity disables telemetry
+  // without changing environment admission, cleanup or any gate.
+  environmentTelemetry.set(
+    context,
+    Object.freeze({
+      runId:
+        process.env.GITHUB_SHA === headSha ? process.env.GITHUB_RUN_ID : null,
+      headSha,
+    }),
+  );
   return context;
 }
 
@@ -309,6 +328,20 @@ async function runPair(context, lease, attemptId, scenario, signal) {
     candidateSha: bundle.candidateSha,
     scenarioId: scenario.id,
   };
+  const telemetryContext = createFailureTelemetry(
+    {
+      runId: environmentTelemetry.get(context)?.runId,
+      headSha: environmentTelemetry.get(context)?.headSha,
+      sourceSha: SOURCE.commit,
+      candidateSha: bundle.candidateSha,
+      attemptId,
+      pairId,
+    },
+    MANIFEST.indexOf(scenario),
+  );
+  let failureTelemetry,
+    oracleCompleted = false,
+    publicationCompleted = false;
   const bridge = context.pack(pairRoot, identity);
   const phpPack = context.pack(pairRoot, identity);
   const oracleParent = join(pairRoot, "oracle-raw");
@@ -360,16 +393,25 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       scenarios: [scenario],
       artifactParent: oracleParent,
       operationTimeoutMs: 30000,
+      failureTelemetry: telemetryContext,
     });
+    oracleCompleted = true;
+    failureTelemetry = result.failureTelemetry;
     const retained = retainOracle(result, oracleParent, bridge);
     gates = validatePublication(
       retained,
       scenario,
       basename(result.evidenceDirectory),
     );
+    publicationCompleted = true;
     signal.throwIfAborted();
     validateTargetBudget(worker);
   } catch (error) {
+    if (oracleCompleted && !publicationCompleted)
+      failureTelemetry = unavailableFailureTelemetry(
+        telemetryContext,
+        "PUBLICATION_FAILED",
+      );
     failure = signal.aborted ? "CANCELLED" : safeCode(error);
     record("failure", {
       code: failure,
@@ -434,15 +476,20 @@ async function runPair(context, lease, attemptId, scenario, signal) {
   }
   // Build failures are observed candidate FAIL, while orchestration faults are ERROR.
   if (failure === "BUILD_FAILED" && build?.verdict === "FAIL") failure = null;
-  return {
-    ...identity,
-    gates,
-    build,
-    compilerDiagnostics: diagnostics,
-    cleanup,
-    errorCode: failure,
-    packs: [context.seal(phpPack), context.seal(bridge)],
-  };
+  return bindPairFailureTelemetry(
+    {
+      ...identity,
+      gates,
+      build,
+      compilerDiagnostics: diagnostics,
+      cleanup,
+      errorCode: failure,
+      packs: [context.seal(phpPack), context.seal(bridge)],
+      failureTelemetry:
+        failureTelemetry ?? finishFailureTelemetry(telemetryContext),
+    },
+    telemetryContext,
+  );
 }
 
 /** No synthetic runtime seam. External verdicts can only use a prepared context. */
