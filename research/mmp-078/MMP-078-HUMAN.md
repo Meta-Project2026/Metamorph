@@ -17,19 +17,25 @@ on main before it can be dispatched. #61 remains open until genuine public model
 trial evidence exists. Merging is not a paid dispatch.
 
 Recheck published Meta rates and the exact main SHA before a paid run. At most
-one bounded attempt; **$1.00 is a pre-send projection allowance, not a hard dollar
-cap or settled charge. Timeout/crash/429 may have been billed. No retry/rerun.**
+one bounded attempt; **the budget selector is a pre-send projection allowance,
+not a hard dollar cap or settled charge. Timeout/crash/429 may have been billed.
+No retry/rerun.**
 Two owners can independently dispatch different runs, including concurrently.
 Each command below authorizes that owner's one run; do not run it for testing:
 
 ```powershell
 $paidMainSha = gh api repos/Meta-Project2026/Metamorph/commits/main --jq .sha
-gh workflow run meta-paid-migration.yml --repo Meta-Project2026/Metamorph --ref main -f "reviewed_sha=$paidMainSha" -f confirm_paid=I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP -f max_estimated_usd=1.00 -f model_provider=meta
+gh workflow run meta-paid-migration.yml --repo Meta-Project2026/Metamorph --ref main -f "reviewed_sha=$paidMainSha" -f confirm_paid=I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP -f max_estimated_usd=0.25 -f model_provider=meta
 ```
 
 The owner must independently inspect/review that SHA, not blindly accept a changed
-main returned by the example. Use max_estimated_usd=0.25 to lower the allowance for
-the current projected $0.220377 input; 0.10/0.20 intentionally block before send.
+main returned by the example. Leaving `max_estimated_usd` untouched now selects the
+fail-closed default **0.10**, which intentionally blocks the frozen conservative
+projection ($0.224402 at `07568d576565c2b83254655585ed869b270befd3`) before any
+send; 0.25 or higher must be chosen explicitly and still never bounds the actual
+provider response, timeout or bill. The historical $1.00 selection on run
+#41327197036 predates this default and its receipts are not rewritten. Any
+workflow change on `main` supersedes older exact-main authorization cards.
 Run identity and SHA checks must pass. Only inspect the sanitized public artifact;
 do not upload candidate/raw response/private runner files. An UNKNOWN/missing
 receipt requires billing inspection, not rerunning the workflow.
@@ -47,5 +53,8 @@ Nonbillable real-runner admission verification after merge: use the same exact
 reviewed main SHA/inputs above **with `-f validate_only=true`**. This explicitly
 skips the secret-mapped network step and candidate/Docker validation; it checks
 real GitHub OIDC/metadata and publishes authorization.json, Meta GET/POST=0/0.
-The production default is validate_only=false. A validation run issues but never
-consumes the opaque capability and cannot be rerun as a paid attempt (reruns block).
+Validation enforces the same budget gate: with the untouched 0.10 default it
+records `BLOCKED`/`ESTIMATED_BUDGET_BLOCKED` and exits 1, so validation needs the
+same explicit selection as a paid run. The production default is
+validate_only=false. A validation run issues but never consumes the opaque
+capability and cannot be rerun as a paid attempt (reruns block).
