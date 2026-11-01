@@ -36,8 +36,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'MMP115_SOURCE_BUNDLE_FAILED' }
   foreach ($kind in @('work','private','output')) {
     $name = "mmp115-$kind-$runId"
-    & docker volume inspect $name 2>$null | Out-Null
-    if ($LASTEXITCODE -eq 0) { throw 'MMP115_PREEXISTING_VOLUME_REJECTED' }
+    $existing = Check-Docker -Arguments @('volume','ls','--quiet','--filter',"name=^$name$")
+    if ($existing) { throw 'MMP115_PREEXISTING_VOLUME_REJECTED' }
     Check-Docker -Arguments @('volume','create','--label',"metamorph.mmp115.run=$runId",$name) | Out-Null
     $createdVolumes += $name
     Check-OwnedVolume $name | Out-Null
@@ -48,7 +48,7 @@ try {
   $program = @'
 set -eu
 umask 077
-test ! -e /usr/bin/docker && ln -s /usr/local/bin/docker /usr/bin/docker
+if [ ! -e /usr/bin/docker ]; then ln -s /usr/local/bin/docker /usr/bin/docker; fi
 mkdir -p "$MMP115_PRIVATE/tools" "$MMP115_OUTPUT"
 (umask 022; git clone --quiet /task.bundle "$MMP115_WORK/repo")
 cd "$MMP115_WORK/repo"
@@ -58,10 +58,15 @@ pnpm build >"$MMP115_PRIVATE/build.log" 2>&1
 RUNNER_TEMP="$MMP115_PRIVATE/tools" node research/mmp-089/install-age.mjs >"$MMP115_PRIVATE/tools.log" 2>&1
 node research/mmp-115/run-offline.mjs
 '@
+  $program = $program.Replace("`r`n", "`n")
   $started = $true
   & docker run --name $container --label "metamorph.mmp115.run=$runId" --cpus 2 --memory 1536m --pids-limit 256 --mount "type=bind,src=$bundle,dst=/task.bundle,readonly" --mount "type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock" --mount "type=volume,src=mmp115-work-$runId,dst=$work" --mount "type=volume,src=mmp115-private-$runId,dst=$private" --mount "type=volume,src=mmp115-output-$runId,dst=$output" -e "MMP115_WORK=$work" -e "MMP115_PRIVATE=$private" -e "MMP115_OUTPUT=$output" -e "MMP115_HEAD=$head" $image /bin/sh -c $program
   $result = $LASTEXITCODE
   New-Item -ItemType Directory -Force -Path $receipts | Out-Null
+  if ($result -ne 0) {
+    & docker cp "${container}:$private/age-tests.log" (Join-Path $receipts 'private-synthetic-tests.log') 2>$null
+    & docker cp "${container}:$private/tools.log" (Join-Path $receipts 'private-tool-preparation.log') 2>$null
+  }
   & docker cp "${container}:$output/summary.json" (Join-Path $receipts 'summary.json')
   if ($LASTEXITCODE -ne 0) { throw 'MMP115_SUMMARY_UNAVAILABLE' }
   Write-Output "MMP115_SUMMARY=$receipts/summary.json"
