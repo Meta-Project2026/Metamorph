@@ -1,0 +1,169 @@
+{
+  "format": "mmp104-public-incident-v1",
+  "runId": "41327197036",
+  "jobId": "124909546925",
+  "headSha": "d199510fd802693d4af852bd5ed8498b5461d185",
+  "artifactIds": {
+    "public": "13091408776",
+    "policy": "13091647657"
+  },
+  "files": [
+    {
+      "name": "public.zip",
+      "bytes": 4884,
+      "sha256": "c97b875427c2acd80d921b6cfab213fb8f29d590c113dbd7f797b8c7b3c4ec3a"
+    },
+    {
+      "name": "policy.zip",
+      "bytes": 250,
+      "sha256": "020530465e345aa7f750d8c7657ea5fd6bd0f40835a8117354fc40351884a006"
+    },
+    {
+      "name": "generation.json",
+      "bytes": 2152,
+      "sha256": "9b61d8a35307a309ac2c62f7a4b1f10979c721f4492ee064c52b5a81c8befc97"
+    },
+    {
+      "name": "trial.json",
+      "bytes": 8493,
+      "sha256": "715e6bb68af4db48d7ca64c8a347a1dc4f188523699d1fa3c5a33ec828a5c4ff"
+    },
+    {
+      "name": "finalizer.json",
+      "bytes": 165,
+      "sha256": "56ca31959920fe9ff87a31b38b7d8221fd5084bd32e1321245e0ad338ed897b1"
+    },
+    {
+      "name": "preservation.json",
+      "bytes": 451,
+      "sha256": "c0cbf38399434ad3bd90e57ece211572a850ff5a322aaf6b01073cedef222658"
+    },
+    {
+      "name": "mmp078-41327197036-attempt.json",
+      "bytes": 765,
+      "sha256": "7e337639cdc19afb7cb179224a785044cfcaa5287ca0c5f050690ae80eb3c05f"
+    },
+    {
+      "name": "policy.json",
+      "bytes": 137,
+      "sha256": "3adfaf34b2fdcc96a5c7aaf40ec63cab5d67369ed1854c6aa068efd7e8b6bd23"
+    }
+  ],
+  "candidateSha256": "1120249ee45c0aa3efe73d57d01e813d522a9c2252fcd3e2d984a4000b9d9d2d",
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "contextSha256": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "requestSha256": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+  "generation": {
+    "status": "PASS",
+    "generationKind": "REAL_INFERENCE",
+    "modelId": "muse-spark-1.3",
+    "attemptedRequests": 1,
+    "confirmedResponseCount": 1,
+    "httpStatus": 200,
+    "networkSend": "RESPONSE_RECEIVED",
+    "inputTokens": 5985,
+    "outputTokens": 9870,
+    "cachedInputTokens": 0,
+    "estimatedCostUsd": 0.04942875,
+    "chargedCostUsd": null
+  },
+  "gates": [
+    {
+      "gate": "G0",
+      "verdict": "INCONCLUSIVE",
+      "executedTestIds": [],
+      "findingCodes": ["G0_NOT_ESTABLISHED"]
+    },
+    {
+      "gate": "G1",
+      "verdict": "INCONCLUSIVE",
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "findingCodes": ["BUILD_NOT_RUN"]
+    },
+    {
+      "gate": "G2",
+      "verdict": "ERROR",
+      "executedTestIds": [],
+      "findingCodes": ["VERIFIER_ERROR"]
+    },
+    {
+      "gate": "G3",
+      "verdict": "ERROR",
+      "executedTestIds": ["workshop-business:initial"],
+      "findingCodes": ["VERIFIER_ERROR"]
+    },
+    {
+      "gate": "G4",
+      "verdict": "INCONCLUSIVE",
+      "executedTestIds": [
+        "workshop-business:http-positive",
+        "workshop-business:http-key-order",
+        "workshop-business:http-status-mutant",
+        "workshop-business:http-type-mutant",
+        "workshop-business:http-missing-mutant",
+        "workshop-business:http-order-mutant",
+        "workshop-business:db-positive",
+        "workshop-business:db-row-mutant",
+        "workshop-business:db-sequence-mutant"
+      ],
+      "findingCodes": ["HELD_OUT_NOT_RUN"]
+    }
+  ],
+  "coverage": {
+    "http": 0,
+    "sqlite": 1,
+    "requiredHttp": 17,
+    "requiredSqlite": 20
+  },
+  "firstPair": {
+    "scenarioId": "workshop-business",
+    "g1Verdict": "PASS",
+    "diagnosticStatus": "DIAGNOSTIC_UNAVAILABLE",
+    "cleanup": "VERIFIED_ZERO_RESOURCES"
+  },
+  "cleanup": {
+    "status": "VERIFIED_ZERO_RESOURCES",
+    "containers": 0,
+    "volumes": 0,
+    "emergencyRemoved": 0
+  },
+  "finalizer": {
+    "status": "PASS",
+    "containers": 0,
+    "volumes": 0,
+    "emergencyRemoved": 0
+  },
+  "preservation": {
+    "status": "NOT_APPLICABLE",
+    "identity": null,
+    "ciphertextSha256": null,
+    "ciphertextBytes": null,
+    "upload": "NOT_RUN"
+  },
+  "policy": {
+    "status": "VERIFIED",
+    "main": "d199510fd802693d4af852bd5ed8498b5461d185",
+    "reviewers": 0,
+    "waitTimer": 0,
+    "branch": "main"
+  },
+  "attemptLedger": {
+    "actor": "barbalatv",
+    "runId": "41327197036",
+    "status": "UNKNOWN",
+    "attemptedRequests": 1,
+    "chargedCostUsd": null
+  },
+  "product": "NOT_ESTABLISHED",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "historicalRootCause": "UNKNOWN",
+  "historicalCandidateSource": "UNAVAILABLE",
+  "privateOperationPacks": "UNAVAILABLE",
+  "stageClassification": "NOT_RECORDED"
+}

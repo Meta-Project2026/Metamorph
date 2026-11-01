@@ -1,0 +1,92 @@
+{
+  "format": "mmp104-local-checks-v1",
+  "baseSha": "d199510fd802693d4af852bd5ed8498b5461d185",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "checks": [
+    {
+      "name": "lint",
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:01:51.2793334Z",
+      "elapsedSeconds": 1.1184207,
+      "logSha256": "a3d27e40b16c572f155c630b8f684ec998cc32c0f28040ba5fe73da284efd8fe"
+    },
+    {
+      "name": "research-lint",
+      "command": "pnpm exec biome check research/mmp-104",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:01:52.4348603Z",
+      "elapsedSeconds": 0.7422176,
+      "logSha256": "5f2c057258bcc02f0a1ad41585730c5d2f59888ca589ab4091441fc4ed92723c"
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:01:53.1792546Z",
+      "elapsedSeconds": 34.1967057,
+      "logSha256": "b06aacc4464111fd385a7416b0dcc86c587b298b2194127515c374ebb92db448"
+    },
+    {
+      "name": "test",
+      "command": "pnpm test",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:02:27.3778156Z",
+      "elapsedSeconds": 27.983648,
+      "logSha256": "4a21da76025d3d2059443c571d3781c02e3b2b8a2710ec32ad47f8aa6d4350ac"
+    },
+    {
+      "name": "build",
+      "command": "pnpm build",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:02:55.3627773Z",
+      "elapsedSeconds": 17.6368727,
+      "logSha256": "8d691b8929c4e83a360c1a129dedab630ebf4942e1c1dfe03f080925b284d82c"
+    },
+    {
+      "name": "syntax",
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:03:13.0018278Z",
+      "elapsedSeconds": 4.37204,
+      "logSha256": "8bfd3ec8428e0673b756e2c3f4831754a459cf62670c635f99ab9733117dc3b5"
+    },
+    {
+      "name": "coverage",
+      "command": "node research/mmp-069/validate.mjs",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:03:17.3750194Z",
+      "elapsedSeconds": 0.2206367,
+      "logSha256": "64e09f40402cd9d41ffcf49005e91711b6425dab2597f5d2a0378499371d3f42"
+    },
+    {
+      "name": "coverage-controls",
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "exitCode": 0,
+      "startedAt": "2026-11-01T17:03:17.5970125Z",
+      "elapsedSeconds": 16.7447072,
+      "logSha256": "3ba58245b8e79c1c0cd15fc15edda5306727ee419bd8ac43e228624ac3d2c905"
+    }
+  ],
+  "rootTests": {
+    "total": 552,
+    "pass": 448,
+    "fail": 0,
+    "skip": 104,
+    "platform": "win32"
+  },
+  "targeted": {
+    "total": 20,
+    "pass": 19,
+    "fail": 0,
+    "skip": 1,
+    "linuxPreserverCli": "NOT_RUN_ON_WINDOWS"
+  },
+  "historicalCandidate": "NOT_EXECUTED",
+  "newDocker": "NOT_RUN",
+  "modelRequests": 0,
+  "workflowDispatches": 0,
+  "privateKeyAccess": "NOT_RUN",
+  "liveCiphertextUpload": "NOT_RUN"
+}
