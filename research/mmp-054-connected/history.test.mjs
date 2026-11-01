@@ -16,6 +16,9 @@ test("real depth-one clone lacks history; bounded exact-object bootstrap restore
       "git",
       [
         "clone",
+        // Disposable clone: background maintenance can race its final removal.
+        "--config=maintenance.auto=false",
+        "--config=gc.auto=0",
         "--depth=1",
         "--no-local",
         "--no-checkout",
@@ -24,6 +27,16 @@ test("real depth-one clone lacks history; bounded exact-object bootstrap restore
       ],
       { timeout: 60000, stdio: "pipe", windowsHide: true },
     );
+    for (const [name, expected] of [
+      ["maintenance.auto", "false"],
+      ["gc.auto", "0"],
+    ])
+      assert.equal(
+        execFileSync("git", ["config", "--get", name], { cwd: checkout })
+          .toString()
+          .trim(),
+        expected,
+      );
     assert.equal(
       execFileSync("git", ["rev-parse", "--is-shallow-repository"], {
         cwd: checkout,

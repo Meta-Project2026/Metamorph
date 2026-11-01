@@ -46,3 +46,29 @@ are mock close acknowledgements, not a fresh Docker0/0/0 inventory observation.
 OSS/provenance: original forensic code and synthetic schema/adapters; reused
 repository Oracle/report/retention and existing synthetic receipt builders.
 No dependency, upstream source, fixture pin or license notice was changed.
+
+## Initial hosted CI and a separate test-fixture correction
+
+[Fast CI41330032577](https://github.com/Meta-Project2026/Metamorph/actions/runs/41330032577)
+covered PR head2dd2da89fffccf48e97441ee3b3c0ba07e8ce289, merge checkout
+7cf81fc256c1d12a78614172a9dd90da94d41ba7 into main d199510f.
+Node24 job124917991792 succeeded. Node22 job124917991962 passed the entire root
+suite, including all20MMP104 tests and the real Linux preserver CLI, then failed
+the existing shallow-history test during temporary checkout removal: ENOTEMPTY
+inside the temporary .git directory. Both root suites had552total/549PASS/3SKIP/0FAIL.
+This CI cleanup failure is separate from the historical paid-v2 verifier incident.
+
+Git documents [automatic post-fetch maintenance](https://git-scm.com/docs/git-fetch)
+and its [default background detachment](https://git-scm.com/docs/git-config).
+Background maintenance is a plausible concurrent writer, not an observed process
+identity from the failed run. The correction prevents it in the disposable clone:
+clone-local maintenance.auto=false and gc.auto=0, with assertions verifying both
+settings. [Clone config](https://git-scm.com/docs/git-clone) applies before fetch
+and persists in that temporary clone. No global/root config or history bootstrap
+implementation changed; depth-one, missing-object failure, exact pinned objects,
+bootstrap result and final shallow-state assertions are retained. Cleanup still
+fails on any removal error; no retry, swallowed failure, skip or relaxed hash check.
+
+The corrected history test exited0 locally,2PASS/0FAIL. Final pnpm test on published
+head2dd2da8 also exited0 with552/448PASS/104Windows or permission SKIP/0FAIL.
+The new commit's ordinary PR CI will be observed separately, not manually rerun.
