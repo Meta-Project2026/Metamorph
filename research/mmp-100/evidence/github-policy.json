@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-11-01T15:29:43.037Z",
+  "status": "VERIFIED",
+  "main": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "reviewers": 0,
+  "waitTimer": 0,
+  "branch": "main",
+  "visibility": "public",
+  "branchProtected": true,
+  "credentialValuesRead": false,
+  "oidcIssued": false,
+  "paidWorkflowDispatched": false
+}

@@ -1,0 +1,122 @@
+{
+  "format": "mmp100-allowlisted-request-audit-v1",
+  "auditedMainSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "executedAt": "2026-11-01T15:30:54.787Z",
+  "execution": {
+    "command": "node --import <local-network-deny-file-URL> research/mmp-086/audit-request.mjs <workspace-ignored-audit-file>",
+    "headSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+    "checkedAt": "2026-11-01T15:30:54.787Z",
+    "exitCode": 0,
+    "signal": null,
+    "timedOut": false,
+    "attemptedNetworkCalls": 0,
+    "modelApiKeyInChild": false,
+    "providerConstructed": false,
+    "gitOperation": "local rev-parse HEAD only",
+    "temporaryGuard": "trusted local audit harness; not committed or production code",
+    "initialHarnessAttempt": {
+      "exitCode": 1,
+      "classification": "LOCAL_HARNESS_WINDOWS_IMPORT_PATH",
+      "correctedTo": "file URL before execution; no production code change"
+    }
+  },
+  "requestSha256": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+  "contextSha256": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+  "requestBytes": 22762,
+  "messageBytes": 21209,
+  "userMessageSha256": "60a14a7d0881b3919dd970fdf2f5f976fa1fca20a28ceb0aefccd80f2c0b4b4e",
+  "developerMessageSha256": "d00551edcc052233b4cf4747c17a7b078f5cf5492ca7d93bed963b3d128483e2",
+  "responseSchemaSha256": "46fc42d2a145d3f2098acb2ce1881c05db8df2937c9e4c8c9ebc2b299c46af25",
+  "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "sourceArchiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "manifestPin": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "recomputedManifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "recipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "recomputedGitRecipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "sourceFiles": [
+    {
+      "path": "api.php",
+      "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77",
+      "bytes": 11956
+    },
+    {
+      "path": "config.php",
+      "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd",
+      "bytes": 4331
+    }
+  ],
+  "orderedUnitCount": 11,
+  "routeCount": 5,
+  "model": {
+    "id": "muse-spark-1.3",
+    "mode": "STANDARD",
+    "reasoningEffort": "low",
+    "n": 1,
+    "stream": false,
+    "store": false,
+    "tools": "ABSENT",
+    "externalSearch": "ABSENT",
+    "fallback": "NONE"
+  },
+  "limits": {
+    "maxCompletionTokens": 16384,
+    "maxPromptMessageBytes": 131072,
+    "serializedRequestCheckBytes": 163840,
+    "maxResponseBytes": 2097152,
+    "observedInputTokenCeiling": 65536,
+    "maxCandidateFiles": 64,
+    "maxCandidateFileBytes": 262144,
+    "maxCandidateTotalBytes": 1048576,
+    "requiredEntrypoint": "src/main.ts",
+    "maxRequests": 1,
+    "maxRepairs": 0
+  },
+  "timing": {
+    "requestTimeoutMs": 180000,
+    "sessionTtlMs": 240000,
+    "signedAdmissionTtlMs": 240000,
+    "compilerPhaseTimeoutMs": 12000,
+    "buildCommandTimeoutMs": 35000,
+    "workerLifetimeMs": 180000,
+    "encryptionDeadlineMs": 30000,
+    "workflowGuardMinutes": 2,
+    "workflowGenerationAndVerificationMinutes": 35
+  },
+  "projection": {
+    "method": "serialized-utf8-bytes-times-4-plus-32768-v1",
+    "inputTokensUpperEstimate": 123816,
+    "maxOutputTokens": 16384,
+    "worstCaseEstimatedUsd": 0.224402,
+    "totalInputPlusMaxOutputTokens": 140200,
+    "contextWindowTokens": 1048576,
+    "isExactTokenizerCount": false,
+    "isProviderHardCap": false
+  },
+  "pricing": {
+    "inputPerMillionUsd": 1.25,
+    "cachedInputPerMillionUsd": 0.15,
+    "outputPerMillionUsd": 4.25,
+    "policyVersion": "mmp078-manual-paid-estimate-v1",
+    "tariffSnapshot": "meta-standard-2026-10-29",
+    "tariffExpires": "2026-11-05T00:00:00Z",
+    "currentOfficialTariff": "MATCHES_POLICY_ON_2026-11-01",
+    "source": "https://dev.meta.ai/docs/pricing-rate-limits",
+    "checkedAt": "2026-11-01T15:30:54.787Z"
+  },
+  "workflowInputs": {
+    "reviewed_sha": "PREMERGE_PROVISIONAL: replace with newly merged independently reviewed main SHA",
+    "confirm_paid": "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP",
+    "max_estimated_usd": "0.25",
+    "allowedMaxEstimatedUsd": ["0.10", "0.20", "0.25", "0.50", "0.75", "1.00"],
+    "model_provider": "meta",
+    "validate_only": false,
+    "authorizationGranted": false
+  },
+  "chargedCostUsd": null,
+  "providerRequests": 0,
+  "paidDispatches": 0,
+  "ownerDecrypt": "OWNER_DECRYPT_NOT_VERIFIED",
+  "decision": "NO_GO",
+  "rawPromptSourceProviderResponse": "EXCLUDED"
+}

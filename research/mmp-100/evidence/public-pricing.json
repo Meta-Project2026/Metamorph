@@ -1,0 +1,28 @@
+{
+  "format": "mmp100-public-document-observation-v1",
+  "retrievedOn": "2026-11-01",
+  "primarySource": "https://dev.meta.ai/docs/pricing-rate-limits",
+  "model": "muse-spark-1.3",
+  "mode": "STANDARD",
+  "inputPerMillionUsd": 1.25,
+  "cachedInputPerMillionUsd": 0.15,
+  "outputPerMillionUsd": 4.25,
+  "policyExpires": "2026-11-05T00:00:00Z",
+  "policyNotExpiredAtAudit": true,
+  "comparison": "MATCH",
+  "entitlementOrCredits": "NOT_VERIFIED_NO_PROVIDER_API_QUERY",
+  "reasoningSource": "https://dev.meta.ai/docs/reasoning",
+  "reasoningFacts": {
+    "lowSupported": true,
+    "noneUnsupported": true,
+    "reasoningConsumesOutputBudget": true
+  },
+  "requestParameterSource": "https://dev.meta.ai/docs/protocols/chat-completions",
+  "requestParameterFacts": {
+    "max_completion_tokens": "SUPPORTED",
+    "n": 1,
+    "stream": false
+  },
+  "modeSource": "https://dev.meta.ai/docs/models",
+  "summary": "Public documentation observation only, not an account entitlement, live inference or authorization receipt."
+}

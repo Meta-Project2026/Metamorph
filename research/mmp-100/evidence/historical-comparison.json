@@ -1,0 +1,60 @@
+{
+  "format": "mmp100-recomputed-comparison-v1",
+  "historicalAuditMainSha": "53b4d5a1da99e49a223fa9cafe03ff24b280bf86",
+  "currentAuditedMainSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "comparison": {
+    "requestSha256": {
+      "historical": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+      "current": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+      "equal": true
+    },
+    "contextSha256": {
+      "historical": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+      "current": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+      "equal": true
+    },
+    "sourceSha": {
+      "historical": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "current": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "equal": true
+    },
+    "sourceArchiveSha256": {
+      "historical": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+      "current": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+      "equal": true
+    },
+    "manifestSha256": {
+      "historical": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "current": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "equal": true
+    },
+    "manifestPin": {
+      "historical": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "current": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+      "equal": true
+    },
+    "recipePin": {
+      "historical": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "current": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "equal": true
+    },
+    "requestBytes": {
+      "historical": 22762,
+      "current": 22762,
+      "equal": true
+    },
+    "messageBytes": {
+      "historical": 21209,
+      "current": 21209,
+      "equal": true
+    }
+  },
+  "estimatedUsd": {
+    "historical": 0.224402,
+    "current": 0.224402,
+    "equal": true
+  },
+  "historicalGeneratedCandidate": "afd9f726bcbc2a9dfc2f67128871db307fbd00f2ba4febdc41b5633da98dad8f",
+  "historicalSourceCompilerRecovery": "UNAVAILABLE_ROOT_CAUSE_UNKNOWN",
+  "newInference": "NOT_RUN"
+}

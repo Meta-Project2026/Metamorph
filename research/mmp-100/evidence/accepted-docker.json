@@ -1,0 +1,199 @@
+{
+  "format": "mmp100-accepted-docker-observation-v1",
+  "executionSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+  "currentMainSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "treeIdentity": "git diff --quiet accepted PR98 head current main: exit0",
+  "runId": 41254318570,
+  "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41254318570",
+  "event": "pull_request",
+  "conclusion": "success",
+  "jobId": 124694140348,
+  "jobUrl": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41254318570/job/124694140348",
+  "receiptSha256": "e23602aed91da6540e04fbf0d6b4d737e2b675d68d8682a748cd813b5137d6df",
+  "node": "v24.22.1",
+  "docker": {
+    "version": "28.0.4",
+    "os": "linux",
+    "arch": "amd64"
+  },
+  "pins": {
+    "ageVersion": "v1.3.2",
+    "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+    "archiveSha256": "cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10",
+    "encryptionImage": "node@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3",
+    "recipeSha256": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3"
+  },
+  "positiveCases": [
+    {
+      "id": "http-only-fault",
+      "status": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "throwawayRoundtrip": "PASS",
+      "finalizer": {
+        "headSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+        "status": "PASS",
+        "emergencyRemoved": 0,
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        }
+      }
+    },
+    {
+      "id": "g1-pass-g2-pass-g3-fail",
+      "status": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "PASS",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "throwawayRoundtrip": "PASS",
+      "finalizer": {
+        "headSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+        "status": "PASS",
+        "emergencyRemoved": 0,
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        }
+      }
+    },
+    {
+      "id": "g1-pass-g2-fail-g3-fail",
+      "status": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "FAIL",
+        "G3": "FAIL"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "throwawayRoundtrip": "PASS",
+      "finalizer": {
+        "headSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+        "status": "PASS",
+        "emergencyRemoved": 0,
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        }
+      }
+    },
+    {
+      "id": "g1-pass-g2-pass-g3-pass",
+      "status": "PASS",
+      "gates": {
+        "G1": "PASS",
+        "G2": "PASS",
+        "G3": "PASS"
+      },
+      "coverage": {
+        "http": 17,
+        "sqlite": 20,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "throwawayRoundtrip": "PASS",
+      "finalizer": {
+        "headSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+        "status": "PASS",
+        "emergencyRemoved": 0,
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        }
+      }
+    },
+    {
+      "id": "legacy-g1-build-failed",
+      "status": "PASS",
+      "gates": {
+        "G1": "FAIL",
+        "G2": "INCONCLUSIVE",
+        "G3": "INCONCLUSIVE"
+      },
+      "coverage": {
+        "http": 0,
+        "sqlite": 0,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "preservationStatus": "ENCRYPTED_PENDING_UPLOAD",
+      "throwawayRoundtrip": "PASS",
+      "finalizer": {
+        "headSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+        "status": "PASS",
+        "emergencyRemoved": 0,
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        }
+      }
+    }
+  ],
+  "negativeCounts": {
+    "receiptAndFile": 28,
+    "cryptoFaults": 4,
+    "validatorFaults": 6,
+    "processFinalizer": 8
+  },
+  "negativeStatuses": {
+    "receiptAndFile": "PASS",
+    "crypto": "PASS",
+    "runtime": "PASS",
+    "process": "PASS"
+  },
+  "preparationCleanup": {
+    "status": "VERIFIED_ZERO_RESOURCES",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0
+  },
+  "globalFinalizer": {
+    "exitCode": 0,
+    "status": "PASS",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0
+  },
+  "privateCleanup": "PRIVATE_TEMP_REMOVED_NOT_SECURE_ERASE",
+  "realArtifactUpload": "NOT_RUN",
+  "ownerDecrypt": "NOT_VERIFIED",
+  "newMainExecution": "NOT_RUN",
+  "independentFinalReview": {
+    "id": 5725969979,
+    "url": "https://github.com/Meta-Project2026/Metamorph/pull/98#pullrequestreview-5725969979",
+    "reviewedSha": "195c5297b7d2e8fb303e700b9ab3dbebdf03edda",
+    "decision": "SCOPED_GO / MERGE_ELIGIBLE",
+    "githubState": "COMMENTED",
+    "nativeApprove": false
+  }
+}

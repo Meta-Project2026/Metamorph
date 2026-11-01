@@ -1,0 +1,84 @@
+{
+  "format": "mmp100-local-validation-v1",
+  "checkedOn": "2026-11-01",
+  "auditedCodeMainSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "branch": "codex/mmp-100-offline-readiness",
+  "treeState": "Working-tree documentation/JSON only; runtime identical to audited main",
+  "platform": "Windows x64",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "modelCredentialRemovedFromCheckProcesses": true,
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "logSha256": "5a28edf22933f48ae0a792cb3f010d5901bde39250c93c8a2fbc42ac943427c9"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "logSha256": "1b5120358f0c2a884304cdb6aeebc896d45c580638d4db2b63dec547b56a1f01"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "logSha256": "afc74bdc8b9c5a11f7844ad96dff7b4ec60fc5af95261f7388098dbd45814e06"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "logSha256": "f0fff75c46e304dbf3c6d85572f6bbc0bf50d622d12e62b8d155502178f3b3e4"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "logSha256": "770677a2f97424b6dbbe0299227c93db70643d02e558a485a6345f16f74443a0"
+    },
+    {
+      "command": "pnpm exec biome check research/mmp-100",
+      "exitCode": 0,
+      "logSha256": "9156372e530210e6344acfc4b9090d3ac535b9c205218bd142c48d7f6a2f5e91"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exitCode": 0,
+      "logSha256": "650697e047d267902f7af6fdbd051f8a6ff7e39815563c1778ddb6a9570d2b90"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "exitCode": 0,
+      "logSha256": "ac1feaa7ba512fa0f72a33ced409d4635bd8ea68668622f387ac1989532e6c25"
+    },
+    {
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "exitCode": 0,
+      "logSha256": "b3b7b428cb48a3f4ec627512c4917855734629ea820806d651ecc3fce5bff866"
+    }
+  ],
+  "rootTests": {
+    "tests": 532,
+    "pass": 429,
+    "fail": 0,
+    "skip": 103
+  },
+  "syntax": {
+    "failed": 0,
+    "checked": 76
+  },
+  "coverage": {
+    "status": "VALID",
+    "validatorPass": 45,
+    "researchModules": 77
+  },
+  "documentIntegrity": {
+    "ownerPowerShellSnippet": "PARSED_ONLY_NOT_EXECUTED",
+    "status": "PASS",
+    "codeHashesVerified": 29,
+    "publicChallengeHashVerified": true
+  },
+  "newDockerExecution": "NOT_RUN",
+  "ownerDecrypt": "OWNER_DECRYPT_NOT_VERIFIED",
+  "paidRequests": 0,
+  "paidDispatches": 0,
+  "countsAreNotSummed": true
+}

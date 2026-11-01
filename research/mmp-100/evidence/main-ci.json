@@ -1,0 +1,26 @@
+{
+  "format": "mmp100-main-ci-observation-v1",
+  "observedAt": "2026-11-01T15:34:42.550Z",
+  "headSha": "493dcb4b059b63d473a9bfbc3d083ea332ae7af4",
+  "runId": 41263638430,
+  "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41263638430",
+  "event": "push",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 124721783847,
+      "name": "quick (24)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41263638430/job/124721783847"
+    },
+    {
+      "id": 124721784005,
+      "name": "quick (22)",
+      "conclusion": "success",
+      "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41263638430/job/124721784005"
+    }
+  ],
+  "exactMainDockerRun": "NOT_RUN",
+  "reason": "Accepted unchanged PR98 tree has actual Docker/age evidence; milestone workflow is PR98-only, not main-triggered."
+}
