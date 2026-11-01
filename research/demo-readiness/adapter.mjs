@@ -21,9 +21,24 @@ function requireThat(condition, code) {
   if (!condition) throw new Error(code);
 }
 
+const BASE_PUBLIC_FIELDS = [
+  "inputTokens",
+  "outputTokens",
+  "cachedInputTokens",
+  "budgetAuthorization",
+];
+
 // A bounded JSON parser: duplicate keys, unsafe numbers and prototype keys fail closed.
 // Errors contain fixed codes only, never receipt content or local paths.
-export function parseStrict(bytes) {
+// extraPublicFields may allowlist additional producer fact-field names that match the
+// secret-like key pattern without being credentials; defaults keep A/B behavior unchanged.
+export function parseStrict(bytes, extraPublicFields = []) {
+  requireThat(
+    Array.isArray(extraPublicFields) &&
+      extraPublicFields.every((field) => typeof field === "string"),
+    "INVALID_PUBLIC_FIELDS",
+  );
+  const publicFields = [...BASE_PUBLIC_FIELDS, ...extraPublicFields];
   requireThat(
     bytes instanceof Uint8Array && bytes.byteLength <= MAX_BYTES,
     "SIZE_LIMIT",
@@ -83,12 +98,6 @@ export function parseStrict(bytes) {
             !["__proto__", "constructor", "prototype"].includes(key),
             "UNSAFE_KEY",
           );
-          const publicFields = [
-            "inputTokens",
-            "outputTokens",
-            "cachedInputTokens",
-            "budgetAuthorization",
-          ];
           requireThat(
             publicFields.includes(key) ||
               !/(secret|token|password|api.?key|private|authorization|cookie|credential)/i.test(
