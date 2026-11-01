@@ -6,10 +6,12 @@
 # B4: the exact image for this run is built first (run-scoped tag) and that
 # tag is what executes, so a stale or absent cached image can never run.
 # B2/B5: run-scoped owner labels; the script refuses any preexisting mmp108
-# volume name; an EXIT trap removes only the volumes this run created (owner
-# label re-verified inside volume-guard.sh) on every exit path, including
-# failures before any receipt exists; removal errors are reported and flip a
-# successful run to nonzero, and never mask an already-failing status.
+# volume name; an EXIT trap removes the run-scoped receipt container (tracked
+# after successful creation, before volumes, since it holds the output
+# volume) and only the volumes this run created (owner label re-verified
+# inside volume-guard.sh) on every exit path, including failures before any
+# receipt exists; removal errors are reported and flip a successful run to
+# nonzero, and never mask an already-failing status.
 # B6: receipts land in a run-scoped evidence directory that is refused if it
 # already exists, so runs can never overwrite or mix each other's evidence;
 # receipts are copied only after a successful harness run.
@@ -19,11 +21,24 @@ GUARD="$(dirname "$0")/volume-guard.sh"
 VOLUMES="mmp108-work mmp108-private mmp108-output"
 CREATED=""
 RUN_ID=""
+RECEIPTS_CONTAINER=""
 cleanup_status=0
 cleanup_done=0
 cleanup() {
   [ "$cleanup_done" -eq 1 ] && return 0
   cleanup_done=1
+  # The receipt container holds the output volume: it must be removed before
+  # any owned-volume removal, and only this run's uniquely named container is
+  # ever touched (tracked after successful creation; foreign state excluded).
+  if [ -n "$RECEIPTS_CONTAINER" ]; then
+    if docker container inspect "$RECEIPTS_CONTAINER" >/dev/null 2>&1; then
+      docker rm "$RECEIPTS_CONTAINER" >/dev/null || cleanup_status=1
+      if docker container inspect "$RECEIPTS_CONTAINER" >/dev/null 2>&1; then
+        echo "MMP108_RECEIPTS_CONTAINER_CLEANUP_FAILURE" >&2
+        cleanup_status=1
+      fi
+    fi
+  fi
   for volume in $CREATED; do
     sh "$GUARD" remove-owned "$volume" "$RUN_ID" || cleanup_status=1
   done
@@ -85,10 +100,15 @@ fi
 # Linux).
 if [ "$run_status" -eq 0 ]; then
   mkdir -p "$evidence_dir"
-  MSYS_NO_PATHCONV=1 docker create --name mmp108-receipts \
+  receipts_container="mmp108-receipts-${RUN_ID}"
+  MSYS_NO_PATHCONV=1 docker create --name "$receipts_container" \
     -v mmp108-output:/o "$IMAGE_TAG" >/dev/null
-  MSYS_NO_PATHCONV=1 docker cp mmp108-receipts:/o/. "$evidence_dir"
-  docker rm mmp108-receipts >/dev/null
+  # Tracked only after successful creation, so the EXIT trap owns its removal
+  # on every path; a failed create leaves nothing to clean.
+  RECEIPTS_CONTAINER="$receipts_container"
+  MSYS_NO_PATHCONV=1 docker cp "$receipts_container:/o/." "$evidence_dir"
+  docker rm "$receipts_container" >/dev/null
+  RECEIPTS_CONTAINER=""
   echo "mmp108 harness receipts: $evidence_dir"
 fi
 

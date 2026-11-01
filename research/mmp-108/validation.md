@@ -61,6 +61,27 @@ volume-guard stub initially ignored its `existing`/`labels` parameters
 (hardcoded behavior); it is now genuinely parameterized, and the tests still
 pass with the real guard logic.
 
+## Re-review round 3 check (receipt-container lifecycle)
+
+Residual B5 blocker: the fixed-name `mmp108-receipts` container could leak on
+a `docker cp` failure and hold the output volume against owner-verified
+volume removal. Fix: run-scoped unique container name
+(`mmp108-receipts-<RUN_ID>`), tracked only after successful `docker create`,
+removed by the EXIT trap on every path BEFORE owned-volume removal (it holds
+the output volume), never touching foreign containers; a failed create leaves
+nothing to clean. Two new stateful-stub controls (18 total in the suite):
+
+| Scenario (mocked docker, no real daemon)           | Observed                                                                                                                                        |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docker cp` fails after successful `docker create` | exit nonzero; the uniquely named container removed exactly once, BEFORE `volume rm` of the output volume; all three owned volumes still removed |
+| `docker create` itself fails                       | exit nonzero; no container created/removed, no `cp` attempted; all three owned volumes still removed                                            |
+| successful run (regression)                        | unique `--name mmp108-receipts-mmp108-*` used (fixed name never appears); container removed; volumes removed                                    |
+
+`pnpm lint` exit 0; `sh -n` clean; `validate.mjs` VALID; `check-syntax.mjs`
+PASS 85 modules. The host script remains not executed end-to-end against a
+real engine; recorded real-Docker evidence stays pinned to execution head
+`f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c`.
+
 ## Re-review round 2 checks (B4–B6, post-review head)
 
 | Command (post-review head)                                                                                                          | Result                                                                                                                                                                                                                                                                                                                                    |

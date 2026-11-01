@@ -124,8 +124,31 @@ function stubDocker(sandboxRoot) {
       '  if [ "$MMP108_TEST_SCENARIO" = "driver-fail" ]; then exit 1; fi',
       "  exit 0",
       "fi",
-      'if [ "$1" = "create" ] || [ "$1" = "cp" ] || [ "$1" = "rm" ]; then',
+      'if [ "$1" = "create" ]; then',
+      '  if [ "$MMP108_TEST_SCENARIO" = "create-fail" ]; then exit 1; fi',
+      '  name=""',
+      "  take_next=0",
+      '  for arg in "$@"; do',
+      '    if [ "$take_next" = "1" ]; then name="$arg"; take_next=0; fi',
+      '    if [ "$arg" = "--name" ]; then take_next=1; fi',
+      "  done",
+      "  printf '%s\\n' \"$name\" >> containers-created.log",
       "  exit 0",
+      "fi",
+      'if [ "$1" = "cp" ]; then',
+      '  if [ "$MMP108_TEST_SCENARIO" = "cp-fail" ]; then exit 1; fi',
+      "  exit 0",
+      "fi",
+      'if [ "$1" = "rm" ]; then',
+      "  printf '%s\\n' \"$2\" >> containers-removed.log",
+      "  exit 0",
+      "fi",
+      'if [ "$1" = "container" ] && [ "$2" = "inspect" ]; then',
+      '  if [ -f containers-created.log ] && grep -qx "$3" containers-created.log; then',
+      '    if [ -f containers-removed.log ] && grep -qx "$3" containers-removed.log; then exit 1; fi',
+      "    exit 0",
+      "  fi",
+      "  exit 1",
       "fi",
       "exit 0",
     ].join("\n"),
@@ -163,6 +186,7 @@ function runHost(sandboxRoot) {
 
 const removedVolumes = (root) =>
   readLines(root, "removed.log").map((line) => line.split(" ").pop());
+const removedContainers = (root) => readLines(root, "containers-removed.log");
 
 test("B5/B6: successful run copies receipts to a unique dir and removes owned volumes", () => {
   const sandboxRoot = sandbox().root;
@@ -178,9 +202,14 @@ test("B5/B6: successful run copies receipts to a unique dir and removes owned vo
     const calls = readLines(sandboxRoot, "calls.log").join("\n");
     assert.match(
       calls,
-      /mmp108-receipts:\/o\/\./,
+      /cp mmp108-receipts-[^ ]*:\/o\/\./,
       `receipts must be copied after success\nstatus=${child.status}\nstderr=${child.stderr}\ncalls=${calls}`,
     );
+    // Run-scoped unique container name; never the old fixed name.
+    assert.ok(!calls.includes("--name mmp108-receipts "));
+    const receiptsName = readLines(sandboxRoot, "containers-created.log")[0];
+    assert.match(receiptsName, /^mmp108-receipts-mmp108-/);
+    assert.deepEqual(removedContainers(sandboxRoot), [receiptsName]);
     const stdout = child.stdout ?? "";
     assert.match(stdout, /local-abcdef12-mmp108-/);
   } finally {
@@ -252,6 +281,67 @@ test("B4: a failed fresh build never provisions or removes any volume", () => {
     assert.equal(child.status, 1);
     assert.deepEqual(removedVolumes(sandboxRoot), []);
     assert.equal(readLines(sandboxRoot, "created.log").length, 0);
+  } finally {
+    delete process.env.MMP108_TEST_SCENARIO;
+    rmSync(sandboxRoot, { recursive: true, force: true });
+  }
+});
+
+test("B5: cp failure after successful create removes the receipt container before volumes", () => {
+  const sandboxRoot = sandbox().root;
+  process.env.MMP108_TEST_SCENARIO = "cp-fail";
+  try {
+    const child = runHost(sandboxRoot);
+    assert.equal(child.status, 1, child.stderr);
+    // The uniquely named receipt container was created, then removed exactly
+    // once by the exit-path cleanup — never left holding the output volume.
+    const receiptsName = readLines(sandboxRoot, "containers-created.log")[0];
+    assert.match(receiptsName, /^mmp108-receipts-mmp108-/);
+    assert.deepEqual(removedContainers(sandboxRoot), [receiptsName]);
+    // Ordering: container removal precedes owned-volume removal.
+    const calls = readLines(sandboxRoot, "calls.log");
+    const containerRmAt = calls.findIndex((line) =>
+      line.startsWith(`rm ${receiptsName}`),
+    );
+    const volumeRmAt = calls.findIndex((line) =>
+      line.startsWith("volume rm mmp108-output"),
+    );
+    assert.ok(containerRmAt >= 0, "container must be removed");
+    assert.ok(volumeRmAt >= 0, "owned volumes must be removed");
+    assert.ok(
+      containerRmAt < volumeRmAt,
+      "receipt container must be removed before volume cleanup",
+    );
+    assert.deepEqual(removedVolumes(sandboxRoot).sort(), [
+      "mmp108-output",
+      "mmp108-private",
+      "mmp108-work",
+    ]);
+  } finally {
+    delete process.env.MMP108_TEST_SCENARIO;
+    rmSync(sandboxRoot, { recursive: true, force: true });
+  }
+});
+
+test("B5: a failed receipt-container create removes no container and still cleans volumes", () => {
+  const sandboxRoot = sandbox().root;
+  process.env.MMP108_TEST_SCENARIO = "create-fail";
+  try {
+    const child = runHost(sandboxRoot);
+    assert.equal(child.status, 1, child.stderr);
+    // Nothing was ever created, so nothing foreign is touched or removed.
+    assert.deepEqual(readLines(sandboxRoot, "containers-created.log"), []);
+    assert.deepEqual(removedContainers(sandboxRoot), []);
+    const calls = readLines(sandboxRoot, "calls.log").join("\n");
+    assert.ok(
+      !calls.includes("docker cp") && !calls.includes("^cp "),
+      "no cp after failed create",
+    );
+    assert.deepEqual(removedVolumes(sandboxRoot).sort(), [
+      "mmp108-output",
+      "mmp108-private",
+      "mmp108-work",
+    ]);
   } finally {
     delete process.env.MMP108_TEST_SCENARIO;
     rmSync(sandboxRoot, { recursive: true, force: true });

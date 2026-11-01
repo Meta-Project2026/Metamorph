@@ -186,6 +186,21 @@ CLI-mode integrity, volume ownership, harness wiring and run-host lifecycle
 scenarios), all CI-gated via the existing
 `node --test research/mmp-108/*.test.mjs` step.
 
+## Review round 3 correction (receipt-container lifecycle)
+
+The re-review's single residual blocker: the fixed-name `mmp108-receipts`
+container could survive a `docker cp` failure (the EXIT trap cleaned only
+volumes) and would keep holding the output volume, making owner-verified
+volume removal fail on the next run. Corrected: the receipt container now
+has a run-scoped unique name (`mmp108-receipts-<RUN_ID>`), is tracked only
+after a successful `docker create`, is removed by the EXIT trap on every
+exit path BEFORE any owned-volume removal (it holds the output volume), and
+no foreign container is ever touched; a failed create leaves nothing to
+clean. Two new stateful-stub controls cover exactly the review's cases —
+cp-failure after successful create (container removed exactly once, before
+`volume rm`, volumes still cleaned) and a failed create (nothing created,
+nothing removed, no copy) — bringing the CI-gated suite to 18 tests.
+
 ## NOT_RUN
 
 - Hosted-runner (GitHub) real Docker replay and any `workflow_dispatch` —
