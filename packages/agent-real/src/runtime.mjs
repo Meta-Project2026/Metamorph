@@ -32,6 +32,7 @@ import {
   TargetWorker,
 } from "../../target-worker/src/controller.mjs";
 import { buildTrustedRuntime } from "../../target-worker/src/runtime-broker.mjs";
+import { completedRetentionReceipt } from "./candidate-retention.mjs";
 import { summarizeCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import { aggregateAttempt, safeCode, validatePublication } from "./report.mjs";
 import { check, isSourceSession } from "./source.mjs";
@@ -410,6 +411,26 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       gates,
       build,
     });
+    if (build?.verdict === "PASS") {
+      // A separate metadata-only record avoids reading mixed runtime/Oracle
+      // completion data during candidate-only export. Retention cannot score gates.
+      try {
+        record(
+          "retention",
+          completedRetentionReceipt(
+            identity,
+            worker,
+            build,
+            gates,
+            failure,
+            cleanup,
+            target.failure,
+          ),
+        );
+      } catch {
+        // Missing/invalid sidecar closes retention; original verdict is unchanged.
+      }
+    }
   }
   // Build failures are observed candidate FAIL, while orchestration faults are ERROR.
   if (failure === "BUILD_FAILED" && build?.verdict === "FAIL") failure = null;

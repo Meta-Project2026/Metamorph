@@ -473,6 +473,9 @@ export function preservationRecord(
   ciphertext = null,
   cleanup = "NOT_RUN",
 ) {
+  const completed = identity?.case === "G1_PASS_COMPLETED";
+  requireDiagnostic(identity?.case === undefined || completed);
+  if (completed) requireDiagnostic(hash.test(identity.bindingsSha256));
   requireDiagnostic(
     [
       "NOT_APPLICABLE",
@@ -511,7 +514,7 @@ export function preservationRecord(
     );
   // Fresh object allowlist: never publish arbitrary exception text or payload fields.
   return {
-    format: "mmp089-preservation-v1",
+    format: completed ? "mmp097-preservation-v1" : "mmp089-preservation-v1",
     status,
     identity:
       identity &&
@@ -524,6 +527,7 @@ export function preservationRecord(
           "candidateSha",
           "attemptId",
           "pairId",
+          ...(completed ? ["case", "bindingsSha256"] : []),
         ].map((k) => [k, identity[k]]),
       ),
     recipientFingerprint: DIAGNOSTIC_POLICY.recipientKeySha256,

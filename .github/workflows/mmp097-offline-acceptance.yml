@@ -1,0 +1,66 @@
+name: MMP097 offline Docker acceptance
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/mmp097-offline-acceptance.yml'
+      - 'research/mmp-097/**'
+      - 'research/mmp-089/**'
+      - 'packages/agent-real/src/candidate-retention.mjs'
+      - 'packages/agent-real/src/private-diagnostics.mjs'
+      - 'packages/agent-real/src/runtime.mjs'
+      - 'packages/agent-real/src/encrypt-diagnostics.mjs'
+      - 'packages/agent-real/test/*retention*.test.mjs'
+      - 'packages/agent-real/test/offline-acceptance-workflow.test.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mmp097-offline-pr98
+  cancel-in-progress: false
+
+jobs:
+  offline:
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.number == 98 && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/mmp097-option-a-retention' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+      - name: Frozen trusted install and build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+      - name: Actual offline acceptance at exact PR head without credentials
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          mkdir -m 700 "$RUNNER_TEMP/mmp099-home"
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/mmp099-home" TZ=UTC \
+            RUNNER_TEMP="$RUNNER_TEMP" AGENT_HEAD_SHA="$EXPECTED_HEAD" \
+            MMP097_PRIVATE_PARENT="$RUNNER_TEMP/mmp099-private" \
+            MMP097_PUBLIC_OUTPUT="$RUNNER_TEMP/mmp099-output" \
+            MMP089_AGE_PATH="$RUNNER_TEMP/mmp089-tools/age" \
+            node research/mmp-097/hosted-acceptance.mjs
+      - name: Independent final inventory and temporary private-data removal
+        if: always()
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/mmp099-home" TZ=UTC \
+            RUNNER_TEMP="$RUNNER_TEMP" AGENT_HEAD_SHA="$EXPECTED_HEAD" \
+            MMP097_PRIVATE_PARENT="$RUNNER_TEMP/mmp099-private" \
+            MMP097_PUBLIC_OUTPUT="$RUNNER_TEMP/mmp099-output" \
+            MMP089_AGE_PATH="$RUNNER_TEMP/mmp089-tools/age" \
+            node research/mmp-097/hosted-acceptance.mjs --cleanup

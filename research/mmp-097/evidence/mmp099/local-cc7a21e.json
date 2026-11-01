@@ -1,0 +1,79 @@
+{
+  "format": "mmp099-local-checks-v1",
+  "headSha": "cc7a21eaeccbb2e660bab05759fd5fe4acc0a944",
+  "date": "2026-11-01",
+  "platform": "Windows x64",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "trackedCodeClean": true,
+  "untrackedSanitizedEvidenceAddedDuringCheck": true,
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "logSha256": "719ffeeb9365144c61591c7f90379c368365347fea3248500bc89dc869089f0e"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "logSha256": "0e4f96fa91d70525b677b44c8dab614d7213069502c45dd05b466c5f4d745f04"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "logSha256": "7c91b4eb4813d6a7aa984e650a8147c728185b8e6d84d1e182e49ccfaa3c7d57"
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "logSha256": "464fb985fa56ea3d364eb03e9ff9e6ce12cf5cc72d74f675c4d94dda13ec6cca"
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "logSha256": "ad6c4b7a551e84dc5ef980fff3dba35b129b4a4a7d70623331b1bdad36fbfc8d"
+    },
+    {
+      "command": "pnpm exec biome check research/mmp-097",
+      "exitCode": 0,
+      "logSha256": "ad10948387a4b23e8295ef4776ce9f0715ccafdccdee4be8071d4fd0a1ec9d65"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exitCode": 0,
+      "logSha256": "650697e047d267902f7af6fdbd051f8a6ff7e39815563c1778ddb6a9570d2b90"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "exitCode": 0,
+      "logSha256": "ac1feaa7ba512fa0f72a33ced409d4635bd8ea68668622f387ac1989532e6c25"
+    },
+    {
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "exitCode": 0,
+      "logSha256": "7173bbb46d3d28c4dffd991d1868431af441d96bada820bf5140f3daa72bf7cb"
+    }
+  ],
+  "initialExtraAttempt": {
+    "exitCode": 1,
+    "command": "pnpm exec biome check research/mmp-097",
+    "reason": "New untracked sanitized ef2 receipt was written with PowerShell formatting during the check sequence; formatted and repeated remaining checks; no active source change."
+  },
+  "rootTests": {
+    "skip": 103,
+    "fail": 0,
+    "tests": 532,
+    "pass": 429
+  },
+  "researchSyntax": {
+    "checked": 76,
+    "failed": 0
+  },
+  "coverage": {
+    "modules": 77,
+    "status": "VALID",
+    "validatorPass": 45
+  },
+  "countsOverlapNotAdded": true,
+  "actualDocker": "HOSTED_SEPARATE_NOT_LOCAL"
+}
