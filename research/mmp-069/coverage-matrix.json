@@ -299,6 +299,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Package candidate-retention unit and CLI controls run through pnpm test with synthetic envelopes/ciphertext only. The manual real-Docker/age driver is syntax-checked but NOT_RUN in Fast CI. Actual crypto/worker acceptance is NOT_TESTED until separately observed on a disposable Linux Docker host. No paid dispatch or live upload."
+    },
+    {
+      "path": "research/mmp-104",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Package verifier-forensics tests exercise the actual Oracle/report and Linux preserver with inert synthetic adapters through pnpm test. Research stage instrumentation is a proposal/prototype, not wired into production. Exact historical artifacts are inspected locally, never fetched by tests. No model, Docker, dispatch or live upload."
     }
   ],
   "skips": [
