@@ -18,6 +18,6 @@ RUN apt-get update \
     && git config --system --add safe.directory /repo \
     && npm install --global pnpm@11.25.0
 
-COPY run-inner.sh /usr/local/bin/mmp108-run
-RUN chmod 0755 /usr/local/bin/mmp108-run
+COPY run-inner.sh volume-guard.sh /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/mmp108-run /usr/local/bin/volume-guard.sh
 WORKDIR /root

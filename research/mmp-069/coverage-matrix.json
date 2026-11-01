@@ -74,6 +74,10 @@
     {
       "command": "node --test research/demo-readiness/*.test.mjs",
       "status": "GATED_HOSTED"
+    },
+    {
+      "command": "node --test research/mmp-108/*.test.mjs",
+      "status": "GATED_HOSTED"
     }
   ],
   "packages": [
@@ -313,8 +317,8 @@
       "lifecycle": "ACTIVE",
       "execution": "MANUAL_DOCKER",
       "staticCheck": "GATED_HOSTED_SYNTAX",
-      "tests": "NOT_VERIFIED",
-      "gap": "The manual offline first-step driver and disposable harness are syntax-checked and biome-linted in Fast CI; the real known-good Docker replay, real first-step fault control and synthetic verifyPair controls were executed once on a local disposable Linux Docker environment (receipts in research/mmp-108/evidence). No hosted Docker replay, Meta request, paid dispatch or held-out G4 coverage."
+      "tests": "GATED_HOSTED",
+      "gap": "Receipt-integrity, CLI-mode and volume-ownership negative controls run in Fast CI (research/mmp-108/*.test.mjs). The real known-good Docker replay, real first-step fault control and synthetic verifyPair controls were executed once on a local disposable Linux Docker environment at driver head f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c (receipts in research/mmp-108/evidence). No hosted Docker replay, Meta request, paid dispatch or held-out G4 coverage."
     }
   ],
   "skips": [

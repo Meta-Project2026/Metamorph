@@ -4,12 +4,16 @@ Status: **EXECUTED — known-good full path PASS on one disposable local Linux D
 environment; historical paid-run root cause remains UNKNOWN.**
 
 Issue: <https://github.com/Meta-Project2026/Metamorph/issues/108>.
-Base: fresh `origin/main@9cbe1ef7bbbf59b0756bae937a7519adf3a4d447`.
-Branch: `codex/mmp108-offline-docker-firststep`. Run-validated driver head:
-`f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c` (evidence receipts carry this SHA;
-the PR head adds only this documentation and the receipts).
-Receipts: [evidence/local-f9a7b44](evidence/local-f9a7b44/summary.json).
-Driver: [first-step-proof.mjs](first-step-proof.mjs). Harness:
+Base: fresh `origin/main@9cbe1ef7bbbf59b0756bae937a7519adf3a4d447` (rebased
+onto `114973cbcde2debc699ff0b578c146c34b6c636e` after review).
+Branch: `codex/mmp108-offline-docker-firststep`. **Real-Docker execution
+head: `f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c`** — the receipts below were
+produced by the driver at that exact source state; the current PR head adds
+only review corrections (failure projection, volume ownership, mode
+validation), negative tests, documentation and receipts, with driver case
+logic unchanged and no Docker rerun (per review). Receipts:
+[evidence/local-f9a7b44](evidence/local-f9a7b44/summary.json). Driver:
+[first-step-proof.mjs](first-step-proof.mjs). Harness:
 [harness/](harness/run-host.sh).
 
 No Meta GET/POST, no model spend, no workflow dispatch or rerun, no age
@@ -109,6 +113,42 @@ adapters, no Docker, sealed evidence in every case):
    and private packs are UNAVAILABLE. No candidate is blamed and no
    environment verdict for the historical run is claimed.
 
+## Review corrections (PR #112 independent review, B1–B3)
+
+The independent review requested three research-only corrections and negative
+tests; all are implemented in this PR head with no Docker rerun and no
+production change:
+
+1. **B1 — public error-content leak removed.** The public `summary.json`
+   failure projection is now a fixed allowlisted code (`CASE_FAILED`) via
+   exported `projectFailure()`; the thrown error is deliberately unread — no
+   `error.message`/`error.code` ever reaches a public receipt. Negative
+   controls ([first-step-proof.test.mjs](first-step-proof.test.mjs)) throw
+   hostile canary-laden errors (private paths, tokens, daemon text) with
+   throwing getters and assert the serialized public run leaks nothing.
+2. **B2 — non-destructive volume ownership.** `harness/volume-guard.sh`
+   refuses any preexisting volume name (`require-free`), verifies a
+   run-scoped `metamorph.mmp108.run` owner label before touching anything
+   (`verify-owner`), and removes only owned volumes with the removal result
+   re-verified and no error swallowed (`remove-owned`). `run-host.sh` creates
+   fresh labelled volumes per run and copies public receipts out before
+   cleanup; `run-inner.sh` verifies ownership before clearing contents.
+   Negative controls ([volume-guard.test.mjs](volume-guard.test.mjs)) run the
+   real guard against a stateful stub `docker` on PATH and assert collision
+   refusal, foreign-volume refusal and exactly-one-owned removal — no
+   destructive call against real state.
+3. **B3 — false zero-case PASS removed.** Unknown CLI modes are rejected with
+   exit 2 before any filesystem side effect, environment assertion or receipt
+   creation, and `finalizeRun()` only allows `PASS` when the mode's expected
+   nonzero number of case results completed and every case PASSed; truncated,
+   zero-case, over-full and unknown-mode runs are `ERROR` with fixed codes.
+   Negative controls cover the invalid-mode child process (no receipt
+   created) and the truncated/no-case finalize flow.
+
+The tests run in Fast CI (`node --test research/mmp-108/*.test.mjs`, one new
+CI step registered in `research/mmp-069/coverage-matrix.json` and the pinned
+CI step list).
+
 ## NOT_RUN
 
 - Hosted-runner (GitHub) real Docker replay and any `workflow_dispatch` —
@@ -125,7 +165,9 @@ adapters, no Docker, sealed evidence in every case):
 ```sh
 git checkout <reviewed head>
 AGENT_HEAD_SHA=$(git rev-parse HEAD) sh research/mmp-108/harness/run-host.sh
-# public receipts land in the mmp108-output volume; private volume is disposable
+# refuses any preexisting mmp108 volume; copies public receipts into
+# research/mmp-108/evidence/local-<shorthash>/ then removes only the
+# volumes this run created (owner label verified)
 ```
 
 Requires a Linux-container Docker engine; the harness image pins
@@ -137,6 +179,8 @@ accounting.
 
 ## Changed files
 
-`research/mmp-108/**` only: driver, harness (Dockerfile + two shell scripts),
-biome config, receipts, this documentation. No production package, workflow,
-recipe, fixture, policy or CI change.
+`research/mmp-108/**` (driver, harness incl. `volume-guard.sh`, negative
+tests, biome config, receipts, documentation), `research/mmp-069/**`
+(coverage matrix + pinned CI step list) and one new step in
+`.github/workflows/ci.yml` running the new negative controls. No production
+package, recipe, fixture, policy or paid-workflow change.

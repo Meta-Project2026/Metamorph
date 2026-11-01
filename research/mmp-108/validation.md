@@ -38,6 +38,29 @@ v22.23.1 never executed candidate or reference code.
   coverage 17/20, cleanup verified, finalizer PASS 0/0/0.
 - Synthetic controls: 5/5 PASS with sealed evidence directories.
 
+## Review-correction checks (post-review head, no Docker rerun)
+
+Per the independent PR #112 review (B1 public error leak, B2 destructive
+volume behavior, B3 false zero-case PASS): driver case logic is unchanged and
+the recorded real-Docker evidence stays pinned to execution head
+`f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c`; the corrections touch failure
+projection, CLI mode/count integrity, harness volume ownership and tests only.
+
+| Command (post-review head)                                          | Result                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node --test research/mmp-108/*.test.mjs`                           | exit 0 — 9/9 PASS: canary failure projection (throwing getters, tokens, private paths), zero-case/truncated/over-full finalize rejection, invalid-mode child process (exit 2, no receipt dir created), volume-guard collision/ownership/removal against a stateful stub `docker` (no destructive real call) |
+| `node research/mmp-069/validate.mjs`                                | `VALID` — matrix gates include the new CI step; `research/mmp-108` tests claim GATED_HOSTED                                                                                                                                                                                                                 |
+| `node research/mmp-069/check-syntax.mjs`                            | PASS, 84 modules syntax-checked                                                                                                                                                                                                                                                                             |
+| `pnpm lint` (root `biome check .`)                                  | exit 0                                                                                                                                                                                                                                                                                                      |
+| `node --check research/mmp-108/first-step-proof.mjs`                | exit 0                                                                                                                                                                                                                                                                                                      |
+| `sh -n` on all three harness scripts                                | exit 0                                                                                                                                                                                                                                                                                                      |
+| `git rebase origin/main` (114973cbcde2debc699ff0b578c146c34b6c636e) | clean, 4 commits replayed                                                                                                                                                                                                                                                                                   |
+
+One test-design defect was caught locally before push and fixed: the
+volume-guard stub initially ignored its `existing`/`labels` parameters
+(hardcoded behavior); it is now genuinely parameterized, and the tests still
+pass with the real guard logic.
+
 ## NOT_RUN
 
 Root `pnpm lint/typecheck/test/build` were not executed on the host for this
