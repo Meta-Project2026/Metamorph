@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { parseDocument } from "yaml";
 import {
   META_OWNERS,
   validateMetaEnvironment,
@@ -587,4 +588,89 @@ test("workflow maps one secret to one step only; per-owner queue and explicit pu
     /createMetaMigrationProvider|runPublicMigration|metaHttpsExchange/,
   );
   assert.match(validation, /authorizePaidWorkflow\(context\)/);
+});
+test("untouched paid budget default is 0.10 and blocks the frozen projection before any send", async (t) => {
+  const text = readFileSync(
+    join(root, ".github/workflows/meta-paid-migration.yml"),
+    "utf8",
+  );
+  const yaml = parseDocument(text);
+  assert.deepEqual(yaml.errors, []);
+  const budget = yaml.toJS().on.workflow_dispatch.inputs.max_estimated_usd;
+  assert.equal(budget.required, true);
+  assert.equal(budget.default, "0.10");
+  assert.deepEqual(budget.options, [
+    "0.10",
+    "0.20",
+    "0.25",
+    "0.50",
+    "0.75",
+    "1.00",
+  ]);
+  const body = prepareMetaMigration(context(), request),
+    p = paidProjection(body);
+  assert.ok(p.worstCaseEstimatedUsd > Number(budget.default));
+  assert.ok(p.worstCaseEstimatedUsd <= 0.25);
+  const e = signedRun(t),
+    calls = nativeStub(t);
+  writeFileSync(
+    e.values.GITHUB_EVENT_PATH,
+    JSON.stringify({
+      inputs: { ...inputs(), max_estimated_usd: budget.default },
+    }),
+  );
+  await assert.rejects(authorizePaidWorkflow(context()), {
+    code: "ESTIMATED_BUDGET_BLOCKED",
+  });
+  assert.equal(calls.length, 0);
+});
+test("explicit 0.25 admits projection only; consent, identity and budget stay independently blocking", async (t) => {
+  const e = signedRun(t),
+    calls = nativeStub(t);
+  writeFileSync(
+    e.values.GITHUB_EVENT_PATH,
+    JSON.stringify({ inputs: { ...inputs(), max_estimated_usd: "0.25" } }),
+  );
+  const a = await authorizePaidWorkflow(context());
+  assert.equal(a.maxEstimatedUsd, 0.25);
+  assert.ok(a.worstCaseEstimatedUsd <= a.maxEstimatedUsd);
+  for (const [override, code] of [
+    [{ confirm_paid: "NOT_CONFIRMED" }, "PAID_CONFIRMATION_BLOCKED"],
+    [{ reviewed_sha: "0".repeat(40) }, "WORKFLOW_IDENTITY_BLOCKED"],
+    [{ max_estimated_usd: "0.20" }, "ESTIMATED_BUDGET_BLOCKED"],
+  ]) {
+    writeFileSync(
+      e.values.GITHUB_EVENT_PATH,
+      JSON.stringify({ inputs: { ...inputs(), ...override } }),
+    );
+    await assert.rejects(authorizePaidWorkflow(context()), { code });
+  }
+  assert.equal(calls.length, 0);
+});
+test("corrupt budget inputs fail closed on the exact-string seam; reruns stay blocked", (t) => {
+  const { values } = environment(t);
+  for (const max_estimated_usd of [
+    undefined,
+    "",
+    " 0.25",
+    "0.25 ",
+    "1e-1",
+    0.25,
+  ])
+    assert.throws(() =>
+      validateWorkflowIdentity(
+        values,
+        head,
+        { ...inputs(), max_estimated_usd },
+        true,
+      ),
+    );
+  assert.throws(() =>
+    validateWorkflowIdentity(
+      { ...values, GITHUB_RUN_ATTEMPT: "2" },
+      head,
+      { ...inputs(), max_estimated_usd: "0.25" },
+      true,
+    ),
+  );
 });
