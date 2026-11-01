@@ -99,8 +99,8 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
 - `packages/agent-real/`: [real-model workshop composition](packages/agent-real/README.md)
   with source sessions, compiler diagnostics and candidate retention; its
   execution branch stays unreachable without reviewed provider admission.
-- `packages/workshop-audit/`: independent workshop audit harness (public corpus
-  recipes, ordered lifecycle, finalizer), executed by CI.
+- `packages/workshop-audit/`: [independent workshop audit harness](packages/workshop-audit/)
+  (public corpus recipes, ordered lifecycle, finalizer), executed by CI.
 - `packages/evidence-retention/`: [encrypted local evidence adapter](packages/evidence-retention/README.md)
   for synthetic/public data only.
 - `specs/005-integration/`: compact MMP-004 specification, plan and validation.
@@ -109,8 +109,9 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
   [interface note for Ilia](specs/002-foundation/interface-note.md).
-- `specs/006-018/`: PHP qualification, worker, differential, acceptance, audit,
-  readiness and formal-G4 specifications for later milestones.
+- `specs/006-php74-qualification/` through `specs/018-mmp026-evidence-retention/`:
+  PHP qualification, worker, differential, acceptance, audit, readiness and
+  formal-G4 specifications for later milestones.
 - `.github/workflows/ci.yml`: PR/push-to-`main` checks on a Node 22/24 matrix,
   eight-minute timeout per job: frozen install, lint, typecheck, test, build plus
   Oracle reference, target-worker, differential, PHP-qualification sanitizer,
