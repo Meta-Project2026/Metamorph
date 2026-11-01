@@ -1,6 +1,6 @@
 # Metamorph — three-track offline evidence desk (MMP-071 / MMP-085)
 
-Read-only presentation for 2026-10-30. Refs [#85](https://github.com/Meta-Project2026/Metamorph/issues/85), [#71](https://github.com/Meta-Project2026/Metamorph/issues/71), [#61](https://github.com/Meta-Project2026/Metamorph/issues/61), [#81](https://github.com/Meta-Project2026/Metamorph/issues/81).
+Read-only presentation built for the 2026-10-30 event (historical date). Refs [#85](https://github.com/Meta-Project2026/Metamorph/issues/85), [#71](https://github.com/Meta-Project2026/Metamorph/issues/71), [#61](https://github.com/Meta-Project2026/Metamorph/issues/61), [#81](https://github.com/Meta-Project2026/Metamorph/issues/81).
 
 From the repository root, with Node 22.13+ / 24 and a modern browser:
 
@@ -38,7 +38,8 @@ product NOT_ESTABLISHED. Historical PR #31 AUDIT_FAIL is unchanged.
 Original GitHub-hosted public ZIP and four member sizes/digests independently
 verified on 2026-10-29; byte-identical members under evidence/real-ai-40900698372/.
 Original five historical receipts, pins.mjs, adapter.mjs and demo.test.mjs unchanged.
-C pins/adapter remain a review candidate pending independent review.
+C pins/adapter were merged through reviewed [PR #87](https://github.com/Meta-Project2026/Metamorph/pull/87)
+(2026-10-31; owner review comments — GitHub disallows native self-approval).
 
 Picker: one complete set of five historical files, four C files, or one
 future-model.json declaration preview (always NOT_VERIFIED). Names overlap:

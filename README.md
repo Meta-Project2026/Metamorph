@@ -1,13 +1,27 @@
 # Metamorph — development and agent foundations
 
-MMP-001 implements shared TypeScript/Zod contracts and a local Fastify health
-endpoint. MMP-003 adds a bounded offline agent lifecycle with scripted providers,
-a restricted candidate writer and a trusted verifier port. MMP-002 adds a standalone
+The implemented foundation covers shared TypeScript/Zod contracts and a local
+Fastify health endpoint (MMP-001), a bounded offline agent lifecycle with
+scripted providers (MMP-003), a standalone
 [Oracle foundation](packages/oracle/README.md) for original public/synthetic HTTP
-and SQLite comparison, controls and evidence. Real migration generation, Meta
-integration, PHP workers and complete product verification are **not implemented**.
-No benchmark has been selected. The optional web app
-is deferred until there is real run data to display.
+and SQLite comparison, controls and evidence (MMP-002), the real Agent/Oracle
+public repair loop (MMP-004), the disposable TypeScript target worker (MMP-007),
+the PHP/TS differential bridge (MMP-008A) and the real-model workshop
+composition (MMP-010A) with an independent workshop audit and encrypted
+evidence retention. Real PHP 7.4 qualification executed on an isolated hosted
+Docker runner (MMP-005). One authorized paid model generation executed on
+2026-10-29 ([run 40900698372](https://github.com/Meta-Project2026/Metamorph/actions/runs/40900698372)):
+the Muse Spark 1.3 candidate passed generation and **failed G1
+build/typecheck**; G2/G3 never executed. A successful PHP→TypeScript migration,
+complete product verification and formal G4 remain **NOT established**
+([product milestone #61](https://github.com/Meta-Project2026/Metamorph/issues/61);
+readiness preflight [#100](https://github.com/Meta-Project2026/Metamorph/issues/100)).
+No benchmark is registered; the workshop profile is proposed for agreement, not
+selected. The offline read-only
+[evidence viewer](research/demo-readiness/README.md) presents recorded public
+receipts in three separated tracks. The optional web app
+is deferred until there is real run data to display. There is no automatic or
+standing paid model request; billable probes require separate authorization.
 
 The [imported architecture pack](metamorph-architecture-v0.1/README.md) remains a
 proposal, including its model names, API hostname, ADR and constitution.
@@ -51,15 +65,16 @@ remove it afterward with `Remove-Item Env:PORT`. The server binds only to
 
 Health returns HTTP 200 with `status: "ok"`, `scope: "foundation"` and explicit
 capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchmark
-`undecided`. This describes the health service, without a migration verdict.
+`undecided`. This describes the health service, without a migration verdict. The capability
+strings are that service's static labels, not current project status.
 
 ## Checks and layout
 
 | Command | Executed work |
 | --- | --- |
 | `pnpm lint` | Biome lint, formatting and imports for workspace source/config/tests |
-| `pnpm typecheck` | Build dependency declarations; check contracts, server, agent, oracle, integration and a public types consumer |
-| `pnpm test` | Build packages; run contracts, agent, oracle and integration synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
+| `pnpm typecheck` | Build dependency declarations; recursively typecheck every workspace package, including a public types consumer |
+| `pnpm test` | Build packages; run contracts, agent, oracle, integration, agent-real and evidence-retention synthetic/boundary tests, injection smoke and real HTTP against the built CLI |
 | `pnpm build` | Compile packages in dependency order, using TypeScript |
 
 Tests use synthetic fixtures, never a real benchmark/provider. The child server
@@ -77,15 +92,32 @@ smoke receives no credentials or PATH. Test builds exercise compiled exports.
   Run `pnpm demo:integration`: real synthetic HTTP/SQLite FAIL -> one repair ->
   G2/G3 PASS; final **INCONCLUSIVE** with actual temporary evidence packs.
   Generated text is never executed; PHP, live Meta, G0/G1 and held-out remain NOT_RUN.
+- `packages/target-worker/`: [disposable TypeScript target worker](packages/target-worker/README.md)
+  with trusted host admission and isolated Docker execution.
+- `packages/differential/`: [Oracle-owned real PHP/TS differential bridge](packages/differential/README.md),
+  without a migration model or new comparator.
+- `packages/agent-real/`: [real-model workshop composition](packages/agent-real/README.md)
+  with source sessions, compiler diagnostics and candidate retention; its
+  execution branch stays unreachable without reviewed provider admission.
+- `packages/workshop-audit/`: [independent workshop audit harness](packages/workshop-audit/)
+  (public corpus recipes, ordered lifecycle, finalizer), executed by CI.
+- `packages/evidence-retention/`: [encrypted local evidence adapter](packages/evidence-retention/README.md)
+  for synthetic/public data only.
 - `specs/005-integration/`: compact MMP-004 specification, plan and validation.
 - `specs/003-oracle/`: MMP-002 spec, qualification blocker and validation records.
 - `specs/004-agent/`: compact MMP-003 spec, plan, tasks and validation record.
 - `specs/002-foundation/`: [spec](specs/002-foundation/spec.md),
   [plan](specs/002-foundation/plan.md), [tasks](specs/002-foundation/tasks.md),
   [interface note for Ilia](specs/002-foundation/interface-note.md).
-- `.github/workflows/ci.yml`: fast checks on PRs and pushes to `main`, Node 22/24
-  matrix, eight-minute timeout per job. Target 2–4 minutes per job; the
-  first PR's Node 22/24 hosted CI passed in approximately 39 seconds.
+- `specs/006-php74-qualification/` through `specs/018-mmp026-evidence-retention/`:
+  PHP qualification, worker, differential, acceptance, audit, readiness and
+  formal-G4 specifications for later milestones.
+- `.github/workflows/ci.yml`: PR/push-to-`main` checks on a Node 22/24 matrix,
+  eight-minute timeout per job: frozen install, lint, typecheck, test, build plus
+  Oracle reference, target-worker, differential, PHP-qualification sanitizer,
+  workshop-audit tests, active research lint/syntax, coverage-matrix validation
+  with negative controls, connected history/adversarial tests and demo-readiness
+  tests. Still PR-scoped: no paid, model or full-differential runs in CI.
 
 Green Fast CI means technical checks passed. **Oracle PASS** additionally requires
 independent G0–G4 execution, all mandatory scenarios and evidence for the exact
@@ -94,26 +126,16 @@ See the unchanged [Oracle contract](metamorph-architecture-v0.1/docs/architectur
 
 ## Ilia / parallel work
 
-MMP-001 is merged into `main` through [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1).
-Parallel follow-ups: [MMP-002 Oracle](https://github.com/Meta-Project2026/Metamorph/issues/2)
-(Ilia) and [MMP-003 agent/orchestrator](https://github.com/Meta-Project2026/Metamorph/issues/3)
-(Vladimir). Start both from current `main`:
-
-```powershell
-$repoUrl = 'https://github.com/Meta-Project2026/Metamorph.git'
-$foundationRef = 'origin/main'
-git clone $repoUrl metamorph-ilia
-Set-Location -LiteralPath '.\metamorph-ilia'
-git switch --create feat/mmp-002-oracle $foundationRef
-pnpm install --frozen-lockfile
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
-```
-
-Main now contains the foundation. Vladimir should use a
-separate checkout/branch for MMP-003. Review the shared interface note together
+MMP-001 is merged into `main` through [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1);
+MMP-002/003/004/005 and the target-worker, differential, workshop-audit,
+agent-real and evidence-retention packages are merged. Current open fronts,
+each from current `main` in a separate checkout/branch: product milestone
+[#61](https://github.com/Meta-Project2026/Metamorph/issues/61) (Vladimir) —
+real model-driven migration parity NOT established; demo
+[#71](https://github.com/Meta-Project2026/Metamorph/issues/71) — viewer merged,
+human-timed rehearsal pending; paid-v2 readiness preflight
+[#100](https://github.com/Meta-Project2026/Metamorph/issues/100) (Ilia,
+offline only). Review the shared interface note together
 before extending DTOs; no teammate approval is implied by local implementation.
 
 Spec Kit 1.0.12 resolves features independently of branch names. The compact 002
