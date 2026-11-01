@@ -48,13 +48,6 @@
       "logSha256": "99e0c9ddc0e60e168de41d83a4579a65ecc089aec2591d21bc06f22618ec8bb4"
     },
     {
-      "command": "pnpm.cmd lint",
-      "exit": 0,
-      "startedAt": "2026-11-01T18:05:27.3762135Z",
-      "finishedAt": "2026-11-01T18:05:28.4651429Z",
-      "logSha256": "8a4c23e3bc400aff0d83a5817595776a078790493742e973fe7e8949c083dda9"
-    },
-    {
       "command": "pnpm.cmd exec biome check research/mmp-104",
       "exit": 0,
       "startedAt": "2026-11-01T18:05:28.5150534Z",
@@ -62,25 +55,32 @@
       "logSha256": "adbb6faea9570871c61245cef5bfe9ce3f14a55e5bf10320f6f67dcfcbe61895"
     },
     {
-      "command": "pnpm.cmd test",
-      "exit": 0,
-      "startedAt": "2026-11-01T18:05:29.3057443Z",
-      "finishedAt": "2026-11-01T18:05:55.0537707Z",
-      "logSha256": "f140a28d7f24d6c595ae1b1d961ee3c104b86599c247bb79a6b3a35b82afe974"
-    },
-    {
-      "command": "node --test packages/agent-real/test/trusted-stage-contract.test.mjs",
-      "exit": 0,
-      "startedAt": "2026-11-01T18:05:55.0669964Z",
-      "finishedAt": "2026-11-01T18:05:57.1410014Z",
-      "logSha256": "b3af5ecc6d17b65d096725be57c11754587adcbe9e5e503f4e7ff3c8e13bbac8"
-    },
-    {
       "command": "node research/mmp-069/check-syntax.mjs",
       "exit": 0,
       "startedAt": "2026-11-01T18:05:57.1561459Z",
       "finishedAt": "2026-11-01T18:06:01.91903Z",
       "logSha256": "dd67c0c3dea95a7031f5fe26c4ef3352345020e3a41468f89c593c4205ba8d59"
+    },
+    {
+      "command": "pnpm.cmd lint",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:09:27.1319978Z",
+      "finishedAt": "2026-11-01T18:09:28.1952459Z",
+      "logSha256": "baf1b778bdf925649dba5505e185e5a61040dc00497f9c5a88b2951d61dd2991"
+    },
+    {
+      "command": "pnpm.cmd test",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:09:28.2279515Z",
+      "finishedAt": "2026-11-01T18:09:55.3399173Z",
+      "logSha256": "ec519a29722fae6a2746c44f8e878086e92ff0637862038987728281e7d80b2b"
+    },
+    {
+      "command": "node --test packages/agent-real/test/trusted-stage-contract.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:09:55.3520311Z",
+      "finishedAt": "2026-11-01T18:09:57.1911691Z",
+      "logSha256": "a79be6a2a3609356afd9f9e6b756f71be131065cebee13f0075bb0cb768aee1a"
     }
   ]
 }

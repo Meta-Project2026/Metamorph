@@ -470,13 +470,15 @@ async function oracleControl(t, instrumented, fault = "none") {
     };
     return {
       reset: (s) => call(`${side}_RESET`, null, s, adapter.reset),
-      snapshot: (s) =>
-        call(
-          `${side}_${snapshots++ === 0 ? "INITIAL_SNAPSHOT" : "STEP_SNAPSHOT"}`,
-          null,
+      snapshot: (s) => {
+        const initial = snapshots++ === 0;
+        return call(
+          `${side}_${initial ? "INITIAL_SNAPSHOT" : "STEP_SNAPSHOT"}`,
+          initial ? null : steps - 1,
           s,
           adapter.snapshot,
-        ),
+        );
+      },
       request: (input, s) =>
         call(`${side}_REQUEST`, steps++, s, (signal) =>
           adapter.request(input, signal),
@@ -547,6 +549,10 @@ for (const side of ["REFERENCE", "CANDIDATE"])
       assert.deepEqual(after.closed, before.closed);
       assert.equal(after.gates[0].verdict, "ERROR");
       assert.equal(after.telemetry.firstFailureStage, stage);
+      assert.equal(
+        after.telemetry.stepIndex,
+        operation === "STEP_SNAPSHOT" ? 0 : null,
+      );
       assert.equal(
         after.gates[0].executedTestIds.length,
         operation === "CLOSE" ? 6 : operation === "STEP_SNAPSHOT" ? 1 : 0,
