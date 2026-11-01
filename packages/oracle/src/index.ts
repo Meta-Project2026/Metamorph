@@ -5,6 +5,19 @@ export {
   runControls,
 } from "./controls.js";
 export {
+  createFailureTelemetry,
+  FAILURE_STAGES,
+  FAILURE_TELEMETRY_FORMAT,
+  FAILURE_TELEMETRY_MAX_BYTES,
+  type FailureTelemetryContext,
+  type FailureTelemetryRecord,
+  finishFailureTelemetry,
+  isFailureTelemetryContext,
+  projectFailureTelemetry,
+  unavailableFailureTelemetry,
+  validateFailureTelemetry,
+} from "./failure-telemetry.js";
+export {
   compareHttp,
   type Difference,
   type HttpObservation,

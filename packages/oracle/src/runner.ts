@@ -8,6 +8,13 @@ import {
 } from "@metamorph/contracts";
 import { checkedDifferences, runControls } from "./controls.js";
 import {
+  type FailureStage,
+  type FailureTelemetryContext,
+  type FailureTelemetryRecord,
+  failureTelemetryRecorder,
+  finishFailureTelemetry,
+} from "./failure-telemetry.js";
+import {
   compareHttp,
   type Difference,
   type HttpObservation,
@@ -42,6 +49,7 @@ export interface VerificationResult {
   evidenceDirectory: string;
   gateResults: GateResult[];
   scope: "synthetic-or-public-scenarios-only";
+  failureTelemetry?: FailureTelemetryRecord;
 }
 
 async function bounded<T>(
@@ -81,6 +89,7 @@ export async function verifyPair(input: {
   scenarios: readonly PublicScenario[];
   artifactParent: string;
   operationTimeoutMs: number;
+  failureTelemetry?: FailureTelemetryContext | null;
 }): Promise<VerificationResult> {
   if (input.reference === input.candidate)
     throw new Error("Separate worker adapters required");
@@ -116,26 +125,60 @@ export async function verifyPair(input: {
     throw new Error("Invalid public scenario definitions");
   const started = performance.now();
   const startedAt = new Date().toISOString();
-  const operation = <T>(fn: (signal: AbortSignal) => Promise<T>) =>
-    bounded(fn, input.operationTimeoutMs);
+  const telemetry = failureTelemetryRecorder(input.failureTelemetry, scenarios);
+  const operation = <T>(
+    stage: FailureStage,
+    step: number | null,
+    fn: (signal: AbortSignal) => Promise<T>,
+  ) =>
+    bounded(
+      (signal) => telemetry.observe(stage, step, signal, () => fn(signal)),
+      input.operationTimeoutMs,
+    );
   let evidenceDirectory: string;
   try {
     evidenceDirectory = await mkdtemp(join(input.artifactParent, "oracle-"));
     for (const directory of ["http", "db", "diffs"])
       await mkdir(join(evidenceDirectory, directory), { mode: 0o700 });
   } catch (error) {
+    telemetry.invalidate("PUBLICATION_FAILED");
     await Promise.allSettled([
-      operation((signal) => input.reference.close(signal)),
-      operation((signal) => input.candidate.close(signal)),
+      operation("REFERENCE_CLOSE", null, (signal) =>
+        input.reference.close(signal),
+      ),
+      operation("CANDIDATE_CLOSE", null, (signal) =>
+        input.candidate.close(signal),
+      ),
     ]);
     throw error;
   }
-  const save = async (path: string, value: unknown) => {
-    await writeFile(
-      join(evidenceDirectory, path),
-      `${JSON.stringify(value, null, 2)}\n`,
-      { flag: "wx", mode: 0o600 },
-    );
+  const publish = async <T>(fn: () => Promise<T>): Promise<T> => {
+    try {
+      return await telemetry.observe(
+        "EVIDENCE_PUBLICATION_WRITE",
+        null,
+        null,
+        fn,
+      );
+    } catch (error) {
+      telemetry.invalidate("PUBLICATION_FAILED");
+      throw error;
+    }
+  };
+  const save = async (
+    path: string,
+    value: unknown,
+    stage: FailureStage,
+    step: number | null = null,
+  ) => {
+    const write = () =>
+      writeFile(
+        join(evidenceDirectory, path),
+        `${JSON.stringify(value, null, 2)}\n`,
+        { flag: "wx", mode: 0o600 },
+      );
+    if (stage === "EVIDENCE_PUBLICATION_WRITE") await publish(write);
+    else await telemetry.observe(stage, step, null, write);
     return path;
   };
   const executedHttp: string[] = [];
@@ -164,102 +207,224 @@ export async function verifyPair(input: {
     scenarios.some((scenario) => scenario.requests.length === 0);
   try {
     controls = runControls();
-    await save("controls.json", {
-      ...controls,
-      observations: {
-        ...controls.observations,
-        http: controls.observations.http.map(rawHttp),
+    await save(
+      "controls.json",
+      {
+        ...controls,
+        observations: {
+          ...controls.observations,
+          http: controls.observations.http.map(rawHttp),
+        },
       },
-    });
+      "EVIDENCE_CONTROLS_WRITE",
+    );
     controlsSaved = true;
     if (controls.verdict !== "PASS")
       throw new Error("Independent controls failed");
     if (!missingCoverage) {
       for (const [scenarioIndex, scenario] of scenarios.entries()) {
-        await operation((signal) => input.reference.reset(signal));
-        await operation((signal) => input.candidate.reset(signal));
-        const initialReference = structuredClone(
-          await operation((signal) => input.reference.snapshot(signal)),
+        await operation("REFERENCE_RESET", null, (signal) =>
+          input.reference.reset(signal),
+        );
+        await operation("CANDIDATE_RESET", null, (signal) =>
+          input.candidate.reset(signal),
+        );
+        const initialReferenceValue = await operation(
+          "REFERENCE_INITIAL_SNAPSHOT",
+          null,
+          (signal) => input.reference.snapshot(signal),
+        );
+        const initialReference = telemetry.capture(
+          "REFERENCE_OBSERVATION_CLONE",
+          null,
+          () => structuredClone(initialReferenceValue),
         );
         dbEvidence.push(
           await save(
             `db/${scenarioIndex}-initial-reference.json`,
             initialReference,
+            "EVIDENCE_INITIAL_REFERENCE_WRITE",
           ),
         );
-        const initialCandidate = structuredClone(
-          await operation((signal) => input.candidate.snapshot(signal)),
+        const initialCandidateValue = await operation(
+          "CANDIDATE_INITIAL_SNAPSHOT",
+          null,
+          (signal) => input.candidate.snapshot(signal),
         );
-        const initialPath = await save(`db/${scenarioIndex}-initial.json`, {
-          reference: initialReference,
-          candidate: initialCandidate,
-        });
+        const initialCandidate = telemetry.capture(
+          "CANDIDATE_OBSERVATION_CLONE",
+          null,
+          () => structuredClone(initialCandidateValue),
+        );
+        const initialPath = await save(
+          `db/${scenarioIndex}-initial.json`,
+          {
+            reference: initialReference,
+            candidate: initialCandidate,
+          },
+          "EVIDENCE_INITIAL_PAIR_WRITE",
+        );
         dbEvidence.push(initialPath);
-        const initialDiffs = compareSqlite(initialReference, initialCandidate);
+        const initialDiffs = telemetry.capture("DB_INITIAL_COMPARE", null, () =>
+          compareSqlite(initialReference, initialCandidate),
+        );
         executedDb.push(`${scenario.id}:initial`);
         addFindings(dbFindings, initialDiffs, scenario.id);
         dbEvidence.push(
-          await save(`diffs/${scenarioIndex}-initial.json`, initialDiffs),
+          await save(
+            `diffs/${scenarioIndex}-initial.json`,
+            initialDiffs,
+            "EVIDENCE_INITIAL_DIFF_WRITE",
+          ),
         );
         // A mismatched initial state cannot demonstrate a differential scenario.
         if (initialDiffs.length > 0) continue;
         for (const [step, request] of scenario.requests.entries()) {
           const prefix = `${scenarioIndex}-${step}`;
-          const reference = structuredClone(
-            await operation((signal) =>
-              input.reference.request(structuredClone(request), signal),
-            ),
+          const referenceValue = await operation(
+            "REFERENCE_REQUEST",
+            step,
+            (signal) =>
+              input.reference.request(
+                telemetry.capture("REQUEST_CLONE", step, () =>
+                  structuredClone(request),
+                ),
+                signal,
+              ),
+          );
+          const reference = telemetry.capture(
+            "REFERENCE_OBSERVATION_CLONE",
+            step,
+            () => structuredClone(referenceValue),
           );
           // Preserve the completed side even if the other worker fails next.
           httpEvidence.push(
-            await save(`http/${prefix}-reference.json`, rawHttp(reference)),
-          );
-          const candidate = structuredClone(
-            await operation((signal) =>
-              input.candidate.request(structuredClone(request), signal),
+            await save(
+              `http/${prefix}-reference.json`,
+              telemetry.capture("REFERENCE_HTTP_SERIALIZE", step, () =>
+                rawHttp(reference),
+              ),
+              "EVIDENCE_HTTP_REFERENCE_WRITE",
+              step,
             ),
           );
-          httpEvidence.push(
-            await save(`http/${prefix}.json`, {
-              request,
-              reference: rawHttp(reference),
-              candidate: rawHttp(candidate),
-            }),
+          const candidateValue = await operation(
+            "CANDIDATE_REQUEST",
+            step,
+            (signal) =>
+              input.candidate.request(
+                telemetry.capture("REQUEST_CLONE", step, () =>
+                  structuredClone(request),
+                ),
+                signal,
+              ),
           );
-          const httpDiffs = compareHttp(reference, candidate);
+          const candidate = telemetry.capture(
+            "CANDIDATE_OBSERVATION_CLONE",
+            step,
+            () => structuredClone(candidateValue),
+          );
+          httpEvidence.push(
+            await save(
+              `http/${prefix}.json`,
+              {
+                request,
+                reference: telemetry.capture(
+                  "REFERENCE_HTTP_SERIALIZE",
+                  step,
+                  () => rawHttp(reference),
+                ),
+                candidate: telemetry.capture(
+                  "CANDIDATE_HTTP_SERIALIZE",
+                  step,
+                  () => rawHttp(candidate),
+                ),
+              },
+              "EVIDENCE_HTTP_PAIR_WRITE",
+              step,
+            ),
+          );
+          const httpDiffs = telemetry.capture("HTTP_COMPARE", step, () =>
+            compareHttp(reference, candidate),
+          );
           executedHttp.push(`${scenario.id}:step-${step}`);
           addFindings(httpFindings, httpDiffs, scenario.id);
-          httpEvidence.push(await save(`diffs/${prefix}-http.json`, httpDiffs));
-          const referenceDb = structuredClone(
-            await operation((signal) => input.reference.snapshot(signal)),
+          httpEvidence.push(
+            await save(
+              `diffs/${prefix}-http.json`,
+              httpDiffs,
+              "EVIDENCE_HTTP_DIFF_WRITE",
+              step,
+            ),
+          );
+          const referenceDbValue = await operation(
+            "REFERENCE_STEP_SNAPSHOT",
+            step,
+            (signal) => input.reference.snapshot(signal),
+          );
+          const referenceDb = telemetry.capture(
+            "REFERENCE_OBSERVATION_CLONE",
+            step,
+            () => structuredClone(referenceDbValue),
           );
           dbEvidence.push(
-            await save(`db/${prefix}-reference.json`, referenceDb),
+            await save(
+              `db/${prefix}-reference.json`,
+              referenceDb,
+              "EVIDENCE_DB_REFERENCE_WRITE",
+              step,
+            ),
           );
-          const candidateDb = structuredClone(
-            await operation((signal) => input.candidate.snapshot(signal)),
+          const candidateDbValue = await operation(
+            "CANDIDATE_STEP_SNAPSHOT",
+            step,
+            (signal) => input.candidate.snapshot(signal),
+          );
+          const candidateDb = telemetry.capture(
+            "CANDIDATE_OBSERVATION_CLONE",
+            step,
+            () => structuredClone(candidateDbValue),
           );
           dbEvidence.push(
-            await save(`db/${prefix}.json`, {
-              reference: referenceDb,
-              candidate: candidateDb,
-            }),
+            await save(
+              `db/${prefix}.json`,
+              {
+                reference: referenceDb,
+                candidate: candidateDb,
+              },
+              "EVIDENCE_DB_PAIR_WRITE",
+              step,
+            ),
           );
-          const dbDiffs = compareSqlite(referenceDb, candidateDb);
+          const dbDiffs = telemetry.capture("DB_STEP_COMPARE", step, () =>
+            compareSqlite(referenceDb, candidateDb),
+          );
           executedDb.push(`${scenario.id}:step-${step}`);
           addFindings(dbFindings, dbDiffs, scenario.id);
-          dbEvidence.push(await save(`diffs/${prefix}-db.json`, dbDiffs));
+          dbEvidence.push(
+            await save(
+              `diffs/${prefix}-db.json`,
+              dbDiffs,
+              "EVIDENCE_DB_DIFF_WRITE",
+              step,
+            ),
+          );
         }
       }
     }
   } catch {
     // Raw provider/worker exception text can contain secrets or held-out data.
+    telemetry.unclassifiedFailure();
     fatal =
       "Worker, observation, comparator or evidence operation failed; inspect private evidence and trusted worker diagnostics";
   } finally {
     const cleanup = await Promise.allSettled([
-      operation((signal) => input.reference.close(signal)),
-      operation((signal) => input.candidate.close(signal)),
+      operation("REFERENCE_CLOSE", null, (signal) =>
+        input.reference.close(signal),
+      ),
+      operation("CANDIDATE_CLOSE", null, (signal) =>
+        input.candidate.close(signal),
+      ),
     ]);
     if (cleanup.some((result) => result.status === "rejected"))
       fatal = "Worker cleanup failed or timed out";
@@ -333,58 +498,69 @@ export async function verifyPair(input: {
     evidencePaths: controlsSaved ? ["controls.json"] : [],
   });
   const gateResults = [g2, g3, g4];
-  await save("manifest.json", {
-    runId: basename(evidenceDirectory),
-    scope: "synthetic-or-public-scenarios-only",
-    productVerdict: "NOT_RUN",
-    normalizationVersion: NORMALIZATION_VERSION,
-    stableHeaders: STABLE_HEADERS,
-    scenarioIds: scenarios.map((scenario) => scenario.id),
-    expectedSteps,
-    operationTimeoutMs: input.operationTimeoutMs,
-    startedAt,
-    elapsedMs: performance.now() - started,
-    runtime: {
-      node: process.version,
-      sqlite: process.versions.sqlite,
-      platform: process.platform,
-      arch: process.arch,
+  await save(
+    "manifest.json",
+    {
+      runId: basename(evidenceDirectory),
+      scope: "synthetic-or-public-scenarios-only",
+      productVerdict: "NOT_RUN",
+      normalizationVersion: NORMALIZATION_VERSION,
+      stableHeaders: STABLE_HEADERS,
+      scenarioIds: scenarios.map((scenario) => scenario.id),
+      expectedSteps,
+      operationTimeoutMs: input.operationTimeoutMs,
+      startedAt,
+      elapsedMs: performance.now() - started,
+      runtime: {
+        node: process.version,
+        sqlite: process.versions.sqlite,
+        platform: process.platform,
+        arch: process.arch,
+      },
+      notRun: [
+        "G0 target independence",
+        "G1 candidate build",
+        "G4 held-out isolation",
+        "PHP benchmark qualification",
+      ],
     },
-    notRun: [
-      "G0 target independence",
-      "G1 candidate build",
-      "G4 held-out isolation",
-      "PHP benchmark qualification",
-    ],
-  });
+    "EVIDENCE_PUBLICATION_WRITE",
+  );
   const events: RunEvent[] = gateResults.map((result) => ({
     type: "gate-result",
     runId: basename(evidenceDirectory),
     timestamp: new Date().toISOString(),
     result,
   }));
-  await writeFile(
-    join(evidenceDirectory, "events.jsonl"),
-    `${events.map((event) => JSON.stringify(event)).join("\n")}\n`,
-    { flag: "wx", mode: 0o600 },
+  await publish(() =>
+    writeFile(
+      join(evidenceDirectory, "events.jsonl"),
+      `${events.map((event) => JSON.stringify(event)).join("\n")}\n`,
+      { flag: "wx", mode: 0o600 },
+    ),
   );
-  await save("model-usage.json", []);
+  await save("model-usage.json", [], "EVIDENCE_PUBLICATION_WRITE");
   const escapeHtml = (value: string) =>
     value
       .replaceAll("&", "&amp;")
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;");
-  await writeFile(
-    join(evidenceDirectory, "report.html"),
-    `<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'"><title>Oracle fixture evidence</title><h1>Oracle fixture evidence</h1><p>Public/synthetic scenario scope only. Product verdict: NOT_RUN. G0/G1, PHP qualification and held-out isolation were not executed.</p><pre>${escapeHtml(JSON.stringify(gateResults, null, 2))}</pre></html>\n`,
-    { flag: "wx", mode: 0o600 },
+  await publish(() =>
+    writeFile(
+      join(evidenceDirectory, "report.html"),
+      `<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'"><title>Oracle fixture evidence</title><h1>Oracle fixture evidence</h1><p>Public/synthetic scenario scope only. Product verdict: NOT_RUN. G0/G1, PHP qualification and held-out isolation were not executed.</p><pre>${escapeHtml(JSON.stringify(gateResults, null, 2))}</pre></html>\n`,
+      { flag: "wx", mode: 0o600 },
+    ),
   );
   // Last file is the publication marker. Failure here rejects, never returns PASS.
-  await save("gate-results.json", gateResults);
+  await save("gate-results.json", gateResults, "EVIDENCE_PUBLICATION_WRITE");
   return {
     evidenceDirectory,
     gateResults,
     scope: "synthetic-or-public-scenarios-only",
+    ...(input.failureTelemetry !== undefined
+      ? { failureTelemetry: finishFailureTelemetry(input.failureTelemetry) }
+      : {}),
   };
 }
