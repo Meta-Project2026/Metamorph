@@ -115,6 +115,12 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   assert.equal(sha256(qualifiedBinary), DIAGNOSTIC_POLICY.ageSha256);
   // copyFileSync can preserve ownership under uid 0; create a new inode explicitly.
   writeFileSync(restoreAge, qualifiedBinary, { flag: "wx", mode: 0o755 });
+  const keygenBytes = readFileSync(keygen);
+  assert.equal(sha256(keygenBytes), DIAGNOSTIC_POLICY.keygenSha256);
+  writeFileSync(join(dir, "age-keygen"), keygenBytes, {
+    flag: "wx",
+    mode: 0o755,
+  });
   execFileSync(keygen, ["--output", identityPath], {
     env: clean,
     stdio: "pipe",
@@ -145,8 +151,18 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
     { sha256: sha256(result.ciphertext), bytes: result.ciphertext.length },
     result.cleanup,
   );
+  // A TEST private identity must never be mistaken for the pinned owner identity.
+  assert.throws(() =>
+    verifyAgeRestore({
+      agePath: restoreAge,
+      identityPath,
+      ciphertextPath,
+      record,
+    }),
+  );
   const restored = verifyAgeRestore({
     agePath: restoreAge,
+    testRecipient: recipient,
     identityPath,
     ciphertextPath,
     record,
@@ -170,6 +186,7 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   assert.throws(() =>
     verifyAgeRestore({
       agePath: restoreAge,
+      testRecipient: recipient,
       identityPath: wrong,
       ciphertextPath,
       record,
@@ -182,6 +199,7 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   assert.throws(() =>
     verifyAgeRestore({
       agePath: restoreAge,
+      testRecipient: recipient,
       identityPath,
       ciphertextPath,
       record,

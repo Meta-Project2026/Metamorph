@@ -1,5 +1,6 @@
 // Owner-local verification only. Agent/CI acceptance uses generated TEST identities.
 import { spawnSync } from "node:child_process";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { sha256 } from "../../target-worker/src/admission.mjs";
 import {
@@ -16,6 +17,8 @@ export function verifyAgeRestore({
   identityPath,
   ciphertextPath,
   record,
+  // Trusted generated-key controls only. CLI cannot select another recipient.
+  testRecipient,
 }) {
   record = plainData(record);
   requireCustody(
@@ -34,6 +37,30 @@ export function verifyAgeRestore({
   );
   const identity = readPrivateBytes(identityPath, 4096);
   identity.fill(0);
+  const keygenPath = join(dirname(agePath), "age-keygen");
+  requireCustody(
+    sha256(readPrivateBytes(keygenPath, 32 * 1024 * 1024, false)) ===
+      DIAGNOSTIC_POLICY.keygenSha256,
+  );
+  const publicKey = spawnSync(keygenPath, ["-y", identityPath], {
+    cwd: "/",
+    env: { PATH: "/usr/bin:/bin", HOME: "/nonexistent", TZ: "UTC" },
+    timeout: 10000,
+    maxBuffer: 4096,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  try {
+    requireCustody(
+      !publicKey.error &&
+        publicKey.status === 0 &&
+        !publicKey.signal &&
+        publicKey.stdout.toString().trim() ===
+          (testRecipient ?? DIAGNOSTIC_POLICY.recipient),
+    );
+  } finally {
+    publicKey.stdout?.fill(0);
+    publicKey.stderr?.fill(0);
+  }
   const result = spawnSync(agePath, ["--decrypt", "--identity", identityPath], {
     input: cipherAt(ciphertextPath, expected),
     cwd: "/",
