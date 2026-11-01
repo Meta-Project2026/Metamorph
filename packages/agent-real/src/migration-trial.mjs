@@ -1,7 +1,10 @@
 import { ModelResponseSchema } from "@metamorph/agent";
 import { admitDirectory } from "../../target-worker/src/admission.mjs";
 import { captureLease } from "./custody-capture.mjs";
-import { consumeOraclePermit } from "./custody-checkpoint.mjs";
+import {
+  consumeOraclePermit,
+  custodyVerificationLink,
+} from "./custody-checkpoint.mjs";
 import { beginCustody } from "./custody-contract.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 import { createProductionMigrationProvider } from "./migration-provider.mjs";
@@ -152,11 +155,10 @@ export async function validateCustodiedMigration(options, permit) {
   const result = await validateGeneratedMigration(options);
   return {
     ...result,
-    custodyLink: {
-      format: "mmp115-custody-verifier-link-v1",
-      identity: custodyIdentity,
-      verifierAttemptIds: result.attempts.map((a) => a.attemptId),
-    },
+    custodyLink: custodyVerificationLink(
+      custodyIdentity,
+      result.attempts.map((a) => a.attemptId),
+    ),
   };
 }
 

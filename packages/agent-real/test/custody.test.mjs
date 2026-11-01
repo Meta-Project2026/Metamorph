@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
+import childProcess from "node:child_process";
+import crypto, { randomUUID } from "node:crypto";
+import { EventEmitter } from "node:events";
 import fs from "node:fs";
 import { syncBuiltinESMExports } from "node:module";
 import { tmpdir } from "node:os";
@@ -7,10 +9,13 @@ import { basename, dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { parse } from "yaml";
 import { sha256 } from "../../target-worker/src/admission.mjs";
+import { captureLease } from "../src/custody-capture.mjs";
 import {
   artifactMetadata,
+  authenticatedArtifactMetadata,
   checkpointReady,
   consumeOraclePermit,
+  custodyVerificationLink,
   requireStoredCheckpoint,
   saveTransport,
   verifiedReadback,
@@ -165,6 +170,7 @@ test("production capsule rejects altered/missing/duplicate/extra/oversize source
     "AGE-SECRET-KEY-",
     "REFERENCE_MUST_NEVER_EXPORT",
     "<?php",
+    "\ud800",
   ]) {
     const c = structuredClone(syntheticCapsule());
     c.files[0].content += canary;
@@ -198,8 +204,11 @@ test("hostile getters/proxies cannot execute in capsule/receipt admission", () =
       },
     },
   );
-  for (const v of [getter, proxy, { nested: proxy }, { value: NaN }])
+  for (const v of [getter, proxy, { nested: proxy }, { value: NaN }]) {
     assert.throws(() => plainData(v));
+    assert.throws(() => validateCapsule(v));
+    assert.throws(() => artifactMetadata(v, {}, {}, {}));
+  }
   assert.equal(calls, 0);
 });
 test("custody token requires genuine opaque paid admission and live source lease, independent UUID", async (t) => {
@@ -210,7 +219,10 @@ test("custody token requires genuine opaque paid admission and live source lease
     session = createSourceSession(dir),
     signal = new AbortController().signal;
   await session.writer.write(
-    f.capsule.files.map(({ path, content }) => ({ path, content })),
+    [
+      ...f.capsule.files.map(({ path, content }) => ({ path, content })),
+      { path: "src/empty.ts", content: "" },
+    ],
     signal,
   );
   const lease = await session.acquire(session.writer.root, signal);
@@ -231,6 +243,10 @@ test("custody token requires genuine opaque paid admission and live source lease
     authorization: f.authorization,
   };
   const capsule = await capsuleFromLease(token, lease, receipt);
+  assert.equal(
+    capsule.manifest.find((f) => f.path === "src/empty.ts").bytes,
+    0,
+  );
   assert.notEqual(capsule.identity.attemptId, f.capsule.identity.attemptId);
   await assert.rejects(capsuleFromLease(token, lease, receipt));
   await assert.rejects(
@@ -263,6 +279,14 @@ test("source lease rejects real symlink/hardlink and mutation before capture", a
   fs.linkSync(path, join(session.writer.root, "src/linked.ts"));
   await assert.rejects(session.acquire(session.writer.root, signal));
   fs.unlinkSync(join(session.writer.root, "src/linked.ts"));
+  const linkedDirectory = join(session.writer.root, "src/escape");
+  fs.symlinkSync(
+    dir,
+    linkedDirectory,
+    process.platform === "win32" ? "junction" : "dir",
+  );
+  await assert.rejects(session.acquire(session.writer.root, signal));
+  fs.unlinkSync(linkedDirectory);
   const lease = await session.acquire(session.writer.root, signal);
   fs.appendFileSync(path, "// race");
   await assert.rejects(lease.assertUnchanged());
@@ -495,6 +519,20 @@ test(
   },
 );
 test("no Oracle source access before a genuine stored-checkpoint capability", async () => {
+  const identity = syntheticCapsule().identity,
+    verifierId = randomUUID();
+  assert.deepEqual(
+    custodyVerificationLink(identity, []).verifierAttemptIds,
+    [],
+  );
+  assert.equal(
+    custodyVerificationLink(identity, [verifierId]).verification,
+    "UNVERIFIED",
+  );
+  assert.throws(() => custodyVerificationLink(identity, [identity.attemptId]));
+  assert.throws(() =>
+    custodyVerificationLink(identity, [verifierId, verifierId]),
+  );
   let touched = 0;
   await assert.rejects(
     validateCustodiedMigration(
@@ -512,6 +550,204 @@ test("no Oracle source access before a genuine stored-checkpoint capability", as
   );
   assert.equal(touched, 0);
 });
+test("real read-time source mutation is rejected before collector handoff", async (t) => {
+  const dir = temp(t),
+    f = await offlinePaid(t, dir),
+    session = createSourceSession(dir),
+    signal = new AbortController().signal;
+  await session.writer.write(
+    f.capsule.files.map(({ path, content }) => ({ path, content })),
+    signal,
+  );
+  const lease = await session.acquire(session.writer.root, signal),
+    original = fs.readSync;
+  let changed = false;
+  try {
+    fs.readSync = (...args) => {
+      const n = original(...args);
+      if (!changed) {
+        changed = true;
+        fs.appendFileSync(join(session.writer.root, "src/main.ts"), "// swap");
+      }
+      return n;
+    };
+    syncBuiltinESMExports();
+    await assert.rejects(
+      capsuleFromLease(
+        beginCustody(f.context, f.authorization),
+        lease,
+        boundReceipt(f, lease),
+      ),
+    );
+    assert.equal(changed, true);
+  } finally {
+    fs.readSync = original;
+    syncBuiltinESMExports();
+    await assert.rejects(lease.release());
+  }
+  assert.equal(f.calls.length, 0);
+});
+test(
+  "fresh collector deadline/cancellation and late close cannot commit or retry; no credentials forwarded",
+  linux,
+  async (t) => {
+    const dir = temp(t),
+      f = await offlinePaid(t, dir),
+      session = createSourceSession(dir),
+      signal = new AbortController().signal;
+    await session.writer.write(
+      f.capsule.files.map(({ path, content }) => ({ path, content })),
+      signal,
+    );
+    const lease = await session.acquire(session.writer.root, signal),
+      token = beginCustody(f.context, f.authorization);
+    const spawn = childProcess.spawn,
+      timeout = globalThis.setTimeout;
+    let starts = 0,
+      borrowed,
+      late = false;
+    try {
+      globalThis.setTimeout = (callback, ms, ...args) =>
+        timeout(callback, ms === 45000 ? 2 : ms === 85000 ? 100 : ms, ...args);
+      childProcess.spawn = (_file, _args, options) => {
+        starts++;
+        for (const name of [
+          "MODEL_API_KEY",
+          "GH_TOKEN",
+          "ACTIONS_RUNTIME_TOKEN",
+          "ACTIONS_ID_TOKEN_REQUEST_TOKEN",
+          "NODE_OPTIONS",
+        ])
+          assert.equal(Object.hasOwn(options.env, name), false);
+        const child = new EventEmitter();
+        child.stderr = new EventEmitter();
+        child.stdin = new EventEmitter();
+        child.kill = () => true;
+        child.stdin.end = (input) => {
+          borrowed = input;
+          timeout(() => {
+            child.emit("close", 0, null);
+            timeout(() => {
+              late = true;
+              child.emit("close", 0, null);
+            }, 5);
+          }, 10);
+        };
+        return child;
+      };
+      syncBuiltinESMExports();
+      await assert.rejects(
+        captureLease(token, lease, boundReceipt(f, lease), signal),
+      );
+      await new Promise((resolve) => timeout(resolve, 20));
+      assert.equal(late, true);
+      assert.ok(borrowed.every((b) => b === 0));
+      await assert.rejects(
+        captureLease(token, lease, boundReceipt(f, lease), signal),
+      );
+      assert.equal(starts, 1);
+      assert.equal(fs.existsSync(join(dir, "mmp115-custody")), false);
+    } finally {
+      childProcess.spawn = spawn;
+      globalThis.setTimeout = timeout;
+      syncBuiltinESMExports();
+      await lease.release();
+    }
+  },
+);
+test(
+  "atomic partial write, pending collision and directory-flush crash remain fail closed",
+  linux,
+  (t) => {
+    const dir = temp(t),
+      path = join(dir, "candidate.age"),
+      uuid = "00000000-0000-4000-8000-000000000000",
+      pending = join(dir, `.pending-${uuid}`),
+      random = crypto.randomUUID,
+      write = fs.writeSync,
+      sync = fs.fsyncSync;
+    try {
+      fs.writeSync = () => 0;
+      syncBuiltinESMExports();
+      assert.throws(() => commitPrivate(path, Buffer.alloc(200), 1000));
+      assert.equal(fs.existsSync(path), false);
+      fs.writeSync = write;
+      crypto.randomUUID = () => uuid;
+      syncBuiltinESMExports();
+      fs.writeFileSync(pending, "ORIGINAL_COLLISION_WITNESS", { mode: 0o600 });
+      assert.throws(() => commitPrivate(path, Buffer.alloc(200), 1000));
+      assert.equal(
+        fs.readFileSync(pending, "utf8"),
+        "ORIGINAL_COLLISION_WITNESS",
+      );
+      fs.unlinkSync(pending);
+      let flushes = 0;
+      fs.fsyncSync = (fd) => {
+        if (++flushes === 2) throw new Error("PRIVATE_DIRECTORY_FLUSH");
+        return sync(fd);
+      };
+      syncBuiltinESMExports();
+      assert.throws(() => commitPrivate(path, Buffer.alloc(200), 1000));
+      assert.equal(fs.existsSync(path), true);
+      assert.equal(fs.existsSync(join(dir, "capture.json")), false);
+    } finally {
+      crypto.randomUUID = random;
+      fs.writeSync = write;
+      fs.fsyncSync = sync;
+      syncBuiltinESMExports();
+    }
+  },
+);
+test("authenticated metadata retrieval errors, redirects and oversized bodies never assert storage", async (t) => {
+  const env = {
+    GH_TOKEN: "fake-only",
+    MMP115_ARTIFACT_ID: "115002",
+    GITHUB_RUN_ID: "115001",
+  };
+  let calls = 0;
+  t.mock.method(globalThis, "fetch", async (url, options) => {
+    calls++;
+    assert.ok(
+      String(url).startsWith(
+        "https://api.github.com/repos/Meta-Project2026/Metamorph/actions/",
+      ),
+    );
+    assert.equal(options.redirect, "error");
+    return new Response("PRIVATE_RAW_HTTP_ERROR", { status: 403 });
+  });
+  await assert.rejects(authenticatedArtifactMetadata(env), {
+    message: "CUSTODY_REJECTED",
+  });
+  assert.equal(calls, 1);
+  await assert.rejects(
+    authenticatedArtifactMetadata({ ...env, MMP115_ARTIFACT_ID: "../foreign" }),
+  );
+  assert.equal(calls, 1);
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async () => new Response("x".repeat(65537), { status: 200 }),
+  );
+  await assert.rejects(authenticatedArtifactMetadata(env));
+});
+function boundReceipt(f, lease) {
+  return {
+    format: "meta-generation-v1",
+    status: "PASS",
+    generationKind: "REAL_INFERENCE",
+    attemptedRequests: 1,
+    attempt: 1,
+    action: "generate",
+    sourceSha: f.authorization.sourceSha,
+    contextSha256: f.authorization.contextSha256,
+    manifestSha256: f.authorization.manifestSha256,
+    inputSha256: f.authorization.bodySha256,
+    responseSha256: "a".repeat(64),
+    candidateSha: lease.bundle.candidateSha,
+    authorization: f.authorization,
+  };
+}
+
 test("workflow order, credential boundary, exact ciphertext transport and original finalizers remain", () => {
   const raw = fs.readFileSync(
       join(ROOT, ".github/workflows/meta-paid-migration.yml"),

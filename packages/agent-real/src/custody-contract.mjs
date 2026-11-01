@@ -1,6 +1,15 @@
 // Trusted public-source custody contract. Never import or execute candidate text.
 import { randomUUID } from "node:crypto";
-import { lstatSync, readFileSync, realpathSync } from "node:fs";
+import {
+  closeSync,
+  constants,
+  fstatSync,
+  lstatSync,
+  openSync,
+  readFileSync,
+  readSync,
+  realpathSync,
+} from "node:fs";
 import { join } from "node:path";
 import { types } from "node:util";
 import { MANIFEST_SHA256, SOURCE } from "@metamorph/oracle";
@@ -12,11 +21,7 @@ import {
   bindMigrationContext,
   isMigrationContext,
 } from "./migration-context.mjs";
-import {
-  DIAGNOSTIC_POLICY,
-  readPrivateBytes,
-  rejectSecrets,
-} from "./private-diagnostics.mjs";
+import { DIAGNOSTIC_POLICY, rejectSecrets } from "./private-diagnostics.mjs";
 import { isSourceLease, sourceLeaseRoot } from "./source.mjs";
 
 export const CUSTODY = Object.freeze({
@@ -234,14 +239,57 @@ export async function capsuleFromLease(token, lease, receipt) {
       before.uid === process.getuid() && (before.mode & 0o077) === 0,
     );
   for (const file of lease.bundle.files) {
-    const bytes = readPrivateBytes(join(sourceRoot, file.path), 256 * 1024);
+    const path = join(sourceRoot, file.path);
+    let bytes;
+    // Empty auxiliary TS files are legal admission inputs too. This bounded fd
+    // reader preserves them and checks read-time identity/size/mode/link stability.
+    const named = lstatSync(path),
+      fd = openSync(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
     try {
+      const opened = fstatSync(fd);
+      const safe = (s) =>
+        s.isFile() &&
+        !s.isSymbolicLink() &&
+        s.nlink === 1 &&
+        s.size <= 256 * 1024 &&
+        (process.platform !== "linux" ||
+          (s.uid === process.getuid() && (s.mode & 0o077) === 0));
+      const same = (s) =>
+        s.ino === opened.ino &&
+        s.dev === opened.dev &&
+        s.size === opened.size &&
+        s.mtimeMs === opened.mtimeMs &&
+        s.ctimeMs === opened.ctimeMs &&
+        s.mode === opened.mode &&
+        s.nlink === 1 &&
+        s.uid === opened.uid;
       requireCustody(
-        bytes.equals(Buffer.from(file.content)) &&
-          sha256(bytes) === file.sha256,
+        safe(named) &&
+          safe(opened) &&
+          same(named) &&
+          realpathSync(path) === path,
+      );
+      bytes = Buffer.alloc(opened.size + 1);
+      let n = 0,
+        count;
+      do {
+        count = readSync(fd, bytes, n, bytes.length - n, n);
+        n += count;
+      } while (count && n < bytes.length);
+      requireCustody(
+        n === opened.size &&
+          same(fstatSync(fd)) &&
+          same(lstatSync(path)) &&
+          realpathSync(path) === path,
+      );
+      bytes = bytes.subarray(0, n);
+      requireCustody(
+        new TextDecoder("utf-8", { fatal: true }).decode(bytes) ===
+          file.content && sha256(bytes) === file.sha256,
       );
     } finally {
-      bytes.fill(0);
+      bytes?.fill(0);
+      closeSync(fd);
     }
   }
   const after = lstatSync(sourceRoot);

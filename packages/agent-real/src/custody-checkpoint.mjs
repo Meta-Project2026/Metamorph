@@ -2,6 +2,7 @@
 import { join } from "node:path";
 import {
   CUSTODY,
+  custodyIdentity,
   exact,
   plainData,
   receiptFor,
@@ -89,6 +90,7 @@ export function checkpointReady(capture, finalizer, expected) {
   );
 }
 export function artifactMetadata(record, artifact, run, acknowledgment) {
+  record = plainData(record);
   const c = validateReceipt(
       record,
       record.identity,
@@ -206,6 +208,28 @@ export function consumeOraclePermit(
   permits.delete(token);
   return record.identity;
 }
+export function custodyVerificationLink(identity, verifierAttemptIds) {
+  identity = custodyIdentity(identity);
+  const ids = plainData(verifierAttemptIds);
+  requireCustody(
+    Array.isArray(ids) &&
+      new Set(ids).size === ids.length &&
+      ids.every(
+        (id) =>
+          typeof id === "string" &&
+          /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(
+            id,
+          ) &&
+          id !== identity.attemptId,
+      ),
+  );
+  return plainData({
+    format: "mmp115-custody-verifier-link-v1",
+    verification: "UNVERIFIED",
+    identity,
+    verifierAttemptIds: ids,
+  });
+}
 export async function authenticatedArtifactMetadata(env) {
   requireCustody(
     typeof env.GH_TOKEN === "string" &&
@@ -243,6 +267,9 @@ export async function authenticatedArtifactMetadata(env) {
   return { artifact, run };
 }
 export function saveTransport(spool, ready, artifact, run, ack, directory) {
+  artifact = plainData(artifact);
+  run = plainData(run);
+  ack = plainData(ack);
   const stored = verifiedReadback(ready, artifact, run, ack, directory);
   // Store only bounded binding fields, never API payloads with URLs/actor metadata.
   const a = {

@@ -44,7 +44,11 @@ import {
   offlinePaid,
   syntheticCapsule,
 } from "../../packages/agent-real/test/custody-fixture.mjs";
-import { sha256 } from "../../packages/target-worker/src/admission.mjs";
+import { WORKSHOP_CANDIDATE_SHA } from "../../packages/differential/src/workshop-policy.mjs";
+import {
+  admitDirectory,
+  sha256,
+} from "../../packages/target-worker/src/admission.mjs";
 
 assert.equal(process.platform, "linux");
 assert.ok(
@@ -104,6 +108,11 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   const dir = directory(t),
     identityPath = join(dir, "test-identity"),
     keygen = join(tools, "age-keygen");
+  // Root tar extraction can retain the release archive UID. Restore requires a
+  // separately owned, hash-qualified binary, just like an owner-local install.
+  const restoreAge = join(dir, "age");
+  copyFileSync(agePath, restoreAge);
+  chmodSync(restoreAge, 0o755);
   execFileSync(keygen, ["--output", identityPath], {
     env: clean,
     stdio: "pipe",
@@ -135,7 +144,7 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
     result.cleanup,
   );
   const restored = verifyAgeRestore({
-    agePath,
+    agePath: restoreAge,
     identityPath,
     ciphertextPath,
     record,
@@ -144,7 +153,7 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   assert.deepEqual(restored.manifest, capsule.manifest);
   assert.deepEqual(restored.identity, capsule.identity);
   const plaintext = execFileSync(
-    agePath,
+    restoreAge,
     ["--decrypt", "--identity", identityPath],
     { env: clean, input: result.ciphertext, maxBuffer: CUSTODY.plaintext },
   );
@@ -157,14 +166,24 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   execFileSync(keygen, ["--output", wrong], { env: clean, stdio: "pipe" });
   chmodSync(wrong, 0o600);
   assert.throws(() =>
-    verifyAgeRestore({ agePath, identityPath: wrong, ciphertextPath, record }),
+    verifyAgeRestore({
+      agePath: restoreAge,
+      identityPath: wrong,
+      ciphertextPath,
+      record,
+    }),
   );
   writeFileSync(
     ciphertextPath,
     result.ciphertext.subarray(0, result.ciphertext.length - 1),
   );
   assert.throws(() =>
-    verifyAgeRestore({ agePath, identityPath, ciphertextPath, record }),
+    verifyAgeRestore({
+      agePath: restoreAge,
+      identityPath,
+      ciphertextPath,
+      record,
+    }),
   );
   guardOwned();
   fact({
@@ -183,7 +202,19 @@ test("production generation/lease/credential-free collector and both actual inde
   mkdirSync(join(dir, "mmp089-tools"), { mode: 0o700 });
   copyFileSync(agePath, join(dir, "mmp089-tools/age"));
   chmodSync(join(dir, "mmp089-tools/age"), 0o755);
-  const f = await offlinePaid(t, dir);
+  const known = await admitDirectory(
+    join(root, "packages/target-worker/fixtures/workshop"),
+    WORKSHOP_CANDIDATE_SHA,
+  );
+  const capsule = syntheticCapsule();
+  capsule.files = known.files;
+  capsule.identity.candidateSha = known.candidateSha;
+  capsule.manifest = known.files.map((f) => ({
+    path: f.path,
+    bytes: Buffer.byteLength(f.content),
+    sha256: f.sha256,
+  }));
+  const f = await offlinePaid(t, dir, capsule);
   const result = await runPublicMigration({
     context: f.context,
     selection: "meta",
@@ -269,6 +300,7 @@ test("production generation/lease/credential-free collector and both actual inde
     ciphertextSha256: sha256(bytes),
     ciphertextBytes: bytes.length,
     recipientScope: "FIXED_PRODUCTION_PUBLIC_RECIPIENT",
+    candidateScope: "PINNED_KNOWN_GOOD_FIXTURE_NOT_AI",
     modelAdapter: "SYNTHETIC_NATIVE_HTTPS_NO_NETWORK",
     externalModelRequests: 0,
     interceptedRequests: f.calls.length,
@@ -283,6 +315,21 @@ test("real encryptor crash and cancellation reject; actual emergency cleanup blo
   guardOwned();
   const dir = directory(t),
     capsule = syntheticCapsule();
+  for (const patch of [
+    { recipient: "" },
+    { recipientSha256: "0".repeat(64) },
+    { image: "node:latest" },
+    { ageSha256: "0".repeat(64) },
+  ]) {
+    await assert.rejects(
+      encryptDiagnostic(Buffer.from("synthetic pin refusal"), {
+        agePath,
+        workerPath,
+        policy: { ...DIAGNOSTIC_POLICY, ...patch },
+      }),
+    );
+    guardOwned();
+  }
   for (const mode of ["crash", "cancel", "deadline"]) {
     const fault = join(dir, `${mode}.mjs`);
     writeFileSync(

@@ -5,6 +5,7 @@ import { sha256 } from "../../target-worker/src/admission.mjs";
 import {
   CUSTODY,
   parseCapsule,
+  plainData,
   requireCustody,
   validateReceipt,
 } from "./custody-contract.mjs";
@@ -16,6 +17,7 @@ export function verifyAgeRestore({
   ciphertextPath,
   record,
 }) {
+  record = plainData(record);
   requireCustody(
     process.platform === "linux" &&
       !process.env.MODEL_API_KEY &&
