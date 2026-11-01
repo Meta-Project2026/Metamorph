@@ -13,20 +13,6 @@
       "logSha256": "584060812e8054a28088fd4d7a59050505dbbae0b905aaff84c4f4e339fce58e"
     },
     {
-      "command": "node research/mmp-069/check-syntax.mjs",
-      "exit": 0,
-      "startedAt": "2026-11-01T19:12:57.6780824Z",
-      "finishedAt": "2026-11-01T19:13:02.0101942Z",
-      "logSha256": "dd67c0c3dea95a7031f5fe26c4ef3352345020e3a41468f89c593c4205ba8d59"
-    },
-    {
-      "command": "node research/mmp-069/validate.mjs",
-      "exit": 0,
-      "startedAt": "2026-11-01T19:13:02.0140157Z",
-      "finishedAt": "2026-11-01T19:13:02.2362716Z",
-      "logSha256": "b214394c45f44420113cb6ac1f805d561422042bd5406968453964aa91f39d4c"
-    },
-    {
       "command": "node --test research/mmp-069/validate.test.mjs",
       "exit": 0,
       "startedAt": "2026-11-01T19:13:02.2472762Z",
@@ -74,6 +60,55 @@
       "startedAt": "2026-11-01T19:19:50.3775093Z",
       "finishedAt": "2026-11-01T19:19:54.29463Z",
       "logSha256": "00da1b9ae1b2596c7b5245075121cb185f52d4207f4409839d99801fdc4b893c"
+    },
+    {
+      "command": "pnpm.cmd exec biome check research/mmp-054-connected research/mmp-104",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:31:57.8656191Z",
+      "finishedAt": "2026-11-01T19:31:58.659016Z",
+      "logSha256": "95ae93f96496e840f642af148309a80cbf4c23270b58c7c646fd90304a4dd20e"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:31:58.7007601Z",
+      "finishedAt": "2026-11-01T19:32:03.2969659Z",
+      "logSha256": "dd67c0c3dea95a7031f5fe26c4ef3352345020e3a41468f89c593c4205ba8d59"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:32:03.3063415Z",
+      "finishedAt": "2026-11-01T19:32:03.6056735Z",
+      "logSha256": "b214394c45f44420113cb6ac1f805d561422042bd5406968453964aa91f39d4c"
+    },
+    {
+      "command": "node research/mmp-054-connected/history.mjs check",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:32:03.6094995Z",
+      "finishedAt": "2026-11-01T19:32:04.0512549Z",
+      "logSha256": "d57b6a1f01e2ec1fd3ef8629743dff677378e3a92b337a22368c49c0a2cc3222"
+    },
+    {
+      "command": "node --test research/mmp-054-connected/history.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:32:04.0615559Z",
+      "finishedAt": "2026-11-01T19:32:07.0196499Z",
+      "logSha256": "ce8807f6cf61bdb0dc12ebde4591a9a01bdc40be585a233df38f0bc8bfc95091"
+    },
+    {
+      "command": "node --test research/mmp-054-connected/verify.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:32:07.0296949Z",
+      "finishedAt": "2026-11-01T19:32:30.3723812Z",
+      "logSha256": "7c79d3ce3ad91446c05c6987a48e91edabf95800842fa0c991a246d8e52adc1b"
+    },
+    {
+      "command": "node --test research/demo-readiness/demo.test.mjs research/demo-readiness/real-ai.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T19:32:30.3843169Z",
+      "finishedAt": "2026-11-01T19:32:30.755272Z",
+      "logSha256": "7a2ab4e1cc522ad9f0f1f5539da6ef91b533a7bbdcbae5c675d160d36e4a2db9"
     }
   ]
 }

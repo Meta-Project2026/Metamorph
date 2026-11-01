@@ -1,20 +1,60 @@
 // Adversarial host checks only. Historical public fixtures are never new proof.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import test from "node:test";
+import childProcess from "node:child_process";
+import fs, { readFileSync } from "node:fs";
+import { syncBuiltinESMExports } from "node:module";
+import { join, resolve } from "node:path";
+import test, { mock } from "node:test";
 import {
   sha256,
   validateBundle,
 } from "../../packages/target-worker/src/admission.mjs";
 import { git, PINS_PATH, root, verifyPins } from "../mmp-044/config.mjs";
 import { verifyPublic } from "../mmp-049/verify.mjs";
-import { checkHistory } from "./history.mjs";
+import { checkHistory, HISTORY } from "./history.mjs";
 
 // Explicit deterministic precondition; no platform skip or relaxed pin checks.
 checkHistory();
 
 const historicalSha = "cf33c5bbcaad524a99c667782fae5cb9b0b4125f";
+const RUNNER = "packages/oracle/src/runner.ts";
+// Historical receipts pin the reviewed permission-fix runner, not future HEADs.
+// Scope only that source read to its authentic Git object in synchronous tests.
+// verifyPins(), pin documents, other executable blobs and recipe checks are intact.
+function historicalRunner(operation) {
+  const bytes = git("show", `${HISTORY.fix}:${RUNNER}`);
+  const pins = JSON.parse(readFileSync(join(root, PINS_PATH)));
+  assert.equal(sha256(bytes), pins.files[RUNNER]);
+  const read = fs.readFileSync,
+    exec = childProcess.execFileSync;
+  const readMock = mock.method(fs, "readFileSync", (path, ...args) =>
+    typeof path === "string" && resolve(path) === resolve(root, RUNNER)
+      ? Buffer.from(bytes)
+      : read(path, ...args),
+  );
+  const execMock = mock.method(
+    childProcess,
+    "execFileSync",
+    (command, args, ...rest) =>
+      exec(
+        command,
+        command === "git" &&
+          args?.[0] === "show" &&
+          args[1] === `HEAD:${RUNNER}`
+          ? ["show", `${HISTORY.fix}:${RUNNER}`, ...args.slice(2)]
+          : args,
+        ...rest,
+      ),
+  );
+  syncBuiltinESMExports();
+  try {
+    return operation();
+  } finally {
+    execMock.mock.restore();
+    readMock.mock.restore();
+    syncBuiltinESMExports();
+  }
+}
 const names = [
   "summary.json",
   "semantics.json",
@@ -38,25 +78,29 @@ function fixtures() {
   );
 }
 function verify(files, sha = historicalSha) {
-  return verifyPublic((name) => {
-    assert.ok(names.includes(name));
-    assert.ok(Object.hasOwn(files, name));
-    return JSON.stringify(files[name]);
-  }, sha);
+  return historicalRunner(() =>
+    verifyPublic((name) => {
+      assert.ok(names.includes(name));
+      assert.ok(Object.hasOwn(files, name));
+      return JSON.stringify(files[name]);
+    }, sha),
+  );
 }
 test("unchanged verifier accepts historical public fixtures only at their historical SHA", () => {
   assert.equal(verify(fixtures()).status, "PASS_SCOPED");
   assert.throws(() => verify(fixtures(), "0".repeat(40)));
 });
 test("pin refresh admits exactly the merged permission fix and preserves every other pin", () => {
-  const { pins } = verifyPins({ strictCheckout: process.platform === "linux" });
+  const { pins } = historicalRunner(() =>
+    verifyPins({ strictCheckout: process.platform === "linux" }),
+  );
   const old = JSON.parse(
     git("show", `7cf6e678802802d16336685771c842d0ce6cf37d:${PINS_PATH}`),
   );
   old.files["packages/oracle/src/runner.ts"] =
     "adf610324c8af75c4cde974f5e772ad82646b1435fd378b08584f3b8ea630150";
   assert.deepEqual(pins, old);
-  const current = git("show", "HEAD:packages/oracle/src/runner.ts").toString();
+  const current = git("show", `${HISTORY.fix}:${RUNNER}`).toString();
   const previous = git(
     "show",
     "8779dfe^:packages/oracle/src/runner.ts",
@@ -68,6 +112,21 @@ test("pin refresh admits exactly the merged permission fix and preserves every o
       "await mkdir(join(evidenceDirectory, directory), { mode: 0o700 });",
     ),
   );
+});
+test("historical source view never admits the current unpinned telemetry runner", () => {
+  const pins = JSON.parse(readFileSync(join(root, PINS_PATH)));
+  assert.notEqual(sha256(git("show", `HEAD:${RUNNER}`)), pins.files[RUNNER]);
+  assert.throws(() => verifyPins({ strictCheckout: false }), {
+    code: "PIN_MISMATCH",
+  });
+  const historical = historicalRunner(() =>
+    verifyPins({ strictCheckout: process.platform === "linux" }),
+  );
+  assert.ok(!historical.checkoutDifferences.includes(RUNNER));
+  // Restoration is mandatory: the current unpinned runner must still fail.
+  assert.throws(() => verifyPins({ strictCheckout: false }), {
+    code: "PIN_MISMATCH",
+  });
 });
 test("pin gate still rejects a different executable Oracle blob", () => {
   assert.throws(() =>

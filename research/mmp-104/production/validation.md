@@ -62,6 +62,33 @@ the injection harness now accounts for that call. No production check was relaxe
 Review also added explicit UNAVAILABLE/INTERNAL_ERROR for an error outside approved
 checkpoints, with a matching regression. Final checks above all passed afterward.
 
+## First hosted run and historical pin-test correction
+
+[Fast CI41341463830](https://github.com/Meta-Project2026/Metamorph/actions/runs/41341463830)
+covered initial head eb36864feaddbef1be7a8f2ce1ca5ad61702af22, run_attempt1.
+Both Node22/24 root suites passed:704total/701PASS/3SKIP/0FAIL, including all85
+new production telemetry tests, the actual positive Linux retention/sealing branch
+and existing isolated preserver. Overall CI **FAILED** later at Connected adversarial
+tests: two historical positives incorrectly checked the new HEAD runner against
+the frozen historical permission-fix digest (PIN_MISMATCH). This is a CI fixture
+binding error, separate from the historical paid-v2 incident.
+
+The correction changes only research/mmp-054-connected/verify.test.mjs. In its
+synchronous historical-receipt tests, scoped built-in mocks supply the authentic
+HISTORY.fix Git runner blob to the existing source-read seam. Its digest must match
+the unchanged pin document before use. Every other executable blob, corpus, recipe,
+pin checksum and production verifyPins/verifyPublic check stays unchanged. A new
+negative test proves the actual current telemetry runner fails PIN_MISMATCH before
+and after restoring the historical source view. No historical runner is executed,
+no new candidate runs and no pins or expected results are refreshed to admit HEAD.
+The permission-only diff assertion now explicitly compares the historical fix blob.
+
+Local connected adversarial suite:22PASS/0FAIL (previously21tests); research lint,
+syntax/inventory and depth-one history bootstrap controls pass separately. Updated
+command exits/timestamps/log digests are in local-checks.json. The production code
+and85telemetry controls did not change for this correction. The follow-up push
+starts ordinary PR CI; no manual job rerun or workflow dispatch is performed.
+
 Ordinary exact-HEAD PR Node22/24 CI and the independent production review are
 reported in the PR handoff after publication; this file does not preclaim success.
 No model/provider GET/POST, dispatch/validate_only, job rerun, age/key access,
