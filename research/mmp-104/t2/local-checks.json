@@ -1,0 +1,86 @@
+{
+  "baseSha": "07568d576565c2b83254655585ed869b270befd3",
+  "node": "v24.21.0",
+  "pnpm": "11.25.0",
+  "productionIntegrated": false,
+  "independentReview": "PENDING",
+  "commands": [
+    {
+      "command": "pnpm.cmd install --offline --frozen-lockfile",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:02:44.0254006Z",
+      "finishedAt": "2026-11-01T18:02:44.6565991Z",
+      "logSha256": "fee3675211506ccbc8e1442c5273e98be4e1dead82e849cb396b472b3da6e455"
+    },
+    {
+      "command": "pnpm.cmd typecheck",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:02:46.9576199Z",
+      "finishedAt": "2026-11-01T18:03:22.1860188Z",
+      "logSha256": "893eaa1567ae405de800266ddc1575c4db7d8cc344fbcf739d1e6b65e4ca806a"
+    },
+    {
+      "command": "pnpm.cmd build",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:03:51.1951118Z",
+      "finishedAt": "2026-11-01T18:04:08.5603558Z",
+      "logSha256": "5d73ca7809a7cfa6a05315055c36c25d6a9b0dd8993ccfa9a96bbd1806f08e59"
+    },
+    {
+      "command": "node --test packages/agent-real/test/verifier-forensics.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:04:10.5055377Z",
+      "finishedAt": "2026-11-01T18:04:12.0411893Z",
+      "logSha256": "5edd1f5b53fca117ca8b91e6b3fc0e9b695d9e393fbc91619e3eb10d04a23330"
+    },
+    {
+      "command": "node research/mmp-069/validate.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:04:16.7408137Z",
+      "finishedAt": "2026-11-01T18:04:16.9749366Z",
+      "logSha256": "a4a4b4522e535e651693cf50a00a4609ac16359a808c59ce209f7e1b1acac184"
+    },
+    {
+      "command": "node --test research/mmp-069/validate.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:04:16.9851599Z",
+      "finishedAt": "2026-11-01T18:04:33.8222366Z",
+      "logSha256": "99e0c9ddc0e60e168de41d83a4579a65ecc089aec2591d21bc06f22618ec8bb4"
+    },
+    {
+      "command": "pnpm.cmd lint",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:05:27.3762135Z",
+      "finishedAt": "2026-11-01T18:05:28.4651429Z",
+      "logSha256": "8a4c23e3bc400aff0d83a5817595776a078790493742e973fe7e8949c083dda9"
+    },
+    {
+      "command": "pnpm.cmd exec biome check research/mmp-104",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:05:28.5150534Z",
+      "finishedAt": "2026-11-01T18:05:29.2941953Z",
+      "logSha256": "adbb6faea9570871c61245cef5bfe9ce3f14a55e5bf10320f6f67dcfcbe61895"
+    },
+    {
+      "command": "pnpm.cmd test",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:05:29.3057443Z",
+      "finishedAt": "2026-11-01T18:05:55.0537707Z",
+      "logSha256": "f140a28d7f24d6c595ae1b1d961ee3c104b86599c247bb79a6b3a35b82afe974"
+    },
+    {
+      "command": "node --test packages/agent-real/test/trusted-stage-contract.test.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:05:55.0669964Z",
+      "finishedAt": "2026-11-01T18:05:57.1410014Z",
+      "logSha256": "b3af5ecc6d17b65d096725be57c11754587adcbe9e5e503f4e7ff3c8e13bbac8"
+    },
+    {
+      "command": "node research/mmp-069/check-syntax.mjs",
+      "exit": 0,
+      "startedAt": "2026-11-01T18:05:57.1561459Z",
+      "finishedAt": "2026-11-01T18:06:01.91903Z",
+      "logSha256": "dd67c0c3dea95a7031f5fe26c4ef3352345020e3a41468f89c593c4205ba8d59"
+    }
+  ]
+}
