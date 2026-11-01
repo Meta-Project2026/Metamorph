@@ -111,8 +111,10 @@ test("real pinned age with ephemeral TEST identity: original-byte restore and wr
   // Root tar extraction can retain the release archive UID. Restore requires a
   // separately owned, hash-qualified binary, just like an owner-local install.
   const restoreAge = join(dir, "age");
-  copyFileSync(agePath, restoreAge);
-  chmodSync(restoreAge, 0o755);
+  const qualifiedBinary = readFileSync(agePath);
+  assert.equal(sha256(qualifiedBinary), DIAGNOSTIC_POLICY.ageSha256);
+  // copyFileSync can preserve ownership under uid 0; create a new inode explicitly.
+  writeFileSync(restoreAge, qualifiedBinary, { flag: "wx", mode: 0o755 });
   execFileSync(keygen, ["--output", identityPath], {
     env: clean,
     stdio: "pipe",
