@@ -7,7 +7,9 @@ export function check(value, code) {
   if (!value) throw Object.assign(new Error(code), { code });
 }
 const sessions = new WeakSet();
+const leases = new WeakSet();
 export const isSourceSession = (value) => sessions.has(value);
+export const isSourceLease = (value) => leases.has(value);
 
 /** A directory issued here is backed by the unchanged createCandidateWriter.
  * Exclusive host ownership is required; the provider receives no filesystem path. */
@@ -43,7 +45,7 @@ export function createSourceSession(parent) {
         Object.freeze(bundle.files);
         Object.freeze(bundle);
         let released = false;
-        return Object.freeze({
+        const lease = Object.freeze({
           bundle,
           async assertUnchanged() {
             check(!released, "SOURCE_RELEASED");
@@ -55,10 +57,13 @@ export function createSourceSession(parent) {
               await admitDirectory(root, bundle.candidateSha);
             } finally {
               released = true;
+              leases.delete(lease);
               busy = false;
             }
           },
         });
+        leases.add(lease);
+        return lease;
       } catch (error) {
         busy = false;
         throw error;

@@ -327,6 +327,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Inert synthetic custody controls execute through the package test bridge in pnpm test (Node 22/24); the static research test-glob inventory does not trace imports. Local lint and offline budget/recorded-receipt preflight are separate. No production capture, age interoperability, owner restore, Docker, Meta call, dispatch or artifact upload."
+    },
+    {
+      "path": "research/mmp-115",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Production custody contract/state/filesystem and instrumented workflow controls are reached directly by the package custody.test.mjs fast glob. Real Linux age/Docker and generated-test-key restore acceptance are manual-only and recorded separately. No model, paid dispatch, live artifact upload or owner private identity is used."
     }
   ],
   "skips": [

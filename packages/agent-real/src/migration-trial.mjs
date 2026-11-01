@@ -1,5 +1,8 @@
 import { ModelResponseSchema } from "@metamorph/agent";
 import { admitDirectory } from "../../target-worker/src/admission.mjs";
+import { captureLease } from "./custody-capture.mjs";
+import { consumeOraclePermit } from "./custody-checkpoint.mjs";
+import { beginCustody } from "./custody-contract.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 import { createProductionMigrationProvider } from "./migration-provider.mjs";
 import { publicAttempt } from "./report.mjs";
@@ -69,6 +72,7 @@ export async function runPublicMigration({
   result.trialRunId = selected.status.authorization.runId;
   result.blockers = [];
   const session = createSourceSession(parent);
+  const custodyAttempt = beginCustody(context, authorization);
   try {
     const response = ModelResponseSchema.parse(
       await selected.provider.generate(
@@ -89,9 +93,27 @@ export async function runPublicMigration({
       result.candidateSha === selected.receipts()[0]?.candidateSha,
       "SOURCE_IDENTITY",
     );
-    await lease.release();
+    let custody,
+      captureFailed = false;
+    try {
+      custody = await captureLease(
+        custodyAttempt,
+        lease,
+        selected.receipts()[0],
+        signal,
+      );
+    } catch {
+      captureFailed = true;
+    } finally {
+      await lease.release();
+    }
     result.modelGeneration = "GENERATED";
     result.aiGeneration = "REAL_INFERENCE_GENERATED";
+    if (captureFailed) {
+      result.blockers = ["CUSTODY_CAPTURE_FAILED"];
+      return result;
+    }
+    result.custody = custody;
     result.blockers = ["PUBLIC_DOCKER_VALIDATION_PENDING"];
     Object.defineProperty(result, "candidateRoot", {
       value: session.writer.root,
@@ -117,6 +139,25 @@ export async function runPublicMigration({
     result.totalCostUsd = null;
   }
   return result;
+}
+
+// Only the paid production path uses this wrapper. Original deterministic offline
+// validation remains available without disguising its fixture as model generation.
+export async function validateCustodiedMigration(options, permit) {
+  const custodyIdentity = consumeOraclePermit(permit, {
+    candidateSha: options.candidateSha,
+    headSha: options.headSha,
+    sourceSha: options.context.sourceSha,
+  });
+  const result = await validateGeneratedMigration(options);
+  return {
+    ...result,
+    custodyLink: {
+      format: "mmp115-custody-verifier-link-v1",
+      identity: custodyIdentity,
+      verifierAttemptIds: result.attempts.map((a) => a.attemptId),
+    },
+  };
 }
 
 /** Fresh process after the secret-bearing step. No provider or credentials here.
