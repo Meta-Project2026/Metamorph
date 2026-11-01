@@ -307,6 +307,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Package verifier-forensics tests exercise the actual Oracle/report and Linux preserver with inert synthetic adapters through pnpm test. Research stage instrumentation is a proposal/prototype, not wired into production. Exact historical artifacts are inspected locally, never fetched by tests. No model, Docker, dispatch or live upload."
+    },
+    {
+      "path": "research/mmp-108",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "The manual offline first-step driver and disposable harness are syntax-checked and biome-linted in Fast CI; the real known-good Docker replay, real first-step fault control and synthetic verifyPair controls were executed once on a local disposable Linux Docker environment (receipts in research/mmp-108/evidence). No hosted Docker replay, Meta request, paid dispatch or held-out G4 coverage."
     }
   ],
   "skips": [
