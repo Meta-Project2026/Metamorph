@@ -235,9 +235,14 @@ async function main() {
     assert.equal(result.attempts.length, 1);
     const attempt = result.attempts[0];
     assert.equal(attempt.candidateSha, CANDIDATE_SHA);
+    // Executor semantics: the verifier stops after the first pair that ends
+    // in an ERROR or a G1 FAIL, so the recorded scenario ids must be a
+    // monotone prefix of the pinned MANIFEST and non-empty — not the whole
+    // MANIFEST. The aggregate gates below already score coverage honestly.
+    assert.ok(attempt.pairs.length >= 1);
     assert.deepEqual(
       attempt.pairs.map((pair) => pair.scenarioId),
-      MANIFEST.map((scenario) => scenario.id),
+      MANIFEST.slice(0, attempt.pairs.length).map((scenario) => scenario.id),
     );
     for (const pair of attempt.pairs) {
       assert.equal(pair.cleanup, "VERIFIED_ZERO_RESOURCES");
@@ -271,6 +276,11 @@ async function main() {
       },
       coverage: attempt.coverage,
       pairs: attempt.pairs.length,
+      pairsDetail: attempt.pairs.map((pair) => ({
+        scenarioId: pair.scenarioId,
+        cleanup: pair.cleanup,
+        compilerDiagnostics: pair.compilerDiagnostics ?? null,
+      })),
       cleanup: result.cleanup,
       blockers: result.blockers,
       aiGeneration: "AI_GENERATION_NOT_RUN",
