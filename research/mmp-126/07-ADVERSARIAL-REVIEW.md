@@ -141,7 +141,7 @@ MMP-120 `prompt-proposals.md` сам отклонил «Schema-text steering» �
 
 | Утверждение | Уверенность | Класс |
 | --- | --- | --- |
-| `main` HEAD = `074af75`, Fast CI success, 3 платных прогона, последний 16:38Z 01.11 | **ОЧЕНЬ ВЫСОКАЯ** | `GIT_VERIFIED` |
+| `main` HEAD = `074af75`, Fast CI success, 3 запуска GitHub workflow, из которых 2 подтверждённых Meta POST, последний 16:38Z 01.11 | **ОЧЕНЬ ВЫСОКАЯ** | `GIT_VERIFIED` |
 | `x-request-id` требуется Oracle и отсутствует в модельном контексте и у GLM repair | **ОЧЕНЬ ВЫСОКАЯ** | `GIT_VERIFIED` |
 | Это детерминированно ломает GLM repair на `CANDIDATE_REQUEST` → `ERROR 0/17+1/20` | **ВЫСОКАЯ** (дедукция; исполнение не производилось) | `HYPOTHESIS` (фальсифицируемо 2.2) |
 | Та же причина у Meta run #41327197036 | **СРЕДНЯЯ** | `HYPOTHESIS` / `UNKNOWN` |
