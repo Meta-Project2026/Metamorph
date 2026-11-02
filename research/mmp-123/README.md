@@ -10,7 +10,7 @@ the single authorized post-freeze repair unit.
 | path | contents | mutable? |
 | --- | --- | --- |
 | `candidate/` | The sealed first draft (`candidateSha 4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72`). Bytes are frozen at commit `c482e19f8242850f1cc04f79a79add79e68658ee`. | **never** |
-| `repair-candidate/` | The single authorized post-freeze repair unit ("GLM 5.3 first draft + Sol 6.1 repair"), admission-pinned `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`. | frozen once committed |
+| `repair-candidate/` | The single authorized post-freeze repair unit ("GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair"), admission-pinned `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`. | frozen once committed |
 | `harness/` | Disposable Linux Docker verification harness (manual only; never dispatched). | driver edits only |
 | `verifier-proof.mjs` | The driver; admits a candidate read-only and records whatever the unchanged verifier produces. Modes: `candidate`, `repair`. | driver edits only |
 | `prompt-sha.mjs` | Context-payload reconstruction hash recheck (also the independent first-draft SHA reproduction entry point). | read-only in practice |
@@ -26,7 +26,7 @@ The frozen first draft failed G1 build/type checking (`TS2345` at
 `src/config.ts:100:41`) inside the real unchanged verifier, so G2/G3 were
 never executed (INCONCLUSIVE, MISSING_COVERAGE 0/17, 0/20) and G4 was not run
 (INCONCLUSIVE, HELD_OUT_NOT_RUN); product **NOT_ESTABLISHED**. The single
-authorized post-freeze repair unit ("GLM 5.3 first draft + Sol 6.1 repair",
+authorized post-freeze repair unit ("GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair",
 admission-pinned `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`)
 was then verified in its own repair-mode run: typecheck and build both
 executed (compiler projection `g1Verdict PASS` — the `TS2345` failure no
@@ -45,7 +45,7 @@ PASS and no product acceptance are established. See `RESULTS.md`.
   this continuation; reproduction passes against `research/mmp-123/candidate`
   identical to `research/mmp-123/repair-candidate`'s four untouched files).
 - **Repair**: separate directory + separate commit; admission-pinned;
-  never labeled GLM-only (label: "GLM 5.3 first draft + Sol 6.1 repair").
+  never labeled ZCode-only (label: "GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair").
 - **Receipts**: hash-pinned in `RESULTS.md`; byte-identity re-verified against
   the run-source clone at commit `a8cf79dd…`.
 
