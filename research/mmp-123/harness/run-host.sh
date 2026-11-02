@@ -92,6 +92,7 @@ if MSYS_NO_PATHCONV=1 docker run --rm --name mmp123-harness \
   -v "$REPO_MOUNT:/repo:ro" \
   -e AGENT_HEAD_SHA \
   -e MMP123_RUN_ID="$RUN_ID" \
+  -e MMP123_MODE="${MMP123_MODE:-}" \
   -e MMP123_PRIVATE_PARENT=/var/lib/docker/volumes/mmp123-private/_data \
   -e MMP123_PUBLIC_OUTPUT=/var/lib/docker/volumes/mmp123-output/_data \
   "$IMAGE_TAG" mmp123-run; then

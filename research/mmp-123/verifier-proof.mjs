@@ -1,7 +1,9 @@
 // MMP-123 offline verifier validation of the frozen GLM 5.3 first draft.
-// Linux-only, secret-free, no model provider, no repair loop. The candidate is
-// admitted read-only from the frozen first-draft directory; candidate TS and
-// reference PHP execute exclusively inside the trusted network-off Docker
+// Linux-only, secret-free, no model provider, no repair loop. Each admitted
+// candidate (the frozen first draft, or the single authorized post-freeze
+// repair unit in repair mode) is admitted read-only from its pinned
+// directory; candidate TS and reference PHP execute exclusively inside the
+// trusted network-off Docker
 // workers that the unchanged production verifier provisions. The driver never
 // asserts the candidate's outcome in advance: it records whatever the
 // unchanged verifier produces, with PASS floating on exactly the expected
@@ -36,12 +38,47 @@ const CANDIDATE_ROOT = "research/mmp-123/candidate";
 const CANDIDATE_FILE_COUNT = 5;
 const MIT_NOTICE = "Copyright (c) 2026 Tanjila Afsari Rubina";
 
+/** Pin of the single authorized post-freeze repair unit ("GLM 5.3 first
+ * draft + Sol 6.1 repair", research/mmp-123/repair-candidate). Computed once
+ * by the unchanged admission module and pinned here; this driver does not
+ * generate, mutate or loop over repair candidates. */
+const REPAIR_CANDIDATE_SHA =
+  "0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1";
+const REPAIR_ROOT = "research/mmp-123/repair-candidate";
+
+/**
+ * Per-mode pinned case specification. All facts are fixed constants: the
+ * driver never reads the mode from untrusted input beyond this allowlist.
+ * The first draft is linked into the repair receipt so the two recorded runs
+ * stay explicitly connected as draft + single repair.
+ */
+const CASE_SPECS = Object.freeze({
+  candidate: Object.freeze({
+    key: "candidate",
+    candidateRoot: CANDIDATE_ROOT,
+    candidateSha: CANDIDATE_SHA,
+    fileCount: CANDIDATE_FILE_COUNT,
+    id: "glm-first-draft-real-docker-validation",
+    execution: "REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT",
+    firstDraftCandidateSha: null,
+  }),
+  repair: Object.freeze({
+    key: "repair",
+    candidateRoot: REPAIR_ROOT,
+    candidateSha: REPAIR_CANDIDATE_SHA,
+    fileCount: CANDIDATE_FILE_COUNT,
+    id: "glm-first-draft-with-sol-repair-real-docker-validation",
+    execution: "REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT_WITH_SOL_REPAIR",
+    firstDraftCandidateSha: CANDIDATE_SHA,
+  }),
+});
+
 /** Valid CLI modes. Anything else must be rejected before any side effect. */
-export const MODES = Object.freeze(["candidate"]);
+export const MODES = Object.freeze(["candidate", "repair"]);
 
 /** Expected nonzero number of case results per mode; 0 for unknown modes. */
 export function expectedCaseCount(mode) {
-  return (mode === "candidate" ? 1 : 0);
+  return (mode === "candidate" || mode === "repair" ? 1 : 0);
 }
 
 /** Fixed allowlisted public failure projection. The error argument is
@@ -200,28 +237,29 @@ async function main() {
     emergencyRemoved: 0,
   };
 
-  async function candidateCase() {
-    // Admission runs against the frozen first-draft directory as deposited by
-    // the sealed commit: any byte change or layout drift fails closed here.
+  async function verifierCase(spec) {
+    // Admission runs against the pinned candidate directory exactly as
+    // deposited by its commit: any byte change or layout drift fails closed
+    // here.
     const bundle = await admitDirectory(
-      join(root, CANDIDATE_ROOT),
-      CANDIDATE_SHA,
+      join(root, spec.candidateRoot),
+      spec.candidateSha,
     );
-    assert.equal(bundle.candidateSha, CANDIDATE_SHA);
-    assert.equal(bundle.files.length, CANDIDATE_FILE_COUNT);
+    assert.equal(bundle.candidateSha, spec.candidateSha);
+    assert.equal(bundle.files.length, spec.fileCount);
     for (const file of bundle.files)
       assert.ok(
         file.content.includes(MIT_NOTICE),
         `MIT notice missing in ${file.path}`,
       );
-    const runParent = join(parent, "candidate");
+    const runParent = join(parent, spec.key);
     mkdirSync(runParent, { recursive: true, mode: 0o700 });
     const result = await validateGeneratedMigration({
       context: bindContext(),
       root,
       parent: runParent,
       headSha,
-      candidateRoot: join(root, CANDIDATE_ROOT),
+      candidateRoot: join(root, spec.candidateRoot),
       candidateSha: bundle.candidateSha,
       signal: AbortSignal.timeout(REAL_TIMEOUT_MS),
     });
@@ -234,7 +272,7 @@ async function main() {
     );
     assert.equal(result.attempts.length, 1);
     const attempt = result.attempts[0];
-    assert.equal(attempt.candidateSha, CANDIDATE_SHA);
+    assert.equal(attempt.candidateSha, spec.candidateSha);
     // Executor semantics: the verifier stops after the first pair that ends
     // in an ERROR or a G1 FAIL, so the recorded scenario ids must be a
     // monotone prefix of the pinned MANIFEST and non-empty — not the whole
@@ -255,14 +293,17 @@ async function main() {
     assert.ok(byGate.G4.findingCodes.includes("HELD_OUT_NOT_RUN"));
     assert.equal(result.product, "NOT_ESTABLISHED");
     const finalizer = cleanupReceipt(
-      join(parent, "finalizer-candidate"),
-      "candidate",
+      join(parent, `finalizer-${spec.key}`),
+      spec.key,
     );
     return {
-      id: "glm-first-draft-real-docker-validation",
+      id: spec.id,
       status: "PASS",
-      execution: "REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT",
+      execution: spec.execution,
       candidateSha: bundle.candidateSha,
+      ...(spec.firstDraftCandidateSha
+        ? { firstDraftCandidateSha: spec.firstDraftCandidateSha }
+        : {}),
       candidateFiles: bundle.files.map((file) => ({
         path: file.path,
         bytes: Buffer.byteLength(file.content),
@@ -305,7 +346,8 @@ async function main() {
         image: SOURCE.image,
         archiveSha256: SOURCE.archiveSha256,
       },
-      candidatePin: CANDIDATE_SHA,
+      candidatePin: CASE_SPECS[mode].candidateSha,
+      ...(mode === "repair" ? { firstDraftCandidatePin: CANDIDATE_SHA } : {}),
     },
     network: { sourceFetches: 0, blockedRequests: 0 },
     cases: [],
@@ -315,7 +357,8 @@ async function main() {
     status: "PASS",
   };
   const cases = {
-    candidate: [candidateCase],
+    candidate: [() => verifierCase(CASE_SPECS.candidate)],
+    repair: [() => verifierCase(CASE_SPECS.repair)],
   };
   try {
     for (const runCase of cases[mode]) {

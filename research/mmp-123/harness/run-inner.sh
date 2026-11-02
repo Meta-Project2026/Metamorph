@@ -26,4 +26,4 @@ cd "$WORK"
 test "$(git rev-parse HEAD)" = "$AGENT_HEAD_SHA"
 pnpm install --frozen-lockfile >"$HOME/pnpm-install.log" 2>&1
 pnpm build >"$HOME/pnpm-build.log" 2>&1
-node research/mmp-123/verifier-proof.mjs candidate
+node research/mmp-123/verifier-proof.mjs "${MMP123_MODE:-candidate}"
