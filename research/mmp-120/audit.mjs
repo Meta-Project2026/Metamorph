@@ -408,7 +408,7 @@ export function audit({ headProvider = auditedHead, rawSource } = {}) {
       "G4_FORMAL_HELD_OUT_NOT_ESTABLISHED",
       "PRODUCT_ACCEPTANCE_NOT_ESTABLISHED",
       "PROMPT_QUALITY_NOT_EMPIRICALLY_ESTABLISHED",
-      "MMP120_COVERAGE_MATRIX_REGISTRATION_DEFERRED_TO_POST_117_REBASE",
+      "MMP120_RESEARCH_ONLY_PRODUCTION_PROMPT_UNCHANGED",
     ],
     paidDispatch: {
       authorized: false,
