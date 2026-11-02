@@ -1,0 +1,156 @@
+{
+  "format": "mmp137-research-evidence-v1",
+  "trackingIssue": 137,
+  "executor": "GLM 5.3 (ZCode), offline research-only",
+  "paidAuthorization": {
+    "status": "CONSUMED_ONE_POST",
+    "rerunAuthorized": false,
+    "note": "No Meta GET/POST, no workflow_dispatch (including validate_only), no rerun, no repair attempt was made or is authorized by this research."
+  },
+  "run": {
+    "runId": "41505679809",
+    "runAttempt": 1,
+    "workflowName": "Meta paid migration",
+    "event": "workflow_dispatch",
+    "actor": "barbalatv",
+    "headSha": "a01bb65f8bb58c02c7a59e06ffedc9662576478e",
+    "conclusion": "failure",
+    "failedAtStep": "Independent Docker Oracle after verified stored source checkpoint",
+    "originMainSameShaAtAnalysis": true,
+    "analyzedAt": "2026-11-02",
+    "url": "https://github.com/Meta-Project2026/Metamorph/actions/runs/41505679809"
+  },
+  "generation": {
+    "generationKind": "REAL_INFERENCE",
+    "providerHttpStatus": 200,
+    "attemptedRequests": 1,
+    "confirmedResponseCount": 1,
+    "modelId": "muse-spark-1.3",
+    "inputTokens": 6060,
+    "outputTokens": 9554,
+    "cachedInputTokens": 0,
+    "durationMs": 28694,
+    "requestBodySha256": "d0e5c872a735ca5a039820147177f9eb2d2a2da4f9d0b6f5a93180f66dd7da46",
+    "candidateSha256": "6140dbed4afb0d2068db17facb0e14ff9c2ffb61aaaf2b64207b9a8aa2125d38",
+    "estimatedCostUsd": "0.0481795",
+    "tariff": "meta-standard-2026-10-29",
+    "chargedCostUsd": null,
+    "billingSettlement": "UNKNOWN",
+    "contextSha256": "1c42ae8cb147aac54e0e7a767d66b77c4213137046bace47d5bed3560defaed3",
+    "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4"
+  },
+  "publicGates": {
+    "G0": { "verdict": "INCONCLUSIVE", "findingCodes": ["G0_NOT_ESTABLISHED"] },
+    "G1": {
+      "verdict": "PASS",
+      "executedTestIdCount": 6,
+      "findingCodes": []
+    },
+    "G2": {
+      "verdict": "FAIL",
+      "executedTestIdCount": 17,
+      "findingCodes": ["HTTP_JSON_TYPE"]
+    },
+    "G3": {
+      "verdict": "FAIL",
+      "executedTestIdCount": 20,
+      "findingCodes": ["HTTP_JSON_TYPE"]
+    },
+    "G4": {
+      "verdict": "INCONCLUSIVE",
+      "executedTestIdCount": 27,
+      "findingCodes": ["HELD_OUT_NOT_RUN"]
+    },
+    "coverage": { "http": 17, "requiredHttp": 17, "sqlite": 20, "requiredSqlite": 20 },
+    "product": "NOT_ESTABLISHED"
+  },
+  "perScenarioGates": [
+    {
+      "scenarioId": "workshop-business",
+      "g2": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] },
+      "g3": { "executedTestIdCount": 7, "findingCodes": ["HTTP_JSON_TYPE"] }
+    },
+    {
+      "scenarioId": "workshop-rejected",
+      "g2": { "executedTestIdCount": 5, "findingCodes": ["HTTP_JSON_TYPE"] },
+      "g3": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] }
+    },
+    {
+      "scenarioId": "workshop-capacity",
+      "g2": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] },
+      "g3": { "executedTestIdCount": 7, "findingCodes": ["HTTP_JSON_TYPE"] }
+    }
+  ],
+  "codeForcedConclusions": {
+    "httpJsonTypeEmission": "packages/oracle/src/http.ts:143-144 (kind mismatch in jsonDiff)",
+    "g3Aggregation": "packages/oracle/src/runner.ts:467-473 ([...httpFindings, ...dbFindings])",
+    "dbComparisonCodes": ["DB_SCHEMA", "DB_STATE"],
+    "conclusions": [
+      "status and all four STABLE_HEADERS equal on every step",
+      "both bodies valid JSON with JSON content-types on every step",
+      "JSON key sets equal on every step (no HTTP_JSON_MISSING)",
+      "all equal-type values equal (no HTTP_JSON_VALUE), including message strings and PHP date renderings",
+      "all array lengths equal (no HTTP_JSON_LENGTH)",
+      "all initial and per-step SQLite snapshots exactly equal (no DB_* codes, no MISSING_COVERAGE, all 20 G3 IDs executed)"
+    ]
+  },
+  "custody": {
+    "stored": {
+      "format": "mmp115-custody-v1",
+      "state": "STORED_UNVERIFIED",
+      "verification": "UNVERIFIED",
+      "storage": "ACKNOWLEDGED_RETRIEVED",
+      "artifactId": 13169609004,
+      "artifactName": "mmp107-candidate-41505679809-1",
+      "ciphertextSha256": "1afcc2a061a72f322f4a888bd03a93686babaf5a3e268a5d45dcc7c17bc997cb",
+      "ciphertextBytes": 31094,
+      "recipientFingerprint": "48218aef33dd17354761805a678f95481ad21131336cc348c23cefe99f714600",
+      "independentRehash": "MATCH (reviewer, per #137 receipt)"
+    },
+    "preservation": {
+      "format": "mmp097-preservation-v1",
+      "status": "PRESERVED",
+      "case": "G1_PASS_COMPLETED",
+      "upload": "SUCCEEDED",
+      "artifactId": 13171510338,
+      "artifactName": "mmp089-private-diagnostics-41505679809-1",
+      "ciphertextSha256": "32f2d53f66d9e3ca97a368f5cc9c3e951f561425d0c186a3ab4da0ae20eb9ff8",
+      "ciphertextBytes": 30571,
+      "ageVersion": "v1.3.2",
+      "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
+      "independentRehash": "MATCH (reviewer, per #137 receipt)"
+    },
+    "finalizer": { "status": "PASS", "containers": 0, "volumes": 0, "emergencyRemoved": 0 },
+    "artifactsExpireUtc": "2026-11-09 around 19:00 UTC (per #137 receipt)",
+    "ownerRestore": "OWNER_RESTORE_PASS is NOT_RUN; #136 owner-reported recipient MATCH is possession evidence, not restore"
+  },
+  "artifactMetadata": [
+    { "id": 13169804253, "name": "meta-paid-public-41505679809", "sizeInBytes": 8733, "expired": false },
+    { "id": 13169609004, "name": "mmp107-candidate-41505679809-1", "sizeInBytes": 31234, "expired": false },
+    { "id": 13171510338, "name": "mmp089-private-diagnostics-41505679809-1", "sizeInBytes": 30745, "expired": false },
+    { "id": 13169304213, "name": "meta-paid-policy-41505679809", "sizeInBytes": 250, "expired": false }
+  ],
+  "pinnedSource": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "files": [
+      { "path": "api.php", "bytes": 11956, "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77", "reFetchedAndVerified": true },
+      { "path": "config.php", "bytes": 4331, "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd", "reFetchedAndVerified": true }
+    ],
+    "inventory": "research/mmp-061/inventory.json"
+  },
+  "php74RuntimeFacts": {
+    "pdoSqliteColumnTyping": "ext/pdo_sqlite/sqlite_statement.c (PHP-7.4): pdo_sqlite_stmt_get_col returns sqlite3_column_text() for INTEGER/FLOAT/TEXT; describe maps all to PDO_PARAM_STR -> all non-NULL columns are PHP strings",
+    "lastInsertId": "php.net PDO::lastInsertId(): string|false — returns a string",
+    "referenceEffect": "book success emits appointment_id as JSON string; get_appointments rows emit every column as JSON string; get_slots (int) casts emit numbers and boolean is_full"
+  },
+  "issueStates": { "116": "CLOSED", "115": "OPEN", "61": "OPEN", "137": "OPEN" },
+  "privacy": {
+    "candidatePlaintextAccessed": false,
+    "ageIdentityAccessed": false,
+    "privateOracleObservationsAccessed": false,
+    "dockerUsed": false,
+    "metaApiCalls": 0
+  }
+}
