@@ -56,45 +56,15 @@ mutation alone. The negative tests assert the identity, the field isolation,
 and that both variants stay within every policy bound. All three remain
 blocked by the $0.10 default admission.
 
-## Known integration gate (deliberate, not an accident)
+## Coverage-matrix integration — independently corrected after GLM delivery
 
-`research/mmp-069/coverage-matrix.json` is part of the OPEN PR #117 diff, and
-the task card forbids editing it in parallel: registration of
-`research/mmp-120` is therefore **deferred to the post-#117 rebase**. Until
-that one JSON entry lands, the unregistered `research/mmp-120/audit.mjs`
-trips `RESEARCH_INVENTORY_DRIFT`, which is thrown at module load by
-`check-syntax.mjs` (it imports `validate()` first). Observed hosted effect —
-one failed step and seven skipped steps per Node leg (the job stops at the
-first failure), all one root cause:
+Original GLM branch head `b02ae012817aaa0f21ca4eaaf23c26c4376a91c6` was **NOT mergeable on CI**: `research/mmp-120/audit.mjs` was absent from `research/mmp-069/coverage-matrix.json`; Fast CI Node 22/24 failed at `Active research syntax` (`RESEARCH_INVENTORY_DRIFT`) and skipped seven subsequent steps. The pre-fix CI #41364434851 and the test counts above remain historical evidence and must not be described as green.
 
-- FAIL: `Active research syntax`
-- SKIPPED: `Validate coverage matrix`, `Coverage validator negative controls`,
-  `Connected history bootstrap`, `Shallow history negative control`,
-  `Connected adversarial tests`, `Demo-readiness tests`,
-  `MMP-108 first-step negative controls`
+Independent ChatGPT review verified the validator's source behavior and added the missing `research/mmp-120` registration directly on this PR branch, rather than waiting for PR #117. **Important correction to the GLM-proposed entry:** `tests: "NOT_VERIFIED"`, not `GATED_HOSTED`. The validator determines research test coverage only from `research/mmp-120/*.test.mjs`; the 22 actual executed controls reside under `packages/agent-real/test/mmp120-generation-readiness.test.mjs` and are **independently covered by root pnpm test**, not counted as research-local suite coverage. Setting `GATED_HOSTED` without a research-local test is rejected as `RESEARCH_TEST_CLAIM`. The syntax check for `audit.mjs` is gated regardless.
 
-First-push hosted evidence: Fast CI run
-[`41364132058`](https://github.com/Meta-Project2026/Metamorph/actions/runs/41364132058)
-at head `4b6681fcc1b2772abb905c3de71fe2aab4872737` — both `quick (22)` and
-`quick (24)` legs passed every step up to and including `Active research lint`
-and `pnpm test` (the 22 new controls ran green on hosted Node 22 and 24),
-then hit exactly the gate above. Local Windows results are identical in kind.
-The completing edit at rebase time is a single `research` array entry (the
-syntax step then covers `audit.mjs` automatically):
+The `audit.mjs` informational blocker was updated to avoid falsely claiming the registration remains deferred. `research/mmp-120/evidence/audit-b057462.json` is retained as an **earlier execution snapshot at delegation base**; it includes the original pre-fix informational blocker, and is not a live snapshot of this review commit. Re-run the CLI for current readings. No production prompt or budget was changed.
 
-```json
-{
-  "path": "research/mmp-120",
-  "lifecycle": "ACTIVE",
-  "execution": "LOCAL_ONLY",
-  "staticCheck": "GATED_HOSTED_SYNTAX",
-  "tests": "GATED_HOSTED",
-  "gap": "Offline audit/variant CLI and negative controls reached through the agent-real fast glob (mmp120-generation-readiness.test.mjs, network canary, Node 22/24); the CLI itself runs locally only and never dispatches. No model request, paid operation, Docker run or artifact upload."
-}
-```
-
-(`tests: "GATED_HOSTED"` holds because the bridge file is covered by root
-`pnpm test`; adjust at rebase if the glob reach changes.)
+A concurrently open PR #117 also edits the shared matrix. Before merging #117, rebase it onto the new `main`, preserving **both** its MMP-115 entry and this MMP-120 entry; run exact-head Fast CI again. Changes to PR #117 remain Ilya's responsibility and are not modified by this research PR.
 
 ## Not established / uncertainties
 
@@ -105,9 +75,7 @@ syntax step then covers `audit.mjs` automatically):
   remain UNKNOWN; this audit makes no retro-diagnosis.
 - Live tariff verification, charged-cost settlement, G0, formal held-out G4,
   product acceptance: NOT_RUN / NOT_ESTABLISHED.
-- CI on this PR: local Windows results above; hosted Node 22/24 results are
-  whatever the PR checks show at the reviewed head — the three matrix-gated
-  steps are expected red until the deferred registration lands at rebase.
+- CI on original GLM head: red due solely to missing research inventory; current review head requires its own hosted Node 22/24 result. Do not promote the earlier failure to PASS.
 - The 22-test pin `Buffer.byteLength(body) > 18000` plus the snapshot equality
   check will consciously trip on any future legitimate prompt change — that is
   the intended audit tripwire; update together with the body SHA at rebase.
