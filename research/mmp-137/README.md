@@ -12,12 +12,4 @@ plaintext, no age-identity access. Tracking issue: #137. Related: #115, #61.
 | [validation.md](validation.md) | Commands actually executed with exit codes; NOT_RUN discipline |
 | [comparator-mechanics.test.mjs](comparator-mechanics.test.mjs) | Offline synthetic test of the trusted comparator mechanics (`pnpm --filter @metamorph/oracle build` first; not wired into hosted CI) |
 
-Headline: the run's published evidence forces the conclusion that the
-candidate was state-perfect (all SQLite snapshots equal) and string-perfect
-(all messages equal) — the only divergence class is JSON *type* on
-`appointment_id` / `get_appointments` row fields / `get_slots` fields, where
-PHP 7.4 PDO semantics (stringified columns, string `lastInsertId()`) differ
-from natural `node:sqlite` emission. H1 (`appointment_id` number-vs-string) is
-the unique single-field explanation covering all three scenarios. Confirming
-which hypothesis holds requires gated evidence paths or a separately
-authorized sanitized candidate review.
+Headline: the public G3 results establish equality of the **compared initial and post-step SQLite snapshots** across all three scenarios. HTTP statuses and stable headers match; the only **reported** mismatch class is `HTTP_JSON_TYPE`. The comparator short-circuits when two JSON nodes have different kinds: the absence of MISSING/VALUE/LENGTH findings proves equality only on paths the comparison actually visits, not inside mismatched-type subtrees. PHP 7.4 PDO string conversion makes `appointment_id` and appointment-row typing plausible hypotheses, not established candidate faults. H1 is one parsimonious single-field explanation for all three scenarios, **not uniquely implied**. Confirming actual candidate behavior requires separately gated evidence.
