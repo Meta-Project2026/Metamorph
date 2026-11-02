@@ -28,7 +28,7 @@ import { PassThrough } from "node:stream";
 import test from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { commitPrivate as trustedCommitPrivate } from "../../packages/agent-real/src/custody-files.mjs";
-import { sha256 } from "../../packages/target-worker/src/admission.mjs";
+import { sha256, validateBundle } from "../../packages/target-worker/src/admission.mjs";
 import {
   classifyDestination,
   createPrompter,
@@ -76,7 +76,10 @@ const SYNTHETIC_FILES = Object.freeze([
 ]);
 const synthetic = selectExportableFiles(SYNTHETIC_FILES);
 assert.equal(synthetic.ok, true);
-const SYNTHETIC_CANDIDATE_SHA = sha256(JSON.stringify(synthetic.files));
+// Derive the synthetic oracle from the trusted generation admission, NOT
+// from the exporter under test (that masked MMP-143's production SHA bug).
+const SYNTHETIC_CANDIDATE_SHA =
+  validateBundle(SYNTHETIC_FILES).candidateSha;
 const TEST_ATTEMPT_ID = "3f0e8d6c-1111-4abc-9def-223344556677";
 const TEST_PINS = Object.freeze({
   runId: "271828",
@@ -272,6 +275,35 @@ test("canonical synthetic bundle passes and sorts deterministically", () => {
   assert.equal(sha256(JSON.stringify(synthetic.files)), TEST_PINS.candidateSha);
 });
 
+test("MMP-143 regression: exporter SHA bytes match trusted validateBundle, not divergent object insertion order", () => {
+  const authoritative = validateBundle(SYNTHETIC_FILES);
+  assert.equal(authoritative.candidateSha, SYNTHETIC_CANDIDATE_SHA);
+  // This compares source paths AND property insertion order in JSON, not
+  // merely deep equality (which ignores object property insertion order).
+  assert.equal(
+    JSON.stringify(synthetic.files),
+    JSON.stringify(authoritative.files),
+  );
+  assert.equal(
+    sha256(JSON.stringify(synthetic.files)),
+    authoritative.candidateSha,
+  );
+  const divergent = authoritative.files.map(({ path, content, sha256 }) => ({
+    path,
+    content,
+    sha256,
+  }));
+  assert.notEqual(
+    sha256(JSON.stringify(divergent)),
+    authoritative.candidateSha,
+    "old MMP-139 property ordering must not silently pass the test",
+  );
+  assert.equal(
+    planExport(mockCapsule(), TEST_PINS).manifest.candidateSha,
+    authoritative.candidateSha,
+  );
+});
+
 test("rejection matrix covers paths, content, sizes, counts, entrypoint and duplicates", () => {
   const cases = [
     ["COUNT", []],
@@ -399,7 +431,12 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
   );
   const secretSelected = selectExportableFiles([secretFile]);
   assert.equal(secretSelected.ok, true);
-  const secretCandidateSha = sha256(JSON.stringify(secretSelected.files));
+  const secretCandidateSha =
+    validateBundle([secretFile]).candidateSha;
+  assert.equal(
+    sha256(JSON.stringify(secretSelected.files)),
+    secretCandidateSha,
+  );
   const secretPins = { ...TEST_PINS, candidateSha: secretCandidateSha };
   const secretCapsule = mockCapsule([secretFile], {
     candidateSha: secretCandidateSha,
@@ -408,7 +445,11 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
   const safeFile = fileOf("src/main.ts", MAIN_TS);
   const safeSelected = selectExportableFiles([safeFile]);
   assert.equal(safeSelected.ok, true);
-  const safeCandidateSha = sha256(JSON.stringify(safeSelected.files));
+  const safeCandidateSha = validateBundle([safeFile]).candidateSha;
+  assert.equal(
+    sha256(JSON.stringify(safeSelected.files)),
+    safeCandidateSha,
+  );
   assert.equal(
     planExport(mockCapsule([safeFile], { candidateSha: safeCandidateSha }), {
       ...TEST_PINS,
