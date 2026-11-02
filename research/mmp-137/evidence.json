@@ -40,7 +40,12 @@
     "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4"
   },
   "publicGates": {
-    "G0": { "verdict": "INCONCLUSIVE", "findingCodes": ["G0_NOT_ESTABLISHED"] },
+    "G0": {
+      "verdict": "INCONCLUSIVE",
+      "findingCodes": [
+        "G0_NOT_ESTABLISHED"
+      ]
+    },
     "G1": {
       "verdict": "PASS",
       "executedTestIdCount": 6,
@@ -49,49 +54,94 @@
     "G2": {
       "verdict": "FAIL",
       "executedTestIdCount": 17,
-      "findingCodes": ["HTTP_JSON_TYPE"]
+      "findingCodes": [
+        "HTTP_JSON_TYPE"
+      ]
     },
     "G3": {
       "verdict": "FAIL",
       "executedTestIdCount": 20,
-      "findingCodes": ["HTTP_JSON_TYPE"]
+      "findingCodes": [
+        "HTTP_JSON_TYPE"
+      ]
     },
     "G4": {
       "verdict": "INCONCLUSIVE",
       "executedTestIdCount": 27,
-      "findingCodes": ["HELD_OUT_NOT_RUN"]
+      "findingCodes": [
+        "HELD_OUT_NOT_RUN"
+      ]
     },
-    "coverage": { "http": 17, "requiredHttp": 17, "sqlite": 20, "requiredSqlite": 20 },
+    "coverage": {
+      "http": 17,
+      "requiredHttp": 17,
+      "sqlite": 20,
+      "requiredSqlite": 20
+    },
     "product": "NOT_ESTABLISHED"
   },
   "perScenarioGates": [
     {
       "scenarioId": "workshop-business",
-      "g2": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] },
-      "g3": { "executedTestIdCount": 7, "findingCodes": ["HTTP_JSON_TYPE"] }
+      "g2": {
+        "executedTestIdCount": 6,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      },
+      "g3": {
+        "executedTestIdCount": 7,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      }
     },
     {
       "scenarioId": "workshop-rejected",
-      "g2": { "executedTestIdCount": 5, "findingCodes": ["HTTP_JSON_TYPE"] },
-      "g3": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] }
+      "g2": {
+        "executedTestIdCount": 5,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      },
+      "g3": {
+        "executedTestIdCount": 6,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      }
     },
     {
       "scenarioId": "workshop-capacity",
-      "g2": { "executedTestIdCount": 6, "findingCodes": ["HTTP_JSON_TYPE"] },
-      "g3": { "executedTestIdCount": 7, "findingCodes": ["HTTP_JSON_TYPE"] }
+      "g2": {
+        "executedTestIdCount": 6,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      },
+      "g3": {
+        "executedTestIdCount": 7,
+        "findingCodes": [
+          "HTTP_JSON_TYPE"
+        ]
+      }
     }
   ],
   "codeForcedConclusions": {
     "httpJsonTypeEmission": "packages/oracle/src/http.ts:143-144 (kind mismatch in jsonDiff)",
     "g3Aggregation": "packages/oracle/src/runner.ts:467-473 ([...httpFindings, ...dbFindings])",
-    "dbComparisonCodes": ["DB_SCHEMA", "DB_STATE"],
+    "dbComparisonCodes": [
+      "DB_SCHEMA",
+      "DB_STATE"
+    ],
     "conclusions": [
-      "status and all four STABLE_HEADERS equal on every step",
-      "both bodies valid JSON with JSON content-types on every step",
-      "JSON key sets equal on every step (no HTTP_JSON_MISSING)",
-      "all equal-type values equal (no HTTP_JSON_VALUE), including message strings and PHP date renderings",
-      "all array lengths equal (no HTTP_JSON_LENGTH)",
-      "all initial and per-step SQLite snapshots exactly equal (no DB_* codes, no MISSING_COVERAGE, all 20 G3 IDs executed)"
+      "status and the four STABLE_HEADERS matched on every tested step",
+      "steps emitting HTTP_JSON_TYPE had parseable JSON bodies with JSON content-types on both sides",
+      "visited JSON object nodes had matching key sets; descendants of kind-mismatched nodes were not inspected",
+      "visited same-kind scalar leaves had equal values; some message strings and dates may lie under unvisited mismatched-type parents",
+      "visited JSON array nodes had matching lengths; arrays below mismatched kinds were not inspected",
+      "all initial and per-step SQLite snapshots that the manifest compared matched exactly (no DB_* codes, no MISSING_COVERAGE, all 20 G3 IDs executed)",
+      "H1 appointment_id numeric-vs-string is a parsimonious but not unique single-field hypothesis; H5 success numeric-vs-bool also can cover all scenarios"
     ]
   },
   "custody": {
@@ -120,23 +170,58 @@
       "ageSha256": "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c",
       "independentRehash": "MATCH (reviewer, per #137 receipt)"
     },
-    "finalizer": { "status": "PASS", "containers": 0, "volumes": 0, "emergencyRemoved": 0 },
+    "finalizer": {
+      "status": "PASS",
+      "containers": 0,
+      "volumes": 0,
+      "emergencyRemoved": 0
+    },
     "artifactsExpireUtc": "2026-11-09 around 19:00 UTC (per #137 receipt)",
     "ownerRestore": "OWNER_RESTORE_PASS is NOT_RUN; #136 owner-reported recipient MATCH is possession evidence, not restore"
   },
   "artifactMetadata": [
-    { "id": 13169804253, "name": "meta-paid-public-41505679809", "sizeInBytes": 8733, "expired": false },
-    { "id": 13169609004, "name": "mmp107-candidate-41505679809-1", "sizeInBytes": 31234, "expired": false },
-    { "id": 13171510338, "name": "mmp089-private-diagnostics-41505679809-1", "sizeInBytes": 30745, "expired": false },
-    { "id": 13169304213, "name": "meta-paid-policy-41505679809", "sizeInBytes": 250, "expired": false }
+    {
+      "id": 13169804253,
+      "name": "meta-paid-public-41505679809",
+      "sizeInBytes": 8733,
+      "expired": false
+    },
+    {
+      "id": 13169609004,
+      "name": "mmp107-candidate-41505679809-1",
+      "sizeInBytes": 31234,
+      "expired": false
+    },
+    {
+      "id": 13171510338,
+      "name": "mmp089-private-diagnostics-41505679809-1",
+      "sizeInBytes": 30745,
+      "expired": false
+    },
+    {
+      "id": 13169304213,
+      "name": "meta-paid-policy-41505679809",
+      "sizeInBytes": 250,
+      "expired": false
+    }
   ],
   "pinnedSource": {
     "repository": "tanjilaafsarirubina/car-workshop",
     "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
     "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
     "files": [
-      { "path": "api.php", "bytes": 11956, "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77", "reFetchedAndVerified": true },
-      { "path": "config.php", "bytes": 4331, "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd", "reFetchedAndVerified": true }
+      {
+        "path": "api.php",
+        "bytes": 11956,
+        "sha256": "7d66dc6ad489972a00c6b93619c13024ea3f6d577206579bc2e97f58cf74fd77",
+        "reFetchedAndVerified": true
+      },
+      {
+        "path": "config.php",
+        "bytes": 4331,
+        "sha256": "11216d306900f8a2e304908cebab52b9375cba83c1ead99a90278ec14b2c21bd",
+        "reFetchedAndVerified": true
+      }
     ],
     "inventory": "research/mmp-061/inventory.json"
   },
@@ -145,7 +230,12 @@
     "lastInsertId": "php.net PDO::lastInsertId(): string|false — returns a string",
     "referenceEffect": "book success emits appointment_id as JSON string; get_appointments rows emit every column as JSON string; get_slots (int) casts emit numbers and boolean is_full"
   },
-  "issueStates": { "116": "CLOSED", "115": "OPEN", "61": "OPEN", "137": "OPEN" },
+  "issueStates": {
+    "61": "OPEN",
+    "115": "OPEN",
+    "116": "CLOSED",
+    "137": "OPEN"
+  },
   "privacy": {
     "candidatePlaintextAccessed": false,
     "ageIdentityAccessed": false,
