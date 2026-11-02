@@ -1,7 +1,7 @@
 # MMP-115 production custody — offline acceptance
 
 Original implementation base: `d87a7029abf23c3d222bc309741d9185e502313e`. Refs #115 #107 #61.
-Current main synchronization and separate MMP122 evidence: see [validation.md](validation.md).
+Historical main synchronization and separate MMP122 evidence: see [validation.md](validation.md).
 Policy is the exact Option A contract at `f2ca41d89c96456ada5661e7a80c398a18eeb209`.
 Vladimir's decision: issue107/comment6564661434; Ilia's direct ACCEPT:
 [comment6564705526](https://github.com/Meta-Project2026/Metamorph/issues/107#issuecomment-6564705526).
@@ -40,11 +40,15 @@ is claimed; trusted workflow/host ownership and authenticated transport remain b
 Plan/tasks: implement identity+lease capture → private atomic ciphertext → independent
 checkpoint → authenticated readback/one-use Oracle permit → real test-key age/restore
 acceptance → negatives and frozen checks → exact-head CI and independent review.
-Current implementation/check evidence is recorded in the PR as it arrives.
+PR #117 was independently accepted for scoped merge and merged; that acceptance
+remains distinct from production operational readiness. The current
+[offline operational gate review](operational-gates-review.md) audits
+main bb8f548bae35f9add0402c855da0cd247a124cf6 and records the remaining decisions.
 **Offline crypto/capture/cleanup controls: PASS** (see validation.md and recorded real
-Linux evidence). **End-to-end durable custody and production/paid readiness: NO_GO until
-fresh independent exact-head security review and the owner decision on any additional
-production proof.** Separate MMP122 transport evidence is not full production execution.
+Linux evidence). **End-to-end durable custody and production/paid readiness: NO_GO.**
+Full production generate/capture/transport/readback/Oracle E2E and actual owner-key
+restore remain NOT_RUN and require distinct authorization/owner action. Separate
+MMP122 transport evidence is not full production execution.
 No new paid proposal is
 issued before production acceptance. Historical source UNAVAILABLE, cause UNKNOWN,
 PRODUCT_NOT_ESTABLISHED. The response-to-durable-ack loss window remains accepted risk.

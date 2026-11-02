@@ -1,8 +1,8 @@
 # MMP-115 validation and remaining gate
 
-## Main synchronization — 2026-11-02
+## Archived main synchronization — 2026-11-02
 
-Current integration base: `8e857654a3aabbb16a2fec44b4fceab8d4209944`,
+Integration base at that synchronization: `8e857654a3aabbb16a2fec44b4fceab8d4209944`,
 freshly fetched from canonical origin/main. Its post-merge Fast CI
 [41365426071](https://github.com/Meta-Project2026/Metamorph/actions/runs/41365426071)
 was independently read: Node22/24 SUCCESS. Previous published PR head:
@@ -136,3 +136,56 @@ ciphertext and irrevocable copies; trusted dedicated host/UID/root/Docker/workfl
 action/service authority; JS strings are not securely erased; unknown/encoded credential
 echo is not proven absent. Historical candidate UNAVAILABLE, cause UNKNOWN;
 #61 PRODUCT_NOT_ESTABLISHED.
+
+## Operational gates review
+
+Date2026-11-02; audited fresh origin/main **bb8f548bae35f9add0402c855da0cd247a124cf6**,
+branch codex/mmp115-offline-operational-gates. No open PR at initial check. Current
+main Fast CI41466658044 was independently read: Node24 job125349221984 and Node22
+job125349222338, all27 steps SUCCESS each; root783 /780 PASS /3 existing SKIP /0 FAIL.
+This is new evidence inspection, not a new Docker/age/model/transport execution.
+
+The [decision-ready operational review](operational-gates-review.md) maps each
+transition to this main's source line, existing test/control and evidence owner.
+Contract-v1 remains byte-identical to f2ca41d89c96456ada5661e7a80c398a18eeb209.
+Direct Ilia ACCEPT6564705526 and Vladimir's recorded approval6564661434 are present;
+PR117 is merged with scoped independent acceptance. Seventeen selected custody/
+source/workflow/test/manual-driver blobs are identical to reviewed d0153f2. This
+is not a claim that the complete dependency closure/request body is unchanged:
+PR131 changed current public request preparation; admission binds the current body.
+
+No new runtime defect was confirmed in this bounded read-only inspection. Existing
+controls already cover the examined refusal cases, so no duplicate test or code,
+workflow, dependency, coverage-row, pin, permission or policy change was added.
+The three changed files are documentation only; historical evidence is retained.
+
+Commands actually executed on Windows Node24.21.0 / pnpm11.25.0:
+
+| Command | Exit | Actual result |
+| --- | --- | --- |
+| node --test packages/agent-real/test/custody.test.mjs | 0 | 25 total /19 PASS /6 Linux-only SKIP /0 FAIL |
+| pnpm install --frozen-lockfile | 0 | Frozen install |
+| pnpm lint | 0 | PASS |
+| pnpm typecheck | 0 | PASS |
+| pnpm test | 0 | 783 total /673 PASS /110 Windows/environment SKIP /0 FAIL |
+| pnpm build | 0 | PASS |
+| node research/mmp-069/validate.mjs | 0 | VALID104 modules; no coverage-row change |
+| node --test research/mmp-069/validate.test.mjs | 0 | 45 PASS /0 FAIL /0 SKIP |
+| node research/mmp-069/check-syntax.mjs | 0 | 103 files PASS, syntax only |
+| git diff --check; protected-source/evidence comparisons | 0 | Only documentation differs from audited main |
+
+Linux-specific ownership/spool/readback/permit controls were not run locally;
+current main's Linux Fast CI supplies the separately observed evidence. Actual
+pinned-age/Docker3/3 is an archival executor report, not rerun here. MMP122 run
+41366708136 metadata was read: upload and ID-download SUCCESS, last-step and overall
+FAILURE. Reviewer6566123432's existing-ZIP byte-identity attestation was read;
+no artifact or raw private data was downloaded by this review.
+
+All live/manual drivers, real Docker/daemon operations, actual age/owner-key
+restore, Meta/model/API transport, workflow dispatch/validate_only/rerun, artifact
+upload/download, private packs/G4 and owner keys are **NOT_RUN/NOT_ACCESSED** here.
+The future composite test is only a decision proposal, with fresh exact action/
+budget/identity/transport/owner authorization required. No old card or artifact
+is reused. Full production E2E/owner restore remains NOT_RUN; operational NO_GO,
+#115 OPEN, #116 HOLD, #61 PRODUCT_NOT_ESTABLISHED, formal G4 NOT_RUN. This review
+is submitted for independent exact-SHA review, not self-approval or merge.
