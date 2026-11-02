@@ -1,6 +1,7 @@
 # MMP-115 production custody — offline acceptance
 
-Base: `d87a7029abf23c3d222bc309741d9185e502313e`. Refs #115 #107 #61.
+Original implementation base: `d87a7029abf23c3d222bc309741d9185e502313e`. Refs #115 #107 #61.
+Current main synchronization and separate MMP122 evidence: see [validation.md](validation.md).
 Policy is the exact Option A contract at `f2ca41d89c96456ada5661e7a80c398a18eeb209`.
 Vladimir's decision: issue107/comment6564661434; Ilia's direct ACCEPT:
 [comment6564705526](https://github.com/Meta-Project2026/Metamorph/issues/107#issuecomment-6564705526).
@@ -30,7 +31,9 @@ The [upload action v4 contract](https://github.com/actions/upload-artifact/tree/
 provides an immediately addressable artifact ID. The [download action v4 inputs](https://github.com/actions/download-artifact/tree/v4#inputs)
 support that ID in the current run. [Authenticated REST metadata](https://docs.github.com/en/rest/actions/artifacts#get-an-artifact)
 binds run/name/head/digest. These documented capabilities do not prove a live upload or
-readback happened here. Such external operations remain NOT_RUN under this assignment.
+readback happened in this production path, which remains NOT_RUN. The separate MMP122
+one-shot synthetic service transport has byte-identity evidence PASS but overall workflow
+FAILURE; see validation.md. Its upload permission is consumed. No new upload is authorized.
 No same-UID/root hostile-host protection or independent cryptographic producer signature
 is claimed; trusted workflow/host ownership and authenticated transport remain boundaries.
 
@@ -40,8 +43,9 @@ acceptance → negatives and frozen checks → exact-head CI and independent rev
 Current implementation/check evidence is recorded in the PR as it arrives.
 **Offline crypto/capture/cleanup controls: PASS** (see validation.md and recorded real
 Linux evidence). **End-to-end durable custody and production/paid readiness: NO_GO until
-independent exact-head security review and a separately authorized live synthetic transport
-proof.** No new paid proposal is
+fresh independent exact-head security review and the owner decision on any additional
+production proof.** Separate MMP122 transport evidence is not full production execution.
+No new paid proposal is
 issued before production acceptance. Historical source UNAVAILABLE, cause UNKNOWN,
 PRODUCT_NOT_ESTABLISHED. The response-to-durable-ack loss window remains accepted risk.
 
