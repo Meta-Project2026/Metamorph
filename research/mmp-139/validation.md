@@ -86,3 +86,26 @@ never executed with real inputs; no age binary was downloaded.
   upload/download, no candidate execution or import, no paid action, no G4,
   no custody/workflow/recipient/pin/contract change. #137 hypotheses stay
   hypotheses; #115 stays open; #61 stays PRODUCT_NOT_ESTABLISHED.
+
+## Independent reviewer correction — test false positive fixed (2026-11-02)
+
+ChatGPT independent exact-head review discovered that the original secret-tripwire
+negative control changed `src/main.ts` but kept the old expected candidate SHA,
+so it rejected **at the preceding canonical hash check** without exercising
+`rejectSecrets`. The updated test constructs valid matching synthetic capsule
+and expected pins for a deliberately secret-bearing file; it then proves the
+source-content tripwire rejects instead of relying on SHA drift. The companion
+safe control demonstrates a matching source passes. The export planner now
+normalizes the trusted scanner's internal rejection to fixed `EXPORT_REJECTED`.
+The injected write-failure test also now *commits one real synthetic plaintext
+file* via the existing trusted `commitPrivate`, confirms it exists before
+second-write failure, then checks it was removed along with the fresh tree.
+
+**Execution of these corrected tests is NOT_RUN by the independent reviewer.**
+Original GLM evidence 24 tests (WSL 22 PASS / 2 SKIP; Windows 14 PASS /
+10 SKIP) applies only to the earlier PR head; it must not be cited as a test
+of the corrected head. Hosted Fast CI validates syntax and matrix but does
+not execute `research/mmp-139/synthetic.test.mjs`. Re-execute this suite
+under owner's/test executor's Linux/WSL with **synthetic TEST material only**
+before exact-head approval or merge. No key, ciphertext, candidate, Docker,
+Meta API or workflow dispatch was accessed by this correction.
