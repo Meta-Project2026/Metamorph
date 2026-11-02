@@ -84,13 +84,25 @@ unresolved alternatives. Cleanup 0/0/0 excludes a recorded cleanup failure as
 the final result; it does not exonerate the earlier environment or application.
 No completed HTTP comparison does not mean no HTTP request reached either side.
 
-## Next decision
+## Authorized diagnostic
 
-The existing records cannot resolve the first failing side or error class.
-[diagnostic-plan.md](diagnostic-plan.md) proposes exactly one bounded local
-disposable Linux Docker validation of the **unchanged repair candidate** with
-trusted categorical instrumentation. It is a plan, not an executable delegation
-or authorization. No new Docker run is permitted without explicit owner consent.
-The task's one-repair allowance is consumed. #116 remains HOLD, #61
-PRODUCT_NOT_ESTABLISHED, formal G4 NOT_RUN. Independent exact-SHA review and
-owner merge decision remain separate; no self-merge or issue closure.
+On 2026-11-02 the user authorized preparation and exactly one run of the plan
+published at f3895d1: «Разрешаю подготовку и один прогон по плану».
+The research-only observer and manual launcher are implemented; production
+verifier/runtime/comparators, immutable candidates and historical receipts stay
+byte-identical. Audit/observer tests: 41 PASS; PowerShell launcher: three stateful
+stub controls PASS. These are local controls, not a real candidate replay.
+
+The pending single Docker run uses the unchanged MMP123 repair CLI once, a
+host-issued identity, 20-minute outer deadline, 4GiB/512-PID outer envelope and
+unchanged worker limits. A durable consumed marker forbids automatic retry.
+Command metadata is sampled only at trusted host checkpoints; raw exceptions,
+stdout/stderr, payloads, SQL and source never enter public output. A bounded
+categorical trace is retained in the safe receipt for independent review.
+
+Exactly one invocation of Invoke-Diagnostic.ps1 is authorized for this consent.
+The script itself is manual-only; syntax CI does not launch it. No GitHub run
+identity is invented for the local driver. Missing telemetry remains UNKNOWN.
+Any second run, code repair, model request or artifact upload requires separate
+authorization. #116 HOLD; #61 PRODUCT_NOT_ESTABLISHED; formal G4 NOT_RUN.
+Independent exact-SHA review and owner merge decision remain pending.

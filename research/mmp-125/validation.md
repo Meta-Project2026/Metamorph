@@ -73,3 +73,39 @@ call, paid workflow/validate_only/rerun, second repair, new Docker run, private
 key, artifact upload or product/G4 acceptance. #116 HOLD; #61
 PRODUCT_NOT_ESTABLISHED. Keep #125 OPEN for its separate owner decision and
 independent exact-SHA review; no self-merge.
+
+## Consent-stage preparation (2026-11-02)
+
+The earlier NOT_AUTHORIZED/NOT_RUN statements above describe the completed
+read-only audit phase. The user subsequently authorized preparation and one
+Docker run under the f3895d1 plan: «Разрешаю подготовку и один прогон по плану».
+This is explicit user consent, not inferred teammate/owner governance approval.
+
+New trusted observer/launcher code lives only under research/mmp-125. The original
+MMP123 verifier CLI is invoked as one child with an isolated environment. Hooks
+wrap the existing trusted adapters/transport/command checkpoints, call originals
+once and retain exact returned values/rejected objects. No production code or
+candidate is edited; no fabricated GITHUB_RUN_ID is introduced. The private trace
+is strictly validated, sealed and projected to categorical output (maximum
+128 events /64KiB). Unknown or incomplete cases cannot acquire an attribution.
+
+Executed before launch: node --test research/mmp-125/*.test.mjs exit0, 41 PASS
+(21 read-only audit controls +20 observer/projection controls); the latter compare
+observed versus original verifyPair scoring/cleanup for inert original synthetic
+reference/target request, malformed, timeout and host-write faults. Exception
+getters, worker claims, recovered failures, process metadata, foreign identity,
+truncation/overflow/late settlement, public canaries and cleanup failures are
+covered. No candidate/reference code or real Docker is executed by those tests.
+
+pwsh -NoProfile -File research/mmp-125/launcher.test.ps1 exit0: three stateful
+in-process Docker/Git/Node stub controls (single launch/argument binding/owned
+cleanup/no-retry marker; foreign worker refusal; wrong volume-owner refusal).
+An initial stub invocation exited1 due to its own variable scope; corrected to
+isolated-process globals and unchanged launcher controls then passed. A review
+also corrected the Docker wrapper name/array binding before any real launch.
+PowerShell parser exit0; nested Biome check exit0. Coverage matrix VALID103 modules;
+new behavior tests remain LOCAL_ONLY/NOT_VERIFIED by hosted CI. The only matrix
+execution change is MMP125 LOCAL_ONLY to MANUAL_DOCKER. CI/workflows are unchanged.
+
+Single real Docker diagnostic: NOT_RUN at this preparation commit. The next
+receipt will record its actual driver SHA and result. No automatic retry.

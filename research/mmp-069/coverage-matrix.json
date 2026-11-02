@@ -355,10 +355,10 @@
     {
       "path": "research/mmp-125",
       "lifecycle": "ACTIVE",
-      "execution": "LOCAL_ONLY",
+      "execution": "MANUAL_DOCKER",
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
-      "gap": "Read-only audit of pinned public records, independent candidate/recipe hashes and local anti-attribution controls. New MMP125 behavior tests are LOCAL_ONLY and not selected by hosted CI; modules receive hosted syntax checking only. The one-run Linux Docker diagnostic is a plan requiring separate owner consent, not executed code. No candidate execution, model, repair, provider credentials, workflow dispatch, private/G4 inspection or artifact upload."
+      "gap": "Read-only pinned-public-record audit and separately owner-authorized one-run local Linux/Docker diagnostic of immutable 0cf5ba0 repair with a trusted research observer; manual launcher never runs in CI. Audit/observer behavior and PowerShell stub controls are LOCAL_ONLY, not selected by hosted CI; MJS receives hosted syntax checking only. No models, additional repair, provider credentials, workflow dispatch, hidden G4 inspection or artifact upload. Actual diagnostic status is recorded separately in research/mmp-125."
     }
   ],
   "skips": [

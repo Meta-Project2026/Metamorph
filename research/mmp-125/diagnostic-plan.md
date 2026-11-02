@@ -1,9 +1,13 @@
-# Proposed one-run local diagnostic — NOT_AUTHORIZED / NOT_RUN
+# One-run local diagnostic — AUTHORIZED / PREPARATION_TESTED / NOT_RUN
 
 The issue explicitly says: **"Request owner consent before running it."**
-No executable Docker driver is activated by this PR. This is the concrete scope
-for the next owner decision, including preparing/testing the trusted scratch
-instrumentation before the single run. Approval must not be inferred from this
+The user explicitly authorized preparation and exactly one run on 2026-11-02:
+**«Разрешаю подготовку и один прогон по плану».** This consent applies to the
+plan published at f3895d1e760e6ff398646d1b745e6c3df78204a1. It does not
+authorize another run, repair, model, upload or production change.
+This is the concrete scope
+for the authorized diagnostic, including preparing/testing the trusted scratch
+instrumentation before the single run. The approval was explicit, not inferred from this
 plan, the research PR, its CI, #116 intent, or the consumed #122 upload permission.
 
 ## Immutable subject and execution envelope
@@ -70,7 +74,8 @@ boundary; ensure labels never swap or infer a side from identical aggregate gate
 Also test malformed response vs timeout/cancel, unknown/forged worker claims,
 hostile error getters, canaries, overflow/truncation/late result and identity
 substitution. Verify byte-identical original results/exceptions/gate scoring and
-cleanup remains invoked. These instrumentation controls are **PROPOSED**, not
+cleanup remains invoked. These instrumentation controls are implemented in observer.test.mjs and locally
+executed (20 PASS); launcher.test.ps1 adds three stateful stub controls. They are not
 the already executed read-only audit tests in this PR.
 
 ## Decision and stopping conditions
