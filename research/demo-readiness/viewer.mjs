@@ -4,9 +4,12 @@ import {
   readBundle,
   readFuture,
 } from "./adapter.mjs";
+import { readIncident } from "./incident-adapter.mjs";
 import { PINS } from "./pins.mjs";
 import { REAL_AI_NAMES, readRealBundle } from "./real-ai-adapter.mjs";
 import { REAL_AI_PINS } from "./real-ai-pins.mjs";
+
+const INCIDENT_DIRECTORY = "evidence/mmp-104";
 
 const byId = (id) => document.getElementById(id);
 let bundle = null;
@@ -33,6 +36,7 @@ function reset() {
     "historical-replay",
     "historical-context",
     "real-ai",
+    "incident",
   ])
     byId(id).hidden = true;
   for (const id of [
@@ -51,6 +55,10 @@ function reset() {
     "real-gates",
     "real-timeline",
     "real-identities",
+    "incident-metrics",
+    "incident-gates",
+    "incident-timeline",
+    "incident-identities",
   ])
     byId(id).replaceChildren();
 }
@@ -172,13 +180,85 @@ function renderReal(value) {
   );
   byId("real-ai").hidden = false;
 }
-function renderBundles(historical, real) {
+function renderIncident(value) {
+  const g = value.generation;
+  byId("incident-metrics").append(
+    definitions([
+      ["Model / generation", `${g.modelId} / ${g.status} (generation only)`],
+      [
+        "Attempted requests / confirmed responses",
+        `${g.attemptedRequests} / ${g.confirmedResponseCount}`,
+      ],
+      ["Input / output tokens", `${g.inputTokens} / ${g.outputTokens}`],
+      ["Estimated cost USD (ESTIMATE_ONLY)", g.estimatedCostUsd],
+      [
+        "Charged cost USD",
+        g.chargedCostUsd === null
+          ? "null / unknown — settled charge unavailable"
+          : g.chargedCostUsd,
+      ],
+      [
+        "First pair / build",
+        `${value.firstPair.scenarioId} · per-pair G1 ${value.firstPair.g1Verdict} · diagnostics ${value.firstPair.diagnosticStatus}`,
+      ],
+      [
+        "Aggregate G1",
+        "INCONCLUSIVE / BUILD_NOT_RUN — only workshop-business typecheck + build ran",
+      ],
+      [
+        "Preservation",
+        `${value.preservation.status} · encrypted upload ${value.preservation.upload}`,
+      ],
+      [
+        "Stage classification",
+        `${value.stageClassification} — production telemetry was added later, not present in this run`,
+      ],
+      ["Historical root cause", value.historicalRootCause],
+    ]),
+  );
+  for (const [gate, status] of Object.entries(value.gates))
+    byId("incident-gates").append(
+      element("span", `${gate} ${status}`, `verdict-${status}`),
+    );
+  const http = `${value.coverage.http}/${value.coverage.requiredHttp}`;
+  const sqlite = `${value.coverage.sqlite}/${value.coverage.requiredSqlite}`;
+  for (const text of [
+    `Generation PASS: one authorized POST, HTTP ${g.httpStatus}, ${g.confirmedResponseCount} confirmed response from ${g.modelId}.`,
+    "First pair build PASS: workshop-business typecheck + build completed — the first per-pair G1 PASS for a real AI candidate.",
+    "Aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN: the other pairs' builds never executed, so the full build is not established.",
+    `G3 ERROR / VERIFIER_ERROR: ${sqlite} typed SQLite comparisons — only workshop-business:initial was recorded.`,
+    `G2 ERROR / VERIFIER_ERROR: ${http} completed HTTP comparisons; zero completed comparisons does not mean zero requests reached the services.`,
+    `Normal cleanup ${value.cleanup.status}; independent finalizer ${value.finalizer.status}: ${value.finalizer.containers} containers / ${value.finalizer.volumes} volumes / ${value.finalizer.emergencyRemoved} emergency removals.`,
+    `Generated candidate source ${value.historicalCandidateSource}; private operation packs ${value.privateOperationPacks}; historical root cause ${value.historicalRootCause}. Estimate USD ${g.estimatedCostUsd}; charged cost null — attempt ledger ${value.attemptLedger.status}.`,
+  ])
+    byId("incident-timeline").append(element("li", text));
+  byId("incident-identities").append(
+    definitions([
+      ["Run / job", `${value.runId} / ${value.jobId}`],
+      ["Execution head SHA", value.headSha],
+      ["Frozen source SHA", value.sourceSha],
+      ["Generated candidate SHA", value.candidateSha256],
+      [
+        "Derived summary (hash identity only)",
+        `${value.summarySourcePath} · ${value.summaryBytes} bytes · SHA-256 ${value.summarySha256}`,
+      ],
+      [
+        "Hosted run",
+        `https://github.com/Meta-Project2026/Metamorph/actions/runs/${value.runId}`,
+      ],
+    ]),
+  );
+  byId("incident").hidden = false;
+}
+function renderBundles(historical, real, incident) {
   bundle = { receipts: {} };
   if (historical) renderHistorical(historical);
   if (real) renderReal(real);
+  if (incident) renderIncident(incident);
   for (const [label, value] of [
     ["Historical #70", historical],
     ["Real AI #81", real],
+    ["Incident #104", incident],
   ]) {
     if (!value) continue;
     for (const [name, receipt] of Object.entries(value.receipts)) {
@@ -210,9 +290,12 @@ async function load(getFiles) {
     let future;
     let historical;
     let real;
+    let incident;
     if (Array.isArray(input)) {
       if (input.length === 1 && input[0].name === "future-model.json")
         future = readFuture(input[0].name, input[0].bytes);
+      else if (input.length === 1 && input[0].name === "incident.json")
+        incident = await readIncident(input[0].bytes);
       else if (
         input.some(
           (file) =>
@@ -223,20 +306,27 @@ async function load(getFiles) {
         real = await readRealBundle(input);
       else historical = await readBundle(input);
     } else {
-      // All bundled tracks are validated before displaying any results.
-      [historical, real] = await Promise.all([
+      // All bundled tracks are validated before displaying any results; one invalid
+      // or missing track fails the whole load and clears prior results.
+      [historical, real, incident] = await Promise.all([
         readBundle(input.historical),
         readRealBundle(input.real),
+        readIncident(input.incident.bytes),
       ]);
     }
     if (current !== generation) return;
     if (future) {
       byId("future-content").textContent = JSON.stringify(future, null, 2);
       byId("future").hidden = false;
-    } else renderBundles(historical, real);
+    } else renderBundles(historical, real, incident);
+    const loaded = [
+      historical && "historical A/B (5 receipts)",
+      real && "PINNED_REAL_AI_SNAPSHOT C (4 receipts)",
+      incident && "PINNED_INCIDENT_SUMMARY D (1 receipt)",
+    ].filter(Boolean);
     byId("status").textContent = future
       ? "NOT_VERIFIED — declaration only; no independent execution established."
-      : `PINNED_PUBLIC_SNAPSHOT — ${historical ? "historical A/B (5 receipts)" : ""}${historical && real ? " + " : ""}${real ? "PINNED_REAL_AI_SNAPSHOT C (4 receipts)" : ""}. Recorded evidence; this viewer executes no model or Oracle run.`;
+      : `${loaded.join(" + ")}. Recorded evidence; this viewer executes no model or Oracle run.`;
   } catch (error) {
     if (current !== generation) return;
     reset();
@@ -286,11 +376,12 @@ byId("load").addEventListener("click", () =>
           return { name, bytes };
         }),
       );
-    const [historical, real] = await Promise.all([
+    const [historical, real, incidentFiles] = await Promise.all([
       fetchFiles(RECEIPT_NAMES, "evidence"),
       fetchFiles(REAL_AI_NAMES, REAL_AI_PINS.directory),
+      fetchFiles(["incident.json"], INCIDENT_DIRECTORY),
     ]);
-    return { historical, real };
+    return { historical, real, incident: incidentFiles[0] };
   }),
 );
 byId("files").addEventListener("change", (event) => {
@@ -304,10 +395,18 @@ byId("files").addEventListener("change", (event) => {
         (file) =>
           !RECEIPT_NAMES.includes(file.name) &&
           !REAL_AI_NAMES.includes(file.name) &&
-          file.name !== "future-model.json",
+          file.name !== "future-model.json" &&
+          file.name !== "incident.json",
       )
     )
       throw new Error("FILE_NOT_ALLOWLISTED");
+    // The derived D summary is accepted only as a single exact-pinned selection;
+    // mixing it with A/B/C files would invite cross-track receipt blending.
+    if (
+      selected.some((file) => file.name === "incident.json") &&
+      selected.length > 1
+    )
+      throw new Error("MIXED_SELECTION");
     return Promise.all(
       selected.map(async (file) => ({
         name: file.name,

@@ -12,8 +12,16 @@ const routes = new Map([
     "pins.mjs",
     "real-ai-adapter.mjs",
     "real-ai-pins.mjs",
+    "incident-adapter.mjs",
+    "incident-pins.mjs",
   ].map((name) => [`/${name}`, [name, "text/javascript; charset=utf-8"]]),
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
+  // Track D: one fixed allowlisted derived summary. The literal route serves exactly
+  // ../mmp-104/incident.json; no dynamic paths, directory listing or traversal.
+  [
+    "/evidence/mmp-104/incident.json",
+    ["../mmp-104/incident.json", "application/json; charset=utf-8"],
+  ],
   ...Object.keys(PINS.files).map((name) => [
     `/evidence/${name}`,
     [`evidence/${name}`, "application/json; charset=utf-8"],
