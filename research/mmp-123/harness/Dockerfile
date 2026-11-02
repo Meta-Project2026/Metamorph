@@ -20,5 +20,9 @@ RUN apt-get update \
 
 COPY run-inner.sh /usr/local/bin/mmp123-run
 COPY volume-guard.sh /usr/local/bin/volume-guard.sh
-RUN chmod 0755 /usr/local/bin/mmp123-run /usr/local/bin/volume-guard.sh
+# Host checkouts may carry CRLF text (git autocrlf); a CRLF shebang is not a
+# resolvable interpreter in Linux, so the copied scripts are normalized to LF
+# before they are made executable.
+RUN sed -i 's/\r$//' /usr/local/bin/mmp123-run /usr/local/bin/volume-guard.sh \
+    && chmod 0755 /usr/local/bin/mmp123-run /usr/local/bin/volume-guard.sh
 WORKDIR /root
