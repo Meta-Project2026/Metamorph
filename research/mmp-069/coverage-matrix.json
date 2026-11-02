@@ -313,6 +313,14 @@
       "gap": "Package verifier-forensics tests exercise the actual Oracle/report and Linux preserver with inert synthetic adapters through pnpm test. Research stage instrumentation is a proposal/prototype, not wired into production. Exact historical artifacts are inspected locally, never fetched by tests. No model, Docker, dispatch or live upload."
     },
     {
+      "path": "research/mmp-107",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Inert synthetic custody controls execute through the package test bridge in pnpm test (Node 22/24); the static research test-glob inventory does not trace imports. Local lint and offline budget/recorded-receipt preflight are separate. No production capture, age interoperability, owner restore, Docker, Meta call, dispatch or artifact upload."
+    },
+    {
       "path": "research/mmp-108",
       "lifecycle": "ACTIVE",
       "execution": "MANUAL_DOCKER",
@@ -321,12 +329,12 @@
       "gap": "Receipt-integrity, CLI-mode and volume-ownership negative controls run in Fast CI (research/mmp-108/*.test.mjs). The real known-good Docker replay, real first-step fault control and synthetic verifyPair controls were executed once on a local disposable Linux Docker environment at driver head f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c (receipts in research/mmp-108/evidence). No hosted Docker replay, Meta request, paid dispatch or held-out G4 coverage."
     },
     {
-      "path": "research/mmp-107",
+      "path": "research/mmp-120",
       "lifecycle": "ACTIVE",
       "execution": "LOCAL_ONLY",
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
-      "gap": "Inert synthetic custody controls execute through the package test bridge in pnpm test (Node 22/24); the static research test-glob inventory does not trace imports. Local lint and offline budget/recorded-receipt preflight are separate. No production capture, age interoperability, owner restore, Docker, Meta call, dispatch or artifact upload."
+      "gap": "Offline audit/variant CLI is syntax-checked in Fast CI; 22 package-level negative controls are executed by the agent-real test glob on Node 22/24. The matrix's research tests field does not trace package-test imports. No live model inference, network provider call, workflow dispatch, Docker, artifact upload or prompt quality evidence."
     }
   ],
   "skips": [

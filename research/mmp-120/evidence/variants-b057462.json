@@ -1,0 +1,39 @@
+{
+  "format": "mmp120-prompt-proposal-report-v1",
+  "model": "muse-spark-1.3",
+  "baseline": {
+    "bodyBytes": 22762,
+    "bodySha256": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+    "inputTokensUpperEstimate": 123816,
+    "worstCaseEstimatedUsd": 0.224402,
+    "defaultBudgetAdmits": false
+  },
+  "proposals": [
+    {
+      "id": "A-php-value-semantics-instructions",
+      "field": "instructions",
+      "productionFile": "packages/agent-real/src/migration-context.mjs",
+      "appendedUtf8Bytes": 531,
+      "bodyBytes": 23293,
+      "bodySha256": "500b34dcb6ba931f8195789533baa9e3879f9e04dd17e678b2a552d1d0256fd5",
+      "inputTokensUpperEstimate": 125940,
+      "worstCaseEstimatedUsd": 0.227057,
+      "deltaUsd": 0.0026550000000000185,
+      "defaultBudgetAdmits": false
+    },
+    {
+      "id": "B-first-attempt-compile-developer",
+      "field": "developer",
+      "productionFile": "packages/agent-real/src/meta-migration.mjs",
+      "appendedUtf8Bytes": 334,
+      "bodyBytes": 23096,
+      "bodySha256": "dd28517aaec4f1b38b3f5b41bc327de51b663b123340eb67432af48837d3c08a",
+      "inputTokensUpperEstimate": 125152,
+      "worstCaseEstimatedUsd": 0.226072,
+      "deltaUsd": 0.0016700000000000048,
+      "defaultBudgetAdmits": false
+    }
+  ],
+  "dispatchAuthorization": "NONE; proposals are research-only",
+  "promptQuality": "PROMPT_QUALITY_NOT_EMPIRICALLY_ESTABLISHED"
+}

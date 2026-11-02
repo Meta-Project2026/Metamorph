@@ -1,0 +1,176 @@
+{
+  "format": "mmp120-generation-readiness-audit-v1",
+  "inspectedHead": "b0574626c7c75469e17b7169438e9ae4369d0531",
+  "baseSha": "b0574626c7c75469e17b7169438e9ae4369d0531",
+  "source": {
+    "repository": "tanjilaafsarirubina/car-workshop",
+    "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    "license": "MIT",
+    "licenseSha256": "46ef5fb6b330816e097c9e7e16e5a4e6ba8f03c2113a4d97fe8c358f64d629a9",
+    "modelFiles": [
+      "api.php",
+      "config.php"
+    ],
+    "apiActions": 5,
+    "phpFunctions": 11
+  },
+  "benchmark": {
+    "id": "mmp061-workshop-api-v1",
+    "migrationUnitIds": [
+      "workshop-api"
+    ],
+    "normalizationVersion": "oracle-exact-v1"
+  },
+  "manifestSha256": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "contextSha256": "21415d8b4ea38ad0bfcab92c3632777e30e36a8e3c74b17d95ec9abef8a5c345",
+  "serialized": {
+    "bytes": 22762,
+    "sha256": "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d"
+  },
+  "model": {
+    "id": "muse-spark-1.3",
+    "reasoningEffort": "low",
+    "policyVersion": "mmp061-meta-manual-v2",
+    "priceSnapshot": {
+      "version": "meta-standard-2026-10-29",
+      "inputPerMillion": 1.25,
+      "cachedPerMillion": 0.15,
+      "outputPerMillion": 4.25
+    },
+    "tariffExpires": "2026-11-05T00:00:00Z"
+  },
+  "limits": {
+    "inputBytes": 131072,
+    "maxOutputTokens": 16384,
+    "maxRequests": 1,
+    "maxRepairs": 0,
+    "responseBytes": 2097152,
+    "timeoutMs": 180000,
+    "sessionTtlMs": 240000
+  },
+  "requiredGateCounts": {
+    "G1": 6,
+    "G2": 17,
+    "G3": 20
+  },
+  "projection": {
+    "method": "serialized-utf8-bytes-times-4-plus-32768-v1",
+    "inputTokensUpperEstimate": 123816,
+    "maxOutputTokens": 16384,
+    "worstCaseEstimatedUsd": 0.224402
+  },
+  "budget": {
+    "defaultUsd": 0.1,
+    "optionsUsd": [
+      0.1,
+      0.2,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "defaultAdmits": false
+  },
+  "invariants": [
+    {
+      "name": "source_identity_pins",
+      "status": "PASS"
+    },
+    {
+      "name": "license_mit_notice",
+      "status": "PASS"
+    },
+    {
+      "name": "source_files_two_pinned",
+      "status": "PASS"
+    },
+    {
+      "name": "unit_workshop_api_single",
+      "status": "PASS"
+    },
+    {
+      "name": "functions_eleven_ordered",
+      "status": "PASS"
+    },
+    {
+      "name": "actions_five_routed",
+      "status": "PASS"
+    },
+    {
+      "name": "target_toolchain_pins",
+      "status": "PASS"
+    },
+    {
+      "name": "node_next_commonjs_no_package_json",
+      "status": "PASS"
+    },
+    {
+      "name": "node_sqlite_and_strict_types",
+      "status": "PASS"
+    },
+    {
+      "name": "network_off_sandbox",
+      "status": "PASS"
+    },
+    {
+      "name": "source_is_data_not_instructions",
+      "status": "PASS"
+    },
+    {
+      "name": "held_out_scenario_isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "response_schema_strict_changes",
+      "status": "PASS"
+    },
+    {
+      "name": "wire_policy_single_post",
+      "status": "PASS"
+    },
+    {
+      "name": "one_request_zero_repairs",
+      "status": "PASS"
+    },
+    {
+      "name": "input_output_limits",
+      "status": "PASS"
+    },
+    {
+      "name": "gate_counts_6_17_20",
+      "status": "PASS"
+    },
+    {
+      "name": "tariff_snapshot_locked",
+      "status": "PASS"
+    },
+    {
+      "name": "projection_within_context_bound",
+      "status": "PASS"
+    },
+    {
+      "name": "default_budget_blocks_projection",
+      "status": "PASS",
+      "defaultBudgetUsd": 0.1
+    }
+  ],
+  "readiness": "NO_GO",
+  "blockers": [
+    "MMP116_PAID_TRIAL_ON_HOLD",
+    "PR_117_CUSTODY_IN_FLIGHT_BASELINE_MAY_SHIFT",
+    "NO_AI_CANDIDATE_HAS_ESTABLISHED_G1_G2_G3_END_TO_END",
+    "TARIFF_SNAPSHOT_NOT_LIVE_VERIFIED_EXPIRES_2026-11-05",
+    "DEFAULT_ADMISSION_0.10_BLOCKS_PROJECTION",
+    "G4_FORMAL_HELD_OUT_NOT_ESTABLISHED",
+    "PRODUCT_ACCEPTANCE_NOT_ESTABLISHED",
+    "PROMPT_QUALITY_NOT_EMPIRICALLY_ESTABLISHED",
+    "MMP120_COVERAGE_MATRIX_REGISTRATION_DEFERRED_TO_POST_117_REBASE"
+  ],
+  "paidDispatch": {
+    "authorized": false,
+    "reason": "OFFLINE_AUDIT_ONLY; no owner authorization exists on this branch"
+  },
+  "promptQuality": "PROMPT_QUALITY_NOT_EMPIRICALLY_ESTABLISHED",
+  "product": "NOT_ESTABLISHED"
+}
