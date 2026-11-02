@@ -335,6 +335,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Offline audit/variant CLI is syntax-checked in Fast CI; 22 package-level negative controls are executed by the agent-real test glob on Node 22/24. The matrix's research tests field does not trace package-test imports. No live model inference, network provider call, workflow dispatch, Docker, artifact upload or prompt quality evidence."
+    },
+    {
+      "path": "research/mmp-123",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Research drivers (prompt recheck, manual disposable Linux Docker verifier validation) are syntax-checked in Fast CI only; the manual harness is never executed in CI and this directory has no research-local test glob. The frozen GLM 5.3 first-draft candidate is admitted read-only; candidate TS and reference PHP run exclusively in verifier-provisioned network-off workers. No Meta request, paid run, workflow dispatch, artifact upload or held-out data."
     }
   ],
   "skips": [
