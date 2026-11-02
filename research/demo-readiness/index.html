@@ -3,25 +3,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Metamorph · Evidence desk</title>
+  <title>Metamorph · Migrate. Verify. Know.</title>
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/viewer.mjs"></script>
 </head>
 <body>
-  <header><a class="brand" href="/">M<span>Metamorph</span></a><span class="eyebrow">PUBLIC EVIDENCE DESK · MMP-071 / 085 / 104 · 1 NOV 2026</span><span class="pill neutral">READ ONLY / OFFLINE</span></header>
-  <main>
-    <section class="intro"><div><p class="eyebrow">PHP → TYPESCRIPT / A BOUNDED PUBLIC SLICE</p><h1>Show the evidence.<br>Keep the limits visible.</h1><p class="lede">Four recorded tracks: historical admission, deterministic replay, and two real Muse Spark 1.3 runs — one that failed isolated compilation, one that passed its first pair build but ended in a verifier error with unknown root cause.</p></div><aside class="acceptance"><span class="eyebrow">PRODUCT ACCEPTANCE</span><strong>NOT_ESTABLISHED</strong><p>G0 and formal G4 remain INCONCLUSIVE.<br>Public replay parity is scoped evidence.</p></aside></section>
-    <section class="flow" aria-label="Architecture flow">
-      <div><b>01 / PUBLIC PHP</b><span>Pinned source + MIT notice</span></div><div><b>02 / TRUSTED INPUTS</b><span>Source / manifest identities</span></div><div><b>03 / AGENT + PROVIDER</b><span>C / D: real model responses</span></div><div><b>04 / TS CANDIDATE</b><span>C / D: generated candidate SHAs</span></div><div class="pending"><b>05 / DOCKER ORACLE</b><span>C: G1 FAIL · D: verifier error</span></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header>
+    <a class="brand" href="/" aria-label="Metamorph home"><span class="brand-mark" aria-hidden="true">M</span>Metamorph<span class="edition">/ demo</span></a>
+    <nav aria-label="Page navigation"><a href="#walkthrough">Guided demo</a><a href="#receipt-desk">Evidence desk</a></nav>
+    <span class="offline-label"><span aria-hidden="true">◉</span> Offline · read only</span>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="hero-title">
+      <div><p class="eyebrow"><span class="small-line" aria-hidden="true"></span> BEHAVIOR FIRST. LANGUAGE SECOND.</p>
+        <h1 id="hero-title">New language.<br><span>Same behavior?</span><br>Verify it.</h1>
+        <p class="lede">Migrate PHP → TypeScript with an AI agent.<br>Let an independent Oracle check what changed.</p>
+        <a class="hero-link" href="#walkthrough">Explore the recorded demo <span aria-hidden="true">↗</span></a>
+      </div>
+      <aside class="acceptance" id="acceptance" aria-labelledby="acceptance-title">
+        <p class="eyebrow" id="acceptance-title">PRODUCT ACCEPTANCE</p><strong>NOT_ESTABLISHED</strong>
+        <p>Real generation is recorded.<br>A verified migration is still unproven.</p>
+        <div class="acceptance-rule"></div><p>G0 / G4: INCONCLUSIVE in these receipts.<br>Generation PASS ≠ product PASS.</p>
+        <span class="snapshot-label">RECORDED PUBLIC EVIDENCE · THROUGH 1 NOV 2026</span>
+      </aside>
     </section>
-    <section class="toolbar" aria-label="Receipt selection">
-      <button id="load" type="button">Load pinned public receipts</button>
-      <label class="file-button">Select one complete track bundle<input id="files" type="file" accept=".json,application/json" multiple></label>
-      <p id="status" role="status" aria-live="polite">No receipts loaded. Load all four recorded tracks, or select the 5 historical / 4 real AI / 1 incident files (each set separately). Never mix the folders.</p>
+    <section class="architecture" aria-labelledby="pipeline-title">
+      <div class="section-title"><h2 id="pipeline-title">From source to evidence</h2><span class="muted">Conceptual stages · select to explain · no live execution</span></div>
+      <div class="flow" role="group" aria-label="Pipeline stages">
+        <button type="button" data-stage="0" aria-pressed="true"><span class="stage-number">01</span><b>PHP source</b><span>Pinned public inputs</span><span class="stage-symbol" aria-hidden="true">{ }</span></button>
+        <button type="button" data-stage="1" aria-pressed="false"><span class="stage-number">02</span><b>AI agent</b><span>Bounded generation</span><span class="stage-symbol" aria-hidden="true">✳</span></button>
+        <button type="button" data-stage="2" aria-pressed="false"><span class="stage-number">03</span><b>TS candidate</b><span>Separate content identity</span><span class="stage-symbol" aria-hidden="true">TS</span></button>
+        <button type="button" data-stage="3" aria-pressed="false"><span class="stage-number">04</span><b>Independent Oracle</b><span>Isolated G0–G4 checks</span><span class="stage-symbol" aria-hidden="true">◇</span></button>
+        <button type="button" data-stage="4" aria-pressed="false"><span class="stage-number">05</span><b>Evidence & verdict</b><span>Keep every outcome</span><span class="stage-symbol" aria-hidden="true">≡</span></button>
+      </div>
+      <p id="stage-detail" class="stage-detail" role="status">01 / A frozen PHP source and explicit public scope make the inputs inspectable. No source code executes in this viewer.</p>
+    </section>
+    <section class="guided card" id="walkthrough" aria-labelledby="guide-title">
+      <div class="guide-heading"><p class="eyebrow">GUIDED DEMO / MANUAL PLAYBACK</p><span class="muted">90-second story · expand to 3–5 minutes</span></div>
+      <div class="guide-layout"><nav class="guide-steps" aria-label="Story chapters">
+        <button type="button" data-chapter="0" aria-current="step">01 <span>The premise</span></button>
+        <button type="button" data-chapter="1">02 <span>A · No generation</span></button>
+        <button type="button" data-chapter="2">03 <span>B · Scripted control</span></button>
+        <button type="button" data-chapter="3">04 <span>C · Real AI, build FAIL</span></button>
+        <button type="button" data-chapter="4">05 <span>D · Verifier ERROR</span></button>
+        <button type="button" data-chapter="5">06 <span>The acceptance gap</span></button>
+      </nav><div class="guide-copy" aria-live="polite"><p class="eyebrow" id="guide-position">CHAPTER 01 / 06</p><h2 id="guide-title">A response is a beginning.<br>Verification is the question.</h2><p id="guide-description">Explore four historical tracks, from an unadmitted provider to two genuine AI responses. The viewer reads saved public receipts; it does not run a migration.</p><p id="guide-evidence-note" class="muted">Load pinned receipts below to inspect the evidence. This narration is not execution proof.</p><a id="guide-target" href="#receipt-desk">Load and inspect receipts ↓</a></div></div>
+      <div class="guide-controls"><span id="guide-progress" class="muted">1 of 6 · no automatic transitions</span><div><button id="guide-prev" type="button" class="secondary" disabled>← Previous</button><button id="guide-next" type="button">Next chapter →</button></div></div>
+    </section>
+    <section id="receipt-desk" class="receipt-desk" aria-labelledby="desk-title">
+      <div class="section-title"><div><p class="eyebrow">THE EVIDENCE DESK</p><h2 id="desk-title">Four tracks. Distinct conclusions.</h2></div><span class="pill warning">PRODUCT NOT_ESTABLISHED</span></div>
+      <p class="desk-note">Historical A–D receipts only, through 1 November 2026. Later experiments, including #137 / run 41505679809, are outside this snapshot. These tracks are not the latest complete project state.</p>
+      <div class="toolbar" aria-label="Receipt selection"><button id="load" type="button">Load pinned public receipts <span aria-hidden="true">↓</span></button><label class="file-button" for="files">Or select one complete track bundle<input id="files" type="file" accept=".json,application/json" multiple></label></div>
+      <p id="status" role="status" aria-live="polite">No receipts loaded. Load all four tracks, or select the 5 historical / 4 real AI / 1 incident files separately. Never mix folders.</p>
+      <div id="empty-state" class="empty-state"><span aria-hidden="true">◇</span><div><strong>Evidence starts with the bytes.</strong><p>Load the ten bundled receipts to reveal gate verdicts and comparison counts. All validation stays in this browser.</p></div></div>
+      <div id="overview" hidden><div id="track-cards" class="track-cards" role="group" aria-label="Choose a recorded track"></div>
+        <details class="matrix-details"><summary>Compare all G0–G4 verdicts & completed comparisons</summary><p class="muted">B has three separate attempts. Counts include the failing mutation; they are executed comparisons, not route coverage. A has no candidate and no comparisons.</p><div class="table-wrap" role="region" aria-label="All track gate matrix" tabindex="0"><table><caption>Only validated historical receipts. Product remains NOT_ESTABLISHED for every row.</caption><thead><tr><th scope="col">Track / attempt</th><th scope="col">G0 · Complete target</th><th scope="col">G1 · Build</th><th scope="col">G2 · HTTP</th><th scope="col">G3 · State</th><th scope="col">G4 · Independent controls</th><th scope="col">HTTP</th><th scope="col">SQLite</th></tr></thead><tbody id="gate-matrix"></tbody></table></div></details>
+      </div>
+      <details class="legend"><summary>How to read the outcomes</summary><dl><dt class="verdict-PASS">PASS</dt><dd>The stated operation or gate passed within its scope.</dd><dt class="verdict-FAIL">FAIL</dt><dd>An executed check proved a failure.</dd><dt class="verdict-ERROR">ERROR</dt><dd>A verifier, environment or harness error prevented a conclusion.</dd><dt class="verdict-INCONCLUSIVE">INCONCLUSIVE</dt><dd>The evidence does not establish the gate.</dd><dt class="verdict-NOT_RUN">NOT_RUN</dt><dd>The operation did not execute.</dd></dl><p>Generation PASS, one pair's build PASS, aggregate build and product acceptance are separate claims. G3 includes HTTP and stateful SQLite parity. Public replay controls do not establish formal G4.</p></details>
     </section>
     <div id="evidence" hidden>
-      <section id="historical-model" class="model card" hidden><div class="section-title"><div><p class="eyebrow">TRACK A / HISTORICAL ADMISSION-ONLY SNAPSHOT · PR #70</p><h2 id="model-label"></h2></div><span class="pill warning">NO GENERATED CANDIDATE</span></div><p id="model-alias" class="muted"></p><div id="model-metrics" class="metrics"></div><div id="model-gates" class="gate-strip"></div><p class="muted">In this historical snapshot, the provider was not admitted. Model cleanup is NOT_RUN, with null inventory. This is not the latest overall project state. Tracks B/C never fill this historical track.</p></section>
-      <section id="historical-replay" class="card" hidden><div class="section-title"><div><p class="eyebrow">TRACK B / HISTORICAL HOSTED DOCKER CONTROLS</p><h2>DETERMINISTIC_REPLAY_NOT_AI</h2></div><span class="pill neutral">PINNED PUBLIC SNAPSHOT</span></div><p class="muted">Observed on run 40793819074. The repair is scripted. No model answer or new migration is being executed here.</p><div class="table-wrap"><table><caption>Observed gate verdicts and comparison counts for each exact candidate</caption><thead><tr><th scope="col">Attempt</th><th scope="col">G0</th><th scope="col">G1</th><th scope="col">G2</th><th scope="col">G3</th><th scope="col">G4</th><th scope="col">HTTP</th><th scope="col">Typed SQLite</th></tr></thead><tbody id="attempts"></tbody></table></div><div id="cleanup" class="cleanup"></div><p class="muted">17 HTTP steps and 20 typed database comparisons per attempt (initial state + post-step snapshots across 3 scenarios). Counts describe executed comparisons, including the failing mutation; they are not route or function coverage percentages.</p></section>
+      <p class="detail-label eyebrow">SELECTED TRACK / VALIDATED RECORDED EVIDENCE</p>
+      <section id="historical-model" class="model card" hidden><div class="section-title"><div><p class="eyebrow">TRACK A / HISTORICAL ADMISSION-ONLY SNAPSHOT · PR #70</p><h2 id="model-label"></h2></div><span class="pill warning">NO GENERATED CANDIDATE</span></div><p id="model-alias" class="muted"></p><div id="model-metrics" class="metrics"></div><div id="model-gates" class="gate-strip"></div><p class="muted">In this historical snapshot, the provider was not admitted. Model cleanup is NOT_RUN, with null inventory. This is not the latest overall project state. Tracks B/C/D never fill this historical track.</p></section>
+      <section id="historical-replay" class="card" hidden><div class="section-title"><div><p class="eyebrow">TRACK B / HISTORICAL HOSTED DOCKER CONTROLS</p><h2>DETERMINISTIC_REPLAY_NOT_AI</h2></div><span class="pill neutral">PINNED PUBLIC SNAPSHOT</span></div><p class="muted">Observed on run 40793819074. The repair is scripted. No model answer or new migration is being executed here.</p><div class="table-wrap" role="region" aria-label="Replay attempt verdicts" tabindex="0"><table><caption>Observed gate verdicts and comparison counts for each exact candidate</caption><thead><tr><th scope="col">Attempt</th><th scope="col">G0</th><th scope="col">G1</th><th scope="col">G2</th><th scope="col">G3</th><th scope="col">G4</th><th scope="col">HTTP</th><th scope="col">Typed SQLite</th></tr></thead><tbody id="attempts"></tbody></table></div><div id="cleanup" class="cleanup"></div><p class="muted">17 HTTP steps and 20 typed database comparisons per attempt (initial state + post-step snapshots across 3 scenarios). Counts describe executed comparisons, including the failing mutation; they are not route or function coverage percentages.</p></section>
       <section id="real-ai" class="card real-ai" hidden>
         <div class="section-title"><div><p class="eyebrow">TRACK C / MMP-081 · 29 OCT 2026 · REAL AI GENERATION</p><h2>Real AI trial — G1 build failure</h2></div><span class="pill failure">G1 FAIL / BUILD_FAILED</span></div>
         <p class="muted">REAL_INFERENCE_GENERATED · Muse Spark 1.3 returned a response and created a TS candidate. Generation PASS applies only to generation. Product remains NOT_ESTABLISHED.</p>
@@ -39,11 +83,11 @@
         <details><summary>Real run / source / candidate identities (MMP-104 derived summary)</summary><div id="incident-identities"></div></details>
       </section>
       <div id="historical-context" class="two-columns" hidden><section class="card"><p class="eyebrow">MEASURED PUBLIC BENCHMARK SCOPE</p><h2>5 API actions / 11 PHP functions</h2><div id="scope"></div><p class="muted">SQLite API slice. HTML/JS UI, MySQL, concurrency and unrestricted queries are excluded. Function inventory is not measured end-to-end function coverage.</p></section><section class="card"><p class="eyebrow">PROVENANCE / EXACT IDENTITIES</p><h2>Recorded facts, pinned bytes</h2><div id="identities"></div><p class="muted">PINNED_PUBLIC_SNAPSHOT means bytes match this reviewed public snapshot. It does not authenticate an arbitrary uploaded receipt or independently rerun the Oracle.</p></section></div>
-      <details class="card"><summary>Inspect the allowlisted public receipt JSON</summary><label for="receipt">Receipt</label><select id="receipt"></select><pre id="raw"></pre></details>
+      <details class="card" id="json-inspector"><summary>Inspect the allowlisted public receipt JSON</summary><label for="receipt">Receipt</label><select id="receipt"></select><pre id="raw"></pre></details>
     </div>
     <section id="future" class="card" hidden><p class="eyebrow">OPTIONAL FUTURE INPUT / DECLARATION PREVIEW</p><h2>REAL_MODEL_GENERATION — DECLARED ONLY</h2><span class="pill warning">NOT_VERIFIED</span><p>No independent execution proof is established by an uploaded file. Claimed outcomes cannot change the historical controls or product acceptance.</p><pre id="future-content"></pre></section>
-    <section class="roadmap"><div><p class="eyebrow">NEXT / #61 PRODUCT GOAL</p><h2>After two recorded real runs</h2><p>Track C: real generation, isolated G1 FAIL. Track D: first-pair build PASS, aggregate G1 INCONCLUSIVE, G2/G3 verifier error, root cause UNKNOWN. A future run needs separate authorization and fresh evidence for its exact candidate; #115 still requires production proof and #116 remains on hold. No planned paid request is started by this viewer.</p></div><div><p class="eyebrow">NEXT / FORMAL G4</p><h2>Independent acceptance</h2><p>Independent controls and held-out isolation remain separate work. Preserve natural FAIL, ERROR, INCONCLUSIVE and NOT_RUN outcomes.</p></div><div><p class="eyebrow">PRESENTATION FALLBACK</p><h2>Use the pinned local evidence</h2><p>No GitHub, Internet, API key, Docker or live model is needed. Load all four tracks locally. If a receipt is unavailable, use the local JSON and runbook; never substitute replay PASS for a real candidate's outcome.</p></div></section>
+    <section class="roadmap"><div><p class="eyebrow">OUTSIDE THIS HISTORICAL SNAPSHOT</p><h2>Fresh runs need fresh evidence</h2><p>In these receipts, Track C: real generation, isolated G1 FAIL. Track D: first-pair build PASS, aggregate G1 INCONCLUSIVE, G2/G3 verifier error, root cause UNKNOWN. A future run needs separate authorization and fresh evidence for its exact candidate. Current work and authorizations are tracked separately in #61 / #115 / #137 / #139. No planned paid request is started by this viewer.</p></div><div><p class="eyebrow">NEXT / FORMAL G4</p><h2>Independent acceptance</h2><p>Independent controls and held-out isolation remain separate work. Preserve natural FAIL, ERROR, INCONCLUSIVE and NOT_RUN outcomes.</p></div><div><p class="eyebrow">PRESENTATION FALLBACK</p><h2>Use the pinned local evidence</h2><p>No GitHub, Internet, API key, Docker or live model is needed. Load all four tracks locally. If a receipt is unavailable, use the local JSON and runbook; never substitute replay PASS for a real candidate's outcome.</p></div></section>
   </main>
-  <footer>Metamorph / Independent demo track · No new model calls · No candidate execution · No external assets or telemetry</footer>
+  <footer><span class="footer-brand">Metamorph / Evidence before acceptance.</span><span>Offline public snapshot · No model calls or candidate execution · No telemetry</span></footer>
 </body>
 </html>

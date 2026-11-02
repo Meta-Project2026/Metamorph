@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "empty state, skip link, keyboard stage selection and visible focus",
+    "all pinned tracks, six exact gate rows, independent selection and C/D counts",
+    "six manual chapters, previous/next boundaries and JSON drill-down",
+    "responsive 1440px, A/B/C/D and expanded matrix, screenshots",
+    "responsive 768px, A/B/C/D and expanded matrix, screenshots",
+    "responsive 390px, A/B/C/D and expanded matrix, screenshots",
+    "picker accepts complete historical, C and lone D sets",
+    "missing chapter stays narration; future declaration clears trusted overview and stays NOT_VERIFIED",
+    "fail-closed picker: incomplete C, old details and summary cleared",
+    "fail-closed picker: forged D PASS, old details and summary cleared",
+    "fail-closed picker: malformed JSON, old details and summary cleared",
+    "fail-closed picker: mixed D/C, old details and summary cleared",
+    "fail-closed picker: unknown filename, old details and summary cleared",
+    "atomic load: replaced D rejects all four tracks and clears old evidence",
+    "stale successful load cannot overwrite newer failed selection",
+    "recovery, reduced-motion mode, no JS exceptions or external requests"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "156.0.8078.74",
+  "humanTimedRehearsal": "NOT_RUN",
+  "screenReaderAudit": "NOT_RUN"
+}

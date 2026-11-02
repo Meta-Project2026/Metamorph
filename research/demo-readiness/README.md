@@ -1,4 +1,25 @@
-# Metamorph — four-track offline evidence desk (MMP-071 / MMP-085 / MMP-104)
+# Metamorph — recorded demo & offline evidence desk
+
+[MMP-140](https://github.com/Meta-Project2026/Metamorph/issues/140) improves the
+existing vanilla HTML/CSS/ESM viewer. It presents **PHP → TypeScript with independent
+behavioral verification**, using four recorded public tracks. It is not a live
+migration application. **PRODUCT NOT_ESTABLISHED** stays visible before loading
+and throughout the walkthrough. A–D end at 1 November 2026; newer experiments,
+including #137 / run 41505679809, are outside this snapshot. This is not the latest
+complete project state.
+
+The first screen explains the product and acceptance gap; five selectable pipeline
+stages explain the architecture. **Guided Demo** has six manually selected chapters
+and Previous/Next buttons, with no timer or simulated execution. After loading,
+four track cards select focused details; expand the comparison matrix for all
+G0–G4 rows, identities for exact SHAs, and the JSON inspector for original fields.
+Chapter narration remains clearly separate from loaded, validated evidence.
+An absent track in a picker selection is labelled not loaded.
+
+Design rationale and scope are in [plan.md](plan.md); target narration and fallback
+are in [RUNBOOK.md](RUNBOOK.md). Current executed checks and before/after browser
+screenshots are in [VALIDATION-140.md](VALIDATION-140.md). Target pacing is not a
+measured human rehearsal.
 
 Read-only presentation built for the 2026-10-30 event (historical date), extended on 2026-11-02 with track D. Refs [#118](https://github.com/Meta-Project2026/Metamorph/issues/118), [#85](https://github.com/Meta-Project2026/Metamorph/issues/85), [#71](https://github.com/Meta-Project2026/Metamorph/issues/71), [#61](https://github.com/Meta-Project2026/Metamorph/issues/61), [#81](https://github.com/Meta-Project2026/Metamorph/issues/81), [#104](https://github.com/Meta-Project2026/Metamorph/issues/104).
 
@@ -61,7 +82,8 @@ cleanup/finalizer 0/0/0, preservation NOT_APPLICABLE, `chargedCostUsd=null`,
 UNKNOWN root cause and NOT_RECORDED stage classification. A matching hash
 establishes **identity of the derived allowlisted summary only** — not
 cryptographic verification of the original ZIPs, authenticity of a third-party
-file, or any new execution of code. The original ZIPs expired 2026-11-08.
+file, or any new execution of code. The recorded original ZIP expiration date is
+2026-11-08; this viewer makes no current artifact availability claim.
 
 Original GitHub-hosted public ZIP and four member sizes/digests independently
 verified on 2026-10-29; byte-identical members under evidence/real-ai-40900698372/.
@@ -78,7 +100,8 @@ is not independent executor attestation.
 
 - [Russian runbook](RUNBOOK.md): 90-second / ~4-minute target pacing and fallbacks.
 - [Provenance / trust policy](PROVENANCE.md): exact original identities and hashes.
-- [Current validation](VALIDATION-085.md); [historical validation](VALIDATION.md).
+- [Current UI validation](VALIDATION-140.md); [MMP-085 validation](VALIDATION-085.md);
+  [historical validation](VALIDATION.md).
 - [Compact scope / plan / tasks](plan.md).
 
 ```powershell
@@ -87,6 +110,33 @@ node --test research/demo-readiness/real-ai.test.mjs
 node --test research/demo-readiness/incident.test.mjs
 pnpm exec biome check research/demo-readiness
 ```
+
+The viewer launch above needs no install. Developer checks use the repository's
+existing pinned dependencies:
+
+```powershell
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+Optional reproducible browser smoke: supply an **already installed** Playwright ESM
+module and local Chromium/Chrome. No download is performed. The script temporarily
+binds loopback port 4171, blocks non-loopback page requests, checks UI/picker/
+atomic/race/responsive behavior, saves screenshots/results, then closes its own
+resources. Stop your own viewer first; do not stop someone else's process.
+
+```powershell
+node research/demo-readiness/browser-smoke.mjs '<absolute local playwright/index.mjs>' '<absolute chrome.exe>' '<absolute output directory>'
+```
+
+This optional local smoke is syntax/lint checked by existing Fast CI; browser
+automation is not added to PR CI. Native buttons, a skip link, labelled controls,
+focus-visible styles, keyboard-scrollable tables and reduced-motion support are
+included. Full assistive-technology testing and human timed rehearsal remain
+separate checks; see the validation record for what actually ran.
 
 Biome is an existing dev dependency, unnecessary for presentation. No dependency,
 lockfile, workflow or Oracle changes. No external assets, telemetry, storage or
