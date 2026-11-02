@@ -45,8 +45,31 @@ The existing `audit.mjs` derives exact serialized production request
 estimate; the new hosted test prints **only these safe numeric/digest fields**
 with prefix `MMP129_SAFE_REQUEST_METRICS` (never the request, PHP source,
 model payload, credentials or private evidence).
-These values are valid only at the exact inspected commit. **No request or
-Docker execution is performed by this change.**
+At the exact CI-tested serialized production contract on PR #131,
+Node24 [Fast CI run #41465412271](https://github.com/Meta-Project2026/Metamorph/actions/runs/41465412271)
+printed these **independently observed offline** metrics before the unrelated
+stale MMP-107 historical request assertion failed:
+
+| Field | Value |
+| --- | --- |
+| `bodyBytes` | **23,148** (historical 22,762; +386) |
+| `bodySha256` | `d0e5c872a735ca5a039820147177f9eb2d2a2da4f9d0b6f5a93180f66dd7da46` |
+| `contextSha256` | `1c42ae8cb147aac54e0e7a767d66b77c4213137046bace47d5bed3560defaed3` |
+| `inputTokensUpperEstimate` | **125,360** (formula 4×serialized bytes + 32,768) |
+| `worstCaseEstimatedUsd` | **$0.226332** (historical $0.224402, +$0.001930) |
+| Default estimated budget | **$0.10: STILL BLOCKED** |
+| Actual charge | **NONE**; no inference performed |
+
+The old frozen MMP-107 control asserted the **previous current request**
+22,762-byte projection. This branch updates only its **current production
+wire** test pin to the new exact body identity, while preserving the original
+MMP-107 research baseline as historical and all safety controls. The final
+green exact-head CI is required before any merge. These projection values
+are not measured provider token usage or a billing cap.
+
+These values are valid only for this unchanged serialization/policy and the
+exact reviewed branch; recompute after any change. **No request or Docker
+execution is performed by this change.**
 
 Historical `55c7b844…` body SHA and old #100 owner authorization are invalid for
 a future changed prompt. Update #116 only with a **fresh exact-main immutable
