@@ -3,12 +3,17 @@
 // DIAGNOSTIC_POLICY.recipient. The check runs only when the owner explicitly
 // starts it on their own trusted machine; it never runs on import, in tests,
 // in CI or on install. The identity and tool paths are entered interactively
-// so they never appear in argv or shell history; the identity file content is
-// never read here (only its size metadata), and only age-keygen -y touches it,
-// spawned without a shell at an absolute owner-provided path with bounded
-// time and output. No network, no telemetry, no file writes. Exactly one
-// allowlisted result line is printed: MATCH / MISMATCH / NOT_AVAILABLE /
-// ERROR. A MATCH is key-possession evidence only and is not a production
+// with input echo suppressed, so they never appear in argv, shell history or
+// the helper's output; the identity file content is never read here (only its
+// size metadata), and only age-keygen -y touches it, spawned without a shell
+// at an absolute owner-provided path with bounded time and output. The Node
+// wrapper makes no network calls and writes no files, and the child binary is
+// accepted only after a content SHA-256 pin check: on Linux/WSL the pinned
+// DIAGNOSTIC_POLICY.keygenSha256 build; on Windows no qualified pinned build
+// exists, so the helper refuses closed (NOT_AVAILABLE) before any spawn —
+// per the PR review, real-key checks are Linux/WSL-only for now. Exactly one
+// allowlisted final status line is printed: MATCH / MISMATCH / NOT_AVAILABLE
+// / ERROR. A MATCH is key-possession evidence only and is not a production
 // decrypt/restore result; verifyAgeRestore on a qualified Linux host remains
 // the only path to OWNER_RESTORE_PASS.
 import { spawnSync } from "node:child_process";
@@ -16,6 +21,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import { isAbsolute, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
+import { Writable } from "node:stream";
 import { pathToFileURL } from "node:url";
 import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 
@@ -115,27 +121,73 @@ export async function runOwnerCheck({
   if (!regularFile(identityPath, IDENTITY_MAX_BYTES)) return done("ERROR"); // missing, empty or oversized identity input
   if (!regularFile(keygenPath, TOOL_MAX_BYTES)) return done("NOT_AVAILABLE");
   if (
-    platform === "linux" &&
+    platform !== "linux" ||
     createHash("sha256").update(readFileSync(keygenPath)).digest("hex") !==
       DIAGNOSTIC_POLICY.keygenSha256
   )
-    return done("NOT_AVAILABLE"); // on Linux/WSL only the pinned qualified build is usable
+    return done("NOT_AVAILABLE"); // only the pinned Linux/WSL build may touch the identity; Windows refuses closed before any spawn (review P1)
   return done(deriveRecipient(keygenPath, identityPath, expected));
 }
 
-async function main() {
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
+// Interactive prompter with input echo suppressed: typed characters and the
+// entered paths never reach the visible stream; only the prompt labels, a
+// line break after each answer, and the caller's own output are written.
+// Lines are taken from an always-attached queue so a pasted second path is
+// never lost between answers, and a closed/aborted stream resolves to an
+// empty answer instead of hanging.
+export function createPrompter({
+  input = process.stdin,
+  write = (text) => process.stdout.write(text),
+} = {}) {
+  const silent = new Writable({
+    write(_chunk, _encoding, callback) {
+      callback();
+    },
+  });
+  const rl = createInterface({ input, output: silent, terminal: true });
+  const queued = [];
+  let notify = null;
+  let closed = false;
+  rl.on("line", (line) => {
+    queued.push(line);
+    const wake = notify;
+    notify = null;
+    wake?.();
+  });
   rl.on("SIGINT", () => rl.close());
+  rl.on("close", () => {
+    closed = true;
+    const wake = notify;
+    notify = null;
+    wake?.();
+  });
+  return {
+    ask: async (label) => {
+      write(`${label} `);
+      let answer = queued.shift();
+      if (answer === undefined && !closed) {
+        await new Promise((resolve) => {
+          notify = resolve;
+        });
+        answer = queued.shift();
+      }
+      write("\n");
+      return answer ?? "";
+    },
+    close: () => rl.close(),
+  };
+}
+
+async function main() {
+  const prompter = createPrompter();
   try {
-    const code = await runOwnerCheck({
-      ask: (label) => rl.question(`${label} `),
-    });
+    const code = await runOwnerCheck({ ask: prompter.ask });
     process.exitCode = EXIT_CODES[code];
   } catch {
     process.stdout.write("ERROR\n");
     process.exitCode = EXIT_CODES.ERROR;
   } finally {
-    rl.close();
+    prompter.close();
   }
 }
 if (

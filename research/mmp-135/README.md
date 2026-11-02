@@ -13,43 +13,57 @@ recorded in #135; it is not a billing hard cap and authorizes no POST.
 ## What the helper does and never does
 
 [check-owner-key.mjs](check-owner-key.mjs) is a compact owner-executed Node
-script. It asks interactively for (1) the identity file path and (2) the
-`age-keygen` path, then runs `age-keygen -y <identity>` without a shell, at
-the absolute owner-provided path, with a 10 s timeout and a 4096-byte output
-bound, and compares the derived public recipient for exact equality with the
-production `DIAGNOSTIC_POLICY.recipient` from
+script. It prints two prompt labels and asks interactively for (1) the
+identity file path and (2) the `age-keygen` path, then runs
+`age-keygen -y <identity>` without a shell, at the absolute owner-provided
+path, with a 10 s timeout and a 4096-byte output bound, and compares the
+derived public recipient for exact equality with the production
+`DIAGNOSTIC_POLICY.recipient` from
 `packages/agent-real/src/private-diagnostics.mjs` (whose pinned
-`recipientSha256` is re-verified first). It prints exactly one result line.
+`recipientSha256` is re-verified first). It emits one allowlisted **final
+status line**, plus the two prompt labels and a line break after each answer.
 
-It **never**: reads the identity content (only size ≤ 4096 bytes is checked),
-accepts paths as arguments (so nothing lands in shell history), resolves the
-tool through `PATH`, prints the derived key, the paths, stderr or any detail,
-makes a network call, writes any file, or runs on import, in tests, in CI or
-on install.
+- **Input echo is suppressed.** Typed characters and the entered paths are
+  not displayed and never reach the helper's output, argv, shell history or
+  any file. Input is blind: paste the path and press Enter; a mistyped path
+  ends in `ERROR` or `NOT_AVAILABLE` — rerun. Run only in a normal local
+  terminal without transcript recording, screen sharing or agent observation.
+- The Node wrapper itself makes **no network calls** and writes **no files**;
+  it never reads the identity content (only its size ≤ 4096 bytes is checked)
+  and never prints the derived key, the paths, stderr or any other detail.
+  The spawned child is accepted only after a binary content SHA-256 pin
+  check (below), so the executed tool is exactly the qualified build.
+- It never runs on import, in tests, in CI or on install, and refuses closed
+  when `CI`, `GH_TOKEN`, `MODEL_API_KEY` or `ACTIONS_RUNTIME_TOKEN` is set.
+
+## Platform qualification (fail closed)
+
+- **Linux/WSL — the only real-key route:** the helper accepts only an
+  `age-keygen` whose content SHA-256 equals the pinned
+  `DIAGNOSTIC_POLICY.keygenSha256` (official age v1.3.2 linux-amd64 build).
+  Any other binary — including one that merely self-reports v1.3.2 — reports
+  `NOT_AVAILABLE` before any spawn.
+- **Windows: refuses closed (`NOT_AVAILABLE`).** No qualified pinned Windows
+  build exists, so no Windows executable is ever run with the identity path
+  (PR review P1). Perform the real check under Linux or WSL.
+- Any other platform: `NOT_AVAILABLE`.
 
 ## Before you run it
 
-1. **Wait for the independent ChatGPT review of the helper at the exact PR
+1. **Wait for the independent review approval of the helper at the exact PR
    head SHA.** Do not run the helper before that review is recorded.
 2. Run it only on your own trusted machine, in a normal interactive terminal,
-   from a clean checkout of the reviewed SHA. The helper refuses closed when
-   `CI`, `GH_TOKEN`, `MODEL_API_KEY` or `ACTIONS_RUNTIME_TOKEN` is set.
-3. Provide your own local `age-keygen` **v1.3.2**. No tool is downloaded.
-   - Linux/WSL: the helper accepts only a binary whose SHA-256 equals the
-     pinned `keygenSha256` (`DIAGNOSTIC_POLICY`, linux-amd64 build); anything
-     else reports `NOT_AVAILABLE`.
-   - Windows: no pinned hash exists for a Windows build, so the helper cannot
-     qualify it for you; you are responsible for using an official unmodified
-     age v1.3.2 `age-keygen.exe`. This documented qualification gap is an
-     obstacle to note, never a fake PASS.
+   from a clean checkout of the reviewed SHA.
+3. Under Linux or WSL, provide your own copy of the pinned official
+   `age-keygen` v1.3.2 linux-amd64 build (for example extracted yourself from
+   the official `age-v1.3.2-linux-amd64.tar.gz` release asset into an
+   owner-only directory). Nothing is downloaded by the helper; if your
+   binary's hash does not match the pin, the check reports `NOT_AVAILABLE`.
+   Under WSL the repository checkout and Node must be reachable from the WSL
+   environment; the identity path you enter must be absolute in that
+   environment.
 
 ## How to run (from the repository root)
-
-Windows PowerShell:
-
-```powershell
-node research\mmp-135\check-owner-key.mjs
-```
 
 Linux or WSL:
 
@@ -57,15 +71,19 @@ Linux or WSL:
 node research/mmp-135/check-owner-key.mjs
 ```
 
-Then answer the two prompts with absolute paths. Press Ctrl+C twice to abort
-(an abort prints `ERROR`; do not report an abort as a check result).
+Windows PowerShell: not available — the helper refuses closed by design; use
+WSL or another Linux host.
 
-| Exit code         | Meaning                                                                                        |
-| ----------------- | ---------------------------------------------------------------------------------------------- |
-| 0 `MATCH`         | The identity derives exactly the production recipient                                          |
-| 1 `MISMATCH`      | A clean derivation produced a different recipient                                              |
-| 2 `NOT_AVAILABLE` | Tool missing, unusable, unqualified, timed out, or unusable output; or a prompt was left empty |
-| 3 `ERROR`         | Invalid identity input, unexpected failure, agent/CI context, or policy pin inconsistency      |
+Answer the two prompts with absolute paths (input is not echoed). Press
+Ctrl+C to abort (an abort or closed input prints `NOT_AVAILABLE` or `ERROR`;
+do not report an abort as a check result).
+
+| Exit code         | Meaning                                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 0 `MATCH`         | The identity derives exactly the production recipient                                                            |
+| 1 `MISMATCH`      | A clean derivation produced a different recipient                                                                |
+| 2 `NOT_AVAILABLE` | Tool missing, unqualified, non-Linux platform, timed out, or unusable output; or a prompt was left empty/aborted |
+| 3 `ERROR`         | Invalid identity input, unexpected failure, agent/CI context, or policy pin inconsistency                        |
 
 Report back exactly one of: `MATCH`, `MISMATCH`, `NOT_AVAILABLE`, `ERROR`.
 
