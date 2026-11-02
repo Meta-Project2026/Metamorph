@@ -48,3 +48,22 @@ workflow dispatch, no candidate decrypt, no age-identity access at any point.
   (H1/H2/H3 ranking); none is claimed confirmed.
 - `INCONCLUSIVE` / `NOT_RUN`: G0, held-out G4, owner restore, billing
   settlement, per-step private diff paths.
+
+## Independent-review follow-up on exact head (2026-11-02)
+
+After the original GLM handoff (9/9 locally executed), ChatGPT independently
+reviewed `packages/oracle/src/http.ts:143-145` and found the JSON comparator
+**short-circuits at a kind mismatch**. Consequently categorical absence of
+`HTTP_JSON_MISSING`, `HTTP_JSON_VALUE` and `HTTP_JSON_LENGTH` cannot establish
+global equality below mismatched-type nodes. H1 is one parsimonious explanation,
+not a unique single-field explanation (H5 could also span all scenarios).
+The research claims in README/findings/matrix/evidence were tightened.
+
+One additional synthetic test now explicitly models an object-vs-string parent
+with hidden missing keys and values. This test was **added by reviewer after**
+the original 9/9 run, and is **NOT_RUN locally by the reviewer** (public GitHub
+checkout not available in reviewer runtime); the project's hosted Fast CI
+checks syntax/matrix but does not execute research-only test modules. Do not
+label this new tenth test PASS until independently executed; the nine earlier
+cases retain their executor-reported 9/9 provenance. No Docker, Meta API,
+private key, plaintext, artifact or paid action was used for the correction.
