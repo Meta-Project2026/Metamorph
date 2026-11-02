@@ -49,18 +49,18 @@ same path have **different kinds** under `kind()` (`http.ts:118-121`): one of
 `null`, `array`, `object`, `string`, `number`, `boolean`. When kinds differ the
 walk does not descend into that node, but sibling keys are still compared.
 
-The published evidence is categorical, but it is highly constraining. Because
+The published evidence is categorical, but it is highly constraining **only on visited comparison paths**. Because
 `G2 findingCodes == ["HTTP_JSON_TYPE"]` and nothing else appears anywhere in
 the run's public gate results:
 
 | Absent code | Forced conclusion (per `http.ts`/`runner.ts` code) |
 | --- | --- |
 | `HTTP_STATUS`, `HTTP_HEADER` | status and all 4 stable headers matched on every step, on both sides |
-| `HTTP_BODY` | either both sides JSON, or byte-equal non-JSON; combined with the JSON branch and no parse failure: **both sides emitted valid JSON with JSON content-types** |
-| `HTTP_JSON_MISSING` | every JSON object had exactly the same key set on both sides (key presence is checked independently of type mismatches, `http.ts:159-168`) |
-| `HTTP_JSON_VALUE` | every same-type leaf had an equal value — including all human-readable messages, PHP `date('F j, Y', …)` renderings and capacity texts |
-| `HTTP_JSON_LENGTH` | all JSON arrays had equal lengths on both sides |
-| (verdict FAIL, not ERROR) | no `VERIFIER_ERROR`; neither body crashed the strict parser |
+| `HTTP_BODY` | no unequal non-JSON bodies. Steps that emit `HTTP_JSON_TYPE` necessarily have parseable JSON on both sides; other steps may be JSON or equal non-JSON bodies |
+| `HTTP_JSON_MISSING` | identical keys at **object nodes visited** by the comparator; no conclusion for descendants of a node where kinds differ (`http.ts:143-144` short-circuits) |
+| `HTTP_JSON_VALUE` | same-kind scalar leaves **visited** by the comparator have equal values; a message or date string hidden under a mismatched-type parent is not checked |
+| `HTTP_JSON_LENGTH` | equal lengths at **array nodes visited** on both sides; array descendants under a type mismatch are not inspected |
+| (verdict FAIL, not ERROR) | no `VERIFIER_ERROR`; JSON bodies reached by parsing were accepted by the strict parser |
 
 For G3, `runner.ts:467-473` builds the gate from
 `[...httpFindings, ...dbFindings]`. DB-side comparison can only emit
@@ -69,15 +69,17 @@ in the published G3 codes, and `MISSING_COVERAGE` is absent while all 20 IDs
 executed (`runner.ts:281` would skip steps after a mismatched initial
 snapshot). Therefore:
 
-> **CONFIRMED: every initial and per-step SQLite snapshot of the candidate was
-> exactly equal to the reference (schema and all table state), in all three
-> scenarios. The candidate's persistent behavior was fully state-correct. The
-> only divergence class observed anywhere in the paid run is JSON *type*
-> representation over HTTP.**
+> **CONFIRMED within the published manifest:** all compared initial and
+> post-step SQLite snapshots matched the reference exactly in all three
+> scenarios, and the only **emitted** HTTP mismatch class was JSON *type*.
+> This is strong tested-state parity, not proof of all possible business behavior
+> or of equality within JSON subtrees the comparator skipped after a type
+> mismatch.**
 
 This also refines issue #137's caution: the shared G3 failure code is not
-merely "the same HTTP classification" — the published code set makes a DB
-mismatch impossible for this run (DB findings would have added `DB_*` codes).
+merely "the same HTTP classification" — the published code set establishes
+equality of all **compared** initial/step SQLite snapshots for this manifest
+(DB findings would have added `DB_*` codes).
 
 ## 3. Where the type divergence must live (source-backed)
 
@@ -114,18 +116,22 @@ and `lastInsertRowid` as number/bigint, so the two first bullets are exactly
 where a faithful-looking TS implementation type-diverges while remaining
 state-correct — matching the confirmed evidence envelope in §2.
 
-Notable negative result: the candidate reproduced every string-valued aspect
-exactly (all messages, PHP date formatting, validation text, capacity
-sentences — no `HTTP_JSON_VALUE`), all key sets, all statuses and headers, and
-all DB state. The defect surface is precisely and only numeric/boolean-vs-string
-JSON typing.
+Notable negative result: status and stable headers matched for every
+tested response, and compared SQLite snapshots matched. No non-type HTTP
+findings were emitted, so *visited* JSON object keys, array lengths and
+same-kind leaf values also matched. But `jsonDiff` does **not** traverse
+descendants after a kind mismatch: unvisited nested keys, messages, dates or
+values may still differ. The specific type mismatch (number/string, boolean/
+number, object/string, etc.) cannot be recovered from the categorical code
+alone. Numeric/boolean-vs-string typing is a source-backed **hypothesis**, not
+a confirmed exclusive defect surface.
 
 ## 4. Ranked falsifiable hypotheses (summary)
 
 Full matrix with per-step trigger maps and falsification conditions:
 [hypothesis-matrix.md](hypothesis-matrix.md). Summary:
 
-- **H1 (P0, unique single-defect explanation):** candidate emitted
+- **H1 (P0, parsimonious single-field explanation):** candidate emitted
   `appointment_id` as a JSON number instead of the PHP string. Fires at least
   once in **every** scenario (`workshop-business:step-0`,
   `workshop-rejected:step-0`, `workshop-capacity:step-0..3`; the capacity
@@ -140,8 +146,10 @@ Full matrix with per-step trigger maps and falsification conditions:
 - **H3 (P1):** candidate emitted `get_slots` fields as strings (missed
   `(int)` casts) or `is_full` as 0/1 instead of boolean. Fires only at
   `workshop-capacity:step-5` (the manifest's only `get_slots` call).
-- H1 is the **minimal** hypothesis: a single field defect that explains all
-  three scenario failures. H2+H3 jointly also explain the observation set.
+- H1 is **one minimal** hypothesis: a single field defect that could explain
+  all three scenario failures. It is **not unique**: a `success` boolean-vs-number
+  type defect across all three booking paths (H5) is another possible
+  single-field explanation. H2+H3 jointly also explain the observation set.
   Both are consistent with every published code; discriminating between them
   requires the per-step diff paths (private Oracle evidence, access gated) or
   a separately authorized sanitized candidate review. No hypothesis is
@@ -169,9 +177,10 @@ model-knowledge-dependent, not contract violations.
   integrity, **not** decryptability or correctness of the plaintext.
 - **Product validation:** G1 PASS, G2 FAIL, G3 FAIL, G4 NOT_RUN/INCONCLUSIVE,
   **PRODUCT_NOT_ESTABLISHED** (issue #61 stays open). The candidate is a
-  failed product attempt that is nevertheless fully state-correct and one
-  typing defect away from plausible parity — it must not be described as a
-  garbage or broken candidate.
+  failed product attempt with matching tested SQLite snapshots; the
+  number and location of HTTP defects remain unknown until private per-step
+  diff paths or separately authorized candidate source review are available.
+  Do not claim it is exactly one fix away from parity.
 - **Owner restore:** `OWNER_RESTORE_PASS` is **NOT_RUN**. The owner-reported
   recipient MATCH (#136) proves key possession, not restore. See
   [owner-restore-gate.md](owner-restore-gate.md).
