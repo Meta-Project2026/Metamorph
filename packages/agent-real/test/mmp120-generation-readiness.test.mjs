@@ -179,8 +179,10 @@ test("target contract pins NodeNext/CommonJS, node:sqlite and the offline sandbo
   assert.match(target.permissions, /external network/);
 });
 
-test("MMP-129: model sees the public wrapper x-request-id echo contract exactly once", () => {
-  const p = prompt();
+test(
+  "MMP-129: model sees the public wrapper x-request-id echo contract exactly once",
+  () => {
+    const p = prompt();
   const { target } = p;
   assert.equal(
     Object.keys(target).filter((key) => key === "httpRequestIdentity").length,
@@ -203,9 +205,12 @@ test("MMP-129: model sees the public wrapper x-request-id echo contract exactly 
     target.httpRequestIdentity,
     /application\/json; charset=utf-8 where specified/,
   );
-  assert.equal(JSON.stringify(p.source).includes("httpRequestIdentity"), false);
-  assert.equal(JSON.stringify(p.orderedUnits).includes("x-request-id"), false);
-  assert.equal(JSON.stringify(p.routes).includes("x-request-id"), false);
+    assert.equal(
+      JSON.stringify(p.source).includes("httpRequestIdentity"),
+      false,
+    );
+    assert.equal(JSON.stringify(p.orderedUnits).includes("x-request-id"), false);
+    assert.equal(JSON.stringify(p.routes).includes("x-request-id"), false);
   assert.match(wire().messages[0].content, /Never invent usage, request IDs/);
   assert.equal(
     (JSON.stringify(p).match(/target-service wrapper requirement/g) ?? [])
@@ -238,7 +243,8 @@ test("MMP-129: model sees the public wrapper x-request-id echo contract exactly 
       }) +
       "\n",
   );
-});
+  },
+);
 
 test("response schema is strict changes-only and source stays data, not instructions", () => {
   const w = wire();
