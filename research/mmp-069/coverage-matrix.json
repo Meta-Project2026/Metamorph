@@ -351,6 +351,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Research drivers (prompt recheck, manual disposable Linux Docker verifier validation in candidate and single-repair modes) are syntax-checked in Fast CI only; the manual harness is never executed in CI and this directory has no research-local test glob. The frozen GLM 5.3 first-draft candidate and the separately pinned single post-freeze repair unit are each admitted read-only; candidate TS and reference PHP run exclusively in verifier-provisioned network-off workers. No Meta request, paid run, workflow dispatch, artifact upload, model inference, held-out data or second repair."
+    },
+    {
+      "path": "research/mmp-125",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Read-only audit of pinned public records, independent candidate/recipe hashes and local anti-attribution controls. New MMP125 behavior tests are LOCAL_ONLY and not selected by hosted CI; modules receive hosted syntax checking only. The one-run Linux Docker diagnostic is a plan requiring separate owner consent, not executed code. No candidate execution, model, repair, provider credentials, workflow dispatch, private/G4 inspection or artifact upload."
     }
   ],
   "skips": [

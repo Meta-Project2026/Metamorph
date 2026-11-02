@@ -1,0 +1,106 @@
+{
+  "format": "mmp125-correlation-v1",
+  "status": "AUDIT_COMPLETE_CAUSE_UNRESOLVED",
+  "baseSha": "074af751e9012abad1be2749c360c5d8b86218e0",
+  "pinnedInputs": 47,
+  "evidenceKind": "EXISTING_PUBLIC_RECORDS_AND_STATIC_CODE_ONLY",
+  "sourcePin": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+  "manifestPin": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+  "recomputedRecipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "candidates": {
+    "draft": "4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72",
+    "repair": "0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1",
+    "meta": "1120249ee45c0aa3efe73d57d01e813d522a9c2252fcd3e2d984a4000b9d9d2d"
+  },
+  "profiles": {
+    "meta": {
+      "G1": {
+        "verdict": "INCONCLUSIVE",
+        "executed": 2
+      },
+      "G2": {
+        "verdict": "ERROR",
+        "executed": 0
+      },
+      "G3": {
+        "verdict": "ERROR",
+        "executed": 1
+      }
+    },
+    "draft": {
+      "G1": {
+        "verdict": "FAIL",
+        "executed": 1
+      },
+      "G2": {
+        "verdict": "INCONCLUSIVE",
+        "executed": 0
+      },
+      "G3": {
+        "verdict": "INCONCLUSIVE",
+        "executed": 0
+      }
+    },
+    "repair": {
+      "G1": {
+        "verdict": "INCONCLUSIVE",
+        "executed": 2
+      },
+      "G2": {
+        "verdict": "ERROR",
+        "executed": 0
+      },
+      "G3": {
+        "verdict": "ERROR",
+        "executed": 1
+      }
+    },
+    "knownGood": {
+      "G1": {
+        "verdict": "PASS",
+        "executed": 6
+      },
+      "G2": {
+        "verdict": "PASS",
+        "executed": 17
+      },
+      "G3": {
+        "verdict": "PASS",
+        "executed": 20
+      }
+    },
+    "statusMutant": {
+      "G1": {
+        "verdict": "PASS",
+        "executed": 6
+      },
+      "G2": {
+        "verdict": "FAIL",
+        "executed": 17
+      },
+      "G3": {
+        "verdict": "FAIL",
+        "executed": 20
+      }
+    }
+  },
+  "correlation": "SAME_PUBLIC_ERROR_SHAPE_NOT_SAME_CAUSE",
+  "nonUniqueSyntheticControls": [
+    "candidate-first-request-failure",
+    "reference-first-request-failure",
+    "malformed-observation"
+  ],
+  "interval": "AFTER_INITIAL_DB_BEFORE_FIRST_HTTP_COMPARISON_COMPLETES",
+  "failedSide": "UNKNOWN",
+  "errorClass": "UNKNOWN",
+  "rootCause": "UNKNOWN",
+  "privateEvidence": "OWNER_REPORTED_NOT_RETAINED",
+  "privateEvidenceRead": "NOT_RUN",
+  "modelProvenance": "GLM_DRAFT_AND_OPENCODE_REPORTED_GLM_FLASH_FREE_REPAIR_NOT_SOL_ATTESTED",
+  "newDockerRuns": 0,
+  "newModelRequests": 0,
+  "newArtifactUploads": 0,
+  "diagnostic": "PROPOSED_REQUIRES_OWNER_CONSENT",
+  "formalG4": "NOT_RUN",
+  "product": "NOT_ESTABLISHED"
+}
