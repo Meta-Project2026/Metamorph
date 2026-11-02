@@ -140,3 +140,17 @@ test("status and non-JSON body controls pin the remaining finding codes (absent 
     { code: "HTTP_BODY", path: "/body" },
   ]);
 });
+
+
+test("type mismatch short-circuits: hidden child key/value/array mismatches do not emit their separate codes", async (t) => {
+  if (!existsSync(dist)) return t.skip("BUILD_DIST_MISSING");
+  const { compareHttp } = await import(dist.href);
+  const reference = obs(200, '{"success":true,"payload":{"message":"expected","rows":[1,2]}}');
+  const candidate = obs(200, '{"success":true,"payload":"replacement"}');
+  // A type mismatch at /payload prevents traversal of /payload/message and /payload/rows.
+  // This refutes any inference that absent HTTP_JSON_MISSING/VALUE/LENGTH means
+  // all nested keys/values/array lengths globally matched.
+  assert.deepEqual(compareHttp(reference, candidate), [
+    { code: "HTTP_JSON_TYPE", path: "/body/payload" },
+  ]);
+});
