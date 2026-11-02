@@ -105,3 +105,96 @@ MySQL, whole-app migration.
   G1/G2/G3 verdicts, Oracle PASS, G4. See `RESULTS.md` for what was actually
   executed, with `PASS` / `FAIL` / `ERROR` / `INCONCLUSIVE` / `NOT_RUN`
   distinctions.
+
+---
+
+# Continuation record — OpenCode session after ZCode context exhaustion
+
+This section was appended (not amended) after the section above: the original
+first-draft record is frozen and every fact above is unchanged.
+
+## Identity and who performed what
+
+- First-draft authoring: **GLM 5.3 (ZCode)** per that prior agent's own
+  PROVENANCE statement and task-card history. The model-internal logs of that
+  session are **NOT_VERIFIED**; the statement that no fixtures, expected
+  values or prior candidate code were read while authoring remains
+  **self-reported, not independently provable**.
+- Continuation, independent re-verification, harness authoring, the single
+  repair unit (if committed) and this record: the OpenCode continuation
+  session. Harness-level agent designation for the continuation is **sol 6.1**
+  per the MMP-123 task card; the session's reportable model identifier is
+  `GLM 5.3 Flash Free` (`glm-5.3-flash-free`, provider `opencode`). Same-family
+  continuation is explicitly permitted by the card as long as the
+  **first-draft origin GLM 5.3 (ZCode) is preserved** and later work is never
+  labeled GLM-only. Platform-level model independence beyond these labels is
+  **NOT_VERIFIED**.
+- No repair beyond the card's single authorized post-freeze unit has been
+  performed. The first-draft commit, its bytes and its
+  `candidateSha 4ff450d2...` are immutable and independently re-verified
+  (see below).
+
+## Independent identity re-verification (2026-11-02, OpenCode)
+
+- `git ls-remote origin` confirmed the freeze commit
+  `c482e19f8242850f1cc04f79a79add79e68658ee` was already pushed to
+  `refs/heads/glm/mmp123-independent-candidate` **before** the continuation
+  session started (the prior agent's "about to commit/log" narrative was
+  stale; the freeze exists).
+- The freeze commit contains exactly the five `research/mmp-123/candidate/src/*.ts`
+  files (A entries only), on merge base `8e85765` (PR #121 merge), with no
+  hook-modified bytes.
+- `node research/mmp-123/prompt-sha.mjs` (unchanged trusted
+  `packages/target-worker/src/admission.mjs` `admitDirectory()`) reproduced
+  **candidateSha `4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72`**
+  with all five per-file bytes and SHA-256s matching the table above, plus all
+  seven prompt-material hashes matching this file's table.
+- An independent Node hash pass over the same material files reproduced every
+  listed path/bytes/sha256 value.
+
+## First-draft isolated verifier result (real Docker, unchanged verifier)
+
+Executed in one disposable Linux Docker environment (Windows host, Docker
+Desktop engine `29.9.2`, linux/amd64; harness image pinned
+`node:24-bookworm@sha256:e7add2a490bb17d97b485b8641bd88455fff7839ade0f5eba493c3508124d413`,
+docker CLI `28.5.2`) using the MMP-108-approved disposable-harness pattern
+copied research-locally to `research/mmp-123/harness/`:
+
+- Run id `mmp123-20261102T013108Z-bc21b08702a2`, driver head
+  `a8cf79ddef1329b882c3277ff11c890047c64560` (the push that contains the
+  harness, driver and inventory registration), source freshly cloned from
+  `origin/glm/mmp123-independent-candidate`, Node `v24.22.2`.
+- Driver: `research/mmp-123/verifier-proof.mjs` mode `candidate` — no model
+  provider, no repair loop; fetch guard admits only the pinned public source
+  archive (`sourceFetches=1`, `blockedRequests=0`); candidate TS and reference
+  PHP runnable only inside verifier-provisioned network-off workers; every
+  scenario answer compared by the unchanged production `verifyPair`.
+- Outcome recorded in `research/mmp-123/evidence/local-a8cf79dd-*/`:
+  **G1 FAIL** (`BUILD_FAILED`; executed 1/6 — first pair typecheck only;
+  bounded compiler diagnostic: `TS2345` at `src/config.ts:100:41`,
+  errorCount 1), **G2 INCONCLUSIVE 0/17** and **G3 INCONCLUSIVE 0/20**
+  (`MISSING_COVERAGE`; never executed), **G4 INCONCLUSIVE
+  (`HELD_OUT_NOT_RUN`)**; per-pair and whole-run cleanup
+  `VERIFIED_ZERO_RESOURCES` with an independent finalizer PASS 0/0/0;
+  product **NOT_ESTABLISHED**; `aiGeneration AI_GENERATION_NOT_RUN`.
+  Case status `PASS` records that this validation executed cleanly — the
+  candidate's own gate verdicts inside the receipt are the reported verdicts;
+  this is not an AI-migration PASS.
+- Before the recorded run, five pre-evidence harness/driver iterations were
+  used to make this Windows-host execution possible and to correct driver
+  defects (MSYS2 mount rewriting; linked-worktree `/repo` link-file; CRLF
+  shebang inside the image; an over-strict copied known-good assumption moved
+  to executor prefix semantics). They are listed with commands and codes in
+  `RESULTS.md`; the recorded run's receipts reflect the corrected driver.
+
+## Boundaries
+
+- Held-out G4 inputs/expectations, target-worker fixtures, answer candidates,
+  reference packs and any preexisting migration target code remained unread
+  by the continuation executor at every stage (the driver reads only the
+  frozen candidate dir, public mmp-061 source/context pins and production
+  harness wiring).
+- No Meta GET/POST, paid workflow, `workflow_dispatch`, artifact upload,
+  owner key operation or benchmark registration. `#116` remains HOLD.
+- The GLM contextPayload reconstruction (`21415d8b...`, 20916 bytes) equality
+  with the production `contextSha256` remains **NOT_VERIFIED**.
