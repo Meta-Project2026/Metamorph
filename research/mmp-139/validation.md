@@ -166,3 +166,37 @@ and any production use. The hosted Fast CI result for the evidence-only
 update commit is recorded in PR #142; Fast CI does not execute this research
 suite, so the WSL run above is the operative test evidence for the corrected
 head.
+
+## MMP-143 confirmed production SHA mismatch (2026-11-03)
+
+A real owner-local export of the restored paid candidate returned
+`EXPORT_REJECTED`. Owner-only read-only checks confirmed receipt read,
+production pins, full receipt schema, ciphertext bytes, output destination
+classification/freshness, age and age-keygen pinned SHA, directory/file
+permissions and CI environment all OK. None of these checks decrypted the
+candidate or exposed the owner identity.
+
+Independent code review identified a deterministic **canonical object field
+ordering** error: the authoritative production `validateBundle()` constructs
+`{ path, sha256, content }` and derives
+`SHA256(JSON.stringify(canonicalFiles))`, while MMP-139 built
+`{ path, content, sha256 }` and compared its different digest with the
+real production candidate SHA. The former synthetic fixture oracle was
+self-derived using the buggy exporter's ordering, which concealed the error.
+
+The research-only correction makes the exporter emit the exact official
+`validateBundle()` field insertion order, switches the synthetic oracle
+to the **independent trusted `validateBundle(SYNTHETIC_FILES)`**, and adds a
+regression proving old reordering has a different hash while matching
+production-format synthetic SHA passes `planExport`. The secret-tripwire
+positive/negative fixtures now also source their expected hashes from
+trusted admission. The source pins/recipient, production `packages/**`,
+paid workflow, and GitHub owner key boundaries remain unchanged.
+
+**All local synthetic tests for this correction are NOT_RUN as of authoring
+this note; review the new PR and ask a separate executor to run the corrected
+suite on Linux/WSL (and Windows, if available).** Hosted Fast CI covers
+syntax/matrix but not this research suite. The owner must **not** retry a
+real-key export until exact-head independent approval, merge and fresh
+owner-only checkout of the merged SHA. This correction has not seen the
+real decrypted candidate; G2/G3 still FAIL, G4 NOT_RUN.
