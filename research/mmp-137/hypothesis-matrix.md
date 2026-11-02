@@ -17,18 +17,19 @@ From the published gate results (aggregate and per-scenario, artifact
   `HTTP_JSON_TYPE` among its G2 findings; no other finding code exists
   anywhere in the run (G1/G2/G3/G4 clean except `HTTP_JSON_TYPE` /
   `HELD_OUT_NOT_RUN` / `G0_NOT_ESTABLISHED`).
-- Per `packages/oracle/src/http.ts` and `runner.ts` this forces: equal status,
-  equal `content-type`/`location`/`cache-control`/`allow` headers, valid JSON
-  on both sides, equal key sets (`HTTP_JSON_MISSING` absent), equal array
-  lengths (`HTTP_JSON_LENGTH` absent), equal values for all same-type leaves
-  (`HTTP_JSON_VALUE` absent — every message string, PHP date rendering and
-  capacity text matched byte-for-byte at JSON level), and equal SQLite state
-  at every snapshot (`DB_SCHEMA`/`DB_STATE` absent from G3, no
-  `MISSING_COVERAGE`, all 20 IDs executed).
-- Therefore: **on every failing step, the candidate and the reference JSON
-  trees were identical in keys, values, shape and status — they differed only
-  in the JSON type of one or more nodes.** A hypothesis only needs to identify
-  *which* nodes and *which* direction.
+- Per `packages/oracle/src/http.ts` and `runner.ts` this establishes:
+  equal HTTP statuses and the four stable headers on every tested step;
+  on steps producing `HTTP_JSON_TYPE`, both sides have parseable JSON;
+  key sets, array lengths and same-kind values are equal **only where
+  `jsonDiff` descended into both sides**. A kind mismatch returns at that
+  node without checking any of its descendants (`http.ts:143-145`).
+  Initial and per-step SQLite snapshots matched on all covered steps
+  (`DB_SCHEMA`/`DB_STATE` absent, no `MISSING_COVERAGE`, 20 G3 IDs).
+- Therefore: the sole **reported mismatch class** is `HTTP_JSON_TYPE`,
+  but arbitrary nested differences can be hidden beneath kind-mismatched
+  nodes. The categorical evidence does **not** establish globally identical
+  JSON keys, strings, array lengths or structure. The candidate's actual
+  mismatching paths remain unknown.
 
 Reference type ground truth (PHP 7.4.33, PDO SQLite, `FETCH_ASSOC`):
 
@@ -73,22 +74,25 @@ emits them as strings.
 | H4 | P2 | `get_appointments` top-level `appointments` as object keyed by id instead of array (or vice versa) | array of row objects | business/rejected read steps | business + rejected | `api.php:243`; no in-repo signal; natural TS mirrors PHP here |
 | H5 | P2 | `success` as 0/1 number instead of boolean on some path | boolean (`json_encode(true/false)`) | any step | all | `api.php` all responses; boolean is natural in TS, so low |
 
-Ruled out **by the published code set** (not by assumption):
+Conclusions **limited by the comparator's traversal**:
 
 - Any status or stable-header difference (`HTTP_STATUS`/`HTTP_HEADER` absent).
-- Any body that is not JSON on either side, or non-JSON content-type
-  (`HTTP_BODY` absent, no `VERIFIER_ERROR` — both bodies parsed strictly).
-- Any missing/extra JSON key (`HTTP_JSON_MISSING` absent) — e.g. a candidate
-  dropping `created_at` or adding fields is excluded.
-- Any value-level difference in strings/numbers of equal type
-  (`HTTP_JSON_VALUE` absent) — this is a strong positive result about the
-  candidate: all messages, PHP `date('F j, Y', strtotime(...))` renderings
-  ("June 15, 2099"), validation orders and capacity texts were exactly right.
-- Any array length difference (`HTTP_JSON_LENGTH` absent).
+- A non-JSON unequal body on a compared step would emit `HTTP_BODY`;
+  some steps can have equal non-JSON bodies. Steps producing `HTTP_JSON_TYPE`
+  necessarily use parseable JSON on both sides.
+- Missing/extra keys are ruled out **only at object nodes visited**;
+  a child such as `created_at` can be absent below an object-vs-scalar
+  mismatch without an extra `HTTP_JSON_MISSING` finding.
+- Different same-kind scalar values are ruled out **only at visited leaves**.
+  Do not infer that every message, PHP-rendered date or capacity sentence
+  is identical where its enclosing node was type-mismatched.
+- Array length mismatches are ruled out **only at visited arrays**.
 - Any DB state/schema divergence (`DB_SCHEMA`/`DB_STATE` absent from G3) —
   inserts, updates, deletes, statuses, `created_at` values and seeds were all
   snapshot-identical.
-- Verifier/comparator false positive: the comparator is versioned
+- Comparator behavior is versioned and has mutant controls; this helps
+  establish the emitted finding's meaning but does **not** reveal hidden
+  descendants or prove the candidate has no other bugs. The comparator is versioned
   (`oracle-exact-v1`), trusted-only, and its own mutant controls
   (`http-type-mutant` family in the acceptance corpus) demonstrate it fires
   `HTTP_JSON_TYPE` exactly on injected type mutants; the pre-scenario
@@ -98,8 +102,10 @@ Ruled out **by the published code set** (not by assumption):
 
 - The scenario-level observation set is: business FAIL, rejected FAIL,
   capacity FAIL, each caused by ≥1 type-diff step.
-- **H1 alone is sufficient**: it fires in all three scenarios. It is the
-  *unique single-field* explanation.
+- **H1 alone is sufficient** as a hypothetical explanation: it could fire in
+  all three scenarios. It is **not a unique** one-field hypothesis: H5
+  (a `success` boolean emitted as number on each scenario's booking step)
+  could also explain the categorical failures, among other candidates.
 - **H2 + H3 together are also sufficient** (H2 covers business+rejected, H3
   covers capacity). Under this alternative the candidate *did* handle
   `lastInsertId()` correctly.
