@@ -367,6 +367,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Owner-local manual recipient possession helper and offline synthetic classification controls are syntax-checked in Fast CI only; no hosted test step is added and the helper never runs on import, in tests, CI or install. Offline test runs execute with throwaway TEST identities only when a locally provided age-keygen exists (no auto-download); the real owner identity is never read by any automated step. KEY_MATCH is possession evidence, not production restore. No network, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action."
+    },
+    {
+      "path": "research/mmp-137",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Offline categorical post-mortem of paid run 41505679809 (G1 PASS, G2/G3 FAIL with HTTP_JSON_TYPE only): public receipts, pinned public PHP source and trusted comparator code produce a falsifiable PHP-7.4-typing hypothesis matrix; the offline comparator-mechanics test exercises only the locally built trusted @metamorph/oracle dist with synthetic public shapes and skips honestly without a build; no hosted test step is added. No candidate plaintext, age identity, private Oracle evidence, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action."
     }
   ],
   "skips": [
