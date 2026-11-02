@@ -81,7 +81,7 @@ REPO_MOUNT="$PWD"
 if command -v cygpath >/dev/null 2>&1; then
   REPO_MOUNT=$(cygpath -wm "$PWD")
 fi
-MSYS_NO_PATHCONV=1 docker run --rm --name mmp123-harness \
+if MSYS_NO_PATHCONV=1 docker run --rm --name mmp123-harness \
   --network bridge \
   --pids-limit 512 \
   --memory 4g \
