@@ -1,0 +1,57 @@
+{
+  "format": "mmp115-offline-age-proof-v1",
+  "headSha": "afe7d594b72180e24095da41630b5f68fc6539b4",
+  "node": "v24.22.2",
+  "platform": "linux",
+  "status": "PASS",
+  "cases": [
+    {
+      "id": "real-age-test-key-restore",
+      "status": "PASS",
+      "sourceByteIdentity": "MATCH",
+      "keyScope": "EPHEMERAL_TEST_ONLY",
+      "realOwnerRestore": "NOT_RUN",
+      "normalCleanup": "ZERO",
+      "verification": "UNVERIFIED"
+    },
+    {
+      "id": "production-capture-actual-finalizers",
+      "status": "PASS",
+      "identity": {
+        "runId": "115001",
+        "runAttempt": "1",
+        "headSha": "afe7d594b72180e24095da41630b5f68fc6539b4",
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+        "attemptId": "2c6e42bf-e0b6-47b1-9499-5438eee03b8f"
+      },
+      "ciphertextSha256": "c498d88fa2ab175d9bd257a82b4362c6215260f94882525790a7383193ef398c",
+      "ciphertextBytes": 15536,
+      "recipientScope": "FIXED_PRODUCTION_PUBLIC_RECIPIENT",
+      "candidateScope": "PINNED_KNOWN_GOOD_FIXTURE_NOT_AI",
+      "modelAdapter": "SYNTHETIC_NATIVE_HTTPS_NO_NETWORK",
+      "externalModelRequests": 0,
+      "interceptedRequests": 1,
+      "preOracleInventory": "0/0/0",
+      "postOracleInventory": "0/0/0",
+      "oracleCandidateExecution": "NOT_RUN",
+      "transport": "LOCAL_MOCK_NOT_GITHUB",
+      "storedSurvivesValidationError": true
+    },
+    {
+      "id": "real-encryptor-faults-and-emergency",
+      "status": "PASS",
+      "crash": "REJECTED",
+      "cancellation": "REJECTED",
+      "actualThirtySecondDeadline": "REJECTED",
+      "emergencyRemoved": 1,
+      "checkpoint": "BLOCKED",
+      "remainingOwnedResources": "0/0"
+    }
+  ],
+  "actualCrypto": "PINNED_AGE_V1_3_2",
+  "liveGithubTransport": "NOT_RUN",
+  "ownerPrivateIdentity": "NOT_USED",
+  "externalModelRequests": 0,
+  "product": "NOT_ESTABLISHED"
+}

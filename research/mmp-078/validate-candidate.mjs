@@ -3,7 +3,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
-import { validateGeneratedMigration } from "../../packages/agent-real/src/migration-trial.mjs";
+import { validateCustodiedMigration } from "../../packages/agent-real/src/migration-trial.mjs";
+import { requireStoredCheckpoint } from "../../packages/agent-real/src/custody-checkpoint.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = join(process.env.RUNNER_TEMP, "meta-paid-public");
 try {
@@ -11,6 +12,7 @@ try {
   const trial = JSON.parse(readFileSync(join(output, "trial.json"), "utf8"));
   const transfer = JSON.parse(readFileSync(join(process.env.RUNNER_TEMP, "meta-paid-private/transfer.json"), "utf8"));
   if (trial.modelGeneration !== "GENERATED" || trial.candidateSha !== transfer.candidateSha || trial.headSha !== process.env.GITHUB_SHA) throw Error();
+  const permit = requireStoredCheckpoint(process.env, { candidateSha: transfer.candidateSha, sourceSha: trial.sourceSha, attemptId: trial.custody?.identity?.attemptId });
   const parent = join(process.env.RUNNER_TEMP, "meta-paid-verification");
   mkdirSync(parent, { mode: 0o700 });
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
@@ -18,7 +20,7 @@ try {
   const stop = () => shutdown.abort();
   process.on("SIGTERM", stop); process.on("SIGINT", stop);
   let result;
-  try { result = await validateGeneratedMigration({ context, root, parent, headSha: trial.headSha, ...transfer, signal: shutdown.signal }); }
+  try { result = await validateCustodiedMigration({ context, root, parent, headSha: trial.headSha, ...transfer, signal: shutdown.signal }, permit); }
   finally { process.removeListener("SIGTERM", stop); process.removeListener("SIGINT", stop); }
   writeFileSync(join(output, "trial.json"), JSON.stringify({ ...trial, ...result }, null, 2) + "\n", { mode: 0o600 });
   if (!["publicG1", "publicG2", "publicG3"].every((g) => result[g] === "PASS") || result.cleanup.status !== "VERIFIED_ZERO_RESOURCES") process.exitCode = 1;
