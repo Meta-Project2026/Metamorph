@@ -101,7 +101,7 @@ Command metadata is sampled only at trusted host checkpoints; raw exceptions,
 stdout/stderr, payloads, SQL and source never enter public output. A bounded
 categorical trace is retained in the safe receipt for independent review.
 
-Exactly one invocation of Invoke-Diagnostic.ps1 is authorized for this consent.
+The one invocation authorized by that consent has already been attempted and closed.
 The script itself is manual-only; syntax CI does not launch it. No GitHub run
 identity is invented for the local driver. Missing telemetry remains UNKNOWN.
 Any second run, code repair, model request or artifact upload requires separate
@@ -132,3 +132,43 @@ was performed. The attempt is closed; the local scratch contains an explicit
 no-retry marker after the failed preflight. A future attempt requires a running
 Docker daemon and separate consent. #125 stays OPEN for that decision and the
 independent exact-SHA review; #116 HOLD, #61 PRODUCT_NOT_ESTABLISHED, G4 NOT_RUN.
+
+## Review corrections for issue #130 (no diagnostic authorization)
+
+Independent review of f77b8b1 identified two P1 launcher defects: consumption was
+after Docker preflight, and the stopwatch did not bound subprocess execution.
+The corrected entrypoint keeps only ScratchRoot/AuthorizedHead parameters and
+loads launcher-core.psm1. After exact-head, clean-tree and immutable-audit checks,
+FileMode.CreateNew / FileShare.None / Flush(true) consumes consent before any
+Docker resolution or invocation. Existing, partial, inaccessible or failed-write
+markers refuse Docker entirely, including final inventory. Nothing reads,
+rewrites or deletes a prior marker to grant permission. Concurrent processes
+compete for the same exclusive file; only one can proceed.
+
+Every host Docker command now uses BoundedProcess.cs via one wrapper. The native
+ProcessStartInfo.ArgumentList preserves argv without shell parsing. One monotonic
+1200-second budget starts at core entry and includes admission, bundle, Docker
+preflight/setup/run/poll/copy. Each CLI call gets min(15seconds, remaining budget).
+Cleanup has its own60-second budget and min(5seconds, remaining) per command.
+Stdout+stderr are bounded to64KiB, stderr is discarded, stdout stays internal;
+timeout/cancellation/output overflow terminates the child tree where supported.
+Execution and pipe draining are both bounded; there is no unbounded WaitForExit,
+ReadToEnd or post-kill EOF wait. Worker/verifier/image limits are unchanged.
+
+The v2 host receipt separates main status, cleanup status and inventory status.
+A refused marker does not call Docker even for cleanup. Unavailable/invalid/
+truncated/failed inventory leaves counts null, never verified zero. Removal still
+requires this run's exact outer label, volume labels and narrowly validated
+private ledger; no global pruning or broad provenance-prefix deletion exists.
+The previous v1 receipt, local closed marker and categorical outcome are untouched.
+
+launcher.test.ps1 substitutes private module functions only inside separate test
+controller processes. Its subprocesses are node plus the original fake-docker.mjs;
+the production CLI/environment exposes no fake executable or budget override.
+Tests exercise real child waits/tree termination/cancellation, cross-process
+marker races, missing→recovered daemon, partial and failed marker writes, output
+limits, unknown inventory, foreign owners and stale ledgers. These are LOCAL_ONLY
+synthetic controls; hosted CI only syntax-checks the MJS fixture. PowerShell/C#
+behavior is not hosted-gated. No real Docker/daemon/diagnostic or model is run.
+#130 and #125 stay OPEN pending independent exact-SHA re-review. #116 HOLD;
+#61 PRODUCT_NOT_ESTABLISHED; formal G4 NOT_RUN. No self-merge or self-approval.

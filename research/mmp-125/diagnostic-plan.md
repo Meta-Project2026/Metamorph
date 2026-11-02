@@ -104,3 +104,25 @@ Global inventory could not be verified; do not invent cleanup0/0/0. The safe
 outcome and raw host receipt are under evidence/. No retry or daemon startup
 was attempted. The consented attempt is closed; new execution requires separate
 consent. Original candidate/root-cause questions remain UNKNOWN, not FAIL/PASS.
+
+## #130 implementation corrections; no renewed execution permission
+
+The prior attempt and consumed consent above remain unchanged. Review of f77b8b1
+found that the marker originally followed preflight and Docker CLI calls could
+hang beyond the stopwatch. The corrected research launcher atomically creates
+and synchronously flushes its marker after source admission, before every Docker
+call. Marker refusal skips all Docker, including final inventory.
+
+A monotonic1200-second execution budget begins at core invocation; source Git/
+audit/bundle and every host Docker subprocess use a bounded native process runner.
+Per-command maximum15seconds is capped by the remaining wall-clock budget; an
+independent60-second cleanup budget caps each cleanup command to5seconds or less.
+Timeout/cancellation/output-limit failures kill the child tree where supported;
+64KiB total stdout/stderr cap and bounded pipe draining prevent inherited pipes
+from causing an indefinite read. No raw process error is projected to receipts.
+
+No new candidate execution is authorized or performed by these fixes. The
+PowerShell controls use original fake CLI processes and test-only private module
+substitution; no production flags/env change an executable, deadline or authority.
+New v2 receipts preserve UNKNOWN/UNAVAILABLE and null counts unless complete
+inventory proves zero. Historical v1 records and all old candidate pins are frozen.

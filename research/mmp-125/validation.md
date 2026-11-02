@@ -155,3 +155,76 @@ JSON deep equality confirms the versioned host receipt retains every original
 field; its local byte hash is retained separately because Git formatting uses LF.
 Protected packages/workflows/source/candidates/historical receipts compare equal
 to main074af751; only research/mmp-125 and its single coverage row differ.
+
+## #130 — two P1 review corrections (NO_REAL_DOCKER_RUN)
+
+Reviewed starting head: f77b8b127ee5c4a9405f316ad910b610d730d377. GitHub/local
+branch codex/mmp125-first-http-forensics matched with a clean worktree; independent
+review5737171364 requested changes. Review base/merge-base074af751e9012abad1be2749c360c5d8b86218e0.
+origin/main additionally contained d016a9aa1782d96410e1855c6381da597942ccae (MMP126
+documents); those were not overwritten or merged into this research patch.
+
+P1-A: atomic CreateNew / FileShare.None / synchronous Flush(true) now runs after
+exact-head/clean-tree/47-pin audit admission and before any Docker resolution or
+invocation. Existing/partial/inaccessible/failed-write markers never grant a retry
+and are never rewritten. The guard loser skips Docker even in finally. A prior
+marker and both historical evidence files remain unchanged.
+
+P1-B: every host Docker operation now uses one native bounded process wrapper,
+including preflight, volume creation/inspection/removal, run, polling, copy, outer
+ownership/removal, ledger fallback and both inventory halves. ArgumentList avoids
+shell parsing. The monotonic1200-second budget starts at core entry and covers
+source admission/bundle and all host CLI blocking. Each command is capped at15s
+or the remaining execution budget. Cleanup has an independent60s total/5s per-call
+cap. Bounded async stdout/stderr draining caps combined bytes to64KiB; stderr is
+never projected. Timeout/cancellation/output-limit stops the child process tree
+where supported; no indefinite WaitForExit/ReadToEnd/post-kill pipe wait exists.
+Receipt v2 separates execution/main error, cleanup error and unknown inventory.
+No complete inventory means null counts, never verified0. Ownership labels and
+private exact-name/run-prefix ledger checks still gate removal; no broad pruning.
+
+Environment: Windows, PowerShell7.6.5/.NET, Node24.21.0, pnpm11.25.0. Commands
+actually executed after the code patch:
+
+| Command                                                                      | Exit | Actual result                                                     |
+| ---------------------------------------------------------------------------- | ---- | ----------------------------------------------------------------- |
+| pwsh -NoProfile -File research/mmp-125/launcher.test.ps1                     | 0    | 20 PASS /0 FAIL; isolated real fake CLI subprocesses only         |
+| node --test research/mmp-125/*.test.mjs                                      | 0    | 41 PASS /0 FAIL /0 SKIP                                           |
+| node research/mmp-125/audit.mjs                                              | 0    | 47 public pins, original/repaired candidates and recipe unchanged |
+| node research/mmp-069/validate.mjs                                           | 0    | VALID104 research modules                                         |
+| node --test research/mmp-069/validate.test.mjs                               | 0    | 45 PASS /0 FAIL /0 SKIP                                           |
+| node research/mmp-069/check-syntax.mjs                                       | 0    | 103 files PASS; syntax only                                       |
+| pnpm install --frozen-lockfile                                               | 0    | No dependency/lockfile changes                                    |
+| pnpm lint                                                                    | 0    | PASS                                                              |
+| pnpm typecheck                                                               | 0    | PASS                                                              |
+| pnpm test                                                                    | 0    | 782 total /672 PASS /110 Windows/environment SKIP /0 FAIL         |
+| pnpm build                                                                   | 0    | PASS                                                              |
+| pnpm exec biome check research/mmp-125 research/mmp-069/coverage-matrix.json | 0    | PASS                                                              |
+| PowerShell parser on entrypoint/core/test                                    | 0    | Three files PASS                                                  |
+| git diff --check; protected-path diff versus f77b8b1                         | 0    | No protected/evidence/candidate/workflow/dependency changes       |
+
+The20 launcher controls supersede the original three function-stub controls:
+real separate controller/fake CLI processes test success/owned cleanup; unavailable
+then recovered daemon with zero second-attempt calls; complete/partial/directory
+markers; actual partial marker-write failure and later refusal; two concurrent
+marker writers; hung version/image/poll/removal/final inventory; foreign worker,
+foreign volume/outer owner, stale ledger, unknown worker/inventory and oversized
+output; literal argv and cancellation. A hung fake CLI also starts a descendant;
+its recorded processes are verified terminated. Short budgets are injected only
+through private module substitution in the isolated test entrypoint, never a
+production CLI/env option. The fake fixture never resolves or imports Docker.
+An initial Biome check found only the new fixture's formatting; it was formatted
+and the final check passed. No failed behavioral control was hidden or skipped.
+
+These PowerShell/C# and41 MMP125 behavior controls remain LOCAL_ONLY. Existing
+hosted CI checks MJS syntax, not C#/PowerShell behavior; CI/dependencies were not
+expanded. Linux/macOS process supervision and real Docker behavior are NOT_RUN.
+The final doc-only additions follow the above full cycle; exact final SHA and
+fresh hosted Node22/24 results are recorded in the PR conversation after push.
+
+No real Docker CLI/daemon/container/volume operation, retry, model/API call,
+workflow dispatch, artifact upload, source migration, repair, private evidence,
+key or hidden G4 access occurred in #130. The previous attempt remains
+ERROR_ENVIRONMENT/candidate NOT_RUN; historical Meta/GLM cause UNKNOWN.
+#130 and #125 OPEN pending independent exact-SHA re-review through barbalatv;
+#116 HOLD; #61 PRODUCT_NOT_ESTABLISHED; formal G4 NOT_RUN. No self-approve/merge.
