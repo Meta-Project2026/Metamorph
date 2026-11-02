@@ -97,8 +97,8 @@ and expected pins for a deliberately secret-bearing file; it then proves the
 source-content tripwire rejects instead of relying on SHA drift. The companion
 safe control demonstrates a matching source passes. The export planner now
 normalizes the trusted scanner's internal rejection to fixed `EXPORT_REJECTED`.
-The injected write-failure test also now *commits one real synthetic plaintext
-file* via the existing trusted `commitPrivate`, confirms it exists before
+The injected write-failure test also now _commits one real synthetic plaintext
+file_ via the existing trusted `commitPrivate`, confirms it exists before
 second-write failure, then checks it was removed along with the fresh tree.
 
 **Execution of these corrected tests is NOT_RUN by the independent reviewer.**
