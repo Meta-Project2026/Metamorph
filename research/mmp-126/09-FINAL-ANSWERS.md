@@ -62,7 +62,7 @@
    Asia/Dhaka/строковым `lastInsertId()`/явным rollback.
 
 10. **Какой первый доказуемый milestone за 24 часа?** — Категорический read-only receipt:
-    `main@074af75` зафиксирован, Fast CI success, 3 платных прогона (последний 16:38Z 01.11),
+    `main@074af75` зафиксирован, Fast CI success, 3 запуска GitHub workflow, из которых 2 подтверждённых Meta POST (последний 16:38Z 01.11),
     `x-request-id` gap подтверждён в 4 независимых местах кода, телеметрия датирована,
     `0/17+1/20` объяснён как вырожденная сигнатура, определены 3 mutually discriminating
     outcomes (O1/O2/O3). **0 inference, 0 Docker, 0 production-изменений**; плюс уже существующий
