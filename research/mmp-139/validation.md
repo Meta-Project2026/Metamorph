@@ -109,3 +109,60 @@ not execute `research/mmp-139/synthetic.test.mjs`. Re-execute this suite
 under owner's/test executor's Linux/WSL with **synthetic TEST material only**
 before exact-head approval or merge. No key, ciphertext, candidate, Docker,
 Meta API or workflow dispatch was accessed by this correction.
+
+## Re-executed evidence for the corrected head (2026-11-02)
+
+Executor: GLM 5.3 via ZCode, same day. Local branch fast-forwarded with
+`git merge --ff-only origin/glm/mmp139-owner-export` (no unrelated work
+touched; working tree was clean). **Every result below was produced at exact
+pre-evidence-update head `d1d684e75227bd18a15a082134d0747805f91f79`** (the
+reviewer-corrected head, confirmed equal to `origin/glm/mmp139-owner-export`
+after `git fetch origin --prune`). Only synthetic TEST material was used:
+no real owner key, identity file, ciphertext, decrypted source, owner home
+scanning, Docker, Meta/model call, workflow dispatch or artifact transfer.
+
+Independent verification of the corrections (read + probe, before running):
+
+- The secret-tripwire fixture now computes its own canonical candidate SHA
+  from its own contents (`selectExportableFiles([secretFile])` then
+  `sha256(JSON.stringify(...))`), so the earlier canonical-hash guard passes
+  and cannot mask the scanner. A direct probe on the corrected head
+  confirmed the chain: `rejectSecrets(<fixture>)` throws
+  `DIAGNOSTIC_REJECTED`; the filter accepts the fixture; `planExport` with
+  the fixture's own SHA and matching test pins reaches the secret guard and
+  throws categorical `EXPORT_REJECTED` (the planner's new normalization).
+  A matching safe-bundle control proves `planExport` accepts when no secret
+  pattern is present.
+- The write-failure case now performs a real trusted `commitPrivate` of
+  `src/lib/util.ts` on the first call and asserts `existsSync(...)` true at
+  the moment of the injected second failure, so the subsequent removal
+  assertions prove genuinely-written source is cleaned up.
+
+Executed commands and results:
+
+- `node --test research/mmp-139/synthetic.test.mjs` — WSL2 Linux
+  (kernel 6.18.54.1-microsoft-standard-WSL2, Node v22.23.4): **24 tests —
+  22 PASS / 2 SKIP / 0 FAIL**, exit 0. The two skips are explicit
+  `TEST_NOT_RUN`s and are not passes: (1) the foreign-uid receipt control
+  (requires root), (2) the win32-host CLI platform-refusal control.
+  This run includes the corrected secret-tripwire and real-write-failure
+  cleanup tests as PASS, superseding their NOT_RUN status from the reviewer
+  correction above.
+- Same suite on Windows 11 x64 (Git Bash, Node v22.23.1): **24 tests —
+  14 PASS / 10 SKIP / 0 FAIL**, exit 0. Skips: the 8 POSIX-gated
+  writer/flow controls (incl. the two corrected tests, which are
+  POSIX-gated and therefore verified only by the WSL run above), the
+  root-required foreign-uid control, and the Linux closed-stdin CLI control.
+- `pnpm exec biome check research/mmp-139`: 6 files, 0 errors. Exit 0.
+- `node research/mmp-069/check-syntax.mjs`: `PASS`, checked 108, failed 0.
+  Exit 0.
+- `node research/mmp-069/validate.mjs`: `VALID`. Exit 0.
+- `node --test research/mmp-069/validate.test.mjs`: 45 PASS / 0 FAIL. Exit 0.
+- `git diff --check`: clean. Exit 0.
+
+Boundaries: still NOT_RUN — the owner export with real identity/ciphertext
+(owner-only after independent exact-head approval), real `verifyAgeRestore`,
+and any production use. The hosted Fast CI result for the evidence-only
+update commit is recorded in PR #142; Fast CI does not execute this research
+suite, so the WSL run above is the operative test evidence for the corrected
+head.
