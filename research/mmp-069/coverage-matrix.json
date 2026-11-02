@@ -358,7 +358,7 @@
       "execution": "MANUAL_DOCKER",
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
-      "gap": "Read-only pinned-public-record audit and separately owner-authorized one-run local Linux/Docker diagnostic of immutable 0cf5ba0 repair with a trusted research observer; manual launcher never runs in CI. Audit/observer behavior and PowerShell stub controls are LOCAL_ONLY, not selected by hosted CI; MJS receives hosted syntax checking only. No models, additional repair, provider credentials, workflow dispatch, hidden G4 inspection or artifact upload. Actual diagnostic status is recorded separately in research/mmp-125."
+      "gap": "Read-only pinned-public-record audit and separately owner-authorized one-run local Linux/Docker diagnostic of immutable 0cf5ba0 repair with a trusted research observer; manual launcher never runs in CI. Audit/observer behavior and PowerShell stub controls are LOCAL_ONLY, not selected by hosted CI; MJS receives hosted syntax checking only. No models, additional repair, provider credentials, workflow dispatch, hidden G4 inspection or artifact upload. The single authorized launcher attempt exited1 before resource creation because the Docker daemon was unavailable; actual candidate validation NOT_RUN, cause UNKNOWN. No retry. Safe outcome and raw host receipt are versioned in research/mmp-125."
     }
   ],
   "skips": [

@@ -1,15 +1,16 @@
-# MMP-125 — first-HTTP forensic correlation, read-only phase
+# MMP-125 — first-HTTP correlation and consented diagnostic attempt
 
 Refs [#125](https://github.com/Meta-Project2026/Metamorph/issues/125), #104, #108,
 #123, #124, #116, #61. Base: `074af751e9012abad1be2749c360c5d8b86218e0`.
 Main post-merge CI41375878083 was independently read: Node22/24 SUCCESS.
 
-**AUDIT_COMPLETE_CAUSE_UNRESOLVED. New Docker diagnostic PROPOSED / NOT_RUN.**
+**AUDIT_COMPLETE_CAUSE_UNRESOLVED. Diagnostic attempt: ERROR_ENVIRONMENT;
+candidate validation NOT_RUN (Docker daemon unavailable).**
 The user requested this issue in the project chat. That starts its read-only
 evidence audit, not the separately gated Docker run. The owner also explicitly
 reported that no local private MMP123 evidence copy remains. This owner report is
 not a filesystem proof that no copy exists anywhere. No private pack or G4 input
-was opened. No additional model request, repair, Docker invocation, paid workflow,
+was opened. During the read-only phase no additional model request, repair, Docker invocation, paid workflow,
 provider credential, owner key or artifact upload was used.
 
 ## Reproducible audit
@@ -93,7 +94,7 @@ verifier/runtime/comparators, immutable candidates and historical receipts stay
 byte-identical. Audit/observer tests: 41 PASS; PowerShell launcher: three stateful
 stub controls PASS. These are local controls, not a real candidate replay.
 
-The pending single Docker run uses the unchanged MMP123 repair CLI once, a
+The authorized single Docker attempt uses the unchanged MMP123 repair CLI once, a
 host-issued identity, 20-minute outer deadline, 4GiB/512-PID outer envelope and
 unchanged worker limits. A durable consumed marker forbids automatic retry.
 Command metadata is sampled only at trusted host checkpoints; raw exceptions,
@@ -106,3 +107,28 @@ identity is invented for the local driver. Missing telemetry remains UNKNOWN.
 Any second run, code repair, model request or artifact upload requires separate
 authorization. #116 HOLD; #61 PRODUCT_NOT_ESTABLISHED; formal G4 NOT_RUN.
 Independent exact-SHA review and owner merge decision remain pending.
+
+## Actual attempt: environment ERROR before candidate execution
+
+The manual launcher was invoked once on driver head
+`1c3581acadbc14382b4a9007d4701904639480de`, diagnostic ID
+`a173d103-3da4-4697-9baa-87e612625e28`; exit1. Docker Desktop Linux Engine was
+unreachable: its named pipe was absent. Separate read-only Docker version,
+container inventory and volume inventory commands each exited1. No outer
+container launch, volume creation, verifier child or candidate execution occurred.
+The raw launcher receipt says ERROR_CLEANUP because its final inventory also
+could not reach the daemon. This is not evidence of leaked resources: no resource
+creation was reached, and global daemon inventory is UNAVAILABLE, not verified0.
+
+See [diagnostic-outcome](evidence/diagnostic-outcome-a173d103.json) and the
+[host receipt (JSON fields preserved; LF formatting)](evidence/host-execution-a173d103.json). There is no
+candidate boundary trace and no new gate/coverage result. All historical results
+and immutable source hashes remain unchanged. Candidate failed side/class/root
+cause and historical Meta cause remain UNKNOWN. This attempt proves only a
+current host environment obstacle, not the cause of either earlier VERIFIER_ERROR.
+
+No retry, Docker startup, extra repair, model, Actions dispatch or artifact upload
+was performed. The attempt is closed; the local scratch contains an explicit
+no-retry marker after the failed preflight. A future attempt requires a running
+Docker daemon and separate consent. #125 stays OPEN for that decision and the
+independent exact-SHA review; #116 HOLD, #61 PRODUCT_NOT_ESTABLISHED, G4 NOT_RUN.

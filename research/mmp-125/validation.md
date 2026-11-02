@@ -109,3 +109,49 @@ execution change is MMP125 LOCAL_ONLY to MANUAL_DOCKER. CI/workflows are unchang
 
 Single real Docker diagnostic: NOT_RUN at this preparation commit. The next
 receipt will record its actual driver SHA and result. No automatic retry.
+
+## Actual consented attempt: ERROR_ENVIRONMENT (2026-11-02)
+
+Command actually run (once):
+
+```powershell
+pwsh -NoProfile -File research/mmp-125/Invoke-Diagnostic.ps1 -ScratchRoot C:/Metamorph/.oracle-evidence/mmp125/authorized-once-20261102 -AuthorizedHead 1c3581acadbc14382b4a9007d4701904639480de
+```
+
+Exit1, diagnostic ID a173d103-3da4-4697-9baa-87e612625e28. The daemon was
+unavailable before the consent marker/resource-creation/outer-run stages. Read-only
+follow-up: docker version --format '{{json .Server}}' exit1 (null server; Docker
+Desktop Linux Engine pipe missing), docker container ls --all --format '{{.Names}}'
+exit1, docker volume ls --format '{{.Name}}' exit1. These were availability reads,
+not second diagnostic invocations. No real container, volume, candidate/reference,
+verifier, model, repair, Actions dispatch or artifact upload was started.
+
+The host-execution receipt preserves every original JSON field; repository Biome
+formatting uses LF. The original local byte SHA256 is recorded in the outcome. Its ERROR_CLEANUP records
+that the independent final inventory was also unavailable; launchAttempts0 and
+elapsedSeconds0 refer to the unopened Docker execution interval, not a measured
+zero wall-clock duration for the PowerShell preflight. This does not prove global
+zero Docker resources or a resource leak. No resource was created by this attempt.
+The separate categorical outcome distinguishes the current environment error
+from the historical candidate VERIFIER_ERROR. There is no new candidate gate or
+coverage result, no first-HTTP boundary evidence and no product acceptance.
+Candidate side/class/cause and historical Meta cause remain UNKNOWN.
+
+No retry or Docker startup was attempted. A local CLOSED_AFTER_FAILED_PREFLIGHT
+no-retry marker now closes this authorization attempt; raw receipts are preserved.
+Any future attempt requires explicit consent. Existing candidate/receipt/scoring
+files remain untouched; the read-only auditor still passes all47 pins.
+
+## Final delivery checks after the failed environment preflight
+
+All exit0: pnpm lint; pnpm typecheck; pnpm test (782 total /672 PASS /110
+Windows/environment SKIP /0 FAIL); pnpm build; new research tests (41 PASS);
+PowerShell stateful launcher controls (three PASS, stubs only); coverage-validator
+negative controls (45 PASS); active research syntax (102 files PASS); nested
+Biome check and47-pin read-only audit. The final doc/evidence-only commit follows
+these checks; exact final SHA and hosted Node22/24 evidence belong in the PR
+conversation. Hosted syntax does not execute the new MMP125 behavior controls.
+JSON deep equality confirms the versioned host receipt retains every original
+field; its local byte hash is retained separately because Git formatting uses LF.
+Protected packages/workflows/source/candidates/historical receipts compare equal
+to main074af751; only research/mmp-125 and its single coverage row differ.

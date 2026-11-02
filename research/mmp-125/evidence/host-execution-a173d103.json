@@ -1,0 +1,17 @@
+{
+  "diagnosticId": "a173d103-3da4-4697-9baa-87e612625e28",
+  "launchAttempts": 0,
+  "hostEmergencyRemoved": 0,
+  "workerResourcesRemaining": null,
+  "repairs": 0,
+  "artifactUploads": 0,
+  "models": 0,
+  "format": "mmp125-host-execution-v1",
+  "elapsedSeconds": 0.0,
+  "outerPids": 512,
+  "exitCode": 1,
+  "deadlineSeconds": 1200,
+  "headSha": "1c3581acadbc14382b4a9007d4701904639480de",
+  "outerMemoryMiB": 4096,
+  "status": "ERROR_CLEANUP"
+}

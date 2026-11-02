@@ -1,4 +1,4 @@
-# One-run local diagnostic — AUTHORIZED / PREPARATION_TESTED / NOT_RUN
+# One-run local diagnostic — ATTEMPT_CLOSED / ERROR_ENVIRONMENT / CANDIDATE_NOT_RUN
 
 The issue explicitly says: **"Request owner consent before running it."**
 The user explicitly authorized preparation and exactly one run on 2026-11-02:
@@ -94,3 +94,13 @@ After the single authorized run, publish only the safe categorical record and
 actual command/exit/cleanup evidence in the research PR. Independent exact-SHA
 security review remains required; no self-merge. Any code repair, second run,
 model request, paid trial or artifact upload needs separate authorization.
+
+## Executed decision
+
+One launcher attempt at 1c3581acadbc14382b4a9007d4701904639480de stopped in
+preflight because Docker Desktop Linux Engine was unreachable (missing pipe).
+Exit1; zero outer launches, volume creations and candidate-verifier invocations.
+Global inventory could not be verified; do not invent cleanup0/0/0. The safe
+outcome and raw host receipt are under evidence/. No retry or daemon startup
+was attempted. The consented attempt is closed; new execution requires separate
+consent. Original candidate/root-cause questions remain UNKNOWN, not FAIL/PASS.
