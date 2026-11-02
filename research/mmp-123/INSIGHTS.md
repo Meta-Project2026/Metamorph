@@ -34,8 +34,8 @@ not change gate verdicts, do not claim parity, and do not establish a product.
    Copy-then-edit verified by admission byte-identity before the edit
    (reproducing `4ff450d2...`) means the first-draft provenance record stays
    true forever, even though the recorded G1 verdict came *after* the freeze.
-   The repair is labeled "GLM 5.3 first draft + Sol 6.1 repair" — never
-   GLM-only — and the continuation model is truthfully recorded as
+   The repair is labeled "GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair" — never
+   ZCode-only — and the continuation model is truthfully recorded as
    `glm-5.3-flash-free` (same family permitted by the card; platform-level
    model independence is NOT_VERIFIED).
 
