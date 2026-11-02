@@ -166,3 +166,129 @@ and any production use. The hosted Fast CI result for the evidence-only
 update commit is recorded in PR #142; Fast CI does not execute this research
 suite, so the WSL run above is the operative test evidence for the corrected
 head.
+
+## MMP-143 confirmed production SHA mismatch (2026-11-03)
+
+A real owner-local export of the restored paid candidate returned
+`EXPORT_REJECTED`. Owner-only read-only checks confirmed receipt read,
+production pins, full receipt schema, ciphertext bytes, output destination
+classification/freshness, age and age-keygen pinned SHA, directory/file
+permissions and CI environment all OK. None of these checks decrypted the
+candidate or exposed the owner identity.
+
+Independent code review identified a deterministic **canonical object field
+ordering** error: the authoritative production `validateBundle()` constructs
+`{ path, sha256, content }` and derives
+`SHA256(JSON.stringify(canonicalFiles))`, while MMP-139 built
+`{ path, content, sha256 }` and compared its different digest with the
+real production candidate SHA. The former synthetic fixture oracle was
+self-derived using the buggy exporter's ordering, which concealed the error.
+
+The research-only correction makes the exporter emit the exact official
+`validateBundle()` field insertion order, switches the synthetic oracle
+to the **independent trusted `validateBundle(SYNTHETIC_FILES)`**, and adds a
+regression proving old reordering has a different hash while matching
+production-format synthetic SHA passes `planExport`. The secret-tripwire
+positive/negative fixtures now also source their expected hashes from
+trusted admission. The source pins/recipient, production `packages/**`,
+paid workflow, and GitHub owner key boundaries remain unchanged.
+
+**All local synthetic tests for this correction are NOT_RUN as of authoring
+this note; review the new PR and ask a separate executor to run the corrected
+suite on Linux/WSL (and Windows, if available).** Hosted Fast CI covers
+syntax/matrix but not this research suite. The owner must **not** retry a
+real-key export until exact-head independent approval, merge and fresh
+owner-only checkout of the merged SHA. This correction has not seen the
+real decrypted candidate; G2/G3 still FAIL, G4 NOT_RUN.
+
+## MMP-143 executed synthetic evidence at tested head (2026-11-03)
+
+Executor: GLM 5.3 via ZCode (separate executor from the correction author).
+Branch `fix/mmp143-canonical-export-hash`, fast-forwarded to
+`origin/fix/mmp143-canonical-export-hash` from a clean tree;
+**every result below was produced at exact tested head
+`cad53f799b5611ecfcabb704a2853cb28f63822e`**. Only synthetic TEST material
+was used: no real owner key, identity file, ciphertext, decrypted source,
+owner-home scanning, Docker, Meta/model call, workflow dispatch or artifact
+transfer. The real owner exporter was never invoked.
+
+Independent inspection before running (read + probe, at the tested head):
+
+- Production `packages/target-worker/src/admission.mjs::validateBundle()`
+  rebuilds each file as `{ path, sha256, content }` (insertion order),
+  sorts with `localeCompare(path, "en")`, and computes
+  `candidateSha = sha256(JSON.stringify(canonical))`.
+- The corrected `research/mmp-139/owner-export.mjs` `selectExportableFiles()`
+  now pushes `{ path, sha256: fileSha256, content }` and applies the same
+  `localeCompare(path, "en")` sort, so its serialized bytes match
+  `validateBundle()` byte-for-byte.
+- The synthetic oracle (`synthetic.test.mjs`) is now
+  `validateBundle(SYNTHETIC_FILES).candidateSha` — trusted production
+  admission, not a hash computed with the exporter under test (the
+  self-derived oracle that masked MMP-143 is gone).
+- The new regression test byte-compares `JSON.stringify()` of exporter
+  output against trusted `validateBundle()` output (not deep equality,
+  which ignores insertion order), asserts `planExport(...).manifest
+  .candidateSha` equals the authoritative SHA, and asserts the old
+  `{path, content, sha256}` reordering hashes differently.
+- Secret-tripwire positive/negative fixtures derive expected SHAs from
+  trusted `validateBundle()`, each cross-checked against the exporter's
+  serialized bytes.
+- The PR diff touches only `research/mmp-139/**` (owner-export.mjs,
+  synthetic.test.mjs, validation.md). No `packages/**`, CI workflow,
+  pins/recipient/age or paid setting is modified.
+
+Executed commands and results (recorded PASS/FAIL/SKIP/ERROR with exit
+codes; skipped tests are never counted as passes):
+
+- `node --test research/mmp-139/synthetic.test.mjs` — WSL2 Linux
+  (Node v22.23.4, nvm): **25 tests — 23 PASS / 2 SKIP / 0 FAIL**, exit 0.
+  The two skips are explicit `TEST_NOT_RUN`s: (1) the foreign-uid receipt
+  control (requires root), (2) the win32-host CLI platform-refusal control.
+  This run includes the new MMP-143 regression test as PASS.
+- Same suite on Windows 11 x64 (Git Bash, Node v22.23.1): **25 tests —
+  15 PASS / 10 SKIP / 0 FAIL**, exit 0. Skips: the 8 POSIX-gated
+  writer/flow controls, the root-required foreign-uid control, and the
+  Linux closed-stdin CLI control; the win32-host CLI refusal control
+  executed and passed here.
+- `node research/mmp-069/check-syntax.mjs` (WSL): `PASS`, checked 108,
+  failed 0. Exit 0.
+- `node research/mmp-069/validate.mjs` (WSL): `VALID` (workspacePackages 11,
+  researchModules 109, privilegedRunner NOT_RUN). Exit 0.
+- `node --test research/mmp-069/validate.test.mjs` (WSL): **45 tests —
+  45 PASS / 0 FAIL / 0 SKIP**. Exit 0.
+- `pnpm exec biome check research/mmp-139` — WSL: **ERROR (environment,
+  not a test failure)**: pnpm's dependency-status check attempted a Linux
+  reinstall of the Windows-installed `node_modules` and aborted with
+  `ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY` (exit 1); no Linux
+  `@biomejs` binary is present in this shared checkout. Not executed
+  further to avoid destructively reinstalling the working tree. Windows:
+  **PASS**, 6 files checked, 0 errors, no fixes applied. Exit 0.
+- `git diff --check` (WSL and Windows): clean, exit 0; only pre-existing
+  CRLF/LF working-copy warnings, no whitespace errors.
+
+Byte-level ordering proof (standalone synthetic probe, run identically
+under WSL Node v22.23.4 and Windows Node v22.23.1; both produce the same
+digests, so the canonical form is platform-independent):
+
+- `validateBundle(<synthetic set>).candidateSha` =
+  `82721c4b1d7b2e0a9daf5265d8e035371260e5994f8cf9c2dd294993edb27888`.
+- `JSON.stringify(selectExportableFiles(set).files)` is byte-identical to
+  `JSON.stringify(validateBundle(set).files)` — `true`.
+- The same files re-serialized in the old `{path, content, sha256}` order
+  hash to `3647c7c98ec4519d85d6b1f95e32593f390ed93a6686c36f4ba1ddcdf81c76a4`
+  ≠ the authoritative SHA — the old ordering demonstrably fails, so the
+  regression test cannot silently pass on a reverted exporter.
+
+Head note: this documentation commit changes the PR head; all execution
+above happened at the parent tested head
+`cad53f799b5611ecfcabb704a2853cb28f63822e` and only this file changed
+afterwards. Hosted Fast CI on the tested head (`quick (22)`, `quick (24)`)
+was SUCCESS; Fast CI does not execute `research/mmp-139/synthetic.test.mjs`,
+so the WSL run above remains the operative test evidence for the code head.
+
+Status after this run: `CANDIDATE_ONLY_EXPORT_READY` stays **NOT_RUN**
+until the owner's approved retry on reviewed merged main; the prior
+`OWNER_RESTORE_PASS` is unaffected; G2/G3 still FAIL and the product
+remains NOT_ESTABLISHED. PR #144 stays open for independent exact-SHA
+review; nothing was merged.

@@ -153,7 +153,10 @@ export function selectExportableFiles(files) {
       return reject("HASH");
     seen.add(path.toLowerCase());
     total += Buffer.byteLength(content);
-    canonical.push({ path, content, sha256: fileSha256 });
+    // Match validateBundle()'s byte-level JSON canonical form exactly.
+    // JSON.stringify preserves object insertion order; content before sha256
+    // yields a DIFFERENT candidate SHA for the same genuine source bytes.
+    canonical.push({ path, sha256: fileSha256, content });
   }
   if (total > MAX_TOTAL_BYTES || !seen.has(ENTRYPOINT))
     return reject("ENTRYPOINT");
