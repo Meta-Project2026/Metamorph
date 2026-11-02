@@ -27,6 +27,7 @@ import { dirname, join } from "node:path";
 import { PassThrough } from "node:stream";
 import test from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { commitPrivate as trustedCommitPrivate } from "../../packages/agent-real/src/custody-files.mjs";
 import { sha256 } from "../../packages/target-worker/src/admission.mjs";
 import {
   classifyDestination,
@@ -389,17 +390,32 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
       TEST_PINS,
     ),
   );
-  rejected(() =>
+  // Pin the intentionally secret-bearing bundle to its OWN canonical SHA.
+  // Using TEST_PINS.candidateSha here would fail earlier at the hash check and
+  // falsely appear to test rejectSecrets even when it had never been called.
+  const secretFile = fileOf(
+    "src/main.ts",
+    'const k = "AGE-SECRET-KEY-1ABCDEFGHJKLMNPQRSTUVWXYZ234567890abcdefghijklm";\n',
+  );
+  const secretSelected = selectExportableFiles([secretFile]);
+  assert.equal(secretSelected.ok, true);
+  const secretCandidateSha = sha256(JSON.stringify(secretSelected.files));
+  const secretPins = { ...TEST_PINS, candidateSha: secretCandidateSha };
+  const secretCapsule = mockCapsule([secretFile], {
+    candidateSha: secretCandidateSha,
+  });
+  rejected(() => planExport(secretCapsule, secretPins)); // actual secret guard
+  const safeFile = fileOf("src/main.ts", MAIN_TS);
+  const safeSelected = selectExportableFiles([safeFile]);
+  assert.equal(safeSelected.ok, true);
+  const safeCandidateSha = sha256(JSON.stringify(safeSelected.files));
+  assert.equal(
     planExport(
-      mockCapsule([
-        fileOf(
-          "src/main.ts",
-          'const k = "AGE-SECRET-KEY-1ABCDEFGHJKLMNPQRSTUVWXYZ234567890abcdefghijklm";\n',
-        ),
-      ]),
-      TEST_PINS,
-    ),
-  ); // static secret tripwire (partial check) rejects before any write
+      mockCapsule([safeFile], { candidateSha: safeCandidateSha }),
+      { ...TEST_PINS, candidateSha: safeCandidateSha },
+    ).manifest.candidateSha,
+    safeCandidateSha,
+  );
 });
 
 test("receipt pins bind ciphertext SHA/length and candidate SHA exactly", () => {
@@ -808,10 +824,15 @@ test("a failing write leaves no partial export: the fresh directory is removed",
     restore: () => mockCapsule(),
     commitImpl: (path, bytes, maxBytes) => {
       commits += 1;
-      if (commits === 2) throw new Error("CUSTODY_COMMIT_REJECTED");
+      if (commits === 2) {
+        // Prove the cleanup actually removes source already written to disk.
+        assert.equal(existsSync(join(destination, "src/lib/util.ts")), true);
+        throw new Error("CUSTODY_COMMIT_REJECTED");
+      }
       assert.equal(typeof path, "string");
       assert.equal(Buffer.isBuffer(bytes), true);
       assert.equal(maxBytes > bytes.length, true);
+      trustedCommitPrivate(path, bytes, maxBytes);
     },
   });
   assert.equal(result.status, STATUS_REJECTED);
