@@ -1,4 +1,21 @@
 # MMP-120 — source-to-prompt static audit (workshop-api)
+> **Historical baseline notice (MMP-129, 2026-11-02):** The 22,762-byte
+> request body, SHA `55c7b844…`, and cost figures below describe the
+> historical MMP-120 audited commit, not the current model-visible contract after
+> the owner-approved Option A disclosure in #129. The current exact SHA,
+> bytes, `contextSha256`, and estimate must be obtained from
+> `node research/mmp-120/audit.mjs` after `pnpm build` at the actual reviewed
+> branch/main commit; no old #100 authorization card is reusable.
+>
+> The new `target.httpRequestIdentity` field discloses only an existing public
+> target-service **transport wrapper**: echo the inbound `x-request-id` in the
+> corresponding response, do not invent another ID, and preserve PHP response
+> status/body/content type. This is not a PHP source fact, comparator mechanics,
+> scenario/test data, G4 material, or a new verifier rule. The trusted Oracle,
+> source/manifest pins, response comparator, budgets, and paid workflow are
+> unchanged. MMP-129 is an offline prompt contract correction; measured model
+> benefit remains `NOT_ESTABLISHED` until a separately authorized experiment.
+
 
 Refs [#120](https://github.com/Meta-Project2026/Metamorph/issues/120), #61, #116.
 Branch base: `main@b0574626c7c75469e17b7169438e9ae4369d0531`.
