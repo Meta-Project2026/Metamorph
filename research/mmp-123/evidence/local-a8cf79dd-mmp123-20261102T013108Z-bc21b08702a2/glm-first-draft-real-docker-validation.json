@@ -1,0 +1,129 @@
+{
+  "id": "glm-first-draft-real-docker-validation",
+  "status": "PASS",
+  "execution": "REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT",
+  "candidateSha": "4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72",
+  "candidateFiles": [
+    {
+      "path": "src/api.ts",
+      "bytes": 17243,
+      "sha256": "938fe78a8d3ccbb31f8a1d4464ddc00b417f6215047b5e1d79163d13bc2282c9"
+    },
+    {
+      "path": "src/config.ts",
+      "bytes": 4946,
+      "sha256": "a79b0a63283a1b3e9eb9a45f1580ee09b86210c1ba73892a345bbbabeddf90ec"
+    },
+    {
+      "path": "src/json.ts",
+      "bytes": 3311,
+      "sha256": "872682f4b6d9816f1815090f9bb2fe2916e59b00b46f3af88c9b60c0a4d50a5e"
+    },
+    {
+      "path": "src/main.ts",
+      "bytes": 6956,
+      "sha256": "afe8cf29bfe313315b2917b61c3fa0fb87a89841297e7c24b25c37af7e4dbd73"
+    },
+    {
+      "path": "src/phpcompat.ts",
+      "bytes": 4480,
+      "sha256": "4317bc4cf3fd1140fd12c272c787facf36ae3ca8461f3d22aac939d12a9611c3"
+    }
+  ],
+  "gates": {
+    "G1": {
+      "gate": "G1",
+      "verdict": "FAIL",
+      "executedCount": 1,
+      "executedFirst": "workshop-business:typecheck",
+      "executedLast": "workshop-business:typecheck",
+      "findingCodes": [
+        "BUILD_FAILED"
+      ]
+    },
+    "G2": {
+      "gate": "G2",
+      "verdict": "INCONCLUSIVE",
+      "executedCount": 0,
+      "executedFirst": null,
+      "executedLast": null,
+      "findingCodes": [
+        "MISSING_COVERAGE"
+      ]
+    },
+    "G3": {
+      "gate": "G3",
+      "verdict": "INCONCLUSIVE",
+      "executedCount": 0,
+      "executedFirst": null,
+      "executedLast": null,
+      "findingCodes": [
+        "MISSING_COVERAGE"
+      ]
+    },
+    "G4": {
+      "gate": "G4",
+      "verdict": "INCONCLUSIVE",
+      "executedCount": 0,
+      "executedFirst": null,
+      "executedLast": null,
+      "findingCodes": [
+        "HELD_OUT_NOT_RUN"
+      ]
+    }
+  },
+  "coverage": {
+    "http": 0,
+    "sqlite": 0,
+    "requiredHttp": 17,
+    "requiredSqlite": 20
+  },
+  "pairs": 1,
+  "pairsDetail": [
+    {
+      "scenarioId": "workshop-business",
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "compilerDiagnostics": {
+        "format": "mmp082-g1-diagnostics-v1",
+        "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+        "candidateSha": "4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72",
+        "attemptId": "3d144f5e-c9d2-42a8-8b3b-52fde004757f",
+        "pairId": "198559c4-e50a-4d02-b0c2-4268c142747d",
+        "g1Verdict": "FAIL",
+        "status": "AVAILABLE",
+        "entries": [
+          {
+            "phase": "typecheck",
+            "code": "TS2345",
+            "path": "src/config.ts",
+            "line": 100,
+            "column": 41
+          }
+        ],
+        "errorCount": 1,
+        "truncated": false
+      }
+    }
+  ],
+  "cleanup": {
+    "status": "VERIFIED_ZERO_RESOURCES",
+    "containers": 0,
+    "volumes": 0,
+    "emergencyRemoved": 0
+  },
+  "blockers": [
+    "BUILD_FAILED",
+    "MISSING_COVERAGE"
+  ],
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "product": "NOT_ESTABLISHED",
+  "finalizer": {
+    "status": "PASS",
+    "inventory": {
+      "containers": 0,
+      "volumes": 0
+    },
+    "emergencyRemoved": 0
+  },
+  "licenceNotice": "MIT notice verified in every generated file"
+}
