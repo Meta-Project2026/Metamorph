@@ -14,6 +14,53 @@ const INCIDENT_DIRECTORY = "evidence/mmp-104";
 const byId = (id) => document.getElementById(id);
 let bundle = null;
 let generation = 0;
+let chapter = 0;
+const availableTracks = new Map();
+const TRACK_SECTIONS = {
+  A: "historical-model",
+  B: "historical-replay",
+  C: "real-ai",
+  D: "incident",
+};
+const CHAPTERS = [
+  [
+    null,
+    "A response is a beginning. Verification is the question.",
+    "Explore four historical tracks, from an unadmitted provider to two genuine AI responses. The viewer reads saved public receipts; it does not run a migration.",
+  ],
+  [
+    "A",
+    "A / Before generation",
+    "The historical provider was not admitted. Zero generated requests, no candidate, unknown cost. NOT_RUN belongs to this snapshot; later runs do not rewrite it.",
+  ],
+  [
+    "B",
+    "B / First, test the verifier",
+    "A known-good replay passes scoped checks. A deliberate mutation fails G2/G3. A scripted repair passes them again. All three execute 17 HTTP and 20 SQLite comparisons. This control is not AI generation.",
+  ],
+  [
+    "C",
+    "C / Real generation. Build failure.",
+    "29 October: one genuine AI response creates a TypeScript candidate. Generation PASS; isolated G1 FAIL / BUILD_FAILED. HTTP 0/17, SQLite 0/20. G2/G3 remain INCONCLUSIVE. The original compiler diagnostics are UNKNOWN.",
+  ],
+  [
+    "D",
+    "D / One build passes. Verification stops.",
+    "1 November: generation PASS and workshop-business per-pair G1 PASS. Aggregate G1 remains INCONCLUSIVE / BUILD_NOT_RUN. G2/G3 ERROR / VERIFIER_ERROR: HTTP 0/17 completed, SQLite 1/20. Candidate source UNAVAILABLE; historical root cause UNKNOWN.",
+  ],
+  [
+    null,
+    "What would establish acceptance?",
+    "An independent complete target, the applicable mandatory G0–G4 gates and complete mandatory scenario evidence for that exact candidate. These receipts do not establish that. PRODUCT NOT_ESTABLISHED. Newer experiments are outside this snapshot.",
+  ],
+];
+const STAGES = [
+  "A frozen PHP source and explicit public scope make the inputs inspectable. No source code executes in this viewer.",
+  "A bounded agent requests a model response. Track A did not generate; tracks C and D record genuine responses. No request is sent now.",
+  "The generated TypeScript candidate has its own content hash. A candidate identity is not a build result; D's historical candidate source is unavailable.",
+  "Independent isolated checks cover G0 completeness, G1 build, G2 HTTP, G3 stateful parity and G4 independent controls. These receipts do not establish all gates.",
+  "Recorded outcomes retain FAIL, ERROR, INCONCLUSIVE and NOT_RUN. A matching receipt pin proves snapshot byte identity, not new execution or product acceptance.",
+];
 
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -29,6 +76,11 @@ function definitions(items) {
 }
 function reset() {
   bundle = null;
+  availableTracks.clear();
+  byId("overview").hidden = true;
+  byId("empty-state").hidden = false;
+  byId("track-cards").replaceChildren();
+  byId("gate-matrix").replaceChildren();
   byId("evidence").hidden = true;
   byId("future").hidden = true;
   for (const id of [
@@ -61,6 +113,152 @@ function reset() {
     "incident-identities",
   ])
     byId(id).replaceChildren();
+  updateGuide();
+}
+function selectTrack(track) {
+  if (!availableTracks.has(track)) return;
+  for (const [id, section] of Object.entries(TRACK_SECTIONS))
+    byId(section).hidden = id !== track;
+  byId("historical-context").hidden = track !== "A" && track !== "B";
+  for (const button of byId("track-cards").children)
+    button.setAttribute("aria-pressed", String(button.dataset.track === track));
+}
+function updateGuide() {
+  const [track, title, description] = CHAPTERS[chapter];
+  byId("guide-title").textContent = title;
+  byId("guide-description").textContent = description;
+  byId("guide-position").textContent =
+    `CHAPTER ${String(chapter + 1).padStart(2, "0")} / 06`;
+  byId("guide-progress").textContent =
+    `${chapter + 1} of 6 · no automatic transitions`;
+  byId("guide-prev").disabled = chapter === 0;
+  byId("guide-next").disabled = chapter === CHAPTERS.length - 1;
+  for (const button of document.querySelectorAll("[data-chapter]")) {
+    if (Number(button.dataset.chapter) === chapter)
+      button.setAttribute("aria-current", "step");
+    else button.removeAttribute("aria-current");
+  }
+  const loaded = track && availableTracks.has(track);
+  byId("guide-evidence-note").textContent = loaded
+    ? `Track ${track} is loaded from validated pinned bytes. Inspect its recorded results below.`
+    : track
+      ? `Track ${track} is not loaded. The narration describes the historical snapshot; it is not loaded evidence.`
+      : "This is a recorded walkthrough, with no live execution or automatic transitions.";
+  byId("guide-target").setAttribute(
+    "href",
+    loaded
+      ? `#${TRACK_SECTIONS[track]}`
+      : chapter === 5
+        ? "#acceptance"
+        : "#receipt-desk",
+  );
+  byId("guide-target").textContent = loaded
+    ? `Inspect track ${track} ↓`
+    : chapter === 5
+      ? "Revisit product acceptance ↑"
+      : "Load and inspect receipts ↓";
+  if (loaded) selectTrack(track);
+}
+function renderOverview(historical, real, incident) {
+  const matrix = [];
+  function row(label, gates, http, sqlite) {
+    const tr = element("tr");
+    const heading = element("th", label);
+    heading.scope = "row";
+    tr.append(heading);
+    for (const gate of ["G0", "G1", "G2", "G3", "G4"])
+      tr.append(element("td", gates[gate], `verdict-${gates[gate]}`));
+    tr.append(element("td", http), element("td", sqlite));
+    matrix.push(tr);
+  }
+  if (historical) {
+    availableTracks.set("A", [
+      "No generation",
+      "HISTORICAL ADMISSION",
+      "NOT_RUN",
+      "0 generated requests · candidate null",
+      "HTTP NOT_RUN · SQLite NOT_RUN",
+    ]);
+    availableTracks.set("B", [
+      "Scripted control",
+      "DOCKER REPLAY · NOT AI",
+      "PASS → FAIL → PASS",
+      "G2/G3 per attempt · scripted repair",
+      "HTTP 17/17 · SQLite 20/20 per attempt",
+    ]);
+    row("A · No generation", historical.model.gates, "NOT_RUN", "NOT_RUN");
+    for (const attempt of historical.replay.attempts)
+      row(
+        `B · ${attempt.label}`,
+        Object.fromEntries(attempt.gates.map((g) => [g.gate, g.verdict])),
+        `${attempt.coverage.http}/${attempt.coverage.requiredHttp}`,
+        `${attempt.coverage.sqlite}/${attempt.coverage.requiredSqlite}`,
+      );
+  }
+  if (real) {
+    availableTracks.set("C", [
+      "Real AI · build failure",
+      "29 OCT 2026 · REAL AI",
+      `G1 ${real.gates.G1}`,
+      "Generation PASS · G2/G3 INCONCLUSIVE",
+      `HTTP ${real.coverage.http}/${real.coverage.requiredHttp} · SQLite ${real.coverage.sqlite}/${real.coverage.requiredSqlite}`,
+    ]);
+    row(
+      "C · Real AI",
+      real.gates,
+      `${real.coverage.http}/${real.coverage.requiredHttp}`,
+      `${real.coverage.sqlite}/${real.coverage.requiredSqlite}`,
+    );
+  }
+  if (incident) {
+    availableTracks.set("D", [
+      "Real AI · verifier error",
+      "1 NOV 2026 · REAL AI",
+      `G2/G3 ${incident.gates.G2}`,
+      "Per-pair G1 PASS · aggregate INCONCLUSIVE",
+      `HTTP ${incident.coverage.http}/${incident.coverage.requiredHttp} · SQLite ${incident.coverage.sqlite}/${incident.coverage.requiredSqlite}`,
+    ]);
+    row(
+      "D · Real AI",
+      incident.gates,
+      `${incident.coverage.http}/${incident.coverage.requiredHttp}`,
+      `${incident.coverage.sqlite}/${incident.coverage.requiredSqlite}`,
+    );
+  }
+  for (const [
+    id,
+    [title, provenance, outcome, distinction, coverage],
+  ] of availableTracks) {
+    const button = element("button", undefined, `track-card track-${id}`);
+    button.type = "button";
+    button.dataset.track = id;
+    button.setAttribute("aria-controls", TRACK_SECTIONS[id]);
+    button.setAttribute("aria-pressed", "false");
+    button.append(
+      element("span", id, "track-letter"),
+      element("span", provenance, "eyebrow"),
+      element("strong", title),
+      element(
+        "span",
+        outcome,
+        id === "C" || id === "D"
+          ? "outcome verdict-ERROR"
+          : "outcome verdict-INCONCLUSIVE",
+      ),
+      element("span", distinction, "track-distinction"),
+      element("span", coverage, "track-coverage"),
+    );
+    button.addEventListener("click", () => {
+      chapter = "ABCD".indexOf(id) + 1;
+      updateGuide();
+    });
+    byId("track-cards").append(button);
+  }
+  byId("gate-matrix").append(...matrix);
+  byId("overview").hidden = false;
+  byId("empty-state").hidden = true;
+  selectTrack(availableTracks.keys().next().value);
+  updateGuide();
 }
 function renderHistorical(value) {
   for (const id of [
@@ -270,6 +468,7 @@ function renderBundles(historical, real, incident) {
     }
   }
   showRaw();
+  renderOverview(historical, real, incident);
   byId("evidence").hidden = false;
 }
 function showRaw() {
@@ -417,3 +616,23 @@ byId("files").addEventListener("change", (event) => {
   event.target.value = "";
 });
 byId("receipt").addEventListener("change", showRaw);
+for (const button of document.querySelectorAll("[data-chapter]"))
+  button.addEventListener("click", () => {
+    chapter = Number(button.dataset.chapter);
+    updateGuide();
+  });
+for (const [id, direction] of [
+  ["guide-prev", -1],
+  ["guide-next", 1],
+])
+  byId(id).addEventListener("click", () => {
+    chapter = Math.max(0, Math.min(CHAPTERS.length - 1, chapter + direction));
+    updateGuide();
+  });
+for (const button of document.querySelectorAll("[data-stage]"))
+  button.addEventListener("click", () => {
+    const stage = Number(button.dataset.stage);
+    for (const item of document.querySelectorAll("[data-stage]"))
+      item.setAttribute("aria-pressed", String(item === button));
+    byId("stage-detail").textContent = `0${stage + 1} / ${STAGES[stage]}`;
+  });
