@@ -25,9 +25,17 @@ the single authorized post-freeze repair unit.
 The frozen first draft failed G1 build/type checking (`TS2345` at
 `src/config.ts:100:41`) inside the real unchanged verifier, so G2/G3 were
 never executed (INCONCLUSIVE, MISSING_COVERAGE 0/17, 0/20) and G4 was not run
-(INCONCLUSIVE, HELD_OUT_NOT_RUN); product **NOT_ESTABLISHED**. A single
-post-freeze repair unit was prepared in a separate location and only becomes
-recorded evidence after its own repair-mode Docker run. See `RESULTS.md`.
+(INCONCLUSIVE, HELD_OUT_NOT_RUN); product **NOT_ESTABLISHED**. The single
+authorized post-freeze repair unit ("GLM 5.3 first draft + Sol 6.1 repair",
+admission-pinned `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`)
+was then verified in its own repair-mode run: typecheck and build both
+executed (compiler projection `g1Verdict PASS` — the `TS2345` failure no
+longer occurs), but G1 is `INCONCLUSIVE` (2 of 6 executed,
+`BUILD_NOT_RUN`), G2/G3 recorded `ERROR` (`VERIFIER_ERROR`, cause not
+interpretable from the public receipts), G4 remains `INCONCLUSIVE`
+(`HELD_OUT_NOT_RUN`), and the product remains **NOT_ESTABLISHED**; per the
+task card no second repair exists or is attempted. No formal G4, no Oracle
+PASS and no product acceptance are established. See `RESULTS.md`.
 
 ## Integrity
 

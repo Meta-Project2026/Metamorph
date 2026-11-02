@@ -62,3 +62,25 @@ not change gate verdicts, do not claim parity, and do not establish a product.
    HTTP/SQLite parity is unsupported, and the only claim allowed is the G1
    finding itself. This result is not comparable to any benchmark aggregate;
    no benchmark selection is proposed here.
+
+8. **The repair chain closed the compile gap but stayed honest at every
+   hop.** The single authorized unit proceeded exactly as admission-pinned:
+   the repair run's receipt links `candidatePin 0cf5ba0b...` with
+   `firstDraftCandidatePin 4ff450d2...`, and its compiler projection records
+   `g1Verdict PASS` with `errorCount null` — the first draft's `TS2345`
+   failure is gone and typecheck plus build themselves completed. But G1 had
+   6 member checks and only 2 executed (`BUILD_NOT_RUN`), so the honest
+   aggregate stays INCONCLUSIVE, not PASS: a pinned fix that is believed to
+   work is still not a closed gate.
+
+9. **`ERROR` is preserved as its own verdict, distinct from `FAIL`.** The
+   repair run's G2/G3 recorded `VERIFIER_ERROR` with public receipts carrying
+   only categorical projections — raw failure content never crosses into
+   evidence. Nothing in the public record distinguishes a verifier-side
+   environment fault from candidate-triggered behavior, so no such claim is
+   made; the C2C-style answer is to report `ERROR`, keep partial coverage
+   honest (sqlite 1/20, http 0/17), and de-scope further claims. Combined
+   with the card's one-repair rule, this means the work *documents* the end
+   state instead of chasing it: draft proven FAIL, repair INCONCLUSIVE
+   forward, product NEVER established outside separately authorized
+   milestone work.

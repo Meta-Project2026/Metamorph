@@ -121,7 +121,8 @@ first-draft record is frozen and every fact above is unchanged.
   values or prior candidate code were read while authoring remains
   **self-reported, not independently provable**.
 - Continuation, independent re-verification, harness authoring, the single
-  repair unit (if committed) and this record: the OpenCode continuation
+  repair unit (committed separately, see below) and this record: the OpenCode
+  continuation
   session. Harness-level agent designation for the continuation is **sol 6.1**
   per the MMP-123 task card; the session's reportable model identifier is
   `GLM 5.3 Flash Free` (`glm-5.3-flash-free`, provider `opencode`). Same-family
@@ -129,8 +130,10 @@ first-draft record is frozen and every fact above is unchanged.
   **first-draft origin GLM 5.3 (ZCode) is preserved** and later work is never
   labeled GLM-only. Platform-level model independence beyond these labels is
   **NOT_VERIFIED**.
-- No repair beyond the card's single authorized post-freeze unit has been
-  performed. The first-draft commit, its bytes and its
+- Exactly one post-freeze repair has been committed, in a separate directory
+  and separate commit, labeled **"GLM 5.3 first draft + Sol 6.1 repair"**
+  (see the post-freeze single repair record below); no second or attempted
+  repair exists. The first-draft commit, its bytes and its
   `candidateSha 4ff450d2...` are immutable and independently re-verified
   (see below).
 
@@ -186,6 +189,39 @@ copied research-locally to `research/mmp-123/harness/`:
   shebang inside the image; an over-strict copied known-good assumption moved
   to executor prefix semantics). They are listed with commands and codes in
   `RESULTS.md`; the recorded run's receipts reflect the corrected driver.
+
+## Post-freeze single repair record (OpenCode continuation)
+
+One repair unit is authorized by the task card. It was produced by the
+OpenCode continuation session (model `glm-5.3-flash-free`; harness-level
+designation **Sol 6.1**), located in `research/mmp-123/repair-candidate/`,
+committed separately (`79440b8`), and labeled **"GLM 5.3 first draft +
+Sol 6.1 repair"** — never GLM-only:
+
+- **REPAIR_CANDIDATE_SHA**
+  `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`,
+  computed and pinned by the unchanged `admitDirectory()` admission module.
+  The directory is a byte-copy of the frozen first draft verified to
+  reproduce `candidateSha 4ff450d2...` **before** the single widening edit to
+  `phpCastInt` (accept `Uint8Array`, cast bytes via UTF-8 decoding through the
+  leading-numeric `phpInt` rule). Only `phpcompat.ts` differs
+  (4813 bytes, sha256 `b86de870c3bbb52dba0b595a53eba62fde37d8ffc333dbebacb43084ae4d30f3`).
+- Recorded isolated verifier result, mode `repair`, real Docker, unchanged
+  verifier (same pins and isolation as the first-draft run): run id
+  `mmp123-20261102T014652Z-cac1410a17b1`, driver head `79440b8dd85b28936e1818c8ce79b35ddbd38fcf`,
+  receipts in `research/mmp-123/evidence/local-79440b8d-mmp123-20261102T014652Z-cac1410a17b1/`
+  (byte-identity re-verified against the run-source clone).
+- Verdicts: **G1 INCONCLUSIVE (`BUILD_NOT_RUN`)** — typecheck and build both
+  executed, compiler diagnostic projection `g1Verdict PASS`, `errorCount
+  null` (the first draft's `TS2345` no longer occurs), 2 of 6 G1 gate tests
+  executed; **G2 ERROR (`VERIFIER_ERROR`, 0/17)**; **G3 ERROR
+  (`VERIFIER_ERROR`, 1/20)**; **G4 INCONCLUSIVE (`HELD_OUT_NOT_RUN`)**;
+  cleanup `VERIFIED_ZERO_RESOURCES` with finalizer PASS 0/0/0; product
+  **NOT_ESTABLISHED**. Case execution status `PASS` records validation
+  integrity only. `VERIFIER_ERROR` is a categorical projection; its cause is
+  not interpretable from the published receipts, so no claim about the
+  candidate is drawn from it.
+- No second repair is authorized or attempted, regardless of these verdicts.
 
 ## Boundaries
 

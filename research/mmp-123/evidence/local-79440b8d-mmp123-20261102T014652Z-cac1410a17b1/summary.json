@@ -1,0 +1,155 @@
+{
+  "format": "mmp123-verifier-proof-v1",
+  "headSha": "79440b8dd85b28936e1818c8ce79b35ddbd38fcf",
+  "engine": {
+    "version": "29.9.2",
+    "os": "linux",
+    "arch": "amd64"
+  },
+  "driver": {
+    "node": "v24.22.2",
+    "platform": "linux",
+    "manifestPin": "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+    "recipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+    "sourcePin": {
+      "repository": "tanjilaafsarirubina/car-workshop",
+      "commit": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+      "image": "php@sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5",
+      "archiveSha256": "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4"
+    },
+    "candidatePin": "0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1",
+    "firstDraftCandidatePin": "4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72"
+  },
+  "network": {
+    "sourceFetches": 1,
+    "blockedRequests": 0
+  },
+  "cases": [
+    {
+      "id": "glm-first-draft-with-sol-repair-real-docker-validation",
+      "status": "PASS",
+      "execution": "REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT_WITH_SOL_REPAIR",
+      "candidateSha": "0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1",
+      "firstDraftCandidateSha": "4ff450d2ec5fdcdfd855b7a3ed02b9f369488cf55f354372e4dc11dfb9511e72",
+      "candidateFiles": [
+        {
+          "path": "src/api.ts",
+          "bytes": 17243,
+          "sha256": "938fe78a8d3ccbb31f8a1d4464ddc00b417f6215047b5e1d79163d13bc2282c9"
+        },
+        {
+          "path": "src/config.ts",
+          "bytes": 4946,
+          "sha256": "a79b0a63283a1b3e9eb9a45f1580ee09b86210c1ba73892a345bbbabeddf90ec"
+        },
+        {
+          "path": "src/json.ts",
+          "bytes": 3311,
+          "sha256": "872682f4b6d9816f1815090f9bb2fe2916e59b00b46f3af88c9b60c0a4d50a5e"
+        },
+        {
+          "path": "src/main.ts",
+          "bytes": 6956,
+          "sha256": "afe8cf29bfe313315b2917b61c3fa0fb87a89841297e7c24b25c37af7e4dbd73"
+        },
+        {
+          "path": "src/phpcompat.ts",
+          "bytes": 4813,
+          "sha256": "b86de870c3bbb52dba0b595a53eba62fde37d8ffc333dbebacb43084ae4d30f3"
+        }
+      ],
+      "gates": {
+        "G1": {
+          "gate": "G1",
+          "verdict": "INCONCLUSIVE",
+          "executedCount": 2,
+          "executedFirst": "workshop-business:typecheck",
+          "executedLast": "workshop-business:build",
+          "findingCodes": [
+            "BUILD_NOT_RUN"
+          ]
+        },
+        "G2": {
+          "gate": "G2",
+          "verdict": "ERROR",
+          "executedCount": 0,
+          "executedFirst": null,
+          "executedLast": null,
+          "findingCodes": [
+            "VERIFIER_ERROR"
+          ]
+        },
+        "G3": {
+          "gate": "G3",
+          "verdict": "ERROR",
+          "executedCount": 1,
+          "executedFirst": "workshop-business:initial",
+          "executedLast": "workshop-business:initial",
+          "findingCodes": [
+            "VERIFIER_ERROR"
+          ]
+        },
+        "G4": {
+          "gate": "G4",
+          "verdict": "INCONCLUSIVE",
+          "executedCount": 9,
+          "executedFirst": "workshop-business:http-positive",
+          "executedLast": "workshop-business:db-sequence-mutant",
+          "findingCodes": [
+            "HELD_OUT_NOT_RUN"
+          ]
+        }
+      },
+      "coverage": {
+        "http": 0,
+        "sqlite": 1,
+        "requiredHttp": 17,
+        "requiredSqlite": 20
+      },
+      "pairs": 1,
+      "pairsDetail": [
+        {
+          "scenarioId": "workshop-business",
+          "cleanup": "VERIFIED_ZERO_RESOURCES",
+          "compilerDiagnostics": {
+            "format": "mmp082-g1-diagnostics-v1",
+            "sourceSha": "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+            "candidateSha": "0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1",
+            "attemptId": "9617df51-8525-431f-94aa-40d3f93db2cc",
+            "pairId": "a68f0fc5-bcf4-40a1-b5fb-1d8d294b1fbd",
+            "g1Verdict": "PASS",
+            "status": "DIAGNOSTIC_UNAVAILABLE",
+            "entries": [],
+            "errorCount": null,
+            "truncated": false
+          }
+        }
+      ],
+      "cleanup": {
+        "status": "VERIFIED_ZERO_RESOURCES",
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "blockers": [
+        "BUILD_NOT_RUN",
+        "VERIFIER_ERROR"
+      ],
+      "aiGeneration": "AI_GENERATION_NOT_RUN",
+      "product": "NOT_ESTABLISHED",
+      "finalizer": {
+        "status": "PASS",
+        "inventory": {
+          "containers": 0,
+          "volumes": 0
+        },
+        "emergencyRemoved": 0
+      },
+      "licenceNotice": "MIT notice verified in every generated file"
+    }
+  ],
+  "aiGeneration": "AI_GENERATION_NOT_RUN",
+  "modelRequests": 0,
+  "product": "NOT_ESTABLISHED",
+  "status": "PASS"
+}
