@@ -1,6 +1,7 @@
 {
-  "format": "mmp125-read-only-pins-v1",
+  "format": "mmp125-read-only-pins-v2",
   "baseSha": "074af751e9012abad1be2749c360c5d8b86218e0",
+  "reviewedHead": "bb8f548bae35f9add0402c855da0cd247a124cf6",
   "files": {
     "packages/agent-real/src/migration-context.mjs": {
       "bytes": 6074,
@@ -189,6 +190,22 @@
     "research/mmp-123/verifier-proof.mjs": {
       "bytes": 14843,
       "sha256": "d61f720f317e0391c86e000a358a0a748293c7e54535f779ba155cbd2f0ec0ad"
+    }
+  },
+  "deltas": {
+    "packages/agent-real/src/migration-context.mjs": {
+      "from": {
+        "bytes": 6074,
+        "sha256": "f8b0a47ea36ecb3b14df9ac9a3124034f171658002448338b91b6c365ce468f6"
+      },
+      "to": {
+        "bytes": 6462,
+        "sha256": "d2274662a397edd98a3fb9230f1e5b09e9bfd39617ca8bbd3fdb476b07bd7425"
+      },
+      "pullRequest": 131,
+      "commit": "bb8f548bae35f9add0402c855da0cd247a124cf6",
+      "changedLines": 2,
+      "reason": "PR #131 approved public request-id echo disclosure for the migration generator (prompt-only; frozen GLM repair unchanged)"
     }
   }
 }

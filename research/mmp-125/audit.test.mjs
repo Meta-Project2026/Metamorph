@@ -235,3 +235,46 @@ test("extra executable recipe files change the recipe rather than being omitted"
   );
   assert.throws(() => audit(dir), /MMP125_AUDIT_REJECTED/);
 });
+
+test("reviewed head drift rejects even with a re-pinned delta", (t) => {
+  const dir = snapshot(t);
+  const pinPath = join(dir, "research/mmp-125/pins.json");
+  const pins = JSON.parse(readFileSync(pinPath, "utf8"));
+  pins.reviewedHead = "f".repeat(40);
+  writeFileSync(pinPath, JSON.stringify(pins));
+  assert.throws(() => audit(dir), /MMP125_AUDIT_REJECTED/);
+});
+
+test("a second post-base delta rejects", (t) => {
+  const dir = snapshot(t);
+  const pinPath = join(dir, "research/mmp-125/pins.json");
+  const pins = JSON.parse(readFileSync(pinPath, "utf8"));
+  pins.deltas["packages/agent-real/src/report.mjs"] = {
+    from: pins.files["packages/agent-real/src/report.mjs"],
+    to: pins.files["packages/agent-real/src/report.mjs"],
+    pullRequest: 999,
+    commit: pins.reviewedHead,
+    changedLines: 1,
+    reason: "not approved",
+  };
+  writeFileSync(pinPath, JSON.stringify(pins));
+  assert.throws(() => audit(dir), /MMP125_AUDIT_REJECTED/);
+});
+
+test("migration-context cannot be repinned to an unapproved hash", (t) => {
+  const dir = snapshot(t);
+  const path = "packages/agent-real/src/migration-context.mjs";
+  replace(dir, path, `${readFileSync(join(dir, path), "utf8")}\n`, true);
+  const pinPath = join(dir, "research/mmp-125/pins.json");
+  const pins = JSON.parse(readFileSync(pinPath, "utf8"));
+  pins.deltas[path].to = pins.files[path];
+  writeFileSync(pinPath, JSON.stringify(pins));
+  assert.throws(() => audit(dir), /MMP125_AUDIT_REJECTED/);
+});
+
+test("base pin map cannot be silently repinned", (t) => {
+  const dir = snapshot(t);
+  const path = "packages/agent-real/src/report.mjs";
+  replace(dir, path, `${readFileSync(join(dir, path), "utf8")}\n`, true);
+  assert.throws(() => audit(dir), /MMP125_AUDIT_REJECTED/);
+});

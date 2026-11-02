@@ -170,15 +170,56 @@ function summary(record) {
 }
 export function audit(root = ROOT) {
   const pins = JSON.parse(decode(bytesAt(root, "research/mmp-125/pins.json")));
+  const expectedReviewedHead = "bb8f548bae35f9add0402c855da0cd247a124cf6";
   requireAudit(
-    pins.format === "mmp125-read-only-pins-v1" &&
+    pins.format === "mmp125-read-only-pins-v2" &&
       pins.baseSha === "074af751e9012abad1be2749c360c5d8b86218e0" &&
-      JSON.stringify(Object.keys(pins.files).sort()) === JSON.stringify(INPUTS),
+      pins.reviewedHead === expectedReviewedHead &&
+      JSON.stringify(Object.keys(pins.files).sort()) ===
+        JSON.stringify(INPUTS) &&
+      pins.deltas &&
+      typeof pins.deltas === "object" &&
+      !Array.isArray(pins.deltas),
   );
+  // Base pin map must remain byte-identical to the historical base. Any repin of a
+  // base (non-delta) input, including migration-context.mjs, rejects.
+  requireAudit(
+    sha(JSON.stringify(pins.files)) ===
+      "f3ebd344a7edd37a14c9d8d71fd41ed51890e1b1a9ecabf807839cd871d038ce",
+  );
+  const deltaPaths = Object.keys(pins.deltas);
+  requireAudit(deltaPaths.length === 1);
+  const deltaPath = deltaPaths[0];
+  requireAudit(deltaPath === "packages/agent-real/src/migration-context.mjs");
+  const delta = pins.deltas[deltaPath];
+  requireAudit(
+    delta &&
+      typeof delta === "object" &&
+      !Array.isArray(delta) &&
+      delta.from.bytes === 6074 &&
+      delta.from.sha256 ===
+        "f8b0a47ea36ecb3b14df9ac9a3124034f171658002448338b91b6c365ce468f6" &&
+      delta.to.bytes === 6462 &&
+      delta.to.sha256 ===
+        "d2274662a397edd98a3fb9230f1e5b09e9bfd39617ca8bbd3fdb476b07bd7425" &&
+      delta.pullRequest === 131 &&
+      delta.commit === expectedReviewedHead &&
+      typeof delta.reason === "string" &&
+      delta.reason.length > 0 &&
+      Number.isInteger(delta.changedLines) &&
+      delta.changedLines === 2,
+  );
+  // The delta's "from" side must equal the preserved base pin.
+  requireAudit(
+    pins.files[deltaPath].bytes === delta.from.bytes &&
+      pins.files[deltaPath].sha256 === delta.from.sha256,
+  );
+  const expectedPin = (path) =>
+    path === deltaPath ? delta.to : pins.files[path];
   const data = new Map(
     INPUTS.map((path) => {
       const bytes = bytesAt(root, path),
-        pin = pins.files[path];
+        pin = expectedPin(path);
       requireAudit(bytes.length === pin.bytes && sha(bytes) === pin.sha256);
       return [path, bytes];
     }),
