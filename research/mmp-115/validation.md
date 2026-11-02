@@ -161,18 +161,18 @@ The three changed files are documentation only; historical evidence is retained.
 
 Commands actually executed on Windows Node24.21.0 / pnpm11.25.0:
 
-| Command | Exit | Actual result |
-| --- | --- | --- |
-| node --test packages/agent-real/test/custody.test.mjs | 0 | 25 total /19 PASS /6 Linux-only SKIP /0 FAIL |
-| pnpm install --frozen-lockfile | 0 | Frozen install |
-| pnpm lint | 0 | PASS |
-| pnpm typecheck | 0 | PASS |
-| pnpm test | 0 | 783 total /673 PASS /110 Windows/environment SKIP /0 FAIL |
-| pnpm build | 0 | PASS |
-| node research/mmp-069/validate.mjs | 0 | VALID104 modules; no coverage-row change |
-| node --test research/mmp-069/validate.test.mjs | 0 | 45 PASS /0 FAIL /0 SKIP |
-| node research/mmp-069/check-syntax.mjs | 0 | 103 files PASS, syntax only |
-| git diff --check; protected-source/evidence comparisons | 0 | Only documentation differs from audited main |
+| Command                                                 | Exit | Actual result                                             |
+| ------------------------------------------------------- | ---- | --------------------------------------------------------- |
+| node --test packages/agent-real/test/custody.test.mjs   | 0    | 25 total /19 PASS /6 Linux-only SKIP /0 FAIL              |
+| pnpm install --frozen-lockfile                          | 0    | Frozen install                                            |
+| pnpm lint                                               | 0    | PASS                                                      |
+| pnpm typecheck                                          | 0    | PASS                                                      |
+| pnpm test                                               | 0    | 783 total /673 PASS /110 Windows/environment SKIP /0 FAIL |
+| pnpm build                                              | 0    | PASS                                                      |
+| node research/mmp-069/validate.mjs                      | 0    | VALID104 modules; no coverage-row change                  |
+| node --test research/mmp-069/validate.test.mjs          | 0    | 45 PASS /0 FAIL /0 SKIP                                   |
+| node research/mmp-069/check-syntax.mjs                  | 0    | 103 files PASS, syntax only                               |
+| git diff --check; protected-source/evidence comparisons | 0    | Only documentation differs from audited main              |
 
 Linux-specific ownership/spool/readback/permit controls were not run locally;
 current main's Linux Fast CI supplies the separately observed evidence. Actual
@@ -189,3 +189,11 @@ budget/identity/transport/owner authorization required. No old card or artifact
 is reused. Full production E2E/owner restore remains NOT_RUN; operational NO_GO,
 #115 OPEN, #116 HOLD, #61 PRODUCT_NOT_ESTABLISHED, formal G4 NOT_RUN. This review
 is submitted for independent exact-SHA review, not self-approval or merge.
+
+The initial delivery head8453dcc13eaeecf94baaebad7cbb641f85ee8452 triggered
+Fast CI41472015661: Node22/24 FAILURE at Markdown table formatting in the two
+new/extended documents; subsequent checks were SKIPPED, not PASS. The earlier
+local lint ran before those final table additions. Both tables were formatted
+with the unchanged repository Biome configuration and lint was rerun before the
+corrective push. This is documentation formatting only, not a runtime repair or
+new operational proof; fresh exact-head CI is reported in the PR conversation.
