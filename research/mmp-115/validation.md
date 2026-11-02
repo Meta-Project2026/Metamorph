@@ -197,3 +197,10 @@ local lint ran before those final table additions. Both tables were formatted
 with the unchanged repository Biome configuration and lint was rerun before the
 corrective push. This is documentation formatting only, not a runtime repair or
 new operational proof; fresh exact-head CI is reported in the PR conversation.
+
+The final review also records a source-derived restore-version limit: expected
+body/context hashes are computed by the restore checkout. PR131 changed public
+migration-context.mjs although the17 custody/driver blobs are unchanged. Restore
+must use the trusted producing revision; backward compatibility of historical
+capsules was not tested, and no binding was weakened. README explicitly labels
+the3/3 age result archival and NOT_RUN here. No runtime or new test was added.

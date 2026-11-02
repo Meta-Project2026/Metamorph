@@ -86,6 +86,13 @@ envelope, reference/G4 pack, SQL/HTTP observation, error/stack or source is expo
 by this documentation. Plaintext staging/JS copies are not securely erased by
 Docker cleanup. Public ciphertext can be retained past expiry and cannot be revoked.
 
+Static restore-version limit: [body/context validation:135](https://github.com/Meta-Project2026/Metamorph/blob/bb8f548bae35f9add0402c855da0cd247a124cf6/packages/agent-real/src/custody-contract.mjs#L135)
+derives expected admission hashes from its own checkout. Owner restore must use
+the producing run's trusted reviewed tool revision. Old-capsule compatibility
+with later prompt versions is NOT_RUN; do not relax bindings to obtain a match.
+PR131 changed migration-context.mjs; identical custody module blobs alone do not
+establish identical request preparation or a general historical-capsule reader.
+
 **One future composite production test, proposed only — NOT_AUTHORIZED/NOT_RUN:**
 
 1. After independent review, owners decide a fresh immutable action card for the
