@@ -375,6 +375,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Offline categorical post-mortem of paid run 41505679809 (G1 PASS, G2/G3 FAIL with HTTP_JSON_TYPE only): public receipts, pinned public PHP source and trusted comparator code produce a falsifiable PHP-7.4-typing hypothesis matrix; the offline comparator-mechanics test exercises only the locally built trusted @metamorph/oracle dist with synthetic public shapes and skips honestly without a build; no hosted test step is added. No candidate plaintext, age identity, private Oracle evidence, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action."
+    },
+    {
+      "path": "research/mmp-139",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Owner-local candidate-only exporter is import-inert and manual-only: offline synthetic controls (static no-dynamic-capability scan, import inertness, production pin constants, path/content/count/entrypoint rejection matrix, deterministic UNVERIFIED_PRODUCT manifest, receipt/cipher pin binding, destination classification, pre-prompt refusals, POSIX 0700/0600 writer, no-clobber, write-failure and unexpected-file cleanup, symlink rejection, CLI refusal lines) execute only on the executor's Windows host and WSL2 Node; no hosted test step is added and the helper never runs on import, in tests, in CI or on install. Real-identity restore and the owner export remain owner-only manual steps after independent review. No network, Git subprocess, candidate execution/import, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action."
     }
   ],
   "skips": [
