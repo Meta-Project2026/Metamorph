@@ -359,6 +359,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Read-only pinned-public-record audit and separately owner-authorized one-run local Linux/Docker diagnostic of immutable 0cf5ba0 repair with a trusted research observer; manual launcher never runs in CI. Audit/observer behavior and PowerShell fake-process controls are LOCAL_ONLY, not selected by hosted CI; MJS receives hosted syntax checking only. The #130 launcher/core/C# timeout, cancellation, consumption and concurrency controls use isolated fake CLI subprocesses; PowerShell/C# behavior is not hosted-gated. No models, additional repair, provider credentials, workflow dispatch, hidden G4 inspection or artifact upload. The single authorized launcher attempt exited1 before resource creation because the Docker daemon was unavailable; actual candidate validation NOT_RUN, cause UNKNOWN. No retry. Safe outcome and raw host receipt are versioned in research/mmp-125."
+    },
+    {
+      "path": "research/mmp-135",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Owner-local manual recipient possession helper and offline synthetic classification controls are syntax-checked in Fast CI only; no hosted test step is added and the helper never runs on import, in tests, CI or install. Offline test runs execute with throwaway TEST identities only when a locally provided age-keygen exists (no auto-download); the real owner identity is never read by any automated step. KEY_MATCH is possession evidence, not production restore. No network, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action."
     }
   ],
   "skips": [
