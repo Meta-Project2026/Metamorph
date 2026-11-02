@@ -27,7 +27,7 @@ try {
     checkpoint: (receipt) => save("generation.json", receipt),
   });
   save("trial.json", result);
-  if (result.modelGeneration !== "GENERATED") { process.exitCode = 1; }
+  if (result.modelGeneration !== "GENERATED" || result.custody?.state !== "CAPTURED_UNVERIFIED") { process.exitCode = 1; }
   else {
     writeFileSync(join(privateRoot, "transfer.json"), JSON.stringify({ candidateRoot: result.candidateRoot, candidateSha: result.candidateSha }), { mode: 0o600 });
   }

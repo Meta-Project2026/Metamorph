@@ -329,6 +329,14 @@
       "gap": "Receipt-integrity, CLI-mode and volume-ownership negative controls run in Fast CI (research/mmp-108/*.test.mjs). The real known-good Docker replay, real first-step fault control and synthetic verifyPair controls were executed once on a local disposable Linux Docker environment at driver head f9a7b4458a083e3df721bb94d8b4370e3e0fdb4c (receipts in research/mmp-108/evidence). No hosted Docker replay, Meta request, paid dispatch or held-out G4 coverage."
     },
     {
+      "path": "research/mmp-115",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Production custody contract/state/filesystem and instrumented workflow controls are reached directly by the package custody.test.mjs fast glob. Real Linux age/Docker and generated-test-key restore acceptance are manual-only and recorded separately. No model, paid dispatch, live artifact upload or owner private identity is used."
+    },
+    {
       "path": "research/mmp-120",
       "lifecycle": "ACTIVE",
       "execution": "LOCAL_ONLY",
