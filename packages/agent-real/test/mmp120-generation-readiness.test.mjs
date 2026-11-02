@@ -179,72 +179,66 @@ test("target contract pins NodeNext/CommonJS, node:sqlite and the offline sandbo
   assert.match(target.permissions, /external network/);
 });
 
-test(
-  "MMP-129: model sees the public wrapper x-request-id echo contract exactly once",
-  () => {
-    const p = prompt();
-    const { target } = p;
-    assert.equal(
-      Object.keys(target).filter((key) => key === "httpRequestIdentity").length,
-      1,
-    );
-    assert.match(
-      target.httpRequestIdentity,
-      /incoming x-request-id request-header value verbatim/,
-    );
-    assert.match(target.httpRequestIdentity, /x-request-id response header/);
-    assert.match(
-      target.httpRequestIdentity,
-      /Never generate, replace, or invent a request ID/,
-    );
-    assert.match(
-      target.httpRequestIdentity,
-      /target-service wrapper requirement, not PHP business semantics/,
-    );
-    assert.match(
-      target.httpRequestIdentity,
-      /application\/json; charset=utf-8 where specified/,
-    );
-    assert.equal(
-      JSON.stringify(p.source).includes("httpRequestIdentity"),
-      false,
-    );
-    assert.equal(JSON.stringify(p.orderedUnits).includes("x-request-id"), false);
-    assert.equal(JSON.stringify(p.routes).includes("x-request-id"), false);
-    assert.match(wire().messages[0].content, /Never invent usage, request IDs/);
-    assert.equal(
-      (JSON.stringify(p).match(/target-service wrapper requirement/g) ?? [])
-        .length,
-      1,
-    );
-    const serialized = body();
-    const projection = paidProjection(serialized);
-    assert.equal(
-      projection.method,
-      "serialized-utf8-bytes-times-4-plus-32768-v1",
-    );
-    assert.ok(projection.worstCaseEstimatedUsd > 0);
-    const summary = proposalReport().baseline;
-    assert.equal(summary.bodyBytes, Buffer.byteLength(serialized));
-    assert.notEqual(
-      summary.bodySha256,
-      "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
-    );
-    assert.match(context().contextSha256, /^[a-f0-9]{64}$/);
-    process.stdout.write(
-      "MMP129_SAFE_REQUEST_METRICS " +
-        JSON.stringify({
-          bodySha256: summary.bodySha256,
-          contextSha256: context().contextSha256,
-          bodyBytes: summary.bodyBytes,
-          inputTokensUpperEstimate: projection.inputTokensUpperEstimate,
-          worstCaseEstimatedUsd: projection.worstCaseEstimatedUsd,
-          budgetGate: "HOLD_NOT_AUTHORIZED",
-        }) +
-        "\n",
-    );
-  },
-);
+test("MMP-129: model sees the public wrapper x-request-id echo contract exactly once", () => {
+  const p = prompt();
+  const { target } = p;
+  assert.equal(
+    Object.keys(target).filter((key) => key === "httpRequestIdentity").length,
+    1,
+  );
+  assert.match(
+    target.httpRequestIdentity,
+    /incoming x-request-id request-header value verbatim/,
+  );
+  assert.match(target.httpRequestIdentity, /x-request-id response header/);
+  assert.match(
+    target.httpRequestIdentity,
+    /Never generate, replace, or invent a request ID/,
+  );
+  assert.match(
+    target.httpRequestIdentity,
+    /target-service wrapper requirement, not PHP business semantics/,
+  );
+  assert.match(
+    target.httpRequestIdentity,
+    /application\/json; charset=utf-8 where specified/,
+  );
+  assert.equal(JSON.stringify(p.source).includes("httpRequestIdentity"), false);
+  assert.equal(JSON.stringify(p.orderedUnits).includes("x-request-id"), false);
+  assert.equal(JSON.stringify(p.routes).includes("x-request-id"), false);
+  assert.match(wire().messages[0].content, /Never invent usage, request IDs/);
+  assert.equal(
+    (JSON.stringify(p).match(/target-service wrapper requirement/g) ?? [])
+      .length,
+    1,
+  );
+  const serialized = body();
+  const projection = paidProjection(serialized);
+  assert.equal(
+    projection.method,
+    "serialized-utf8-bytes-times-4-plus-32768-v1",
+  );
+  assert.ok(projection.worstCaseEstimatedUsd > 0);
+  const summary = proposalReport().baseline;
+  assert.equal(summary.bodyBytes, Buffer.byteLength(serialized));
+  assert.notEqual(
+    summary.bodySha256,
+    "55c7b8442814b6dfb3a273d45063553ea00e4466046945fd72fd7ea2f38d5d5d",
+  );
+  assert.match(context().contextSha256, /^[a-f0-9]{64}$/);
+  process.stdout.write(
+    "MMP129_SAFE_REQUEST_METRICS " +
+      JSON.stringify({
+        bodySha256: summary.bodySha256,
+        contextSha256: context().contextSha256,
+        bodyBytes: summary.bodyBytes,
+        inputTokensUpperEstimate: projection.inputTokensUpperEstimate,
+        worstCaseEstimatedUsd: projection.worstCaseEstimatedUsd,
+        budgetGate: "HOLD_NOT_AUTHORIZED",
+      }) +
+      "\n",
+  );
+});
 
 test("response schema is strict changes-only and source stays data, not instructions", () => {
   const w = wire();
