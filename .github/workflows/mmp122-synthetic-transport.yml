@@ -16,7 +16,7 @@ jobs:
       ${{ github.repository == 'Meta-Project2026/Metamorph' &&
       github.ref == 'refs/heads/test/mmp122-synthetic-transport-once' &&
       github.run_attempt == 1 &&
-      github.event.head_commit.message == 'MMP122_SINGLE_AUTHORIZED_SYNTHETIC_TRANSPORT' }
+      github.event.head_commit.message == 'MMP122_SINGLE_AUTHORIZED_SYNTHETIC_TRANSPORT' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -60,8 +60,8 @@ jobs:
         id: custody_upload
         uses: actions/upload-artifact@v4
         with:
-          name: mmp122-synthetic-${{ github.run_id }-1
-          path: ${{ runner.temp }/mmp122-payload/candidate.age
+          name: mmp122-synthetic-${{ github.run_id }}-1
+          path: ${{ runner.temp }}/mmp122-payload/candidate.age
           if-no-files-found: error
           retention-days: 7
           compression-level: 0
@@ -70,18 +70,18 @@ jobs:
         id: custody_download
         uses: actions/download-artifact@v4
         with:
-          artifact-ids: ${{ steps.custody_upload.outputs.artifact-id }
-          path: ${{ runner.temp }/mmp122-readback
+          artifact-ids: ${{ steps.custody_upload.outputs.artifact-id }}
+          path: ${{ runner.temp }}/mmp122-readback
           merge-multiple: true
 
       - name: Verify actual GitHub artifact and run metadata plus exact ciphertext readback
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }
-          TEST_ARTIFACT_ID: ${{ steps.custody_upload.outputs.artifact-id }
-          TEST_ARCHIVE_SHA: ${{ steps.custody_upload.outputs.artifact-digest }
-          EXPECTED_CIPHERTEXT_SHA: ${{ steps.source.outputs.sha256 }
-          EXPECTED_CIPHERTEXT_BYTES: ${{ steps.source.outputs.bytes }
+          GH_TOKEN: ${{ github.token }}
+          TEST_ARTIFACT_ID: ${{ steps.custody_upload.outputs.artifact-id }}
+          TEST_ARCHIVE_SHA: ${{ steps.custody_upload.outputs.artifact-digest }}
+          EXPECTED_CIPHERTEXT_SHA: ${{ steps.source.outputs.sha256 }}
+          EXPECTED_CIPHERTEXT_BYTES: ${{ steps.source.outputs.bytes }}
         run: |
           set -euo pipefail
           node --input-type=module <<'NODE'
