@@ -103,8 +103,8 @@ record; `c482e19` is the sealed first-draft freeze).
   (`phpcompat.ts`: 4813 bytes, sha256
   `b86de870c3bbb52dba0b595a53eba62fde37d8ffc333dbebacb43084ae4d30f3`; the
   other four files reproduce the first-draft hashes exactly).
-- Provenance label: **"GLM 5.3 first draft + Sol 6.1 repair"** (the repair is
-  committed separately from the first draft and is never labeled GLM-only;
+- Provenance label: **"GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair"** (the repair is
+  committed separately from the first draft and is never labeled ZCode-only;
   continuation session model `glm-5.3-flash-free`).
 - Docker repair-mode verifier run: **RECORDED** (see next section). No second
   repair is authorized or attempted.
