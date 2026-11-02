@@ -1,0 +1,171 @@
+# One owner-authorized, NON-PAID, synthetic-only GitHub artifact service exercise.
+# Never map model credentials, use real candidates, or load an owner private age identity.
+name: MMP-122 one-shot synthetic artifact transport
+on:
+  push:
+    branches:
+      - test/mmp122-synthetic-transport-once
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  synthetic-transport:
+    if: >-
+      ${{ github.repository == 'Meta-Project2026/Metamorph' &&
+      github.ref == 'refs/heads/test/mmp122-synthetic-transport-once' &&
+      github.run_attempt == 1 &&
+      github.event.head_commit.message == 'MMP122_SINGLE_AUTHORIZED_SYNTHETIC_TRANSPORT' }
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Create verified age ciphertext of public synthetic test text (ephemeral TEST key)
+        id: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -m 700 "$RUNNER_TEMP/mmp122-age" "$RUNNER_TEMP/mmp122-payload" "$RUNNER_TEMP/mmp122-readback"
+          curl --fail --location --silent --show-error --retry 0 --max-time 60 --proto '=https' --tlsv1.2 \
+            'https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz' \
+            --output "$RUNNER_TEMP/mmp122-age.tar.gz"
+          printf '%s  %s\n' \
+            'cbe24006683f8eb669266162894b9a522a1af52f2665fbc63a4bb032ed26ac10' \
+            "$RUNNER_TEMP/mmp122-age.tar.gz" | sha256sum --check --status
+          tar -xzf "$RUNNER_TEMP/mmp122-age.tar.gz" -C "$RUNNER_TEMP/mmp122-age" \
+            --strip-components=1 age/age age/age-keygen age/LICENSE
+          printf '%s  %s\n' \
+            'eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c' \
+            "$RUNNER_TEMP/mmp122-age/age" | sha256sum --check --status
+          printf '%s  %s\n' \
+            '0a0009db842259d6717f7eeb30acb6b90d2a2eb924c6acd0a0db0ca1f1537899' \
+            "$RUNNER_TEMP/mmp122-age/age-keygen" | sha256sum --check --status
+          "$RUNNER_TEMP/mmp122-age/age" --version | grep -Fx 'v1.3.2' >/dev/null
+          "$RUNNER_TEMP/mmp122-age/age-keygen" --output "$RUNNER_TEMP/mmp122-test-identity" >/dev/null 2>&1
+          chmod 600 "$RUNNER_TEMP/mmp122-test-identity"
+          recipient=$("$RUNNER_TEMP/mmp122-age/age-keygen" -y "$RUNNER_TEMP/mmp122-test-identity")
+          printf '%s\n' 'MMP-122 PUBLIC SYNTHETIC TRANSPORT TEST ONLY; NO SOURCE OR SECRETS' \
+            > "$RUNNER_TEMP/mmp122-test-plaintext"
+          "$RUNNER_TEMP/mmp122-age/age" --encrypt --recipient "$recipient" \
+            --output "$RUNNER_TEMP/mmp122-payload/candidate.age" \
+            "$RUNNER_TEMP/mmp122-test-plaintext"
+          chmod 600 "$RUNNER_TEMP/mmp122-payload/candidate.age"
+          test "$(head -c 22 "$RUNNER_TEMP/mmp122-payload/candidate.age")" = 'age-encryption.org/v1'
+          printf 'sha256=%s\n' "$(sha256sum "$RUNNER_TEMP/mmp122-payload/candidate.age" | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+          printf 'bytes=%s\n' "$(stat -c '%s' "$RUNNER_TEMP/mmp122-payload/candidate.age")" >> "$GITHUB_OUTPUT"
+          rm -f "$RUNNER_TEMP/mmp122-test-identity" "$RUNNER_TEMP/mmp122-test-plaintext"
+          echo 'TEST_AGE_CREATED: only synthetic ciphertext; key not uploaded'
+
+      - name: Upload exactly one harmless TEST ciphertext (7 days)
+        id: custody_upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmp122-synthetic-${{ github.run_id }-1
+          path: ${{ runner.temp }/mmp122-payload/candidate.age
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      - name: Download uploaded artifact by exact returned ID
+        id: custody_download
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ steps.custody_upload.outputs.artifact-id }
+          path: ${{ runner.temp }/mmp122-readback
+          merge-multiple: true
+
+      - name: Verify actual GitHub artifact and run metadata plus exact ciphertext readback
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }
+          TEST_ARTIFACT_ID: ${{ steps.custody_upload.outputs.artifact-id }
+          TEST_ARCHIVE_SHA: ${{ steps.custody_upload.outputs.artifact-digest }
+          EXPECTED_CIPHERTEXT_SHA: ${{ steps.source.outputs.sha256 }
+          EXPECTED_CIPHERTEXT_BYTES: ${{ steps.source.outputs.bytes }
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import { readFileSync, readdirSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { join } from 'node:path';
+          import assert from 'node:assert/strict';
+
+          const e = process.env;
+          const repo = 'Meta-Project2026/Metamorph';
+          const expectedPath = '.github/workflows/mmp122-synthetic-transport.yml';
+          assert.equal(e.GITHUB_REPOSITORY, repo);
+          assert.equal(e.GITHUB_EVENT_NAME, 'push');
+          assert.equal(e.GITHUB_REF, 'refs/heads/test/mmp122-synthetic-transport-once');
+          assert.equal(e.GITHUB_RUN_ATTEMPT, '1');
+          assert.match(e.GITHUB_SHA, /^[a-f0-9]{40}$/);
+          assert.match(e.TEST_ARTIFACT_ID, /^[1-9][0-9]*$/);
+          assert.match(e.TEST_ARCHIVE_SHA, /^sha256:[a-f0-9]{64}$/);
+          assert.match(e.EXPECTED_CIPHERTEXT_SHA, /^[a-f0-9]{64}$/);
+          assert.match(e.EXPECTED_CIPHERTEXT_BYTES, /^[1-9][0-9]*$/);
+          const sourceDir = join(e.RUNNER_TEMP, 'mmp122-payload');
+          const readbackDir = join(e.RUNNER_TEMP, 'mmp122-readback');
+          assert.deepEqual(readdirSync(sourceDir), ['candidate.age']);
+          assert.deepEqual(readdirSync(readbackDir), ['candidate.age']);
+          const original = readFileSync(join(sourceDir, 'candidate.age'));
+          const downloaded = readFileSync(join(readbackDir, 'candidate.age'));
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          assert.equal(original.length, Number(e.EXPECTED_CIPHERTEXT_BYTES));
+          assert.equal(original.length, downloaded.length);
+          assert.equal(hash(original), e.EXPECTED_CIPHERTEXT_SHA);
+          assert.equal(hash(downloaded), hash(original));
+          assert.equal(downloaded.subarray(0, 22).toString('utf8'), 'age-encryption.org/v1\n');
+          const mutated = Buffer.from(downloaded);
+          mutated[mutated.length - 1] ^= 0x01;
+          assert.notEqual(hash(mutated), e.EXPECTED_CIPHERTEXT_SHA);
+
+          async function api(path) {
+            const url = 'https://api.github.com/repos/' + repo + '/actions/' + path;
+            const response = await fetch(url, {
+              redirect: 'error',
+              signal: AbortSignal.timeout(15000),
+              headers: {
+                authorization: 'Bearer ' + e.GH_TOKEN,
+                accept: 'application/vnd.github+json',
+                'X-GitHub-Api-Version': '2022-11-28',
+              },
+            });
+            assert.equal(response.ok, true, 'GITHUB_METADATA_UNAVAILABLE');
+            const value = await response.text();
+            assert.ok(value.length < 65536, 'METADATA_SIZE');
+            return JSON.parse(value);
+          }
+          const artifact = await api('artifacts/' + e.TEST_ARTIFACT_ID);
+          const run = await api('runs/' + e.GITHUB_RUN_ID);
+          assert.equal(String(artifact.id), e.TEST_ARTIFACT_ID);
+          assert.equal(artifact.name, 'mmp122-synthetic-' + e.GITHUB_RUN_ID + '-1');
+          assert.equal(artifact.expired, false);
+          assert.equal(artifact.digest, e.TEST_ARCHIVE_SHA);
+          assert.ok(artifact.size_in_bytes > 100);
+          assert.equal(String(artifact.workflow_run.id), e.GITHUB_RUN_ID);
+          assert.equal(artifact.workflow_run.head_sha, e.GITHUB_SHA);
+          assert.equal(artifact.workflow_run.repository_id, artifact.workflow_run.head_repository_id);
+          assert.equal(String(run.id), e.GITHUB_RUN_ID);
+          assert.equal(run.head_sha, e.GITHUB_SHA);
+          assert.equal(run.run_attempt, 1);
+          assert.equal(run.event, 'push');
+          assert.equal(run.path, expectedPath);
+          assert.equal(run.head_branch, 'test/mmp122-synthetic-transport-once');
+          assert.equal(run.repository.full_name, repo);
+          assert.equal(run.head_repository.full_name, repo);
+          assert.equal(artifact.workflow_run.repository_id, run.repository.id);
+          console.log('MMP122_GITHUB_ARTIFACT_TRANSPORT_PASS');
+          console.log(JSON.stringify({
+            format: 'mmp122-synthetic-transport-v1',
+            status: 'PASS',
+            verification: 'SYNTHETIC_ONLY',
+            runId: e.GITHUB_RUN_ID,
+            headSha: e.GITHUB_SHA,
+            artifactId: e.TEST_ARTIFACT_ID,
+            archiveDigest: e.TEST_ARCHIVE_SHA,
+            ciphertextSha256: hash(downloaded),
+            ciphertextBytes: downloaded.length,
+            testIdentity: 'EPHEMERAL_TEST_ONLY_NOT_UPLOADED',
+            modelRequests: 0,
+            product: 'NOT_ESTABLISHED',
+          }));
+          NODE
