@@ -44,8 +44,8 @@ PR #117 was independently accepted for scoped merge and merged; that acceptance
 remains distinct from production operational readiness. The current
 [offline operational gate review](operational-gates-review.md) audits
 main bb8f548bae35f9add0402c855da0cd247a124cf6 and records the remaining decisions.
-**Offline crypto/capture/cleanup controls: PASS** (see validation.md and recorded real
-Linux evidence). **End-to-end durable custody and production/paid readiness: NO_GO.**
+**Archived Linux age/capture/cleanup report: 3/3 PASS; NOT_RUN in this review.**
+See validation.md for executor reports and separate current offline tests. **End-to-end durable custody and production/paid readiness: NO_GO.**
 Full production generate/capture/transport/readback/Oracle E2E and actual owner-key
 restore remain NOT_RUN and require distinct authorization/owner action. Separate
 MMP122 transport evidence is not full production execution.
