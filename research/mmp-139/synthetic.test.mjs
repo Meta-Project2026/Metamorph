@@ -28,7 +28,10 @@ import { PassThrough } from "node:stream";
 import test from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { commitPrivate as trustedCommitPrivate } from "../../packages/agent-real/src/custody-files.mjs";
-import { sha256, validateBundle } from "../../packages/target-worker/src/admission.mjs";
+import {
+  sha256,
+  validateBundle,
+} from "../../packages/target-worker/src/admission.mjs";
 import {
   classifyDestination,
   createPrompter,
@@ -78,8 +81,7 @@ const synthetic = selectExportableFiles(SYNTHETIC_FILES);
 assert.equal(synthetic.ok, true);
 // Derive the synthetic oracle from the trusted generation admission, NOT
 // from the exporter under test (that masked MMP-143's production SHA bug).
-const SYNTHETIC_CANDIDATE_SHA =
-  validateBundle(SYNTHETIC_FILES).candidateSha;
+const SYNTHETIC_CANDIDATE_SHA = validateBundle(SYNTHETIC_FILES).candidateSha;
 const TEST_ATTEMPT_ID = "3f0e8d6c-1111-4abc-9def-223344556677";
 const TEST_PINS = Object.freeze({
   runId: "271828",
@@ -431,8 +433,7 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
   );
   const secretSelected = selectExportableFiles([secretFile]);
   assert.equal(secretSelected.ok, true);
-  const secretCandidateSha =
-    validateBundle([secretFile]).candidateSha;
+  const secretCandidateSha = validateBundle([secretFile]).candidateSha;
   assert.equal(
     sha256(JSON.stringify(secretSelected.files)),
     secretCandidateSha,
@@ -446,10 +447,7 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
   const safeSelected = selectExportableFiles([safeFile]);
   assert.equal(safeSelected.ok, true);
   const safeCandidateSha = validateBundle([safeFile]).candidateSha;
-  assert.equal(
-    sha256(JSON.stringify(safeSelected.files)),
-    safeCandidateSha,
-  );
+  assert.equal(sha256(JSON.stringify(safeSelected.files)), safeCandidateSha);
   assert.equal(
     planExport(mockCapsule([safeFile], { candidateSha: safeCandidateSha }), {
       ...TEST_PINS,
