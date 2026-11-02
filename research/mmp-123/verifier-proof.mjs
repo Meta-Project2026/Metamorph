@@ -313,8 +313,17 @@ async function main() {
       run.cases.push(receipt);
       save(join(output, `${receipt.id}.json`), receipt);
     }
-  } catch {
-    // Fixed categorical projection only; the thrown error is never read.
+  } catch (error) {
+    // Bounded private-side investigation aid: the private volume is never
+    // copied out by the harness, and public receipts stay on the fixed
+    // allowlist below, so this console text cannot cross into evidence.
+    console.error(
+      "MMP123_CASE_THROW",
+      String(error?.message ?? "").slice(0, 200),
+      String(error?.stack ?? "").slice(0, 600),
+    );
+    // Fixed categorical projection only; the thrown error is never read
+    // further and no failing case is ever accepted as PASS.
     run.status = "ERROR";
     run.failure = projectFailure();
     process.exitCode = 1;
