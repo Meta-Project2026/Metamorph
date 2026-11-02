@@ -99,7 +99,7 @@ jobs:
           assert.equal(e.GITHUB_RUN_ATTEMPT, '1');
           assert.match(e.GITHUB_SHA, /^[a-f0-9]{40}$/);
           assert.match(e.TEST_ARTIFACT_ID, /^[1-9][0-9]*$/);
-          assert.match(e.TEST_ARCHIVE_SHA, /^sha256:[a-f0-9]{64}$/);
+          assert.match(e.TEST_ARCHIVE_SHA, /^[a-f0-9]{64}$/);
           assert.match(e.EXPECTED_CIPHERTEXT_SHA, /^[a-f0-9]{64}$/);
           assert.match(e.EXPECTED_CIPHERTEXT_BYTES, /^[1-9][0-9]*$/);
           const sourceDir = join(e.RUNNER_TEMP, 'mmp122-payload');
@@ -139,7 +139,7 @@ jobs:
           assert.equal(String(artifact.id), e.TEST_ARTIFACT_ID);
           assert.equal(artifact.name, 'mmp122-synthetic-' + e.GITHUB_RUN_ID + '-1');
           assert.equal(artifact.expired, false);
-          assert.equal(artifact.digest, e.TEST_ARCHIVE_SHA);
+          assert.equal(artifact.digest, 'sha256:' + e.TEST_ARCHIVE_SHA);
           assert.ok(artifact.size_in_bytes > 100);
           assert.equal(String(artifact.workflow_run.id), e.GITHUB_RUN_ID);
           assert.equal(artifact.workflow_run.head_sha, e.GITHUB_SHA);
