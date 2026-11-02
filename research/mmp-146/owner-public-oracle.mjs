@@ -59,7 +59,8 @@ try {
   assert.equal(execFileSync('git', ['rev-parse','HEAD'], {cwd:ROOT,encoding:'utf8'}).trim(), REVIEWED_HEAD, 'REVIEWED_SHA_MISMATCH');
   assert.equal(execFileSync('git', ['status','--porcelain'], {cwd:ROOT,encoding:'utf8'}).trim(), '', 'DIRTY_REPOSITORY');
   assert.equal(existsSync(join(ROOT,'packages/oracle/dist/index.js')), true, 'TRUSTED_BUILD_MISSING');
-  assert.equal(existsSync(join(ROOT,'node_modules/@metamorph/agent')), true, 'DEPENDENCIES_MISSING');
+  // pnpm workspace links direct dependencies inside the consumer package, not the root.
+  assert.equal(existsSync(join(ROOT,'packages/agent-real/node_modules/@metamorph/agent/package.json')), true, 'DEPENDENCIES_MISSING');
   assert.equal(existsSync(PRIVATE_RUN), false, 'PRIVATE_RESULT_EXISTS');
   assert.equal(existsSync(PRIVATE_PARENT), true, 'PRIVATE_PARENT_MISSING');
   allClean(PRIVATE_PARENT);
