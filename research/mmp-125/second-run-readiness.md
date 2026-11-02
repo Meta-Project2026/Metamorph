@@ -111,23 +111,27 @@ resources matching `mmp007-*`, `mmp-reference-*`, `mmp-reference-state-*`,
 run-owner verification**. It is invoked by `research/mmp-125/diagnostic.mjs:308-321`
 and `research/mmp-123/verifier-proof.mjs:196-227` against the host Docker socket.
 
-Launcher preflight refuses foreign workers (`launcher-core.psm1:115`), but the
-finalizer itself has no owner check and would delete any matching foreign
-resource that appears or was missed. This is a shared cross-owner isolation
-change: requires explicit Vladimir + Ilia agreement before the second run is
-authorized. The compensating control (dedicated empty daemon for the whole run)
-is only as strong as the daemon exclusivity guarantee, which is **not**
-established on this shared Docker Desktop host.
+Outer launcher cleanup (`launcher-core.psm1:161-207`) _does_ check owner labels
+and the private ledger, but the **nested unchanged finalizer does not**. Any
+matching foreign resource would be deleted. On a shared daemon a second run is
+therefore **BLOCKED** until Vladimir + Ilia jointly approve either a separately
+reviewed ownership-scoped finalizer remediation or verifiably exclusive
+dedicated-daemon isolation for the entire run. This is a decision gate only; no
+shared finalizer edit is made in this research-only PR. The compensating control
+(dedicated empty daemon) is only as strong as the daemon exclusivity guarantee,
+which is **not** established on this shared Docker Desktop host.
 
 ### B2 — outer harness image identity not reproducible
 
 `launcher-core.psm1:212` pins
-`sha256:45e21e7c564b016c68662f87e558840fb86844e9221f6ed1b1c4c298f0bd1a6f`.
-Public registry inspection (read-only, no pull) shows the pinned
-`node:24-bookworm` manifest `e7add2a…` has amd64 manifest `8544b46b…` / config
-`9214e73b…`, not `45e21e…`. The hard-coded ID has no documented reproducible
-build path. Owner must either prebuild/confirm the exact image on the target
-daemon or supply a new reviewed pin before consent.
+`sha256:45e21e7c564b016c68662f87e558840fb86844e9221f6ed1b1c4c298f0bd1a6f`
+as the **derived** harness image. `research/mmp-123/harness/Dockerfile` builds a
+new image _from_ `node:24-bookworm` and installs/copies scripts, so the derived
+digest is expected to differ from the base manifest/config IDs; comparing them
+does not prove an error. The legitimate unresolved gate is **independent
+verification/reproducibility of the derived harness image ID** on the proposed
+host: owner must prebuild or confirm that exact image is available (and
+reproducible from the reviewed recipe) before consent.
 
 ### B3 — PowerShell 7 absent on this host
 
@@ -169,14 +173,21 @@ Biome check on `research/mmp-125`: PASS.
 
 - **New** unique scratch root in a trusted location (not the consumed
   `C:/Metamorph/.oracle-evidence/mmp125/authorized-once-20261102`).
-- **New** host UUID; `AuthorizedHead` = `bb8f548bae35f9add0402c855da0cd247a124cf6`.
-- Exact prepared command (text only):
+- **New** host UUID; `AuthorizedHead` = `<POST_MERGE_IMPLEMENTATION_SHA>` (non-executable
+  template placeholder). `bb8f548bae35f9add0402c855da0cd247a124cf6` is retained only as
+  the **historical evidence snapshot** (pre-PR #132 main); it must **not** be used as an
+  execution SHA because it predates the v2 audit/pins and would fail `Assert-Source`
+  before Docker.
+- Exact prepared command (non-executable template only; requires an independently
+  verified clean checkout, a fresh audit and a brand-new explicitly approved owner card):
 
   ```
   pwsh -NoProfile -File research/mmp-125/Invoke-Diagnostic.ps1 `
     -ScratchRoot <NEW_TRUSTED_SCRATCH> `
-    -AuthorizedHead bb8f548bae35f9add0402c855da0cd247a124cf6
+    -AuthorizedHead <POST_MERGE_IMPLEMENTATION_SHA>
   ```
+
+  No pre-approved runnable command exists before that gate.
 - 20-minute outer wall clock + 60-second cleanup; 4GiB/512-PID outer envelope;
   unchanged worker limits.
 - Preflight: OS/arch, image identity, empty foreign-worker inventory, owned-volume
@@ -193,7 +204,8 @@ Biome check on `research/mmp-125`: PASS.
 
 ```
 MMP-125 SECOND-RUN AUTHORIZATION CARD (UNSIGNED — NOT YET AUTHORIZED)
-- Git SHA (reviewed head): bb8f548bae35f9add0402c855da0cd247a124cf6
+- Git SHA (reviewed head): <POST_MERGE_IMPLEMENTATION_SHA> (non-executable template;
+  bb8f548bae35f9add0402c855da0cd247a124cf6 is historical evidence only)
 - Plan SHA: <fill after PR merge / exact reviewed commit>
 - Candidate SHA-256: 0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1
 - Source SHA-256 (archive): 32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4
@@ -206,8 +218,13 @@ MMP-125 SECOND-RUN AUTHORIZATION CARD (UNSIGNED — NOT YET AUTHORIZED)
   one attempt (preflight, owned volume/container create/run/poll/copy, cleanup,
   final inventory). No image pull, no second attempt, no daemon restart by agent.
 - Attempt limit: exactly 1
-- Private data/cleanup boundary: owned labels + private ledger only; no broad
-  pruning; null (not zero) when inventory unavailable
+- Private data/cleanup boundary: outer launcher uses owned labels + private
+  ledger only; the nested workshop finalizer (packages/differential/src/
+  workshop-finalizer.mjs) still deletes by broad name prefix WITHOUT owner-label
+  verification. On a shared daemon this makes a second run BLOCKED until Vladimir
+  + Ilia jointly approve a separately reviewed ownership-scoped finalizer fix or
+  prove exclusive dedicated-daemon isolation for the entire run. Null (not zero)
+  when inventory unavailable.
 - Stop on: Docker unavailable, foreign resources, head/pin drift, wrong arch,
   mismatched image, incomplete trace, unverified cleanup
 - Required: NEW owner consent AFTER independent review. Generic approval or
