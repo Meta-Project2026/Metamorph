@@ -122,11 +122,12 @@ first-draft record is frozen and every fact above is unchanged.
   **self-reported, not independently provable**.
 - Continuation, independent re-verification, harness authoring, the single
   repair unit (committed separately, see below) and this record: the OpenCode
-  continuation
-  session. The MMP-123 task card requested **sol 6.1**, but the actual OpenCode session reported **GLM 5.3 Flash Free** (`glm-5.3-flash-free`, provider `opencode`). No attested Sol 6.1 execution was observed; the task-card assignment must not be treated as actual model identity. Same-family
-  continuation is explicitly permitted by the card as long as the
-  **first-draft origin GLM 5.3 (ZCode) is preserved** and later work is never
-  labeled GLM-only. Platform-level model independence beyond these labels is
+  continuation session. The task card requested **Sol 6.1**, but the reported
+  runtime model was **GLM 5.3 Flash Free** (`glm-5.3-flash-free`, provider
+  `opencode`). Actual Sol 6.1 execution is **NOT_VERIFIED**, and a task-card
+  model assignment cannot establish it. The ZCode first-draft origin is
+  preserved, but the continuation is a separate agent session and must not
+  be called ZCode-first-draft-only. Platform-level model independence is
   **NOT_VERIFIED**.
 - Exactly one post-freeze repair has been committed, in a separate directory
   and separate commit, labeled **"GLM 5.3 (ZCode) first draft + OpenCode-reported glm-5.3-flash-free repair"**
@@ -190,11 +191,11 @@ copied research-locally to `research/mmp-123/harness/`:
 
 ## Post-freeze single repair record (OpenCode continuation)
 
-One repair unit is authorized by the task card. It was produced by the
-OpenCode continuation session (model `glm-5.3-flash-free`; harness-level
-designation **Sol 6.1**), located in `research/mmp-123/repair-candidate/`,
-committed separately (`79440b8`), and labeled **"GLM 5.3 first draft +
-Sol 6.1 repair"** — never ZCode-first-draft-only:
+One repair unit was authorized by the task card. It was produced by an
+OpenCode continuation session (reported model `glm-5.3-flash-free`, **not an
+attested Sol 6.1 session**), located in `research/mmp-123/repair-candidate/`,
+committed separately (`79440b8`), and attributed as **"GLM 5.3 (ZCode)
+first draft + OpenCode-reported glm-5.3-flash-free repair"**:
 
 - **REPAIR_CANDIDATE_SHA**
   `0cf5ba0bb22fd1d335b3d061b0a9b258d7ac660f3038e1e651ddaad1262d03c1`,
@@ -235,4 +236,13 @@ Sol 6.1 repair"** — never ZCode-first-draft-only:
 
 ## Independent reviewer attribution correction (2026-11-02)
 
-The original task card **requested** Sol 6.1 for the continuation, but the continuation's reported runtime model was **`glm-5.3-flash-free` via OpenCode**, not an attested Sol 6.1 session. Any prior label `Sol 6.1 repair` must be read as a **historical misattribution**. The defensible label is **GLM 5.3 (ZCode) first draft + OpenCode-reported `glm-5.3-flash-free` repair**. Provider-platform independent model attestation remains NOT_VERIFIED. The recorded case execution discriminator `REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT_WITH_SOL_REPAIR` is preserved verbatim in committed run receipts and driver for historical integrity, **not as evidence Sol executed**. Frozen candidate bytes, repaired candidate bytes, original run-head evidence and gate outcomes are unchanged; no new inference or Docker rerun is implied.
+The original task requested Sol 6.1, but the recorded OpenCode runtime model
+was `glm-5.3-flash-free`. The historical description "Sol 6.1 repair" is
+therefore **unverified** and should not be used as a model attribution.
+
+For historical integrity, the receipt filenames and their original discriminator
+`REAL_DOCKER_UNCHANGED_VERIFIER_GLM_FIRST_DRAFT_WITH_SOL_REPAIR` remain
+unchanged. They document the **same** separate repair run, but the discriminator
+does not establish which foundation model executed it. The frozen source, the
+one-unit repair, the original evidence SHA and all Oracle gate verdicts are
+unchanged. No additional model call or Docker rerun was performed.
