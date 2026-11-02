@@ -72,9 +72,16 @@ for volume in $VOLUMES; do
   CREATED="$CREATED $volume"
 done
 
-# Windows/Git-Bash path conversion for the repository mount is intentionally
-# left enabled on the primary run (no MSYS_NO_PATHCONV here).
-if docker run --rm --name mmp123-harness \
+# Windows/Git-Bash pass through docker.exe arguments; POSIX-looking mount
+# strings would otherwise be rewritten into Windows path lists (verified
+# pre-run: the engine socket and repo mounts are destroyed without this).
+# The repository bind source is translated explicitly so the same line also
+# works on a plain Linux host with no cygpath.
+REPO_MOUNT="$PWD"
+if command -v cygpath >/dev/null 2>&1; then
+  REPO_MOUNT=$(cygpath -wm "$PWD")
+fi
+MSYS_NO_PATHCONV=1 docker run --rm --name mmp123-harness \
   --network bridge \
   --pids-limit 512 \
   --memory 4g \
@@ -82,7 +89,7 @@ if docker run --rm --name mmp123-harness \
   -v "mmp123-work:/var/lib/docker/volumes/mmp123-work/_data" \
   -v "mmp123-private:/var/lib/docker/volumes/mmp123-private/_data" \
   -v "mmp123-output:/var/lib/docker/volumes/mmp123-output/_data" \
-  -v "$(pwd):/repo:ro" \
+  -v "$REPO_MOUNT:/repo:ro" \
   -e AGENT_HEAD_SHA \
   -e MMP123_RUN_ID="$RUN_ID" \
   -e MMP123_PRIVATE_PARENT=/var/lib/docker/volumes/mmp123-private/_data \
