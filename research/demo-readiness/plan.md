@@ -96,3 +96,41 @@ PROVENANCE narration with 90-second / ~4-minute target pacing.
   smoke; results recorded in the delivery PR.
 - [ ] Independent ChatGPT review; leave PR open, no self-merge.
 - [ ] Human timed 90-second / ~4-minute and disconnected-laptop rehearsal: NOT_RUN.
+
+## MMP-140 — presentation refinement (2026-11-02)
+
+Base: freshly fetched `origin/main@d31711f612e14373308fa4f3a220b142567f2004`.
+Dedicated managed worktree and branch `codex/mmp140-demo-ui`. Existing milestones
+above remain historical. Authority: [issue #140](https://github.com/Meta-Project2026/Metamorph/issues/140).
+All changes stay in `research/demo-readiness/`; no shared API decision is needed.
+
+Observed before: a long forensic page with similar visual weight throughout;
+four outcomes and their differing scope were hard to scan, especially on mobile.
+Design: restrained violet/ink/paper palette, product proposition and dark acceptance
+panel first, an explanatory five-stage pipeline, then a manually operated story.
+Four outcome cards provide comparison counts; one selected detail panel reduces
+density. All six gate rows remain available in an expandable matrix, with original
+identities and JSON on demand. Native buttons use pressed/current state and visible
+keyboard focus. Failures and uncertainty keep explicit labels and equal visibility.
+
+Screen flow: product/acceptance → conceptual pipeline → six manual chapters →
+load pinned public receipts → A/B/C/D selection → matrix/identities/JSON → acceptance.
+Narration is available without loading; its note identifies missing evidence.
+Receipt-derived overview and details appear only after the existing atomic load.
+Reset clears both. There is no auto-play, live progress, backend or network service.
+Historical A–D end at 1 November; later run 41505679809 is explicitly outside scope.
+
+- [x] Refresh main; inspect policy, foundation, viewer, adapters, pins and controls.
+- [x] Inspect real baseline in Chrome desktop/mobile; capture before screenshots.
+- [x] Implement product-first hierarchy, pipeline, chapters, focused tracks and matrix.
+- [x] Preserve exact receipts, all adapters/pins, server allowlist/CSP and negative tests.
+- [x] Browser smoke: all tracks, picker, keyboard, JSON, 1440/768/390, malformed/
+  forged/mixed input, atomic error and stale-load controls, declaration preview.
+- [x] Record commands and screenshots; document 90-second / 3–5-minute target slots
+  and fallback. See [VALIDATION-140.md](VALIDATION-140.md).
+- [ ] Independent exact-SHA ChatGPT review after push; no self-approval or merge.
+- [ ] Human timed rehearsal, screen-reader audit and disconnected laptop: NOT_RUN.
+
+No paid request, Docker, candidate execution, private/G4 inputs, custody, Oracle,
+production workflow, dependency, lockfile or source/pin change is authorized here.
+Live integration and fresh evidence ingestion remain separate scoped decisions.
