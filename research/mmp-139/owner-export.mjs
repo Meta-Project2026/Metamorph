@@ -198,7 +198,13 @@ export function planExport(capsule, pins = EXPORT_PINS) {
   if (!selected.ok) throw REJECTED;
   if (sha256(JSON.stringify(selected.files)) !== pins.candidateSha)
     throw REJECTED;
-  for (const file of selected.files) rejectSecrets(file.content);
+  for (const file of selected.files) {
+    try {
+      rejectSecrets(file.content);
+    } catch {
+      throw REJECTED;
+    }
+  }
   const manifest = {
     format: MANIFEST_FORMAT,
     label: MANIFEST_LABEL,
