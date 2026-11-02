@@ -410,10 +410,10 @@ test("planExport enforces identity pins, attempt id, structure and secret scan",
   assert.equal(safeSelected.ok, true);
   const safeCandidateSha = sha256(JSON.stringify(safeSelected.files));
   assert.equal(
-    planExport(
-      mockCapsule([safeFile], { candidateSha: safeCandidateSha }),
-      { ...TEST_PINS, candidateSha: safeCandidateSha },
-    ).manifest.candidateSha,
+    planExport(mockCapsule([safeFile], { candidateSha: safeCandidateSha }), {
+      ...TEST_PINS,
+      candidateSha: safeCandidateSha,
+    }).manifest.candidateSha,
     safeCandidateSha,
   );
 });
