@@ -851,8 +851,10 @@ export const repairedModelOutput = 2;
         repairFixture.artifact.id !== staged.fixture.artifact.id,
     );
     identity.stageArtifactProvenance(repairFixture);
+    // The failed real capture already created the repair spool (the collector
+    // creates it before encryption); only its ownership is re-checked here.
     const repairSpool = join(env.directory, "mmp115-custody-repair");
-    privateDirectory(repairSpool, true);
+    privateDirectory(repairSpool);
     commitPrivate(
       join(repairSpool, "candidate.age"),
       repairBytes,
