@@ -24,6 +24,10 @@ import { MANIFEST_SHA256, SOURCE } from "@metamorph/oracle";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import { publicRepairDecision } from "../src/autonomous-repair.mjs";
 import {
+  consumeOraclePermit,
+  requireStoredCheckpoint,
+} from "../src/custody-checkpoint.mjs";
+import {
   CUSTODY,
   CUSTODY_LICENSE,
   receiptFor,
