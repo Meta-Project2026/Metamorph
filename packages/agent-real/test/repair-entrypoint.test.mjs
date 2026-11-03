@@ -913,8 +913,14 @@ export const repairedModelOutput = 2;
       staged.fixture.ack.artifactId,
     );
 
-    // Foreign candidate in the recorded trial: refused before any send.
+    // Foreign candidate in the recorded trial: refused before any send. The
+    // production step refuses a second invocation via no-clobber outputs, so
+    // this evaluation clears the send-receipt directory first.
     writeTrial({ ...rebound(), candidateSha: "f".repeat(64) });
+    rmSync(join(output, "repair-send-receipts"), {
+      recursive: true,
+      force: true,
+    });
     const before = repairCalls.length;
     await runRepairSend(process.env);
     assert.equal(repairCalls.length, before);
