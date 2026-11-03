@@ -1,4 +1,5 @@
 // Trusted GitHub metadata only. This module never reads a Meta credential.
+import { requireMigrationMode } from "./autonomous-repair-policy.mjs";
 export const META_REPOSITORY = "Meta-Project2026/Metamorph";
 export const META_OWNERS = Object.freeze({
   barbalatv: "85129726",
@@ -19,6 +20,7 @@ export function validateWorkflowIdentity(env, head, inputs, paid = false) {
   );
   gate(Object.hasOwn(META_OWNERS, env.GITHUB_ACTOR), "ACTOR_BLOCKED");
   if (paid) {
+    requireMigrationMode(inputs.execution_mode);
     gate(
       env.GITHUB_ACTOR_ID === META_OWNERS[env.GITHUB_ACTOR] &&
         env.GITHUB_RUN_ATTEMPT === "1" &&
