@@ -86,7 +86,9 @@ const result = await runSyntheticAutonomousRepair({
     const verified = JSON.parse(readFileSync(report, "utf8"));
     verifications.push({ candidateSha, publicG1: verified.publicG1, publicG2: verified.publicG2,
       publicG3: verified.publicG3, coverage: verified.attempts[0]?.coverage ?? null,
-      cleanup: verified.cleanup, blockers: verified.blockers });
+      cleanup: verified.cleanup, blockers: verified.blockers,
+      // Already declassified by the unchanged publicAttempt; no raw trace/source.
+      attempts: verified.attempts });
     return verified;
   },
   cleanup: async () => {
