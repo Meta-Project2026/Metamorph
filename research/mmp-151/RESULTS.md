@@ -13,7 +13,8 @@ Main subsequently advanced to `9021c603fba4efb1b28421cc592adb35bfebfbf1` with
 unrelated demo documentation/screenshots; no overlap with this patch.
 Initial implementation: `30f44cb1bb31d15fcfb784a8f8f6cba8b4aa69de`.
 Smoke entrypoint fix: `c493b7e16f02c390c61a4ebb5f21181d2b8f797f`.
-Current tested smoke code: `6c3f3ae77c2e5a43d553c176035e606790b6516a`.
+Receipt compatibility fix and successful real Docker smoke source:
+`8d43e5d950f73626eb39bdbf5aa5d88651106cdb`.
 Later documentation/evidence commits do not retroactively change a receipt's SHA.
 
 ## Delivered scope and remaining decision
@@ -104,7 +105,7 @@ Windows Node 24.21.0 / pnpm 11.25.0. Linux harness Node 24.22.2, Docker 29.9.2.
 | `pnpm typecheck` | 0 | Existing full workspace command |
 | `pnpm test` (outside Windows filesystem sandbox) | 0 | 800 tests: 690 passed, 110 platform skips, 0 failures |
 | `pnpm build` | 0 | Existing full workspace command |
-| `node --test packages/agent-real/test/autonomous-repair.test.mjs` | 0 | 17/17, Windows and disposable Linux; 0 skips |
+| `node --test packages/agent-real/test/autonomous-repair.test.mjs` | 0 | Initial 17/17 on Windows and disposable Linux; 18/18 on Windows after the real-receipt G4 regression was added; updated suite also passed hosted Linux Node 22/24 |
 | Initial development run of those tests | 1 | 12/17 passed; 5 failures exposed missing evidence references in receipt projection; fixed without changing verifier/contracts/tests to hide failure |
 | Focused new + paid + migration + wire + custody + composition tests inside Windows sandbox | 1 | 158 passed, 6 skipped, 2 existing hardlink tests failed with sandbox EPERM; full unsandboxed suite subsequently passed |
 | `node research/mmp-069/check-syntax.mjs` | 0 | 112 modules checked without execution |
@@ -127,13 +128,13 @@ Node 22/24. Node 24 root suite: 797 passed, 3 expected platform/privilege skips.
 The overall run failed at the existing research inventory check because this new
 manual directory had not been registered. Commit `772be02` added its inventory
 entry without changing CI commands or enabling Docker in CI. Latest hosted status
-on `6c3f3ae` is **PASS** for both Node 22/24:
-[Fast CI run 41562089447](https://github.com/Meta-Project2026/Metamorph/actions/runs/41562089447).
+on the successful smoke source `8d43e5d` is **PASS** for both Node 22/24:
+[Fast CI run 41563699282](https://github.com/Meta-Project2026/Metamorph/actions/runs/41563699282).
 The code tests and overall CI result are separate facts from Docker acceptance.
 
-## Actual local Docker outcome: ERROR, positive acceptance not established
+## Actual local Docker outcome: final SYNTHETIC FAIL -> repair -> PASS
 
-All three invocations used
+All invocations used
 `research/mmp-151/Invoke-DockerSmoke.ps1 -ScratchRoot <outside-repository-temp>`.
 No paid provider transport was available to any of them.
 
@@ -142,25 +143,40 @@ No paid provider transport was available to any of them.
 | `30f44cb1bb31d15fcfb784a8f8f6cba8b4aa69de` | 1 | 0 / 0 | Launcher selected the previous harness entrypoint; admission rejected before smoke execution. Corrected in `c493b7e`. |
 | `c493b7e16f02c390c61a4ebb5f21181d2b8f797f` | 1 | 1 / 0 | Real public Oracle detected HTTP_JSON_TYPE; only 6/17 HTTP and 7/20 SQLite executed before ENVIRONMENT_ERROR/BUILD_FAILED. No repair dispatched. |
 | `6c3f3ae77c2e5a43d553c176035e606790b6516a` | 1 | 1 / 0 | Real worker typecheck phase attempted, G1/G2/G3 ERROR with ENVIRONMENT_ERROR/BUILD_FAILED; 0/17 HTTP, 0/20 SQLite. Sanitized compiler diagnostics unavailable. No repair dispatched. |
+| `af7f8e34159fbb905386bb89893fe5992fb24d15` | 1 | 1 / 1 actually completed; controller incorrectly reported 0 | Sequential run completed G1 PASS and genuine G2/G3 FAIL HTTP_JSON_TYPE with 17/17 HTTP, 20/20 SQLite and normal cleanup. The new controller incorrectly rejected per-pair G4 INCONCLUSIVE and stopped before repair. Fixed in `8d43e5d`; synthetic fixture corrected and regression controls added. |
+| `8d43e5d950f73626eb39bdbf5aa5d88651106cdb` | 0 | 2 / 2 | Original boolean mutant: G1 PASS, G2/G3 FAIL HTTP_JSON_TYPE; one allowlisted repair request with its own complete previous changes; separate repaired candidate: G1/G2/G3 PASS. Each verification executed 6 build checks, 17 HTTP, 20 SQLite and 27 public controls. |
 
-Both actual controller runs completed pinned age encryption and separate TEST-key
-decrypt/readback before their Oracle invocation. Both retained the complete USD
-0.828444 simulated reservation, reported `VERIFICATION_INCOMPLETE`, kept estimated
-mock usage USD 0.001675 separate from unknown charged cost, and ended with
+All actual controller runs completed pinned age encryption and separate TEST-key
+decrypt/readback before each Oracle invocation. They retained the complete USD
+0.828444 simulated reservation and ended with
 `VERIFIED_ZERO_RESOURCES` (0 containers, 0 volumes, 0 emergency removals).
+The successful run reported 2 simulated sends, 1 repair, 2 completed independent
+Oracle verifications and estimated mock usage USD 0.00335. Charged cost remains
+null; actual paid requests are zero. Earlier stopped runs reported
+`VERIFICATION_INCOMPLETE` and estimated mock usage USD 0.001675.
 The outer trusted harness and its three uniquely labeled volumes were removed.
 Final Docker container inventory was empty. Candidate source hash was
-`23b640dabce42a41c3d1b2496d8f6619a55c6af240e7c60a6b63a266f48f5cb5` in both
-runs; they are separate run identities, not repeated requests in a single trial.
+`23b640dabce42a41c3d1b2496d8f6619a55c6af240e7c60a6b63a266f48f5cb5` in all
+controller runs; they are separate run identities, not repeated requests in a single trial.
+The final repaired candidate's independent SHA is
+`34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334`.
+The compact allowlisted receipt is
+[evidence/synthetic-docker-8d43e5d.json](evidence/synthetic-docker-8d43e5d.json).
+Private packs, source plaintext, ciphertext and TEST private keys are not versioned.
 
-The repeated environment/build failure is **ERROR**, not proof that the candidate
+The first two repeated environment/build failures are **ERROR**, not proof that the candidate
 failed TypeScript semantics, not a complete public FAIL, and not a repair success.
-Root cause is not established by the sanitized metadata. The frozen worker's
-limits and Oracle checks were not changed. Full Docker FAIL -> repair -> PASS,
-17/17 + 20/20 on the repaired candidate, and a real model repair remain
-**NOT_ESTABLISHED**. The complete two-attempt positive trace is proven only by the
-explicitly synthetic mock-verifier tests. This acceptance gap remains in the PR;
-the draft is not represented as ready for a paid run.
+Their root cause is not established by the sanitized metadata. The frozen worker's
+limits and Oracle checks were not changed. The final run establishes local
+**SYNTHETIC** Docker FAIL -> repair -> PASS, including 17/17 + 20/20 on the repaired
+candidate. It does not establish a real-model repair, signed repair admission,
+GitHub artifact custody, formal G4 or product acceptance. The draft remains
+NO_GO for a paid run. The earlier complete
+17/20 Oracle FAIL exposed a controller bug, not an environment failure. The saved
+sanitized real receipt passes the corrected checker and yields exactly
+`HTTP_JSON_TYPE`; the new test also rejects missing controls, CONTROL_FAILURE and
+an inappropriate G4 PASS. Original receipts are preserved as reported; the table
+explicitly corrects the controller's earlier verification-count underreport.
 
 ## Changed files and reviewer focus
 
