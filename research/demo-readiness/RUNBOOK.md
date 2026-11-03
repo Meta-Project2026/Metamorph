@@ -1,101 +1,93 @@
-# Operator runbook — MMP-140 recorded demo
+# Operator runbook — five-track recorded demo (MMP-148)
 
-Интерфейс английский, речь русская. Ниже **целевые слоты**, не измеренная
-репетиция. Human timed rehearsal: **NOT_RUN**. Результаты и снимки:
-[VALIDATION-140.md](VALIDATION-140.md).
+Интерфейс английский, речь русская. Временные слоты — **target pacing**, не замер.
+Human timed rehearsal: **NOT_RUN**. [Результаты и screenshots](VALIDATION-148.md).
 
-## Подготовка
+## Запуск и порядок экранов
 
-Нужны checkout с `research/demo-readiness/`, `research/mmp-104/incident.json`,
-Node 22.13+ / 24 и современный браузер. Установка пакетов для показа не нужна.
-Ни ключ, ни Docker, ни GitHub, ни Интернет не используются. Viewer HEAD отличается
-от execution heads, записанных внутри исторических receipts.
+Из checkout этой ветки с Node 22.13+ / 24 и современным браузером:
 
 ```powershell
-Set-Location -LiteralPath '<repository checkout root>'
-node --version
-node --test research/demo-readiness/demo.test.mjs research/demo-readiness/real-ai.test.mjs research/demo-readiness/incident.test.mjs
 node research/demo-readiness/serve.mjs
 ```
 
-Откройте [viewer](http://127.0.0.1:4171/). Сервер слушает только loopback; прямой
-file:// не поддерживается. Если 4171 занят, не завершайте чужой процесс: примените
-текстовый fallback. Для остановки своего сервера — Ctrl+C.
+Откройте [viewer](http://127.0.0.1:4171/), нажмите **Load pinned public receipts**.
+Установка пакетов, Интернет, GitHub, API key, PHP и Docker для показа не нужны.
+Сервер только loopback; file:// не поддерживается. Остановка своего сервера —
+Ctrl+C. Не завершайте чужой процесс, если 4171 занят; используйте fallback.
 
-1. Первый экран: PHP → TypeScript, независимый Oracle, **NOT_ESTABLISHED**.
-2. **From source to evidence**: пять кнопок объясняют концептуальные стадии;
-   подсветка — выбор объяснения, не ход исполнения.
-3. **Evidence desk** → **Load pinned public receipts**. Десять локальных JSON
-   валидируются атомарно: A/B — пять historical, C — четыре original public,
-   D — одна derived allowlisted summary. До успеха результаты не показываются.
-4. Вернитесь к **Guided demo** через навигацию сверху. Выбирайте главы или
-   **Next chapter / Previous**. У A/B/C/D глава выбирает карточку и даёт ссылку
-   **Inspect track …** к подробностям. Переходов по таймеру нет.
-5. Карточки A/B/C/D независимо выбирают подробности. Раскройте **Compare all
-   G0–G4 verdicts & completed comparisons** для шести строк (B — три попытки).
-6. Для вопросов раскройте identities выбранного реального трека. В **Inspect the
-   allowlisted public receipt JSON** выберите `Real AI #81 / trial.json` или
-   `Incident #104 / incident.json`. JSON других загруженных треков тоже доступен;
-   смотрите подпись набора, а не только basename.
-7. Завершите главой **The acceptance gap**. Обновление страницы очищает память;
-   перед следующим показом загрузите набор снова.
+1. Первый экран: PHP → TypeScript и независимый Oracle, PRODUCT NOT_ESTABLISHED.
+   Pipeline-кнопки меняют объяснения, не исполняют стадии.
+2. После атомарной валидации — A–E, 11 публичных inputs: A/B пять historical,
+   C четыре originals, D одна derived summary, E одна versioned projection.
+3. **Guided demo**: семь ручных глав, **Previous / Next chapter** или прямой
+   выбор. Глава A–E выбирает detail panel; **Inspect track …** ведёт к нему.
+   Карточка синхронизирует главу. Таймеров и live progress нет.
+4. Раскройте **Compare all G0–G4 verdicts & completed comparisons**: семь строк
+   (A + три попытки B + C/D/E). Числа — executed comparisons, не pass/route coverage.
+5. Раскройте identities выбранного трека. Для E: JSON inspector →
+   **Real AI #137 / mmp148-track-e-v1.json**. Это public projection, не код кандидата.
+6. Завершите **The acceptance gap**. Refresh очищает память. Viewer HEAD и
+   execution heads receipts — разные identities.
 
-Picker принимает один полный набор: пять JSON непосредственно в `evidence/`,
-четыре из `evidence/real-ai-40900698372/`, единственный `incident.json`, либо один
-`future-model.json` — только declaration preview **NOT_VERIFIED**. Имена
-trial/finalizer совпадают между папками; не смешивайте их. Picker показывает
-только выбранные треки, недоступная глава явно говорит «not loaded».
+Picker принимает один набор: пять JSON в `evidence/`; четыре C в
+`evidence/real-ai-40900698372/`; один D `incident.json`; один E
+`evidence/real-ai-41505679809/mmp148-track-e-v1.json`; либо один
+`future-model.json` — только **NOT_VERIFIED** preview. D/E принимаются отдельно.
+Не смешивайте папки с одинаковыми trial/finalizer basenames. У отсутствующего
+трека глава явно говорит **NOT_LOADED**, например E_NOT_LOADED; это не FAIL или
+INCONCLUSIVE. Narration без загруженных bytes — не evidence.
 
-## 90 секунд — ручной сценарий
+## 90 секунд — семь глав
 
-Целевой темп без auto-play; загрузите receipts до начала речи.
+Receipts загрузите заранее. Целевой темп, не измеренная речь.
 
-| Target | Глава / действие | Речь |
+| Target | Глава | Речь |
 | --- | --- | --- |
-| 0–15s | The premise / первый экран | «Metamorph мигрирует PHP в TypeScript с AI-агентом, а независимый Oracle проверяет сохранение поведения. Это сохранённые результаты; миграция сейчас не запускается. Product NOT_ESTABLISHED». |
-| 15–25s | A · No generation | «A — исторический admission-only снимок: ноль генераций, кандидата нет. Поздние результаты этот снимок не переписывают». |
-| 25–40s | B · Scripted control | «B — Docker-контроль: known-good PASS, намеренная mutation FAIL, scripted repair PASS по G2/G3. По 17 HTTP и 20 SQLite сравнений. Это не ответ AI». |
-| 40–55s | C · Real AI, build FAIL | «C — настоящий ответ модели и созданный кандидат. Генерация PASS, но G1 build FAIL. HTTP 0/17, SQLite 0/20; G2/G3 INCONCLUSIVE. Оригинальные compiler diagnostics UNKNOWN». |
-| 55–80s | D · Verifier ERROR | «D — другой настоящий запуск: генерация PASS, первая пара build PASS. Aggregate G1 INCONCLUSIVE; G2/G3 ERROR. HTTP 0/17 завершено, SQLite 1/20. Это не ноль отправленных запросов. Источник кандидата недоступен, историческая причина UNKNOWN». |
-| 80–90s | The acceptance gap | «Generation PASS и одна build PASS не дают product PASS. G0/G4 INCONCLUSIVE. Новые эксперименты вне этих receipts. Проверяемая миграция ещё не установлена». |
+| 0–15s | The premise | «Metamorph переносит PHP в TypeScript с AI-агентом, а независимый Oracle проверяет поведение. Здесь сохранённые результаты, ничего сейчас не исполняется. Product NOT_ESTABLISHED». |
+| 15–23s | A | «Исторический снимок до admission: ноль генераций, кандидата нет. Поздние результаты его не переписывают». |
+| 23–35s | B | «Docker-контроль: G2/G3 PASS, намеренная mutation FAIL, scripted repair PASS. По 17 HTTP и 20 SQLite сравнений. Это не AI». |
+| 35–45s | C | «Настоящий ответ, но G1 build FAIL. HTTP 0/17, SQLite 0/20; downstream INCONCLUSIVE». |
+| 45–60s | D | «Первая пара build PASS, aggregate G1 INCONCLUSIVE; G2/G3 ERROR. Завершены HTTP 0/17, SQLite 1/20. Историческая причина UNKNOWN». |
+| 60–80s | E | «Три публичных сценария и все шесть typecheck/build IDs прошли. Но G2/G3 FAIL: HTTP JSON types. Выполнены 17/17 и 20/20 сравнений. Проверенные SQLite-снимки совпали в этом manifest; отдельного DB-дефекта не установлено. Точное поле неизвестно». |
+| 80–90s | The acceptance gap | «Прогресс сборки доказан, успешная миграция — нет. G0/G4 INCONCLUSIVE, held-out NOT_RUN, product NOT_ESTABLISHED. Списание неизвестно». |
 
 ## 3–5 минут — расширенный показ
 
 Целевой центр — около четырёх минут; время человека не измерено.
 
-| Target | Экран / действие | Что раскрыть |
+| Target | Экран | Что раскрыть |
 | --- | --- | --- |
-| 0:00–0:35 | Первый экран → pipeline | PHP → агент → TS-кандидат → независимая изоляция → receipts/verdict. Кнопка меняет объяснение, а не запускает стадию. Product NOT_ESTABLISHED. |
-| 0:35–1:05 | A → scope | Historical generation NOT_RUN, candidate/cost null. Публичный MIT car-workshop, source SHA d272170…. Ограниченный SQLite API slice: пять действий, 11 PHP functions; не всё приложение, не route/function coverage. |
-| 1:05–1:45 | B → matrix | Known-good / deliberate mutation / scripted repair: G2/G3 PASS → FAIL → PASS, по 17/17 HTTP и 20/20 SQLite. Числа включают проваленную mutation. G0/G4 INCONCLUSIVE; runtime controls не закрывают formal G4. |
-| 1:45–2:25 | C → details / identities | Run 40900698372, 29 октября: Muse Spark 1.3, один запрос/ответ, generation PASS, G1 FAIL / BUILD_FAILED. G2/G3 INCONCLUSIVE / MISSING_COVERAGE, 0/17 и 0/20. Tokens 5818/9239; estimate USD 0.04653825, charged null. MMP-082 synthetic TS2322 относится к другому кандидату; не выдавайте его за диагностику C. |
-| 2:25–3:20 | D → details / identities | Run 41327197036, 1 ноября: другой head/candidate. Один POST, HTTP 200, generation PASS; per-pair G1 PASS у workshop-business. Aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN; G2/G3 ERROR / VERIFIER_ERROR. Завершены HTTP 0/17, SQLite 1/20 — initial snapshot. Tokens 5985/9870, estimate USD 0.04942875, charged null. Cleanup/finalizer 0/0/0 — отдельный факт. Source и private packs UNAVAILABLE; root cause UNKNOWN; stage classification NOT_RECORDED. |
-| 3:20–4:00 | JSON → The acceptance gap | Сверьте run/head/candidate и естественные FAIL/ERROR. Pin доказывает совпадение bytes с reviewed snapshot; D — derived summary, не новая проверка оригинальных ZIP. G0/G4 INCONCLUSIVE. A–D заканчиваются 1 ноября; #137 / run 41505679809 не включён. Текущая работа #61/#115/#137/#139 отслеживается отдельно, её статус из старого viewer не выводится. |
+| 0:00–0:25 | Первый экран / pipeline | PHP → агент → TS candidate → независимая изоляция → сохранённые verdicts. Кнопки — объяснения, не работающий агент. |
+| 0:25–0:45 | A / scope | Generation NOT_RUN, candidate/cost null. Публичный MIT car-workshop, source d272170…. Пять API actions, 11 PHP functions — ограниченный SQLite API slice, не всё приложение. |
+| 0:45–1:20 | B / matrix | Known-good / mutation / scripted repair: G2/G3 PASS → FAIL → PASS. По HTTP 17/17 и SQLite 20/20, включая failing mutation. Runtime controls не закрывают formal G4. |
+| 1:20–1:50 | C | Run 40900698372, 29 октября: generation PASS, G1 FAIL / BUILD_FAILED. G2/G3 INCONCLUSIVE / MISSING_COVERAGE. Tokens 5818/9239, estimate USD 0.04653825, charged null. Original diagnostics UNKNOWN; MMP-082 synthetic TS2322 — другой кандидат. |
+| 1:50–2:25 | D | Run 41327197036, 1 ноября: generation PASS, workshop-business per-pair G1 PASS, aggregate G1 INCONCLUSIVE / BUILD_NOT_RUN. G2/G3 ERROR / VERIFIER_ERROR, completed HTTP 0/17, SQLite initial 1/20. Ноль завершённых сравнений не означает ноль запросов. Tokens 5985/9870, estimate 0.04942875, charged null. Исторические source UNAVAILABLE, root cause UNKNOWN, stage classification NOT_RECORDED. |
+| 2:25–3:25 | E / gates / metrics | Run 41505679809, 2 ноября: Muse Spark 1.3, один запрос/ответ, HTTP 200. Aggregate G1 PASS по трём сценариям и шести IDs. G2 FAIL по 17 HTTP IDs, G3 FAIL по 20 combined IDs; в каждом сценарии HTTP_JSON_TYPE. G3 включает HTTP findings, поэтому FAIL не доказывает отдельный DB mismatch. Все сравненные initial/step SQLite snapshots совпали в этом manifest. jsonDiff не спускается под kind mismatch: различия в пропущенных поддеревьях не исключены, точное поле/root cause UNCONFIRMED. Tokens 6060/9554, estimate USD 0.0481795, charged null/UNKNOWN. Cleanup/finalizer 0/0/0 — отдельный факт, не migration PASS. |
+| 3:25–4:00 | E identities / JSON / gap | У C/D/E разные run/head/candidate. E — узкий snapshot из самостоятельно полученного original public ZIP: 8733 bytes, все девять members перепроверены. Pin подтверждает identity snapshot, не новую execution или подпись независимого исполнителя. Custody/restore-поля исключены. G0/G4 INCONCLUSIVE, held-out NOT_RUN, PRODUCT NOT_ESTABLISHED. Свежесть ограничена runs до 2 ноября; последующие работы/owner actions — отдельно. |
 
 G0 — independent complete target; G1 — executed build/typecheck; G2 — HTTP contracts;
-G3 — stateful HTTP/typed SQLite parity; G4 — independent controls/held-out isolation.
-Product acceptance требует всех применимых обязательных gates и сценариев
-на точном кандидате. Estimate не равен списанию; null — неизвестно, не $0.
+G3 — stateful HTTP/SQLite parity; G4 — independent controls/held-out isolation.
+Product PASS требует всех применимых обязательных gates и сценариев на точном
+кандидате. Estimate не равен списанию; null — неизвестно, не $0.
 
-## Offline fallback и ошибки
+## Offline fallback и негативный показ
 
 | Условие | Действие |
 | --- | --- |
-| Нет Интернета / GitHub / модели / Docker / ключа | Обычный локальный запуск и десять committed JSON. Браузер не обращается к внешним сервисам. |
-| Corrupt / missing receipt | Результаты и обзор очищаются, NOT_VERIFIED. Восстановите точные bytes из проверенного checkout. Не переименовывайте и не переформатируйте JSON для обхода pinning. |
-| Один трек недоступен | Picker другого полного набора работает отдельно. Объявите, какие треки реально загружены; глава отсутствующего трека — только narration. A/B не заменяют результат C/D. |
-| Нет Node / браузер не работает / порт занят | Откройте committed JSON, README и этот runbook в редакторе. Прочитайте поля; работу UI в этом случае не заявляйте. Screenshots — иллюстрация конкретной проверки, не свежий execution proof. |
-| Попросили root cause / diagnostics | C diagnostics UNKNOWN; D root cause UNKNOWN, source UNAVAILABLE. Не заимствуйте диагностику другого кандидата. |
-| Спрашивают про новую миграцию | Здесь recorded evidence. Live jobs/backend integration и новый receipt требуют отдельного scope/решения и проверенных pins; viewer их не предоставляет. |
+| Нет Интернета / модели / Docker / ключа | Обычный loopback viewer с committed публичными inputs, без внешних запросов страницы. |
+| Corrupt/missing E или другой bundled input | Combined load целиком очищается, NOT_VERIFIED. Нельзя молча показать четыре трека и заявить пять. Восстановите точные bytes из reviewed checkout. |
+| Нужен один доступный трек | Picker полного набора; объявите, что реально загружено. E_NOT_LOADED не трактуется как FAIL/INCONCLUSIVE и не заменяется B PASS. |
+| Нет Node / browser failure / порт занят | Откройте JSON, README и runbook в редакторе; работу UI не заявляйте. Screenshots — конкретный capture, не новая проверка кандидата. |
+| Попросили точный JSON defect | HTTP_JSON_TYPE — установленная категория; точное поле/значения этим snapshot не установлены. Не выдавайте H1/H2 или private observations за receipt. |
+| Попросили owner restore | Это отдельная owner/custody workstream. E не содержит текущего restore-статуса; старые research-поля не переносятся. |
 
-Негативная репетиция: после успешной загрузки выберите только `generation.json` —
-INCOMPLETE_BUNDLE; изменённый `incident.json` — PIN_MISMATCH; D + C вместе —
-MIXED_SELECTION. Во всех случаях нет старых карточек, matrix, gates, identities
-или JSON. **Load pinned public receipts** восстанавливает все четыре трека.
-Шестая глава сохраняет PRODUCT NOT_ESTABLISHED при любом выборе.
+После успеха выберите только C `generation.json` — INCOMPLETE_BUNDLE; изменённый
+E — PIN_MISMATCH; D + E — MIXED_SELECTION. Старые cards, gates, matrix,
+identities, JSON и preview очищаются. **Load pinned public receipts** возвращает
+A–E. Не редактируйте receipt bytes ради зелёного PASS.
 
-Клавиатура: Tab/Shift+Tab по native controls, Enter/Space для кнопок, Enter для
-details; первый Tab — Skip to content. Широкие таблицы прокручиваются внутри
-фокусируемого региона; страница не должна расползаться по горизонтали.
-Полностью отключённый ноутбук, screen reader и человеческую речь по секундомеру
-проверьте отдельно: в текущей работе это NOT_RUN.
+Tab/Shift+Tab — native controls, Enter/Space — кнопки, Enter — details; первый
+Tab — Skip to content. Таблицы прокручиваются внутри фокусируемых регионов.
+Screen reader, fully disconnected laptop и человеческая речь с секундомером
+в текущей работе **NOT_RUN**; scoped browser keyboard/focus smoke описан отдельно.

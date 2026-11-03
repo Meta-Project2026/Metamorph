@@ -134,3 +134,27 @@ Historical A–D end at 1 November; later run 41505679809 is explicitly outside 
 No paid request, Docker, candidate execution, private/G4 inputs, custody, Oracle,
 production workflow, dependency, lockfile or source/pin change is authorized here.
 Live integration and fresh evidence ingestion remain separate scoped decisions.
+
+## MMP-148 — additive public Track E (3 November 2026)
+
+Fresh base f68b75ec0005cb76059f41218452ff57f47d50d6; branch demo/mmp148-track-e,
+independent of screenshot correction #145 / PR #149. Scope demo-readiness only.
+GO: explicit public ZIP 13169804253 and all nine members independently rehashed,
+metadata/run identities and categorical facts reconciled. Original metadata ZIP
+retained unserved; deterministic narrow public projection, new pin-first bounded
+adapter, exact semantic/source/gate/usage/coverage checks. No derived mmp-137
+owner-restore fields, candidate source or private observations enter E.
+
+- [x] Inspect current policy/issues/merged #141, refresh main, separate branches.
+- [x] Verify original public run and nine-member source; document GO/inventory.
+- [x] Preserve A–D bytes/pins/adapters/tests; add E projection/pins/route/controls.
+- [x] Extend existing visual design to A–E, seven manual chapters/matrix rows;
+  scoped G1 PASS, G2/G3 FAIL, SQLite inference bounded to compared manifest.
+- [x] Test atomic/reset/fetch and file-read races, preview/missing-track, keyboard,
+  JSON, responsive widths and real screenshots; record actual commands/exits.
+- [x] Update 90-second / 3–5-minute operator targets, fallback and provenance.
+- [ ] Independent published exact-SHA ChatGPT review; no self-approval/merge.
+- [ ] Human timed, disconnected-laptop and screen-reader rehearsal: NOT_RUN.
+
+Details and limits: VALIDATION-148.md. No live job/API, paid/model request, Docker,
+candidate execution/repair/decryption, private/G4 access or shared API change.

@@ -1,0 +1,106 @@
+{
+  "checks": [
+    "empty state, skip link, keyboard stage selection and visible focus",
+    "all five pinned tracks, seven gate rows, C/D/E outcomes and executed counts",
+    "seven manual chapters, previous/next boundaries and JSON drill-down",
+    "responsive 1440px, A/B/C/D/E and expanded matrix, screenshots",
+    "responsive 768px, A/B/C/D/E and expanded matrix, screenshots",
+    "responsive 390px, A/B/C/D/E and expanded matrix, screenshots",
+    "picker accepts complete historical, C, lone D and lone E sets",
+    "E_NOT_LOADED stays distinct from a loaded FAIL or INCONCLUSIVE",
+    "missing chapter stays narration; future declaration clears trusted overview and stays NOT_VERIFIED",
+    "failed E selection clears prior future preview and trusted DOM",
+    "fail-closed picker: incomplete C, old details and summary cleared",
+    "fail-closed picker: forged D PASS, old details and summary cleared",
+    "fail-closed picker: malformed JSON, old details and summary cleared",
+    "fail-closed picker: mixed D/C, old details and summary cleared",
+    "fail-closed picker: mixed D/E, old details and summary cleared",
+    "fail-closed picker: modified E, old details and summary cleared",
+    "fail-closed picker: unknown filename, old details and summary cleared",
+    "atomic load: replaced D rejects all five tracks and clears old evidence",
+    "bad or missing E fails entire A–E bundled load, without fallback",
+    "stale successful load cannot overwrite newer failed selection",
+    "stale successful E file read cannot overwrite a newer failed selection",
+    "recovery, reduced-motion mode, no JS exceptions or external requests"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "156.0.8078.74",
+  "capturedUtc": "2026-11-03T00:14:29.751Z",
+  "captures": [
+    {
+      "name": "track-e-1440.png",
+      "requestedRegion": "Track E selected details",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 1679,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-1440.png",
+      "requestedRegion": "Evidence desk, A–E loaded, E selected",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 1344,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-1440.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-768.png",
+      "requestedRegion": "Evidence desk, A–E loaded, E selected",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2133,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-768.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-e-390.png",
+      "requestedRegion": "Track E selected details",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 3742,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-390.png",
+      "requestedRegion": "Evidence desk, A–E loaded, E selected",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2426,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-390.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    }
+  ],
+  "humanTimedRehearsal": "NOT_RUN",
+  "screenReaderAudit": "NOT_RUN"
+}

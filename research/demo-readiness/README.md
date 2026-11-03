@@ -2,23 +2,24 @@
 
 [MMP-140](https://github.com/Meta-Project2026/Metamorph/issues/140) improves the
 existing vanilla HTML/CSS/ESM viewer. It presents **PHP → TypeScript with independent
-behavioral verification**, using four recorded public tracks. It is not a live
+behavioral verification**, using five recorded public tracks (A–E). It is not a live
 migration application. **PRODUCT NOT_ESTABLISHED** stays visible before loading
-and throughout the walkthrough. A–D end at 1 November 2026; newer experiments,
-including #137 / run 41505679809, are outside this snapshot. This is not the latest
-complete project state.
+and throughout the walkthrough. A–D end at 1 November; E adds the 2 November 2026
+run 41505679809 from independently retrieved public receipts. This is a recorded
+snapshot, not a live feed or the latest complete project state. Later research,
+owner actions and new experiments remain separate.
 
 The first screen explains the product and acceptance gap; five selectable pipeline
-stages explain the architecture. **Guided Demo** has six manually selected chapters
+stages explain the architecture. **Guided Demo** has seven manually selected chapters
 and Previous/Next buttons, with no timer or simulated execution. After loading,
-four track cards select focused details; expand the comparison matrix for all
+five track cards select focused details; expand the seven-row comparison matrix for all
 G0–G4 rows, identities for exact SHAs, and the JSON inspector for original fields.
 Chapter narration remains clearly separate from loaded, validated evidence.
 An absent track in a picker selection is labelled not loaded.
 
 Design rationale and scope are in [plan.md](plan.md); target narration and fallback
 are in [RUNBOOK.md](RUNBOOK.md). Current executed checks and before/after browser
-screenshots are in [VALIDATION-140.md](VALIDATION-140.md). Target pacing is not a
+screenshots are in [VALIDATION-148.md](VALIDATION-148.md). Target pacing is not a
 measured human rehearsal.
 
 Read-only presentation built for the 2026-10-30 event (historical date), extended on 2026-11-02 with track D. Refs [#118](https://github.com/Meta-Project2026/Metamorph/issues/118), [#85](https://github.com/Meta-Project2026/Metamorph/issues/85), [#71](https://github.com/Meta-Project2026/Metamorph/issues/71), [#61](https://github.com/Meta-Project2026/Metamorph/issues/61), [#81](https://github.com/Meta-Project2026/Metamorph/issues/81), [#104](https://github.com/Meta-Project2026/Metamorph/issues/104).
@@ -30,7 +31,7 @@ node research/demo-readiness/serve.mjs
 ```
 
 Open [the local viewer](http://127.0.0.1:4171/) and click **Load pinned public receipts**.
-Ten exact local receipts load all four tracks. Stop with Ctrl+C. Fixed allowlist,
+Eleven exact local public inputs load all five tracks. Stop with Ctrl+C. Fixed allowlist,
 loopback only (`127.0.0.1:4171`). No API key, Docker, PHP, pnpm install, GitHub,
 Internet or candidate execution is needed to present. Direct file:// is unsupported.
 
@@ -57,7 +58,36 @@ D reports tokens 5985/9870, estimated USD **0.04942875**, charged USD **null**
 diagnostics UNKNOWN; MMP-082 synthetic TS2322 belongs to another candidate. D's
 historical root cause UNKNOWN: zero *completed* HTTP comparisons does not mean
 zero HTTP requests reached the services. G0/G4 INCONCLUSIVE, product
-NOT_ESTABLISHED for both real runs. Historical PR #31 AUDIT_FAIL is unchanged.
+NOT_ESTABLISHED for C/D. Historical PR #31 AUDIT_FAIL is unchanged.
+
+**E — full public build PASS, JSON type parity FAIL:** run 41505679809,
+2 November 2026, head `a01bb65f8bb58c02c7a59e06ffedc9662576478e`, candidate
+`6140dbed4afb0d2068db17facb0e14ff9c2ffb61aaaf2b64207b9a8aa2125d38`.
+Genuine Muse Spark 1.3 response, generation PASS, aggregate G1 PASS (3 scenarios,
+6 typecheck/build IDs), G2/G3 **FAIL / HTTP_JSON_TYPE**. HTTP **17/17** and SQLite
+**20/20** are executed comparisons, not passing coverage. Compared initial/step
+SQLite snapshots match within this manifest (G3 includes HTTP findings); this is
+a bounded source-backed inference, not universal parity or proof about JSON
+subtrees skipped on kind mismatch. Exact offending field/root cause UNCONFIRMED.
+G0/G4 INCONCLUSIVE, formal held-out NOT_RUN, PRODUCT NOT_ESTABLISHED. Tokens
+6060/9554, estimate USD **0.0481795**, charged USD **null / UNKNOWN**.
+
+E's versioned `mmp148-track-e-v1.json` is a narrow public projection of original
+artifact **13169804253**, `meta-paid-public-41505679809`. ZIP and all nine members
+(eight under meta-paid-public plus the attempt receipt) were independently
+rehashed. [Provenance / preparation](PROVENANCE.md#e--2-november-2026-real-build-pass-http-json-type-fail)
+documents source inventory and reproduction with `prepare-track-e.py`. E is
+exact-pinned **before** bounded strict parsing and independently semantically
+validated by separate modules. A pin establishes public snapshot identity, not a
+fresh Oracle run or independent executor attestation. No raw candidate/model body,
+private observations, ciphertext, keys or historical custody/restore fields enter
+this projection. The adjacent research evidence.json is not its data source.
+
+The original reviewed PUBLIC metadata ZIP is retained in the unserved
+`provenance/track-e/` directory so the projection remains reproducible offline
+after the GitHub artifact expires. It contains categorical public receipts,
+not candidate/diagnostics ciphertext. The browser cannot fetch that ZIP or run
+the preparation tool; it loads only the narrow pinned E projection.
 
 | C identity | Exact value |
 | --- | --- |
@@ -92,15 +122,16 @@ C pins/adapter were merged through reviewed [PR #87](https://github.com/Meta-Pro
 (2026-10-31; owner review comments — GitHub disallows native self-approval).
 
 Picker: one complete set of five historical files, four C files, the single
-`incident.json` D summary, or one future-model.json declaration preview (always
+`incident.json` D summary, the lone `mmp148-track-e-v1.json` E projection, or one future-model.json declaration preview (always
 NOT_VERIFIED). `incident.json` is accepted only as a lone selection (exact pin);
-names overlap across A/B/C — select from one folder at a time. Bundled tracks
+E is also accepted only alone. Names overlap across A/B/C — select from one folder at a time. Bundled A–E tracks
 validate atomically; new selection or error clears prior results. Byte identity
 is not independent executor attestation.
 
 - [Russian runbook](RUNBOOK.md): 90-second / ~4-minute target pacing and fallbacks.
 - [Provenance / trust policy](PROVENANCE.md): exact original identities and hashes.
-- [Current UI validation](VALIDATION-140.md); [MMP-085 validation](VALIDATION-085.md);
+- [Current E validation](VALIDATION-148.md); [MMP-140 UI validation](VALIDATION-140.md);
+  [separate screenshot correction #145 / PR #149](https://github.com/Meta-Project2026/Metamorph/pull/149); [MMP-085 validation](VALIDATION-085.md);
   [historical validation](VALIDATION.md).
 - [Compact scope / plan / tasks](plan.md).
 
@@ -108,6 +139,7 @@ is not independent executor attestation.
 node --test research/demo-readiness/demo.test.mjs
 node --test research/demo-readiness/real-ai.test.mjs
 node --test research/demo-readiness/incident.test.mjs
+node --test research/demo-readiness/track-e.test.mjs
 pnpm exec biome check research/demo-readiness
 ```
 
