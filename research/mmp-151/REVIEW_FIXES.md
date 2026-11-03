@@ -58,10 +58,52 @@ were executed outside the Windows filesystem sandbox and each exited **0** on th
 completed code (822 tests: 711 passed, 111 platform skips). Focused controls exited
 **0**: 38 passed, one Linux process-group platform skip. Research syntax check
 exited **0** (114 modules); unchanged shared-scope comparison and diff whitespace
-check exited **0**. Linux coverage, dedicated Docker outcome and CI are recorded
-below after execution. Until recorded, the new dedicated Docker acceptance is
-**NOT_RUN**, and old shared-daemon smoke evidence cannot establish it.
+check exited **0**. New Linux, dedicated Docker and hosted CI results are recorded
+below. Old shared-daemon smoke evidence remains historical.
 No host execution of candidate or reference source is authorized or performed.
+
+## Exact review-fix execution
+
+Implementation commit: `aa54f91`; source used for the dedicated daemon run:
+`7a11a0b8966d8ca885d1dd846608e6f9dce9aaca` (fixture whitespace follow-up only).
+Windows Node 24.21.0 / pnpm 11.25.0; Docker host 29.9.2.
+
+| Command / boundary | Exit | Observed result |
+| --- | ---: | --- |
+| `pnpm lint` | 0 | 345 package/config/test files |
+| `pnpm typecheck` | 0 | Existing workspace command |
+| `pnpm test` | 0 | 822 total; 711 passed; 111 platform skips; 0 failed |
+| `pnpm build` | 0 | Existing workspace command |
+| Focused `autonomous-repair`, `autonomous-review`, `mmp151-daemon` test files | 0 | 38 passed; one Linux-only skip on Windows |
+| `node --test packages/agent-real/test/autonomous-review.test.mjs` in disposable Linux harness | 0 | 16/16; no skips; non-cooperative child/grandchild and lease/receipt controls executed |
+| `node research/mmp-069/check-syntax.mjs` | 0 | 114 modules; parse only |
+| `git diff --cached --check` after fixture newline correction | 0 | No whitespace errors |
+| `Invoke-DockerSmoke.ps1 -ScratchRoot <outside-repository-temp>` | 0 | Dedicated daemon; 2 simulated requests / 1 repair / 2 full Oracle verifications; first HTTP_JSON_TYPE FAIL, second G1/G2/G3 PASS; each 6 build checks, 17 HTTP, 20 SQLite, 27 public controls |
+| Host resources created after preflight, inspected after the complete smoke | 0 | Both inert foreign container and empty volume survived; only their exact labeled test resources were subsequently removed |
+| Independent outer owned-resource inventory | 0 | Dedicated daemon/harness and their exact two outer volumes gone; no foreign resources deleted |
+| [Fast CI 41570956623](https://github.com/Meta-Project2026/Metamorph/actions/runs/41570956623) on `7a11a0b` | 0 | Node 22 and 24 SUCCESS; no workflow_dispatch |
+
+The source for the fresh proof is exactly
+`7a11a0b8966d8ca885d1dd846608e6f9dce9aaca`; follow-up commits only publish this
+report and the [allowlisted proof](evidence/review-fixes-docker-7a11a0b.json).
+Both candidates retained their independent hashes from the public synthetic
+fixture/mutant. Each age TEST-key readback preceded its separate Oracle process.
+All normal and independent cleanup checks reported zero owned resources and no
+emergency removals; the controller released its source lease only after joined
+operation completion. No private source, ciphertext, raw observations or TEST
+identity was exported. The stopped foreign container/empty volume were created
+on the host daemon after the harness started, with the old global cleanup
+prefixes, and survived both Oracle attempts plus finalization. This actual
+isolation check supplements the reproducible before/after injected-process test.
+
+The successful path and all requested negative regressions are locally verified.
+This remains a synthetic transport/repair demonstration, not paid model output.
+
+The additional internal read-only candidate review identified the nested Docker
+client termination gap; the process-group adapter and fail-closed daemon-operation
+state address it. That engineering check is not the owner's independent GitHub
+review or merge approval. Shared Oracle, worker, differential, contracts, workflow
+and `.specify` files remain unchanged by these review fixes.
 
 ## Remaining boundaries and decisions
 

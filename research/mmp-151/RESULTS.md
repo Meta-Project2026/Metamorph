@@ -1,5 +1,9 @@
 # MMP-151 implementation results — 2026-11-03
 
+PR #153's subsequent independent-review corrections and fresh dedicated-daemon
+proof are in [REVIEW_FIXES.md](REVIEW_FIXES.md). The earlier executions below are
+historical and do not certify those cleanup/lifecycle fixes.
+
 **NO_GO for a live paid run: BLOCKED_BUDGET_GUARANTEE; signed repair admission
 and second-candidate production custody are not implemented.**
 

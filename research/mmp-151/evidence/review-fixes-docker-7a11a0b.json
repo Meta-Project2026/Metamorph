@@ -1,0 +1,58 @@
+{
+  "format": "mmp151-review-fix-public-synthetic-proof-v1",
+  "headSha": "7a11a0b8966d8ca885d1dd846608e6f9dce9aaca",
+  "execution": "SYNTHETIC",
+  "status": "SYNTHETIC_PUBLIC_PASS",
+  "daemonIsolation": "DEDICATED_DISPOSABLE_DAEMON",
+  "paidRequests": 0,
+  "simulatedRequests": 2,
+  "repairs": 1,
+  "completedOracleVerifications": 2,
+  "sourceLease": "RELEASED",
+  "cleanup": "VERIFIED_ZERO_RESOURCES",
+  "reservedEstimatedUsd": 0.828444,
+  "estimatedMockUsageUsd": 0.00335,
+  "chargedCostUsd": null,
+  "crypto": "PINNED_AGE_EPHEMERAL_TEST_KEY",
+  "artifactTransport": "LOCAL_READBACK_ONLY",
+  "signedRepairAdmission": "NOT_IMPLEMENTED",
+  "G0": "INCONCLUSIVE",
+  "G4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "verifications": [
+    {
+      "operation": "SYNTHETIC_GENERATION",
+      "candidateSha": "23b640dabce42a41c3d1b2496d8f6619a55c6af240e7c60a6b63a266f48f5cb5",
+      "G1": "PASS",
+      "G2": "FAIL",
+      "G3": "FAIL",
+      "http": 17,
+      "sqlite": 20,
+      "buildChecks": 6,
+      "publicControls": 27,
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "containersAfterCleanup": 0,
+      "volumesAfterCleanup": 0,
+      "emergencyRemoved": 0,
+      "findingCodes": [
+        "HTTP_JSON_TYPE"
+      ]
+    },
+    {
+      "operation": "SYNTHETIC_REPAIR",
+      "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+      "G1": "PASS",
+      "G2": "PASS",
+      "G3": "PASS",
+      "http": 17,
+      "sqlite": 20,
+      "buildChecks": 6,
+      "publicControls": 27,
+      "cleanup": "VERIFIED_ZERO_RESOURCES",
+      "containersAfterCleanup": 0,
+      "volumesAfterCleanup": 0,
+      "emergencyRemoved": 0,
+      "findingCodes": []
+    }
+  ]
+}
