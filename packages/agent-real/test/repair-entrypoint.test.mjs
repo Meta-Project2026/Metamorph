@@ -211,6 +211,7 @@ function fakeIdentity(t, env, claimsMutate = () => {}) {
     respond,
     stageArtifactProvenance: (fixture) => {
       artifactsById.set(Number(fixture.artifact.id), fixture);
+      artifactsById.set(Number(fixture.run.id), fixture);
     },
   };
 }
