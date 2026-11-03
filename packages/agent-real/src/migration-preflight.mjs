@@ -87,7 +87,9 @@ export function generationPreflight({
       ? {
           plan,
           repairWireBytes: PAID_POLICY.repairWireBytes,
-          repairProjection,
+          // The serializable computed projection object, never the function:
+          // the signed card must survive structuredClone and JSON round-trips.
+          repairProjection: repair,
           aggregateWorstCaseEstimatedUsd:
             projection.worstCaseEstimatedUsd + repair.worstCaseEstimatedUsd,
         }
@@ -120,6 +122,7 @@ export function repairPreflight({
   feedback,
   previousChanges,
   firstAttemptEstimatedUsd,
+  firstAttemptCandidateSha,
   confirmation,
   now = Date.now(),
 }) {
@@ -137,6 +140,8 @@ export function repairPreflight({
       previousChanges.length > 0 &&
       Number.isFinite(firstAttemptEstimatedUsd) &&
       firstAttemptEstimatedUsd >= 0 &&
+      typeof firstAttemptCandidateSha === "string" &&
+      /^[a-f0-9]{64}$/.test(firstAttemptCandidateSha) &&
       confirmation === confirmations.generate_then_repair,
     "WORKFLOW_IDENTITY_BLOCKED",
   );
@@ -188,6 +193,7 @@ export function repairPreflight({
     action: "repair",
     repairFeedbackCodes: feedback,
     firstAttemptEstimatedUsd,
+    firstAttemptCandidateSha,
     aggregateWorstCaseEstimatedUsd:
       firstAttemptEstimatedUsd + projection.worstCaseEstimatedUsd,
     maximumPosts: 2,

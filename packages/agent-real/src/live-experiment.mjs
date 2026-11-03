@@ -411,10 +411,20 @@ export function repairScorecard({
     finalizer.inventory?.volumes === 0 &&
     finalizer.emergencyRemoved === 0;
   const outcome = publicTrialOutcome(trial);
+  // First-candidate provenance: the signed attempt-2 admission/card and the
+  // recorded first attempt must name the same candidate. A complete repair
+  // outcome without this binding is refused, never silently accepted.
+  const firstAttemptBound =
+    hash(firstAttempt?.candidateSha) !== null &&
+    firstAttempt?.headSha === headSha &&
+    firstAttempt?.candidateSha ===
+      trial?.budgetAuth?.firstAttemptCandidateSha &&
+    firstAttempt?.candidateSha === preflight?.firstAttemptCandidateSha;
   if (
     outcome.complete &&
     (!custody ||
       !independentZero ||
+      !firstAttemptBound ||
       execution !== "REAL_META" ||
       receipt?.status !== "PASS")
   ) {
@@ -424,14 +434,12 @@ export function repairScorecard({
     outcome.feedbackCodes = [];
     outcome.code = !custody
       ? "CUSTODY_NOT_ESTABLISHED"
-      : !independentZero
-        ? "CLEANUP_ERROR"
+      : !independentZero || !firstAttemptBound
+        ? !firstAttemptBound
+          ? "SOURCE_IDENTITY"
+          : "CLEANUP_ERROR"
         : "SOURCE_IDENTITY";
   }
-  const firstAttemptBound =
-    hash(firstAttempt?.candidateSha) !== null &&
-    firstAttempt?.headSha === headSha &&
-    firstAttempt?.candidateSha === trial?.budgetAuth?.firstAttemptCandidateSha;
   const stopReason = outcome.complete
     ? outcome.publicVerdict === "PASS"
       ? "REPAIR_PUBLIC_PASS_STOP"

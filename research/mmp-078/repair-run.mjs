@@ -8,6 +8,10 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
 import { publicRepairDecision } from "../../packages/agent-real/src/autonomous-repair.mjs";
 import {
+  consumeOraclePermit,
+  requireStoredCheckpoint,
+} from "../../packages/agent-real/src/custody-checkpoint.mjs";
+import {
   authorizePaidWorkflow,
   paidPreflight,
   safePaidAdmissionCode,
@@ -38,9 +42,29 @@ export async function runRepairSend(env) {
     if (!env.MODEL_API_KEY) throw Error("CREDENTIAL_REQUIRED");
     const gate = readPrivateJson(join(privateRoot, "repair-gate.json"), 65536).value;
     const trial = readPrivateJson(join(output, "trial.json"), 16 * 1024 * 1024).value;
-    // Attempt-1 stored custody receipt (verified readback of the sealed candidate).
-    const stored = readPrivateJson(join(output, "custody-stored.json"), 65536).value;
-    // Independent re-verification: the gate record binds nothing by itself.
+    // Independent renewed binding of the sealed first candidate before any
+    // second admission: spool records, authenticated artifact provenance,
+    // exact readback bytes and the pre-Oracle zero-resource proof are all
+    // re-verified from scratch here; the permit is single-use, so replay
+    // inside this process is impossible. This POST step legitimately holds
+    // MODEL_API_KEY for its own send; allowCredentials relaxes only that one
+    // refusal and never touches the credential-free Oracle steps.
+    const custodyPermit = requireStoredCheckpoint(
+      env,
+      {
+        candidateSha: trial.candidateSha,
+        sourceSha: trial.sourceSha,
+        attemptId: trial.custody?.identity?.attemptId,
+      },
+      1,
+      { allowCredentials: true },
+    );
+    const custodyIdentity = consumeOraclePermit(custodyPermit, {
+      candidateSha: trial.candidateSha,
+      headSha: env.GITHUB_SHA,
+      sourceSha: trial.sourceSha,
+    });
+    // The recorded trial is evidence; eligibility is recomputed, not trusted.
     const decision = publicRepairDecision(trial, trial.candidateSha);
     if (
       gate?.format !== "mmp158-repair-gate-v1" ||
@@ -51,22 +75,24 @@ export async function runRepairSend(env) {
       gate.feedback !== decision.feedback ||
       decision.verdict !== "FAIL" ||
       typeof decision.feedback !== "string" ||
-      stored?.identity?.candidateSha !== trial.candidateSha ||
-      stored?.identity?.headSha !== env.GITHUB_SHA
+      custodyIdentity.candidateSha !== trial.candidateSha ||
+      custodyIdentity.headSha !== env.GITHUB_SHA
     )
       throw Error("REPAIR_NOT_ELIGIBLE");
     // The genuine previous model output comes only from the custody-bound
-    // candidate directory: its bytes hash to the stored attempt-1 candidateSha.
+    // candidate directory: its bytes hash to the verified attempt-1 candidateSha.
     const transfer = readPrivateJson(join(privateRoot, "transfer.json"), 65536).value;
-    if (transfer.candidateSha !== trial.candidateSha) throw Error("SOURCE_IDENTITY");
-    const bundle = await admitDirectory(transfer.candidateRoot, trial.candidateSha);
+    if (transfer.candidateSha !== custodyIdentity.candidateSha) throw Error("SOURCE_IDENTITY");
+    const bundle = await admitDirectory(transfer.candidateRoot, custodyIdentity.candidateSha);
     const previousChanges = bundle.files.map(({ path, content }) => ({ path, content }));
     const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
     const authorization = await authorizePaidWorkflow(context, {
+      plan: "generate_then_repair",
       attempt: 2,
       feedback: decision.feedback,
       previousChanges,
       firstAttemptEstimatedUsd: trial.estimatedCostUsd,
+      firstAttemptCandidateSha: custodyIdentity.candidateSha,
     });
     commitPreflight(join(output, "preflight-repair.json"), paidPreflight(authorization, context));
     result = await runPublicRepair({

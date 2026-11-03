@@ -241,6 +241,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
           "feedback",
           "previousChanges",
           "firstAttemptEstimatedUsd",
+          "firstAttemptCandidateSha",
         ].includes(k),
       ),
     "CONFIG_DENIED",
@@ -268,10 +269,15 @@ export async function authorizePaidWorkflow(context, options = {}) {
               typeof change.content === "string",
           ) &&
           Number.isFinite(options.firstAttemptEstimatedUsd) &&
-          options.firstAttemptEstimatedUsd >= 0
+          options.firstAttemptEstimatedUsd >= 0 &&
+          // First-candidate provenance, re-verified by the caller against
+          // stored custody; the signed admission carries it forward.
+          typeof options.firstAttemptCandidateSha === "string" &&
+          /^[a-f0-9]{64}$/.test(options.firstAttemptCandidateSha)
         : options.feedback === undefined &&
           options.previousChanges === undefined &&
-          options.firstAttemptEstimatedUsd === undefined),
+          options.firstAttemptEstimatedUsd === undefined &&
+          options.firstAttemptCandidateSha === undefined),
     "CONFIG_DENIED",
   );
   gate(isMigrationContext(context), "SOURCE_IDENTITY");
@@ -347,6 +353,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
           feedback: options.feedback,
           previousChanges: options.previousChanges,
           firstAttemptEstimatedUsd: options.firstAttemptEstimatedUsd,
+          firstAttemptCandidateSha: options.firstAttemptCandidateSha,
           confirmation: event.inputs.confirm_paid,
         })
       : generationPreflight({
@@ -381,6 +388,9 @@ export async function authorizePaidWorkflow(context, options = {}) {
       attempt === 2 || plan === "generate_then_repair"
         ? "generate_then_repair"
         : "single_generation",
+    ...(attempt === 2
+      ? { firstAttemptCandidateSha: options.firstAttemptCandidateSha }
+      : {}),
     ...projection,
     monetaryCap: "NO_PROVIDER_HARD_CAP",
   });

@@ -45,6 +45,8 @@ import {
 } from "../src/migration-preflight.mjs";
 
 const head = "a".repeat(40);
+const firstCandidateSha = "4".repeat(64);
+const now = Date.parse("2026-11-03T16:00:00Z");
 const source = readFileSync(
   new URL("../../../research/mmp-061/public-source.json", import.meta.url),
   "utf8",
@@ -343,6 +345,7 @@ test("plan card reserves both sends before the first POST", () => {
     maxEstimatedUsd: 1,
     plan: "generate_then_repair",
     confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+    now,
   });
   assert.equal(card.maximumPosts, 2);
   assert.equal(card.maximumRepairs, 1);
@@ -353,6 +356,7 @@ test("plan card reserves both sends before the first POST", () => {
     card.worstCaseEstimatedUsd + repairProjection().worstCaseEstimatedUsd,
   );
   assert.ok(card.aggregateWorstCaseEstimatedUsd <= 1);
+  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.831629) < 1e-9);
   assert.equal(card.confirmation, "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP");
   // An allowance that cannot cover the pessimistic aggregate is refused.
   assert.throws(
@@ -365,6 +369,7 @@ test("plan card reserves both sends before the first POST", () => {
         maxEstimatedUsd: 0.75,
         plan: "generate_then_repair",
         confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+        now,
       }),
     { code: "ESTIMATED_BUDGET_BLOCKED" },
   );
@@ -375,6 +380,7 @@ test("plan card reserves both sends before the first POST", () => {
     workflowBytes: workflowBytes(),
     actor: "barbalatv",
     maxEstimatedUsd: 0.25,
+    now,
   });
   assert.equal(single.maximumPosts, 1);
   assert.equal(single.maximumRepairs, 0);
@@ -403,13 +409,16 @@ test("repair card binds the exact repair body and re-checks the aggregate", () =
     feedback: "HTTP_JSON_TYPE",
     previousChanges: previous,
     firstAttemptEstimatedUsd: 0.05110625,
+    firstAttemptCandidateSha: firstCandidateSha,
     confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+    now,
   });
   assert.equal(card.format, "mmp154-repair-preflight-v1");
   assert.equal(card.attempt, 2);
   assert.equal(card.action, "repair");
   assert.equal(card.requestBodySha256, sha256(repairBody()));
   assert.equal(card.repairFeedbackCodes, "HTTP_JSON_TYPE");
+  assert.equal(card.firstAttemptCandidateSha, firstCandidateSha);
   assert.equal(
     card.aggregateWorstCaseEstimatedUsd,
     0.05110625 + card.worstCaseEstimatedUsd,
@@ -427,7 +436,9 @@ test("repair card binds the exact repair body and re-checks the aggregate", () =
         feedback: "HTTP_JSON_TYPE",
         previousChanges: previous,
         firstAttemptEstimatedUsd: 0.55,
+        firstAttemptCandidateSha: firstCandidateSha,
         confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+        now,
       }),
     { code: "ESTIMATED_BUDGET_BLOCKED" },
   );
@@ -444,7 +455,9 @@ test("repair card binds the exact repair body and re-checks the aggregate", () =
         feedback: "HTTP_JSON_TYPE",
         previousChanges: oversize,
         firstAttemptEstimatedUsd: 0.05,
+        firstAttemptCandidateSha: firstCandidateSha,
         confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+        now,
       }),
     { code: "INPUT_LIMIT" },
   );
@@ -538,7 +551,9 @@ test("repair scorecard refuses unbound or tampered projections", () => {
     feedback: "HTTP_JSON_TYPE",
     previousChanges: previous,
     firstAttemptEstimatedUsd: 0.05110625,
+    firstAttemptCandidateSha: firstCandidateSha,
     confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+    now,
   });
   const trial = {
     format: "mmp078-public-repair-trial-v1",

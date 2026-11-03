@@ -124,3 +124,19 @@ no automatic retry. Dispatch with `execution_mode=generate_then_repair` and
 default path is unchanged. All other preflight/launch conditions above apply
 unchanged, including independent exact-HEAD review, merge to protected main
 and authentic operator action. No dispatch happened from implementation.
+
+Offline two-attempt preview on a clean exact-main checkout (never a signed
+admission, never a provider spending cap); the destination must be a new
+absolute path outside the checkout:
+
+```powershell
+node research/mmp-154/preflight.mjs barbalatv 1.00 C:\path\outside-checkout\mmp154-main-preflight-repair.json generate_then_repair
+node research/mmp-154/preflight.mjs barbalatv 0.25 C:\path\outside-checkout\mmp154-main-preflight.json
+```
+
+The two-attempt preview prints `posts=2 repairs=1 repairWireBytes=98304`,
+the program-computed repair worst case **$0.602112** and the aggregate worst
+case (generation projection + $0.602112; $0.831629 at the current body size).
+An allowance of 0.75 is refused for `generate_then_repair` because it cannot
+cover the pessimistic aggregate; 1.00 is admitted. The three-argument
+invocation remains the unchanged single-generation preview.
