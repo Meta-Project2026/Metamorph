@@ -4,8 +4,8 @@
 // The full two-attempt simulation runs only on Linux (hosted CI); the
 // authorizer regressions run everywhere.
 import assert from "node:assert/strict";
-import childProcess, { execFileSync } from "node:child_process";
-import { generateKeyPairSync, sign } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { generateKeyPairSync, randomUUID, sign } from "node:crypto";
 import { EventEmitter } from "node:events";
 import {
   existsSync,
