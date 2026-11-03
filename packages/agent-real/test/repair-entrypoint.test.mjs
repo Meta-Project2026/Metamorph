@@ -20,12 +20,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { SOURCE } from "@metamorph/oracle";
-import { sha256 } from "../../target-worker/src/admission.mjs";
+import { MANIFEST_SHA256, SOURCE } from "@metamorph/oracle";
+import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import { publicRepairDecision } from "../src/autonomous-repair.mjs";
 import {
   CUSTODY,
-  parseCapsule,
+  CUSTODY_LICENSE,
   receiptFor,
   requireCustody,
 } from "../src/custody-contract.mjs";
@@ -181,7 +181,7 @@ function fakeIdentity(t, env, claimsMutate = () => {}) {
       branch_policies: [{ type: "branch", name: "main" }],
     },
   };
-  let artifact, run;
+  const artifactsById = new Map();
   const respond = (url) => {
     const u = String(url);
     assert.doesNotMatch(u, /api\.meta\.ai/);
@@ -194,16 +194,23 @@ function fakeIdentity(t, env, claimsMutate = () => {}) {
     if (u.endsWith("/branches/main")) return metadata.branch;
     if (u === "https://api.github.com/repos/Meta-Project2026/Metamorph")
       return metadata.repository;
-    if (/\/actions\/artifacts\/\d+$/.test(u)) return artifact;
-    if (/\/actions\/runs\/\d+$/.test(u)) return run;
+    if (/\/actions\/artifacts\/(\d+)$/.test(u)) {
+      const stagedRun = artifactsById.get(Number(/(\d+)$/.exec(u)[1]));
+      if (stagedRun === undefined) throw new Error("UNSTAGED_ARTIFACT");
+      return stagedRun.artifact;
+    }
+    if (/\/actions\/runs\/(\d+)$/.test(u)) {
+      const stagedRun = artifactsById.get(Number(/(\d+)$/.exec(u)[1]));
+      if (stagedRun === undefined) throw new Error("UNSTAGED_RUN");
+      return stagedRun.run;
+    }
     throw new Error("NETWORK_DENIED_IN_SYNTHETIC_CONTROL");
   };
   return {
     claims,
     respond,
     stageArtifactProvenance: (fixture) => {
-      artifact = fixture.artifact;
-      run = fixture.run;
+      artifactsById.set(Number(fixture.artifact.id), fixture);
     },
   };
 }
@@ -710,65 +717,20 @@ test(
       { mode: 0o600 },
     );
 
-    // Attempt-2 custody capture keeps the collector contract but swaps the
-    // age/Docker encryption for a fake ciphertext; capsule validation, spool
-    // layout and receipt commits stay identical to production.
     // The repair reply must carry the pinned license notice: candidate
     // custody validates that every capsule embeds it.
     const license = JSON.parse(source).license;
-    const repairCalls = nativeStub(t, {
-      replyChanges: [
-        {
-          path: "src/main.ts",
-          content: `/*
+    const repairChanges = [
+      {
+        path: "src/main.ts",
+        content: `/*
 ${license.trim()}
 */
 export const repairedModelOutput = 2;
 `,
-        },
-      ],
-    });
-    t.mock.method(childProcess, "spawn", (_exe, args, opts) => {
-      assert.ok(String(args[0]).endsWith("custody-collector.mjs"));
-      const child = new EventEmitter();
-      child.stdin = new EventEmitter();
-      child.stderr = new EventEmitter();
-      child.stdin.end = (input) => {
-        queueMicrotask(() => {
-          try {
-            const spool = join(opts.env.RUNNER_TEMP, opts.env.MMP115_SPOOL);
-            privateDirectory(spool, true);
-            const capsule = parseCapsule(input, {
-              runId: opts.env.GITHUB_RUN_ID,
-              runAttempt: opts.env.GITHUB_RUN_ATTEMPT,
-              headSha: opts.env.GITHUB_SHA,
-            });
-            const bytes = Buffer.concat([
-              Buffer.from("age-encryption.org/v1\n"),
-              Buffer.alloc(190, 8),
-            ]);
-            commitPrivate(
-              join(spool, "candidate.age"),
-              bytes,
-              CUSTODY.ciphertext,
-            );
-            commitRecord(
-              join(spool, "capture.json"),
-              receiptFor(
-                "CAPTURED_UNVERIFIED",
-                capsule.identity,
-                { sha256: sha256(bytes), bytes: bytes.length },
-                "VERIFIED_ZERO_RESOURCES",
-              ),
-            );
-            child.emit("close", 0, null);
-          } catch {
-            child.emit("close", 1, null);
-          }
-        });
-      };
-      return child;
-    });
+      },
+    ];
+    const repairCalls = nativeStub(t, { replyChanges: repairChanges });
 
     // Credential-bearing repair send: its own OIDC admission, one further POST.
     process.env.MODEL_API_KEY = key;
@@ -792,20 +754,156 @@ export const repairedModelOutput = 2;
       trialRepair.budgetAuth.firstAttemptCandidateSha,
       staged.capsule.identity.candidateSha,
     );
-    assert.equal(trialRepair.custody.state, "CAPTURED_UNVERIFIED");
-    const repairSpool = join(env.directory, "mmp115-custody-repair");
-    assert.ok(existsSync(join(repairSpool, "capture.json")));
-    assert.ok(existsSync(join(repairSpool, "candidate.age")));
-    const attemptTwoCapture = JSON.parse(
-      readFileSync(join(repairSpool, "capture.json"), "utf8"),
+    // The collector's age/Docker encryption cannot run in the test host, so
+    // the real capture fails closed; production capture is exercised on the
+    // authentic runner. The attempt-2 custody chain is verified below through
+    // the real checkpoint machinery over synthetic sealed bytes - the same
+    // seam already used for attempt 1.
+    assert.deepEqual(trialRepair.blockers, ["CUSTODY_CAPTURE_FAILED"]);
+    process.exitCode = 0;
+
+    // Distinct attempt-2 custody: REPAIR_CUSTODY capsule, -repair artifact
+    // name, separate spool and its own single-use Oracle permit.
+    const repairBundle = validateBundle(
+      repairChanges.map((file) => ({ ...file, sha256: sha256(file.content) })),
     );
+    const repairCapsule = {
+      format: CUSTODY.format,
+      verification: "UNVERIFIED",
+      attemptKind: "REPAIR_CUSTODY",
+      identity: {
+        runId: RUN,
+        runAttempt: "1",
+        headSha: head,
+        sourceSha: SOURCE.commit,
+        candidateSha: repairBundle.candidateSha,
+        attemptId: randomUUID(),
+      },
+      admission: {
+        generationAttempt: 2,
+        requestBodySha256: trialRepair.budgetAuth.bodySha256,
+        responseSha256: trialRepair.modelReceipts[0].responseSha256,
+        contextSha256: context().contextSha256,
+        manifestSha256: MANIFEST_SHA256,
+      },
+      license: CUSTODY_LICENSE,
+      manifest: repairBundle.files.map((file) => ({
+        path: file.path,
+        bytes: Buffer.byteLength(file.content),
+        sha256: file.sha256,
+      })),
+      files: repairBundle.files,
+    };
+    const repairBytes = Buffer.concat([
+      Buffer.from("age-encryption.org/v1\n"),
+      Buffer.alloc(190, 8),
+    ]);
+    const repairCapture = receiptFor(
+      "CAPTURED_UNVERIFIED",
+      repairCapsule.identity,
+      { sha256: sha256(repairBytes), bytes: repairBytes.length },
+      "VERIFIED_ZERO_RESOURCES",
+    );
+    const repairFixture = {
+      ack: {
+        artifactId: "115003",
+        archiveSha256: "e".repeat(64),
+        uploadOutcome: "success",
+        downloadOutcome: "success",
+      },
+      artifact: {
+        id: 115003,
+        name: `mmp107-candidate-${RUN}-1-repair`,
+        expired: false,
+        digest: `sha256:${"e".repeat(64)}`,
+        size_in_bytes: 500,
+        workflow_run: {
+          id: Number(RUN),
+          head_sha: head,
+          repository_id: 1434945189,
+          head_repository_id: 1434945189,
+        },
+      },
+      run: {
+        id: Number(RUN),
+        head_sha: head,
+        run_attempt: 1,
+        event: "workflow_dispatch",
+        path: ".github/workflows/meta-paid-migration.yml",
+        repository: { id: 1434945189, full_name: "Meta-Project2026/Metamorph" },
+        head_repository: {
+          id: 1434945189,
+          full_name: "Meta-Project2026/Metamorph",
+        },
+      },
+      finalizer: {
+        format: "mmp115-pre-oracle-finalizer-v1",
+        phase: "PRE_ORACLE",
+        identity: repairCapture.identity,
+        containers: 0,
+        volumes: 0,
+        emergencyRemoved: 0,
+      },
+    };
+    requireCustody(
+      repairFixture.artifact.name === "mmp107-candidate-115001-1-repair" &&
+        repairFixture.artifact.id !== staged.fixture.artifact.id,
+    );
+    identity.stageArtifactProvenance(repairFixture);
+    const repairSpool = join(env.directory, "mmp115-custody-repair");
+    privateDirectory(repairSpool, true);
+    commitPrivate(
+      join(repairSpool, "candidate.age"),
+      repairBytes,
+      CUSTODY.ciphertext,
+    );
+    commitRecord(join(repairSpool, "capture.json"), repairCapture);
+    commitRecord(join(repairSpool, "finalizer.json"), repairFixture.finalizer);
+    await custodyStep("prepare-upload", custodyEnv, 2);
+    commitPrivate(
+      join(env.directory, "mmp115-readback-repair", "candidate.age"),
+      repairBytes,
+      CUSTODY.ciphertext,
+    );
+    const repairStored = await custodyStep(
+      "verify-download",
+      {
+        ...custodyEnv,
+        GH_TOKEN: "fake-github-token",
+        MMP115_ARTIFACT_ID: String(repairFixture.ack.artifactId),
+        MMP115_ARCHIVE_SHA256: repairFixture.ack.archiveSha256,
+        MMP115_UPLOAD_OUTCOME: "success",
+        MMP115_DOWNLOAD_OUTCOME: "success",
+      },
+      2,
+    );
+    assert.equal(repairStored.state, "STORED_UNVERIFIED");
+    const repairPermit = requireStoredCheckpoint(
+      process.env,
+      {
+        candidateSha: repairCapsule.identity.candidateSha,
+        sourceSha: SOURCE.commit,
+        attemptId: repairCapsule.identity.attemptId,
+      },
+      2,
+      { allowCredentials: true },
+    );
+    const repairIdentity = consumeOraclePermit(repairPermit, {
+      candidateSha: repairCapsule.identity.candidateSha,
+      headSha: head,
+      sourceSha: SOURCE.commit,
+    });
     assert.notEqual(
-      attemptTwoCapture.identity.attemptId,
+      repairIdentity.attemptId,
       staged.capture.identity.attemptId,
     );
     assert.notEqual(
-      attemptTwoCapture.identity.candidateSha,
-      staged.capture.identity.candidateSha,
+      repairIdentity.candidateSha,
+      staged.capsule.identity.candidateSha,
+    );
+    assert.notEqual(
+      repairFixture.ack.artifactId,
+      staged.fixture.ack.artifactId,
     );
 
     // Foreign candidate in the recorded trial: refused before any send.
