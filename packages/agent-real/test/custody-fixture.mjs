@@ -155,7 +155,7 @@ export async function offlinePaid(t, directory, capsule = syntheticCapsule()) {
       },
     }),
   );
-  const now = Date.parse("2026-11-02T00:00:00Z");
+  const now = Date.parse("2026-11-03T16:00:00Z");
   t.mock.method(Date, "now", () => now);
   const keys = generateKeyPairSync("rsa", { modulusLength: 2048 }),
     jwk = {

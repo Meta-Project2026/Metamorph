@@ -6,6 +6,7 @@ import {
   paidProjection,
   reservePaidAttempt,
 } from "./meta-paid-authorization.mjs";
+import { META_STANDARD_TARIFF } from "./meta-tariff.mjs";
 import {
   checkMetaHttp,
   credentialCode,
@@ -38,11 +39,7 @@ export const META_MIGRATION_POLICY = Object.freeze({
   maxRequestCostUsd: null,
 });
 export const META_PRICE_SNAPSHOT = Object.freeze({
-  version: "meta-standard-2026-10-29",
-  model: META_MODEL,
-  inputPerMillion: 1.25,
-  cachedPerMillion: 0.15,
-  outputPerMillion: 4.25,
+  ...META_STANDARD_TARIFF,
 });
 const object = (x) => x !== null && typeof x === "object" && !Array.isArray(x);
 function keys(value, required, optional = [], code = "RESPONSE_INVALID") {

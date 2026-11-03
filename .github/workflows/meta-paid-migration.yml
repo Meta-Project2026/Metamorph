@@ -184,6 +184,7 @@ jobs:
           name: meta-paid-public-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/meta-paid-public/generation.json
+            ${{ runner.temp }}/meta-paid-public/preflight.json
             ${{ runner.temp }}/meta-paid-public/trial.json
             ${{ runner.temp }}/meta-paid-public/finalizer.json
             ${{ runner.temp }}/meta-paid-public/authorization.json

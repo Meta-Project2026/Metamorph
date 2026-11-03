@@ -21,7 +21,10 @@ import {
   runSyntheticAutonomousRepair,
 } from "../src/autonomous-repair.mjs";
 import { requireMigrationMode } from "../src/autonomous-repair-policy.mjs";
-import { authorizePaidWorkflow } from "../src/meta-paid-authorization.mjs";
+import {
+  authorizePaidWorkflow,
+  PAID_POLICY,
+} from "../src/meta-paid-authorization.mjs";
 import {
   changes,
   clean,
@@ -148,7 +151,8 @@ test("projection is aggregate, exact generation plus bounded repair, never a cha
       code: "ESTIMATED_BUDGET_BLOCKED",
     });
   assert.throws(
-    () => planSyntheticRepair(context(), 1, Date.parse("2026-11-05T00:00:00Z")),
+    () =>
+      planSyntheticRepair(context(), 1, Date.parse(PAID_POLICY.tariffExpires)),
     { code: "TARIFF_EXPIRED" },
   );
 });
@@ -160,7 +164,7 @@ test("unknown/exhausted budget and expired tariff stop before transport", async 
     assert.equal(h.events.length, 0);
   }
   const h = harness(t);
-  t.mock.method(Date, "now", () => Date.parse("2026-11-06T00:00:00Z"));
+  t.mock.method(Date, "now", () => Date.parse(PAID_POLICY.tariffExpires));
   assert.equal((await h.run()).code, "TARIFF_EXPIRED");
   assert.equal(h.bodies.length, 0);
 });

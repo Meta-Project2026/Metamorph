@@ -391,6 +391,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Manual local SYNTHETIC two-attempt Docker/age smoke and offline production-refusal CLI receive syntax checks only here. Package autonomous-repair tests run through the existing pnpm test glob. No live Meta call, workflow dispatch, GitHub artifact transport, production repair admission or held-out G4; actual Docker results are recorded separately in RESULTS.md. Existing CI commands are unchanged."
+    },
+    {
+      "path": "research/mmp-154",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Manual offline generation preflight and trusted workflow scorecard receive syntax checks here; package preflight/evidence/negative tests use the existing pnpm test glob. No Meta call, Docker run or workflow dispatch from CI. Live execution requires independently reviewed merged main and authentic operator admission; actual real/synthetic results are recorded separately. Default generation stays one POST; production repair remains blocked. Existing CI commands are unchanged."
     }
   ],
   "skips": [

@@ -3,6 +3,8 @@ import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { authorizePaidWorkflow, safePaidAdmissionCode } from "../../packages/agent-real/src/meta-paid-authorization.mjs";
+import { paidPreflight } from "../../packages/agent-real/src/meta-paid-authorization.mjs";
+import { commitPreflight } from "../../packages/agent-real/src/migration-preflight.mjs";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { runPublicMigration } from "../../packages/agent-real/src/migration-trial.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -22,6 +24,7 @@ let result;
 try {
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
   const authorization = await authorizePaidWorkflow(context);
+  commitPreflight(join(output, "preflight.json"), paidPreflight(authorization, context));
   result = await runPublicMigration({ context, selection: "meta", headSha: authorization.headSha,
     parent: privateRoot, signal: shutdown.signal, authorization,
     checkpoint: (receipt) => save("generation.json", receipt),

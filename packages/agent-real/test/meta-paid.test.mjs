@@ -23,6 +23,7 @@ import {
   authorizePaidWorkflow,
   PAID_POLICY,
   paidAdmission,
+  paidPreflight,
   paidProjection,
 } from "../src/meta-paid-authorization.mjs";
 import { bindMigrationContext } from "../src/migration-context.mjs";
@@ -119,7 +120,7 @@ function environment(t, actor = "barbalatv", run = "12345") {
 }
 function signedRun(t, actor = "barbalatv", run = "12345", mutate = () => {}) {
   const env = environment(t, actor, run);
-  const now = Date.parse("2026-10-29T16:00:00Z");
+  const now = Date.parse("2026-11-03T16:00:00Z");
   t.mock.method(Date, "now", () => now);
   const claims = {
     iss: "https://token.actions.githubusercontent.com",
@@ -425,6 +426,52 @@ test("one capability across two sessions/racing POSTs admits only one native req
   assert.equal(calls.length, 1);
   await assert.rejects(p.provider.generate(request, signal()));
 });
+test("signed preflight is durable before native send and binds the opaque admission", async (t) => {
+  const { directory } = signedRun(t);
+  const c = context(),
+    a = await authorizePaidWorkflow(c);
+  const expected = paidPreflight(a, c);
+  const calls = nativeStub(t);
+  const originalRequest = https.request;
+  t.mock.method(https, "request", (...args) => {
+    const card = JSON.parse(
+      readFileSync(join(directory, "mmp154-12345-preflight.json"), "utf8"),
+    );
+    const ledger = JSON.parse(
+      readFileSync(join(directory, "mmp078-12345-attempt.json"), "utf8"),
+    );
+    assert.deepEqual(card, expected);
+    assert.equal(card.sha256, a.preflightSha256);
+    assert.equal(card.requestBodySha256, a.bodySha256);
+    assert.equal(ledger.status, "UNKNOWN");
+    assert.equal(ledger.chargedCostUsd, null);
+    return originalRequest(...args);
+  });
+  await createMetaMigrationProvider(c, { authorization: a }).provider.generate(
+    request,
+    signal(),
+  );
+  assert.equal(calls.length, 1);
+  assert.throws(() => paidPreflight({ ...a }, c));
+  assert.throws(() => paidPreflight(a, context()));
+});
+test("pre-existing partial preflight burns admission without a POST or file overwrite", async (t) => {
+  const { directory } = signedRun(t),
+    calls = nativeStub(t);
+  const c = context(),
+    a = await authorizePaidWorkflow(c);
+  const path = join(directory, "mmp154-12345-preflight.json");
+  writeFileSync(path, "{");
+  await assert.rejects(
+    createMetaMigrationProvider(c, { authorization: a }).provider.generate(
+      request,
+      signal(),
+    ),
+    { code: "REQUEST_LIMIT" },
+  );
+  assert.equal(calls.length, 0);
+  assert.equal(readFileSync(path, "utf8"), "{");
+});
 test("separately issued capability for same run cannot bypass durable run ledger", async (t) => {
   signedRun(t);
   const calls = nativeStub(t);
@@ -554,7 +601,7 @@ test("production deadline joins a possibly sent native call and prohibits retry"
 test("exhausted tariff and downward budget block before any Meta network", async (t) => {
   const e = signedRun(t);
   const calls = nativeStub(t);
-  t.mock.method(Date, "now", () => Date.parse("2026-11-06T00:00:00Z"));
+  t.mock.method(Date, "now", () => Date.parse(PAID_POLICY.tariffExpires));
   await assert.rejects(authorizePaidWorkflow(context()), {
     code: "TARIFF_EXPIRED",
   });

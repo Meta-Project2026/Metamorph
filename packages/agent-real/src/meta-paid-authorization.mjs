@@ -18,14 +18,19 @@ import {
   validateWorkflowIdentity,
   verifyHostedMetaPolicy,
 } from "./github-meta-guard.mjs";
+import { META_STANDARD_TARIFF } from "./meta-tariff.mjs";
+import {
+  commitPreflight,
+  generationPreflight,
+} from "./migration-preflight.mjs";
 
 export const PAID_POLICY = Object.freeze({
   version: "mmp078-manual-paid-estimate-v1",
-  tariff: "meta-standard-2026-10-29",
-  tariffExpires: "2026-11-05T00:00:00Z",
-  inputPerMillion: 1.25,
-  cachedPerMillion: 0.15,
-  outputPerMillion: 4.25,
+  tariff: META_STANDARD_TARIFF.version,
+  tariffExpires: META_STANDARD_TARIFF.expires,
+  inputPerMillion: META_STANDARD_TARIFF.inputPerMillion,
+  cachedPerMillion: META_STANDARD_TARIFF.cachedPerMillion,
+  outputPerMillion: META_STANDARD_TARIFF.outputPerMillion,
   maxOutputTokens: 16384,
   maxPromptBytes: 131072,
   // Text only, no tools/media/history. Count ALL serialized bytes (including
@@ -222,6 +227,15 @@ export async function authorizePaidWorkflow(context) {
     typeof env.RUNNER_TEMP === "string" && env.RUNNER_TEMP.length > 0,
     "SIGNED_IDENTITY_BLOCKED",
   );
+  const preflight = generationPreflight({
+    context,
+    headSha: head,
+    workflowBytes: readFileSync(
+      join(root, ".github/workflows/meta-paid-migration.yml"),
+    ),
+    actor: identity.actor,
+    maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
+  });
   const summary = Object.freeze({
     kind: PAID_POLICY.version,
     actor: identity.actor,
@@ -233,6 +247,8 @@ export async function authorizePaidWorkflow(context) {
     bodySha256: hash(body),
     model: "muse-spark-1.3",
     tariff: PAID_POLICY.tariff,
+    workflowSha256: preflight.workflowSha256,
+    preflightSha256: preflight.sha256,
     maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
     ...projection,
     monetaryCap: "NO_PROVIDER_HARD_CAP",
@@ -244,8 +260,17 @@ export async function authorizePaidWorkflow(context) {
     expires: Date.now() + 240000,
     consumed: false,
     ledger: join(env.RUNNER_TEMP, `mmp078-${identity.run_id}-attempt.json`),
+    preflight,
+    preflightPath: join(
+      env.RUNNER_TEMP,
+      `mmp154-${identity.run_id}-preflight.json`,
+    ),
   });
   return auth;
+}
+export function paidPreflight(authorization, context) {
+  paidAdmission(authorization, context);
+  return structuredClone(admissions.get(authorization).preflight);
 }
 export function paidAdmission(authorization, context, body) {
   const a = admissions.get(authorization);
@@ -265,6 +290,8 @@ export function reservePaidAttempt(authorization, context, body) {
   a.consumed = true; // synchronized before any await/send, including another session
   let descriptor;
   try {
+    // The exact human-readable card is durable before UNKNOWN and any POST.
+    commitPreflight(a.preflightPath, a.preflight);
     descriptor = openSync(a.ledger, "wx", 0o600);
     writeFileSync(
       descriptor,
