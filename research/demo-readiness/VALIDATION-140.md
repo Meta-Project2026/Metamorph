@@ -82,10 +82,46 @@ also loaded A–D and captured full-page screenshots at 1440/768/390. After imag
 come from the committed optional smoke. Before/after are viewport captures at
 1000px height; they illustrate presentation, not acceptance or new execution.
 
+### MMP-145 correction — 3 November 2026 (Europe/Bucharest)
+
+The original desktop home and evidence captures were byte-identical (Git blob
+`25873784a5ba60b42b6313775d01dc3e2e15e708`). The earlier
+`scrollIntoViewIfNeeded()` did not move an already-visible panel; the desktop
+evidence label therefore did not demonstrate a separate viewport. The home image
+is preserved. The desktop evidence image below is **replaced by an actual new
+capture**, not renamed or edited pixels.
+
+Baseline: full `git archive` export of `research/demo-readiness/` and
+`research/mmp-104/incident.json` at `d31711f612e14373308fa4f3a220b142567f2004`.
+The baseline's own unchanged `serve.mjs` served it on 127.0.0.1:4171; no route
+overrides. Chrome 156.0.8078.74, viewport **1440 × 1000**, device scale factor 1,
+reduced-motion enabled. Click **Load pinned public receipts**, wait for A–D and
+ten JSON options, then explicitly scroll to Track B's document top minus 24px:
+`window.scrollTo(0, document.getElementById('historical-replay').getBoundingClientRect().top + window.scrollY - 24)`.
+Recorded scroll is **x=0, y=887**, Track B top **23.796875px**; page width 1440px.
+The visible image includes the three replay attempts and real C's natural G1 FAIL.
+
+Capture UTC `2026-11-02T23:59:51.091Z` (3 November local time). New PNG: 95852 bytes,
+SHA-256 `a139389bb6875e4baa961a920e4b852c2b13da8384eeb276d8174a9cf9078fc1`;
+preserved home SHA-256 `7074c7e00e60b19bca9f5f7ca07d6fc5fb0013f56e690e9abc1e0231f4429967`.
+The PNG bytes differ. [Capture metadata](screenshots/mmp140/recapture-145.json)
+records exact steps, position, browser and hashes. Actual screenshot inspected.
+No page exceptions or external page requests occurred. Receipts were unchanged;
+no model, candidate execution, Docker, keys or private data were used.
+
+Checks for this docs/media correction: capture/position/distinct-byte assertions
+exit 0; existing demo receipt tests 134 PASS, exit 0; local documentation link and
+PNG/hash checks exit 0; `git diff --check` exit 0. No runtime/CSS/adapters/receipt
+change. Root install/typecheck/test/build NOT_RUN for this proportional media-only
+slice; automatic PR CI is recorded separately in its PR. No human rehearsal or
+screen-reader claim is added. Independent exact-SHA review of the correction is
+pending; original #141 was independently approved and merged at
+`224e3ca717b9cda9c6973f70ba761adfbc7e4195`.
+
 | View | Before | After |
 | --- | --- | --- |
 | Desktop home, 1440px | [Before](screenshots/mmp140/before-home-1440.png) | [After](screenshots/mmp140/home-1440.png) |
-| Desktop evidence, 1440px | [Before](screenshots/mmp140/before-evidence-1440.png) | [After](screenshots/mmp140/evidence-1440.png) |
+| Desktop evidence, 1440px (MMP-145 recapture; y=887) | [Before](screenshots/mmp140/before-evidence-1440.png) | [After](screenshots/mmp140/evidence-1440.png) |
 | Mobile home, 390px | [Before](screenshots/mmp140/before-home-390.png) | [After](screenshots/mmp140/home-390.png) |
 | Mobile evidence, 390px | [Before](screenshots/mmp140/before-evidence-390.png) | [After](screenshots/mmp140/evidence-390.png) |
 | Tablet, 768px | Direct full-page baseline inspected; not shipped | [Home](screenshots/mmp140/home-768.png), [evidence](screenshots/mmp140/evidence-768.png) |

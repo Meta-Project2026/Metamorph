@@ -1,0 +1,39 @@
+{
+  "format": "mmp145-public-screenshot-capture-v1",
+  "baselineCommit": "d31711f612e14373308fa4f3a220b142567f2004",
+  "snapshot": "git archive: research/demo-readiness and research/mmp-104/incident.json; no route overrides",
+  "captureUtc": "2026-11-02T23:59:51.091Z",
+  "browser": "Chrome 156.0.8078.74",
+  "viewport": {
+    "width": 1440,
+    "height": 1000,
+    "deviceScaleFactor": 1
+  },
+  "region": "historical-replay (Track B), top aligned with 24px viewport inset",
+  "scroll": {
+    "x": 0,
+    "y": 887,
+    "replayTop": 23.796875,
+    "pageWidth": 1440
+  },
+  "steps": [
+    "Start unchanged baseline serve.mjs on loopback 4171",
+    "Open / and click Load pinned public receipts",
+    "Wait for atomic A/B/C/D validation and ten receipt options",
+    "window.scrollTo(0, historical-replay document top - 24)",
+    "Capture viewport, no clipping/image modification"
+  ],
+  "data": "Original pinned public A/B/C/D only; no candidate execution or new run",
+  "screenshot": {
+    "name": "before-evidence-1440.png",
+    "bytes": 95852,
+    "sha256": "a139389bb6875e4baa961a920e4b852c2b13da8384eeb276d8174a9cf9078fc1"
+  },
+  "unchangedHome": {
+    "name": "before-home-1440.png",
+    "sha256": "7074c7e00e60b19bca9f5f7ca07d6fc5fb0013f56e690e9abc1e0231f4429967"
+  },
+  "distinctFromHome": true,
+  "pageErrors": [],
+  "externalRequests": []
+}
