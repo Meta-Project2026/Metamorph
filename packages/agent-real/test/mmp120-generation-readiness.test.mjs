@@ -184,6 +184,15 @@ test("target contract pins NodeNext/CommonJS, node:sqlite and the offline sandbo
     target.schemaContract,
     /sqlite_sequence table is part of the comparison/,
   );
+  assert.match(target.jsonContract, /PDO::lastInsertId\(\)/);
+  assert.match(
+    target.jsonContract,
+    /fetchAll\(\) yields SQLite numeric columns/,
+  );
+  assert.match(target.jsonContract, /success is always a JSON boolean/);
+  assert.match(target.jsonContract, /SQL NULL as JSON null/);
+  assert.doesNotMatch(target.jsonContract, /success.*string fields/);
+  assert.match(target.jsonContract, /Do not globally stringify or numericize/);
   assert.match(target.permissions, /No child processes, downloads/);
   assert.match(target.permissions, /external network/);
 });

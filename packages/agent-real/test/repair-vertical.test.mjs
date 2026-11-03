@@ -205,6 +205,64 @@ test("repair prompt carries only genuine prior changes and public feedback codes
   );
 });
 
+test("PDO JSON type contract is present in both generation and repair prompts; schema contract unchanged", () => {
+  const generateWire = JSON.parse(
+    prepareMetaMigration(context(), {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "generate",
+      attempt: 1,
+      repairFeedback: null,
+    }),
+  );
+  const repairWire = JSON.parse(
+    prepareMetaMigration(
+      context(),
+      {
+        unitId: "workshop-api",
+        tier: "spark",
+        action: "repair",
+        attempt: 2,
+        repairFeedback: "HTTP_JSON_TYPE",
+      },
+      previous,
+    ),
+  );
+  for (const wire of [generateWire, repairWire]) {
+    const target = JSON.parse(wire.messages[1].content).context.target;
+    // The shared target context carries the source-grounded PDO JSON types.
+    assert.match(target.jsonContract, /PDO::lastInsertId\(\)/);
+    assert.match(
+      target.jsonContract,
+      /fetchAll\(\) yields SQLite numeric columns/,
+    );
+    assert.match(target.jsonContract, /is_full is a JSON boolean/);
+    assert.match(
+      target.jsonContract,
+      /non-NULL fetched column as a JSON string/,
+    );
+    assert.match(target.jsonContract, /SQL NULL as JSON null/);
+    // P0: success must never be described as a string.
+    assert.match(target.jsonContract, /success is always a JSON boolean/);
+    assert.doesNotMatch(
+      target.jsonContract,
+      /success, message and error_type string/,
+    );
+    assert.doesNotMatch(target.jsonContract, /success.*string fields/);
+    assert.match(
+      target.jsonContract,
+      /error_type appears only as a JSON string in the source branches/,
+    );
+    assert.match(
+      target.jsonContract,
+      /Do not globally stringify or numericize/,
+    );
+    // The MMP-156 schema DDL contract is untouched.
+    assert.match(target.schemaContract, /exact stored sqlite_schema DDL text/);
+    assert.match(target.schemaContract, /byte-for-byte/);
+  }
+});
+
 test("repair session sends exactly one attempt-2 request with the genuine prior changes", async () => {
   const bodies = [];
   const h = createOfflineMetaWireHarness(
@@ -356,7 +414,7 @@ test("plan card reserves both sends before the first POST", () => {
     card.worstCaseEstimatedUsd + repairProjection().worstCaseEstimatedUsd,
   );
   assert.ok(card.aggregateWorstCaseEstimatedUsd <= 1);
-  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.831629) < 1e-9);
+  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.836604) < 1e-9);
   assert.equal(card.confirmation, "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP");
   // An allowance that cannot cover the pessimistic aggregate is refused.
   assert.throws(

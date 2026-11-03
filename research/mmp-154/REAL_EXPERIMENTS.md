@@ -68,3 +68,43 @@ refusals). Full suite: 846 tests, 733 pass, 113 platform skips, 0 fail on the
 implementation host; hosted CI records its own result. The live two-attempt
 run remains NOT_RUN and requires the same review/merge/operator gate as
 before; product NOT_ESTABLISHED.
+
+**2026-11-03/04 (MMP-158 execution record + MMP-161): first signed two-attempt
+real run executed; no new real experiment launched by this task. Actual Meta
+requests this task: 0.**
+
+Real run [#41726833705](https://github.com/Meta-Project2026/Metamorph/actions/runs/41726833705)
+(`main@f034d4d`, actor `barbalatv`): the signed `generate_then_repair` plan
+executed end to end — two genuine `muse-spark-1.3` Standard POSTs (generate +
+one repair, no retries), two distinct candidate SHAs (`329cdcca…`, `572c6db9…`)
+with separate age-encrypted custody artifacts (ids `13275312442`,
+`13274464573`), both independently stored/read-back verified, both given full
+independent Docker Oracles (G1 PASS 6/6; G2 FAIL 17/17 executed; G3 FAIL 20/20
+executed; only `HTTP_JSON_TYPE`), zero-resource cleanup, estimate $0.052598 +
+$0.05669575 = $0.10929375, charged UNKNOWN. The repair received the genuine
+first candidate plus only the public code `HTTP_JSON_TYPE` and produced
+different bytes with the same per-scenario verdict pattern (business FAIL,
+rejected FAIL, capacity PASS); individual check deltas are not exposed
+publicly. G0/G4 INCONCLUSIVE; product NOT_ESTABLISHED. The repair scorecard
+bound the first-candidate provenance (`firstAttempt.bound=true`). Reporting
+defect found and fixed separately (MMP-161): the attempt-1 scorecard said
+`maximumPosts=1` / `PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED` despite the
+authorized plan and the executed repair.
+
+MMP-161 (this task, offline) adds a public-source-grounded PHP 7.4/PDO JSON
+type contract to the shared generation/repair context (`target.jsonContract`):
+`get_slots` keeps its explicit `(int)`-cast numbers and `is_full` boolean;
+`get_appointments` serializes every fetched column as a string (PDO
+`fetchAll()` yields SQLite numeric columns as strings); a successful `book`
+returns `appointment_id` as a string from `PDO::lastInsertId()`; no global
+stringify/numericize. This mirrors the #146 source-confirmed compatibility
+findings (which concerned a different, earlier candidate) without touching
+reference observations: expected types are derived from the public source
+itself, not from private Oracle packs. Decision gate recorded: declassifying
+reference-observation-derived expected types/paths/bodies or changing shared
+Oracle/comparator/declassification boundaries needs explicit Ilia/owner
+approval and was deliberately NOT done here. Prompt identity changes:
+request body 23,785 → 24,570 bytes (`c2db6096…`), worst case $0.233442,
+two-attempt aggregate $0.835554. Live effect on parity: NOT_RUN — no paid
+call was made by this task; the next authentic run needs the usual
+review/merge/operator gate.

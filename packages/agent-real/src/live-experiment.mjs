@@ -138,6 +138,9 @@ export function generationScorecard({
   finalizer,
   runId,
   headSha,
+  // Same-run repair-execution verdict from repairExecutionStatus:
+  // "EXECUTED" | "SEND_UNKNOWN" | "NOT_DISPATCHED" | null (single mode).
+  repairExecution = null,
 }) {
   const validCard = cardValid(preflight) && preflight.headSha === headSha;
   const receipt = generation ?? trial?.modelReceipts?.[0];
@@ -217,10 +220,21 @@ export function generationScorecard({
       ),
     ]),
   );
+  // The signed two-attempt plan authorizes a repair send; the attempt-1
+  // scorecard must not claim repair is unimplemented when the plan card
+  // reserved it and the repair receipt confirms a confirmed response.
+  const planTwoPost =
+    validCard && preflight.maximumPosts === 2 && preflight.maximumRepairs === 1;
   const stopReason = outcome.complete
     ? outcome.publicVerdict === "PASS"
       ? "FIRST_PUBLIC_PASS_STOP"
-      : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
+      : planTwoPost
+        ? repairExecution === "EXECUTED"
+          ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_EXECUTED"
+          : repairExecution === "SEND_UNKNOWN"
+            ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_SEND_UNKNOWN"
+            : "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
+        : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
     : receipt?.status === "ERROR" && attempted === 1
       ? "GENERATION_ERROR_NO_RETRY"
       : execution === "NOT_ESTABLISHED"
@@ -255,7 +269,10 @@ export function generationScorecard({
       /^meta-standard-\d{4}-\d{2}-\d{2}$/.test(preflight.tariff?.version)
         ? preflight.tariff.version
         : null,
-    maximumPosts: 1,
+    maximumPosts: validCard ? preflight.maximumPosts : 1,
+    // Plan-specific key only: single_generation keeps the exact baseline
+    // key set and serialized shape.
+    ...(planTwoPost ? { maximumRepairs: preflight.maximumRepairs } : {}),
     attemptedRequests: attempted,
     confirmedResponses:
       receipt?.confirmedResponseCount === 1
@@ -322,11 +339,106 @@ export function generationScorecard({
         ) ?? [],
       ),
     ],
-    repairs: 0,
+    repairs: repairExecution === "EXECUTED" ? 1 : 0,
     G0: "INCONCLUSIVE",
     G4: "INCONCLUSIVE",
     product: "NOT_ESTABLISHED",
   };
+}
+
+/** Same-run binding for the repair-executed signal, from recorded
+ * trusted-adapter evidence only. Returns "EXECUTED" only when the signed
+ * two-send plan card, the digest-valid attempt-2 repair card and the repair
+ * receipt all bind this exact run/head/body and the confirmed response;
+ * anything stale, foreign, malformed, unbound or unconfirmed yields
+ * "SEND_UNKNOWN". NOT_DISPATCHED requires the trusted producer to find no
+ * attempt-2 evidence whatsoever, so a possibly-billed attempt is never
+ * claimed unsent and a fabricated receipt can never state that a signed
+ * repair executed. A confirmed response means EXECUTED even when model
+ * decoding later fails: a sent billable request is never conflated with a
+ * successful candidate migration. Evidence only: never spend authority,
+ * never a retry permit. */
+export function repairExecutionStatus({
+  preflight,
+  generation,
+  trial,
+  repairGeneration,
+  repairPreflight,
+  // Trusted read-only producer scan (existsSync over specific attempt-2
+  // evidence paths), never a bare boolean from untrusted file contents.
+  repairEvidencePresent = false,
+  runId,
+  headSha,
+}) {
+  try {
+    const r = repairGeneration;
+    if (r === null || r === undefined) {
+      // A missing confirmed receipt is "not dispatched" only when NO
+      // attempt-2 evidence exists at all. Any reservation ledger, repair
+      // card, repair trial or send receipt means an attempt may already
+      // have been billed; it is never claimed unsent.
+      return repairEvidencePresent ? "SEND_UNKNOWN" : "NOT_DISPATCHED";
+    }
+    // Plausible shape first: anything malformed or mislabeled stays unknown.
+    const plausible =
+      r.format === "meta-generation-v1" &&
+      r.attempt === 2 &&
+      r.action === "repair" &&
+      r.generationKind === "REAL_INFERENCE";
+    if (!plausible) return "SEND_UNKNOWN";
+    const planTwoPost =
+      cardValid(preflight) &&
+      preflight.maximumPosts === 2 &&
+      preflight.maximumRepairs === 1 &&
+      preflight.headSha === headSha;
+    if (!planTwoPost) return "SEND_UNKNOWN";
+    if (
+      !repairCardValid(repairPreflight) ||
+      repairPreflight.headSha !== headSha
+    )
+      return "SEND_UNKNOWN";
+    // The repair card must carry the first plan's pinned identity, exactly,
+    // for this run and head — not merely its own digest validity.
+    const cardAligned =
+      repairPreflight.sourceSha === preflight.sourceSha &&
+      repairPreflight.contextSha256 === preflight.contextSha256 &&
+      repairPreflight.manifestSha256 === preflight.manifestSha256 &&
+      repairPreflight.workflowSha256 === preflight.workflowSha256;
+    if (!cardAligned) return "SEND_UNKNOWN";
+    // A real first-attempt trial must exist and name the exact candidate
+    // bound by the first receipt, the repair card and the repair admission.
+    const trialCandidate = trial?.candidateSha;
+    const firstCandidate = generation?.candidateSha ?? null;
+    const trialBound =
+      typeof trialCandidate === "string" &&
+      /^[a-f0-9]{64}$/.test(trialCandidate) &&
+      trialCandidate === firstCandidate;
+    if (!trialBound) return "SEND_UNKNOWN";
+    // The first-generation receipt must itself belong to this run and head.
+    const generationBound =
+      generation?.authorization?.runId === runId &&
+      generation?.authorization?.headSha === headSha;
+    if (!generationBound) return "SEND_UNKNOWN";
+    const bound =
+      r.authorization?.runId === runId &&
+      r.authorization?.headSha === headSha &&
+      r.authorization?.attempt === 2 &&
+      r.authorization?.plan === "generate_then_repair" &&
+      r.authorization?.preflightSha256 === repairPreflight.sha256 &&
+      r.authorization?.workflowSha256 === repairPreflight.workflowSha256 &&
+      r.inputSha256 === repairPreflight.requestBodySha256 &&
+      r.authorization?.firstAttemptCandidateSha === firstCandidate &&
+      repairPreflight.firstAttemptCandidateSha === firstCandidate &&
+      r.sourceSha === preflight.sourceSha &&
+      r.contextSha256 === preflight.contextSha256 &&
+      r.manifestSha256 === preflight.manifestSha256 &&
+      r.attemptedRequests === 1 &&
+      r.confirmedResponseCount === 1 &&
+      r.networkSend === "RESPONSE_RECEIVED";
+    return bound ? "EXECUTED" : "SEND_UNKNOWN";
+  } catch {
+    return "SEND_UNKNOWN";
+  }
 }
 
 /** Attempt-2 (signed repair) projection. Binding mirrors generationScorecard
