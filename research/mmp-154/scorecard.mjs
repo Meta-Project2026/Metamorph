@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   generationScorecard,
+  repairExecutionStatus,
   repairScorecard,
 } from "../../packages/agent-real/src/live-experiment.mjs";
 import { commitPreflight } from "../../packages/agent-real/src/migration-preflight.mjs";
@@ -16,10 +17,18 @@ export function recordScorecard(env) {
     try { return readPrivateJson(path, 1024 * 1024, false).value; }
     catch (error) { if (error.code === "ENOENT") return null; throw error; }
   };
-  // A confirmed repair response distinguishes an executed signed repair from
-  // an authorized-but-undispatched one in the attempt-1 scorecard's stop
-  // reason; the scorecard stays evidence and never grants spend authority.
-  const repairReceipt = read(join(output, "generation-repair.json"));
+  // The repair-executed verdict is bound across the signed plan card, the
+  // digest-valid repair card and the repair receipt for this exact run; the
+  // scorecard stays evidence and never grants spend authority or a retry.
+  const repairExecution = repairExecutionStatus({
+    preflight: read(join(output, "preflight.json")),
+    generation: read(join(output, "generation.json")),
+    trial: read(join(output, "trial.json")),
+    repairGeneration: read(join(output, "generation-repair.json")),
+    repairPreflight: read(join(output, "preflight-repair.json")),
+    runId: env.GITHUB_RUN_ID,
+    headSha: env.GITHUB_SHA,
+  });
   const scorecard = generationScorecard({
     preflight: read(join(output, "preflight.json")),
     generation: read(join(output, "generation.json")),
@@ -29,7 +38,7 @@ export function recordScorecard(env) {
     finalizer: read(join(output, "finalizer.json")),
     runId: env.GITHUB_RUN_ID,
     headSha: env.GITHUB_SHA,
-    repairAttempted: repairReceipt?.networkSend === "RESPONSE_RECEIVED",
+    repairExecution,
   });
   commitPreflight(join(output, "scorecard.json"), scorecard);
   // The signed two-attempt plan adds its own attempt-2 projection; the final

@@ -239,6 +239,22 @@ test("PDO JSON type contract is present in both generation and repair prompts; s
     assert.match(target.jsonContract, /is_full is a JSON boolean/);
     assert.match(
       target.jsonContract,
+      /non-NULL fetched column as a JSON string/,
+    );
+    assert.match(target.jsonContract, /SQL NULL as JSON null/);
+    // P0: success must never be described as a string.
+    assert.match(target.jsonContract, /success is always a JSON boolean/);
+    assert.doesNotMatch(
+      target.jsonContract,
+      /success, message and error_type string/,
+    );
+    assert.doesNotMatch(target.jsonContract, /success.*string fields/);
+    assert.match(
+      target.jsonContract,
+      /error_type appears only as a JSON string in the source branches/,
+    );
+    assert.match(
+      target.jsonContract,
       /Do not globally stringify or numericize/,
     );
     // The MMP-156 schema DDL contract is untouched.
@@ -398,7 +414,7 @@ test("plan card reserves both sends before the first POST", () => {
     card.worstCaseEstimatedUsd + repairProjection().worstCaseEstimatedUsd,
   );
   assert.ok(card.aggregateWorstCaseEstimatedUsd <= 1);
-  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.835554) < 1e-9);
+  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.836604) < 1e-9);
   assert.equal(card.confirmation, "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP");
   // An allowance that cannot cover the pessimistic aggregate is refused.
   assert.throws(
