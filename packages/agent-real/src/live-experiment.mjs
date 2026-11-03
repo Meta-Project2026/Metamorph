@@ -350,23 +350,35 @@ export function generationScorecard({
  * trusted-adapter evidence only. Returns "EXECUTED" only when the signed
  * two-send plan card, the digest-valid attempt-2 repair card and the repair
  * receipt all bind this exact run/head/body and the confirmed response;
- * anything stale, foreign, malformed or unconfirmed yields "SEND_UNKNOWN",
- * and no repair receipt at all yields "NOT_DISPATCHED". A fabricated or
- * foreign receipt can therefore never state that a signed repair executed.
- * Evidence only: never spend authority, never a retry permit. */
+ * anything stale, foreign, malformed, unbound or unconfirmed yields
+ * "SEND_UNKNOWN". NOT_DISPATCHED requires the trusted producer to find no
+ * attempt-2 evidence whatsoever, so a possibly-billed attempt is never
+ * claimed unsent and a fabricated receipt can never state that a signed
+ * repair executed. A confirmed response means EXECUTED even when model
+ * decoding later fails: a sent billable request is never conflated with a
+ * successful candidate migration. Evidence only: never spend authority,
+ * never a retry permit. */
 export function repairExecutionStatus({
   preflight,
   generation,
   trial,
   repairGeneration,
   repairPreflight,
+  // Trusted read-only producer scan (existsSync over specific attempt-2
+  // evidence paths), never a bare boolean from untrusted file contents.
+  repairEvidencePresent = false,
   runId,
   headSha,
 }) {
-  if (repairGeneration === null || repairGeneration === undefined)
-    return "NOT_DISPATCHED";
   try {
     const r = repairGeneration;
+    if (r === null || r === undefined) {
+      // A missing confirmed receipt is "not dispatched" only when NO
+      // attempt-2 evidence exists at all. Any reservation ledger, repair
+      // card, repair trial or send receipt means an attempt may already
+      // have been billed; it is never claimed unsent.
+      return repairEvidencePresent ? "SEND_UNKNOWN" : "NOT_DISPATCHED";
+    }
     // Plausible shape first: anything malformed or mislabeled stays unknown.
     const plausible =
       r.format === "meta-generation-v1" &&
@@ -385,12 +397,29 @@ export function repairExecutionStatus({
       repairPreflight.headSha !== headSha
     )
       return "SEND_UNKNOWN";
+    // The repair card must carry the first plan's pinned identity, exactly,
+    // for this run and head — not merely its own digest validity.
+    const cardAligned =
+      repairPreflight.sourceSha === preflight.sourceSha &&
+      repairPreflight.contextSha256 === preflight.contextSha256 &&
+      repairPreflight.manifestSha256 === preflight.manifestSha256 &&
+      repairPreflight.workflowSha256 === preflight.workflowSha256;
+    if (!cardAligned) return "SEND_UNKNOWN";
+    // A real first-attempt trial must exist and name the exact candidate
+    // bound by the first receipt, the repair card and the repair admission.
+    const trialCandidate = trial?.candidateSha;
     const firstCandidate = generation?.candidateSha ?? null;
+    const trialBound =
+      typeof trialCandidate === "string" &&
+      /^[a-f0-9]{64}$/.test(trialCandidate) &&
+      trialCandidate === firstCandidate;
+    if (!trialBound) return "SEND_UNKNOWN";
+    // The first-generation receipt must itself belong to this run and head.
+    const generationBound =
+      generation?.authorization?.runId === runId &&
+      generation?.authorization?.headSha === headSha;
+    if (!generationBound) return "SEND_UNKNOWN";
     const bound =
-      r.format === "meta-generation-v1" &&
-      r.attempt === 2 &&
-      r.action === "repair" &&
-      r.generationKind === "REAL_INFERENCE" &&
       r.authorization?.runId === runId &&
       r.authorization?.headSha === headSha &&
       r.authorization?.attempt === 2 &&
@@ -398,11 +427,8 @@ export function repairExecutionStatus({
       r.authorization?.preflightSha256 === repairPreflight.sha256 &&
       r.authorization?.workflowSha256 === repairPreflight.workflowSha256 &&
       r.inputSha256 === repairPreflight.requestBodySha256 &&
-      firstCandidate !== null &&
       r.authorization?.firstAttemptCandidateSha === firstCandidate &&
       repairPreflight.firstAttemptCandidateSha === firstCandidate &&
-      (trial?.candidateSha === undefined ||
-        trial.candidateSha === firstCandidate) &&
       r.sourceSha === preflight.sourceSha &&
       r.contextSha256 === preflight.contextSha256 &&
       r.manifestSha256 === preflight.manifestSha256 &&

@@ -468,10 +468,92 @@ test("repairExecutionStatus binds the confirmed repair across card, admission an
     repairExecutionStatus({ ...base, repairGeneration: { stale: true } }),
     "SEND_UNKNOWN",
   );
-  // Only the complete absence of a repair receipt is NOT_DISPATCHED.
+  // The repair card must agree with the first plan's pinned identity.
+  for (const [name, mutateCard] of Object.entries({
+    foreignSource: (c) => {
+      c.sourceSha = "7".repeat(64);
+    },
+    foreignContext: (c) => {
+      c.contextSha256 = "7".repeat(64);
+    },
+    foreignManifest: (c) => {
+      c.manifestSha256 = "7".repeat(64);
+    },
+    foreignWorkflow: (c) => {
+      c.workflowSha256 = "7".repeat(64);
+    },
+  })) {
+    const mutatedCard = { ...repairCard };
+    mutateCard(mutatedCard);
+    assert.equal(
+      repairExecutionStatus({ ...base, repairPreflight: mutatedCard }),
+      "SEND_UNKNOWN",
+      name,
+    );
+  }
+  // A real first-attempt trial must exist and bind the exact candidate.
   assert.equal(
-    repairExecutionStatus({ ...base, repairGeneration: null }),
+    repairExecutionStatus({
+      ...base,
+      trial: { ...planFixture.trial, candidateSha: undefined },
+    }),
+    "SEND_UNKNOWN",
+  );
+  assert.equal(
+    repairExecutionStatus({
+      ...base,
+      trial: { ...planFixture.trial, candidateSha: "7".repeat(64) },
+    }),
+    "SEND_UNKNOWN",
+  );
+  assert.equal(
+    repairExecutionStatus({ ...base, trial: undefined }),
+    "SEND_UNKNOWN",
+  );
+  // The first-generation receipt must belong to this run and head.
+  assert.equal(
+    repairExecutionStatus({
+      ...base,
+      generation: {
+        ...planFixture.generation,
+        authorization: {
+          ...planFixture.generation.authorization,
+          runId: "999999",
+        },
+      },
+    }),
+    "SEND_UNKNOWN",
+  );
+  assert.equal(
+    repairExecutionStatus({
+      ...base,
+      generation: {
+        ...planFixture.generation,
+        authorization: {
+          ...planFixture.generation.authorization,
+          headSha: "e".repeat(40),
+        },
+      },
+    }),
+    "SEND_UNKNOWN",
+  );
+  // Only the complete absence of repair evidence is NOT_DISPATCHED; evidence
+  // without a confirmed receipt stays unknown (possibly billed).
+  assert.equal(
+    repairExecutionStatus({
+      ...base,
+      repairGeneration: null,
+      repairEvidencePresent: false,
+    }),
     "NOT_DISPATCHED",
+  );
+  assert.equal(
+    repairExecutionStatus({
+      ...base,
+      repairGeneration: null,
+      repairEvidencePresent: true,
+    }),
+    "SEND_UNKNOWN",
   );
 });
 
@@ -711,6 +793,25 @@ test("recordScorecard binds the executed signed repair across real producer inpu
   );
   assert.equal(notDispatched.repairs, 0);
   assert.equal(notDispatched.maximumPosts, 2);
+  // Attempt-2 evidence without a confirmed receipt (repair card, durable
+  // reservation ledger, send receipts) is never reported as unsent.
+  rmSync(join(output, "scorecard.json"));
+  write("preflight-repair.json", repairCard);
+  writeFileSync(join(dir, `mmp078-${runId}-attempt-2.json`), "{}\n", {
+    mode: 0o600,
+  });
+  mkdirSync(join(output, "repair-send-receipts"), { mode: 0o700 });
+  writeFileSync(join(output, "repair-send-receipts", "1.json"), "{}\n", {
+    mode: 0o600,
+  });
+  const evidenceOnly = recordScorecard(env);
+  assert.equal(
+    evidenceOnly.stopReason,
+    "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_SEND_UNKNOWN",
+  );
+  assert.equal(evidenceOnly.repairs, 0);
+  assert.equal(evidenceOnly.maximumPosts, 2);
+  assert.equal(evidenceOnly.product, "NOT_ESTABLISHED");
 });
 
 test("always-run scorecard reads bounded records, tolerates missing files and refuses overwrite/credentials", (t) => {
