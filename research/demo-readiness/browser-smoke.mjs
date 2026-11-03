@@ -7,6 +7,7 @@ import { pathToFileURL } from "node:url";
 import { PINS } from "./pins.mjs";
 import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 import { makeServer } from "./serve.mjs";
+import { TRACK_E_PINS } from "./track-e-pins.mjs";
 
 const [modulePath, browserPath, outputPath] = process.argv.slice(2);
 if (!modulePath || !browserPath || !outputPath)
@@ -25,6 +26,7 @@ let browser;
 const checks = [];
 const errors = [];
 const externalRequests = [];
+const captures = [];
 function checked(name) {
   checks.push(name);
   console.log(`PASS ${name}`);
@@ -35,7 +37,10 @@ try {
     headless: true,
     args: ["--no-proxy-server"],
   });
-  const context = await browser.newContext({ reducedMotion: "reduce" });
+  const context = await browser.newContext({
+    reducedMotion: "reduce",
+    deviceScaleFactor: 1,
+  });
   await context.route("**/*", (route) => {
     if (new URL(route.request().url()).origin === "http://127.0.0.1:4171")
       return route.continue();
@@ -44,16 +49,31 @@ try {
   });
   const page = await context.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
+  async function capture(name, requestedRegion) {
+    const position = await page.evaluate(() => ({
+      width: innerWidth,
+      height: innerHeight,
+      scrollX,
+      scrollY,
+      deviceScaleFactor: devicePixelRatio,
+    }));
+    await page.screenshot({ path: resolve(output, name) });
+    captures.push({ name, requestedRegion, ...position });
+  }
   const load = async () => {
     await page.locator("#load").click();
     await page.locator("#evidence").waitFor({ state: "visible" });
-    assert.equal(await page.locator("#track-cards button").count(), 4);
+    assert.equal(await page.locator("#track-cards button").count(), 5);
   };
-  const empty = async () => {
+  const empty = async (preview = false) => {
     await page.locator("#evidence").waitFor({ state: "hidden" });
     assert.equal(await page.locator("#overview").isVisible(), false);
     assert.equal(await page.locator("#track-cards").textContent(), "");
     assert.equal(await page.locator("#gate-matrix").textContent(), "");
+    if (!preview) {
+      assert.equal(await page.locator("#future").isVisible(), false);
+      assert.equal(await page.locator("#future-content").textContent(), "");
+    }
     for (const id of [
       "raw",
       "attempts",
@@ -62,6 +82,9 @@ try {
       "model-gates",
       "real-gates",
       "incident-gates",
+      "parity-gates",
+      "parity-identities",
+      "parity-metrics",
     ])
       assert.equal(await page.locator(`#${id}`).textContent(), "");
     assert.match(await page.locator("#status").textContent(), /NOT_VERIFIED/);
@@ -90,13 +113,14 @@ try {
   assert.deepEqual(focus, { width: "3px", style: "solid" });
   checked("empty state, skip link, keyboard stage selection and visible focus");
   await load();
-  assert.equal(await page.locator("#receipt option").count(), 10);
-  assert.equal(await page.locator("#gate-matrix tr").count(), 6);
+  assert.equal(await page.locator("#receipt option").count(), 11);
+  assert.equal(await page.locator("#gate-matrix tr").count(), 7);
   for (const [id, section] of [
     ["A", "historical-model"],
     ["B", "historical-replay"],
     ["C", "real-ai"],
     ["D", "incident"],
+    ["E", "parity"],
   ]) {
     await page.locator(`[data-track="${id}"]`).focus();
     await page.keyboard.press("Space");
@@ -118,19 +142,30 @@ try {
     await page.locator("#incident-gates").textContent(),
     /G1 INCONCLUSIVEG2 ERRORG3 ERROR/,
   );
-  checked(
-    "all pinned tracks, six exact gate rows, independent selection and C/D counts",
+  assert.match(
+    await page.locator('[data-track="E"]').textContent(),
+    /HTTP 17\/17 · SQLite 20\/20 executed/,
   );
-  for (let i = 0; i < 6; i++) {
+  assert.match(
+    await page.locator("#parity-gates").textContent(),
+    /G1 PASSG2 FAILG3 FAIL/,
+  );
+  checked(
+    "all five pinned tracks, seven gate rows, C/D/E outcomes and executed counts",
+  );
+  const chapterCount = await page.locator("[data-chapter]").count();
+  assert.equal(chapterCount, 7);
+  const trackIds = ["A", "B", "C", "D", "E"];
+  for (let i = 0; i < chapterCount; i++) {
     await page.locator(`[data-chapter="${i}"]`).click();
     assert.equal(
       await page.locator(`#guide-position`).textContent(),
-      `CHAPTER 0${i + 1} / 06`,
+      `CHAPTER ${String(i + 1).padStart(2, "0")} / ${String(chapterCount).padStart(2, "0")}`,
     );
-    if (i > 0 && i < 5)
+    if (i > 0 && i <= trackIds.length)
       assert.equal(
         await page
-          .locator(`[data-track="${"ABCD"[i - 1]}"]`)
+          .locator(`[data-track="${trackIds[i - 1]}"]`)
           .getAttribute("aria-pressed"),
         "true",
       );
@@ -138,16 +173,18 @@ try {
   assert.equal(await page.locator("#guide-next").isDisabled(), true);
   await page.locator("#guide-prev").click();
   assert.equal(
-    await page.locator('[data-chapter="4"]').getAttribute("aria-current"),
+    await page.locator('[data-chapter="5"]').getAttribute("aria-current"),
     "step",
   );
   await page.locator("#json-inspector summary").click();
   await page.locator("#receipt").selectOption("Incident #104 / incident.json");
   assert.match(await page.locator("#raw").textContent(), /41327197036/);
-  checked("six manual chapters, previous/next boundaries and JSON drill-down");
+  checked(
+    "seven manual chapters, previous/next boundaries and JSON drill-down",
+  );
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 1000 });
-    for (const id of ["A", "B", "C", "D"]) {
+    for (const id of trackIds) {
       await page.locator(`[data-track="${id}"]`).click();
       assert.equal(
         await page.evaluate(
@@ -166,11 +203,20 @@ try {
       `${width} / open matrix`,
     );
     await page.locator(".matrix-details summary").click();
+    if (width !== 768) {
+      await page.locator("#parity").scrollIntoViewIfNeeded();
+      await capture(`track-e-${width}.png`, "Track E selected details");
+    }
     await page.locator("#receipt-desk").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: `${output}/evidence-${width}.png` });
+    await capture(
+      `evidence-${width}.png`,
+      "Evidence desk, A–E loaded, E selected",
+    );
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.screenshot({ path: `${output}/home-${width}.png` });
-    checked(`responsive ${width}px, A/B/C/D and expanded matrix, screenshots`);
+    await capture(`home-${width}.png`, "Home, scroll reset to zero");
+    checked(
+      `responsive ${width}px, A/B/C/D/E and expanded matrix, screenshots`,
+    );
   }
   const history = await Promise.all(
     Object.keys(PINS.files).map(async (name) => ({
@@ -195,16 +241,27 @@ try {
       new URL("../mmp-104/incident.json", import.meta.url),
     ),
   };
+  const parity = {
+    name: TRACK_E_PINS.filename,
+    mimeType: "application/json",
+    buffer: await readFile(
+      new URL(
+        `${TRACK_E_PINS.directory}/${TRACK_E_PINS.filename}`,
+        import.meta.url,
+      ),
+    ),
+  };
   for (const [files, count] of [
     [history, 2],
     [real, 1],
     [[incident], 1],
+    [[parity], 1],
   ]) {
     await page.locator("#files").setInputFiles(files);
     await page.locator("#evidence").waitFor({ state: "visible" });
     assert.equal(await page.locator("#track-cards button").count(), count);
   }
-  checked("picker accepts complete historical, C and lone D sets");
+  checked("picker accepts complete historical, C, lone D and lone E sets");
   await page.locator('[data-chapter="1"]').click();
   assert.match(
     await page.locator("#guide-evidence-note").textContent(),
@@ -214,7 +271,17 @@ try {
     await page.locator("#guide-target").getAttribute("href"),
     "#receipt-desk",
   );
-  assert.equal(await page.locator("#incident").isVisible(), true);
+  assert.equal(await page.locator("#parity").isVisible(), true);
+  await page.locator("#files").setInputFiles([incident]);
+  await page.locator("#evidence").waitFor({ state: "visible" });
+  await page.locator('[data-chapter="5"]').click();
+  assert.match(
+    await page.locator("#guide-evidence-note").textContent(),
+    /E_NOT_LOADED/,
+  );
+  assert.equal(await page.locator("#parity").isVisible(), false);
+  assert.equal(await page.locator('[data-track="E"]').count(), 0);
+  checked("E_NOT_LOADED stays distinct from a loaded FAIL or INCONCLUSIVE");
   // Synthetic declaration tests the preview boundary, never execution evidence.
   const declaration = {
     format: "mmp071-model-preview-v1",
@@ -246,7 +313,7 @@ try {
     },
   ]);
   await page.locator("#future").waitFor({ state: "visible" });
-  await empty();
+  await empty(true);
   assert.match(
     await page.locator("#future-content").textContent(),
     /NOT_VERIFIED/,
@@ -254,6 +321,14 @@ try {
   checked(
     "missing chapter stays narration; future declaration clears trusted overview and stays NOT_VERIFIED",
   );
+  await page
+    .locator("#files")
+    .setInputFiles([{ ...parity, buffer: Buffer.from("{}") }]);
+  await page.waitForFunction(() =>
+    document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+  );
+  await empty();
+  checked("failed E selection clears prior future preview and trusted DOM");
   const forged = JSON.parse(incident.buffer);
   forged.gates[2].verdict = "PASS";
   for (const [name, files] of [
@@ -267,6 +342,20 @@ try {
       [{ ...history[0], buffer: Buffer.from('{"a":') }, ...history.slice(1)],
     ],
     ["mixed D/C", [incident, real[0]]],
+    ["mixed D/E", [incident, parity]],
+    [
+      "modified E",
+      [
+        {
+          ...parity,
+          buffer: Buffer.from(
+            parity.buffer
+              .toString()
+              .replace('"verdict": "FAIL"', '"verdict": "PASS"'),
+          ),
+        },
+      ],
+    ],
     [
       "unknown filename",
       [
@@ -297,8 +386,21 @@ try {
   await empty();
   await page.unroute("**/evidence/mmp-104/incident.json");
   checked(
-    "atomic load: replaced D rejects all four tracks and clears old evidence",
+    "atomic load: replaced D rejects all five tracks and clears old evidence",
   );
+  for (const status of [200, 404]) {
+    await load();
+    await page.route(`**/${TRACK_E_PINS.filename}`, (route) =>
+      route.fulfill({ status, body: "{}", contentType: "application/json" }),
+    );
+    await page.locator("#load").click();
+    await page.waitForFunction(() =>
+      document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+    );
+    await empty();
+    await page.unroute(`**/${TRACK_E_PINS.filename}`);
+  }
+  checked("bad or missing E fails entire A–E bundled load, without fallback");
   // A pending older successful load must not overwrite a newer failed selection.
   let release;
   let intercepted;
@@ -328,7 +430,44 @@ try {
   await empty();
   await page.unroute("**/evidence/mmp-104/incident.json");
   checked("stale successful load cannot overwrite newer failed selection");
+  await page.evaluate((name) => {
+    const original = File.prototype.arrayBuffer;
+    window.restoreFileReader = () => {
+      File.prototype.arrayBuffer = original;
+    };
+    File.prototype.arrayBuffer = async function () {
+      const bytes = await original.call(this);
+      if (this.name !== name) return bytes;
+      window.heldFileReadEntered = true;
+      return new Promise((accept) => {
+        window.releaseFileRead = () => accept(bytes);
+      });
+    };
+  }, TRACK_E_PINS.filename);
+  await page.locator("#files").setInputFiles([parity]);
+  await page.waitForFunction(() => window.heldFileReadEntered);
+  await page.locator("#files").setInputFiles([real[0]]);
+  await page.waitForFunction(() =>
+    document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+  );
+  await page.evaluate(() => {
+    window.releaseFileRead();
+    window.restoreFileReader();
+  });
+  await page.evaluate(() => new Promise((accept) => setTimeout(accept, 150)));
+  await empty();
+  checked(
+    "stale successful E file read cannot overwrite a newer failed selection",
+  );
   await load();
+  await page
+    .locator("#receipt")
+    .selectOption(`Real AI #137 / ${TRACK_E_PINS.filename}`);
+  assert.match(await page.locator("#raw").textContent(), /41505679809/);
+  assert.match(
+    await page.locator("#raw").textContent(),
+    /"chargedCostUsd": null/,
+  );
   assert.deepEqual(errors, []);
   assert.deepEqual(externalRequests, []);
   await context.close();
@@ -343,6 +482,8 @@ try {
         errors,
         externalRequests,
         browser: browser.version(),
+        capturedUtc: new Date().toISOString(),
+        captures,
         humanTimedRehearsal: "NOT_RUN",
         screenReaderAudit: "NOT_RUN",
       },

@@ -102,7 +102,7 @@ input::file-selector-button { color: var(--purple); background: white; padding: 
 .empty-state > span { font-size: 42px; color: var(--purple); }
 .empty-state strong { font-size: 15px; }
 .empty-state p { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
-.track-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.track-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .track-card { display: flex; flex-direction: column; text-align: left; border: 1px solid var(--line); background: white; border-radius: 12px; padding: 20px; min-width: 0; color: var(--ink); position: relative; }
 .track-card:hover { border-color: #9b8bce; background: #faf9ff; }
 .track-card[aria-pressed=true] { border: 2px solid var(--purple); padding: 19px; background: #f6f3ff; }
@@ -123,7 +123,7 @@ summary { cursor: pointer; font-size: 13px; font-weight: 650; overflow-wrap: any
 .warning { color: var(--amber); background: #fff5e1; }
 .failure { color: var(--red); background: #fff0f3; }
 .model { border-top: 3px solid #ba8632; }
-.real-ai, .incident { border-top: 3px solid var(--red); }
+.real-ai, .incident, .parity { border-top: 3px solid var(--red); }
 .detail-label { margin-block: 0 12px; }
 .metrics { display: flex; flex-wrap: wrap; gap: 25px 50px; margin-block: 24px; }
 .metric span { display: block; font-size: 12px; color: var(--muted); }
@@ -150,8 +150,8 @@ td small { display: block; max-width: 225px; font-family: Consolas, monospace; f
 dl { font-size: 12px; margin-block: 16px; }
 dt { color: var(--muted); margin-top: 12px; }
 dd { font-family: Consolas, monospace; font-size: 12px; margin: 4px 0 0; overflow-wrap: anywhere; }
-#real-metrics dl, #incident-metrics dl { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 10px 24px; }
-#real-metrics dt, #real-metrics dd, #incident-metrics dt, #incident-metrics dd { margin: 0; }
+#real-metrics dl, #incident-metrics dl, #parity-metrics dl { display: grid; grid-template-columns: minmax(180px, 1fr) 2fr; gap: 10px 24px; }
+#real-metrics dt, #real-metrics dd, #incident-metrics dt, #incident-metrics dd, #parity-metrics dt, #parity-metrics dd { margin: 0; }
 select { max-width: 100%; display: block; border: 1px solid var(--line); background: white; color: var(--ink); font-size: 12px; padding: 9px; margin-block: 10px; border-radius: 6px; }
 #json-inspector label { display: block; font-size: 12px; margin-top: 20px; }
 pre { font-family: Consolas, monospace; font-size: 12px; background: #f4f3f8; border: 1px solid var(--line); border-radius: 7px; padding: 18px; max-height: 380px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -235,8 +235,8 @@ footer { display: flex; justify-content: space-between; gap: 24px; padding-block
   .empty-state > span { font-size: 30px; }
   .legend dl { grid-template-columns: 1fr; gap: 3px; }
   .legend dd { margin-bottom: 10px; }
-  #real-metrics dl, #incident-metrics dl { grid-template-columns: 1fr; gap: 4px; }
-  #real-metrics dd, #incident-metrics dd { margin-bottom: 12px; }
+  #real-metrics dl, #incident-metrics dl, #parity-metrics dl { grid-template-columns: 1fr; gap: 4px; }
+  #real-metrics dd, #incident-metrics dd, #parity-metrics dd { margin-bottom: 12px; }
   h2 { font-size: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
