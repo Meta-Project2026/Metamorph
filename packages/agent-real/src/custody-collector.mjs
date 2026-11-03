@@ -15,6 +15,16 @@ import {
 } from "./custody-files.mjs";
 import { encryptDiagnostic } from "./encrypt-diagnostics.mjs";
 
+/** One spool per real attempt; the value is pinned by the spawning parent. */
+export function custodySpoolName(env) {
+  requireCustody(
+    env.MMP115_SPOOL === undefined ||
+      env.MMP115_SPOOL === "mmp115-custody" ||
+      env.MMP115_SPOOL === "mmp115-custody-repair",
+  );
+  return env.MMP115_SPOOL ?? "mmp115-custody";
+}
+
 export async function collectCapsule(input, env, signal) {
   requireCustody(
     process.platform === "linux" &&
@@ -29,7 +39,7 @@ export async function collectCapsule(input, env, signal) {
     headSha: env.GITHUB_SHA,
   };
   const capsule = parseCapsule(input, expected),
-    spool = join(env.RUNNER_TEMP, "mmp115-custody");
+    spool = join(env.RUNNER_TEMP, custodySpoolName(env));
   signal.throwIfAborted();
   privateDirectory(env.RUNNER_TEMP, false, false);
   privateDirectory(spool, true);

@@ -24,6 +24,80 @@ export async function runPublicMigration({
   authorization,
   checkpoint,
 }) {
+  return runPaidAttempt({
+    context,
+    selection,
+    parent,
+    headSha,
+    signal,
+    authorization,
+    checkpoint,
+    attempt: 1,
+    request: {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "generate",
+      attempt: 1,
+      repairFeedback: null,
+    },
+    format: "mmp078-public-paid-trial-v1",
+  });
+}
+
+/** The single signed repair send. Requires its own attempt-2 admission bound
+ * to the exact repair body (genuine previous model changes + allowlisted
+ * public feedback codes); custody and the following Oracle are separate. */
+export async function runPublicRepair({
+  context,
+  parent,
+  headSha,
+  signal,
+  authorization,
+  checkpoint,
+  previousChanges,
+  feedback,
+}) {
+  insist(
+    Array.isArray(previousChanges) &&
+      previousChanges.length > 0 &&
+      typeof feedback === "string" &&
+      feedback.length > 0,
+    "SOURCE_IDENTITY",
+  );
+  return runPaidAttempt({
+    context,
+    selection: "meta",
+    parent,
+    headSha,
+    signal,
+    authorization,
+    checkpoint,
+    attempt: 2,
+    request: {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "repair",
+      attempt: 2,
+      repairFeedback: feedback,
+    },
+    format: "mmp078-public-repair-trial-v1",
+    extraOptions: { firstAttempt: 2, previousChanges },
+  });
+}
+
+async function runPaidAttempt({
+  context,
+  selection = "none",
+  parent,
+  headSha,
+  signal,
+  authorization,
+  checkpoint,
+  attempt,
+  request,
+  format,
+  extraOptions = {},
+}) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
   insist(/^[a-f0-9]{40}$/.test(headSha), "HEAD_IDENTITY");
   const selected = createProductionMigrationProvider(
@@ -31,9 +105,10 @@ export async function runPublicMigration({
     selection,
     authorization,
     checkpoint,
+    extraOptions,
   );
   const result = {
-    format: "mmp061-public-trial-v1",
+    format,
     headSha,
     sourceSha: context.sourceSha,
     sourceArchiveSha256: context.sourceArchiveSha256,
@@ -68,7 +143,6 @@ export async function runPublicMigration({
   insist(headSha === selected.status.authorization.headSha, "HEAD_IDENTITY");
   // Separate explicit estimate policy. Never pass an estimate as the guaranteed
   // dollar-bound required by legacy runAgent/ModelProvider. Shared API unchanged.
-  result.format = "mmp078-public-paid-trial-v1";
   result.budgetAuth = selected.status.authorization;
   result.admittedMaxEstimatedRequestCostUsd =
     selected.status.maxEstimatedRequestCostUsd;
@@ -78,16 +152,7 @@ export async function runPublicMigration({
   const custodyAttempt = beginCustody(context, authorization);
   try {
     const response = ModelResponseSchema.parse(
-      await selected.provider.generate(
-        {
-          unitId: "workshop-api",
-          tier: "spark",
-          action: "generate",
-          attempt: 1,
-          repairFeedback: null,
-        },
-        signal,
-      ),
+      await selected.provider.generate(request, signal),
     );
     await session.writer.write(response.changes, signal);
     const lease = await session.acquire(session.writer.root, signal);
@@ -104,6 +169,7 @@ export async function runPublicMigration({
         lease,
         selected.receipts()[0],
         signal,
+        attempt,
       );
     } catch {
       captureFailed = true;
@@ -111,7 +177,8 @@ export async function runPublicMigration({
       await lease.release();
     }
     result.modelGeneration = "GENERATED";
-    result.aiGeneration = "REAL_INFERENCE_GENERATED";
+    result.aiGeneration =
+      attempt === 1 ? "REAL_INFERENCE_GENERATED" : "REAL_INFERENCE_REPAIRED";
     if (captureFailed) {
       result.blockers = ["CUSTODY_CAPTURE_FAILED"];
       return result;

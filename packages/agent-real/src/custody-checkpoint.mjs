@@ -89,7 +89,20 @@ export function checkpointReady(capture, finalizer, expected) {
     c.collectorCleanup,
   );
 }
-export function artifactMetadata(record, artifact, run, acknowledgment) {
+/** Each real attempt stores under its own canonical artifact name. */
+export function candidateArtifactName(runId, attempt = 1) {
+  requireCustody(
+    /^[1-9][0-9]{0,19}$/.test(runId) && (attempt === 1 || attempt === 2),
+  );
+  return `mmp107-candidate-${runId}-1${attempt === 2 ? "-repair" : ""}`;
+}
+export function artifactMetadata(
+  record,
+  artifact,
+  run,
+  acknowledgment,
+  attempt = 1,
+) {
   record = plainData(record);
   const c = validateReceipt(
       record,
@@ -109,12 +122,13 @@ export function artifactMetadata(record, artifact, run, acknowledgment) {
     /^[1-9][0-9]{0,19}$/.test(ack.artifactId) &&
       /^[a-f0-9]{64}$/.test(ack.archiveSha256) &&
       ack.uploadOutcome === "success" &&
-      ack.downloadOutcome === "success",
+      ack.downloadOutcome === "success" &&
+      (attempt === 1 || attempt === 2),
   );
   requireCustody(
     Number.isSafeInteger(a.id) &&
       String(a.id) === ack.artifactId &&
-      a.name === `mmp107-candidate-${c.identity.runId}-1` &&
+      a.name === candidateArtifactName(c.identity.runId, attempt) &&
       a.expired === false &&
       a.digest === `sha256:${ack.archiveSha256}` &&
       Number.isSafeInteger(a.size_in_bytes) &&
@@ -144,8 +158,15 @@ export function artifactMetadata(record, artifact, run, acknowledgment) {
   return c;
 }
 // Production caller passes only fixed-origin authenticated API responses + actual readback.
-export function verifiedReadback(ready, artifact, run, ack, directory) {
-  const c = artifactMetadata(ready, artifact, run, ack);
+export function verifiedReadback(
+  ready,
+  artifact,
+  run,
+  ack,
+  directory,
+  attempt = 1,
+) {
+  const c = artifactMetadata(ready, artifact, run, ack, attempt);
   exactReadback(directory, c);
   return receiptFor(
     "STORED_UNVERIFIED",
@@ -155,13 +176,20 @@ export function verifiedReadback(ready, artifact, run, ack, directory) {
   );
 }
 const permits = new WeakMap();
-export function requireStoredCheckpoint(env, expected) {
+export function requireStoredCheckpoint(
+  env,
+  expected,
+  attempt = 1,
+  { allowCredentials = false } = {},
+) {
   requireCustody(
     process.platform === "linux" &&
-      !env.MODEL_API_KEY &&
-      env.GITHUB_RUN_ATTEMPT === "1",
+      (allowCredentials || !env.MODEL_API_KEY) &&
+      env.GITHUB_RUN_ATTEMPT === "1" &&
+      (attempt === 1 || attempt === 2),
   );
-  const spool = join(env.RUNNER_TEMP, "mmp115-custody");
+  const suffix = attempt === 2 ? "-repair" : "";
+  const spool = join(env.RUNNER_TEMP, `mmp115-custody${suffix}`);
   privateDirectory(spool);
   const capture = readRecord(join(spool, "capture.json")),
     finalizer = readRecord(join(spool, "finalizer.json"));
@@ -187,7 +215,8 @@ export function requireStoredCheckpoint(env, expected) {
     proof.artifact,
     proof.run,
     proof.ack,
-    join(env.RUNNER_TEMP, "mmp115-readback"),
+    join(env.RUNNER_TEMP, `mmp115-readback${suffix}`),
+    attempt,
   );
   requireCustody(JSON.stringify(recomputed) === JSON.stringify(stored));
   const token = Object.freeze({});
@@ -266,11 +295,26 @@ export async function authenticatedArtifactMetadata(env) {
     run = await json(`runs/${env.GITHUB_RUN_ID}`);
   return { artifact, run };
 }
-export function saveTransport(spool, ready, artifact, run, ack, directory) {
+export function saveTransport(
+  spool,
+  ready,
+  artifact,
+  run,
+  ack,
+  directory,
+  attempt = 1,
+) {
   artifact = plainData(artifact);
   run = plainData(run);
   ack = plainData(ack);
-  const stored = verifiedReadback(ready, artifact, run, ack, directory);
+  const stored = verifiedReadback(
+    ready,
+    artifact,
+    run,
+    ack,
+    directory,
+    attempt,
+  );
   // Store only bounded binding fields, never API payloads with URLs/actor metadata.
   const a = {
     id: artifact.id,

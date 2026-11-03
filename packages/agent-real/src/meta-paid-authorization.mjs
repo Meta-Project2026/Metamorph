@@ -22,6 +22,7 @@ import { META_STANDARD_TARIFF } from "./meta-tariff.mjs";
 import {
   commitPreflight,
   generationPreflight,
+  repairPreflight,
 } from "./migration-preflight.mjs";
 
 export const PAID_POLICY = Object.freeze({
@@ -39,6 +40,9 @@ export const PAID_POLICY = Object.freeze({
   // result or a guaranteed provider dollar cap. Meta-injected steering is unbilled.
   tokensPerSerializedByte: 4,
   protocolTokens: 32768,
+  // Single source for the signed two-attempt plan's repair wire bound; the
+  // synthetic REPAIR_POLICY derives the same value.
+  repairWireBytes: 96 * 1024,
 });
 const admissions = new WeakMap();
 const admissionCodes = new Set([
@@ -91,6 +95,24 @@ export function paidProjection(body) {
     inputTokensUpperEstimate + PAID_POLICY.maxOutputTokens <= 1048576,
     "INPUT_LIMIT",
   );
+  return Object.freeze({
+    method: "serialized-utf8-bytes-times-4-plus-32768-v1",
+    inputTokensUpperEstimate,
+    maxOutputTokens: PAID_POLICY.maxOutputTokens,
+    worstCaseEstimatedUsd:
+      (inputTokensUpperEstimate * PAID_POLICY.inputPerMillion +
+        PAID_POLICY.maxOutputTokens * PAID_POLICY.outputPerMillion) /
+      1e6,
+  });
+}
+
+/** Pessimistic pre-send projection of the single repair send: the repair wire
+ * bound is reserved before the first POST; the exact repair body is admitted
+ * separately and cannot exceed this bound. Never a settled charge. */
+export function repairProjection() {
+  const inputTokensUpperEstimate =
+    PAID_POLICY.repairWireBytes * PAID_POLICY.tokensPerSerializedByte +
+    PAID_POLICY.protocolTokens;
   return Object.freeze({
     method: "serialized-utf8-bytes-times-4-plus-32768-v1",
     inputTokensUpperEstimate,
@@ -197,9 +219,67 @@ async function signedIdentity(env) {
   );
   return c;
 }
-export async function authorizePaidWorkflow(context) {
+/** Opaque signed admission for one paid workflow. Default remains the exact
+ * single-generation admission. `plan: "generate_then_repair"` reserves BOTH
+ * sends pessimistically before the first POST (attempt 1 admission), and the
+ * `attempt: 2` admission binds the exact repair body — genuine previous model
+ * changes plus allowlisted public feedback codes only — after the first
+ * candidate's complete eligible public FAIL and verified custody. Each
+ * admission performs its own genuine OIDC identity fetch; neither grants the
+ * other. */
+export async function authorizePaidWorkflow(context, options = {}) {
   const { isMigrationContext } = await import("./migration-context.mjs");
   const { prepareMetaMigration } = await import("./meta-migration.mjs");
+  gate(
+    options !== null &&
+      typeof options === "object" &&
+      !Array.isArray(options) &&
+      Object.keys(options).every((k) =>
+        [
+          "plan",
+          "attempt",
+          "feedback",
+          "previousChanges",
+          "firstAttemptEstimatedUsd",
+          "firstAttemptCandidateSha",
+        ].includes(k),
+      ),
+    "CONFIG_DENIED",
+  );
+  const plan =
+    options.plan === undefined || options.plan === "single_generation"
+      ? "single_generation"
+      : options.plan === "generate_then_repair"
+        ? "generate_then_repair"
+        : null;
+  const attempt = options.attempt ?? 1;
+  gate(
+    plan !== null &&
+      (attempt === 1 || attempt === 2) &&
+      (attempt === 2
+        ? plan === "generate_then_repair" &&
+          typeof options.feedback === "string" &&
+          Array.isArray(options.previousChanges) &&
+          options.previousChanges.length > 0 &&
+          options.previousChanges.every(
+            (change) =>
+              change !== null &&
+              typeof change === "object" &&
+              typeof change.path === "string" &&
+              typeof change.content === "string",
+          ) &&
+          Number.isFinite(options.firstAttemptEstimatedUsd) &&
+          options.firstAttemptEstimatedUsd >= 0 &&
+          // First-candidate provenance, re-verified by the caller against
+          // stored custody; the signed admission carries it forward.
+          typeof options.firstAttemptCandidateSha === "string" &&
+          /^[a-f0-9]{64}$/.test(options.firstAttemptCandidateSha)
+        : options.feedback === undefined &&
+          options.previousChanges === undefined &&
+          options.firstAttemptEstimatedUsd === undefined &&
+          options.firstAttemptCandidateSha === undefined),
+    "CONFIG_DENIED",
+  );
   gate(isMigrationContext(context), "SOURCE_IDENTITY");
   const env = process.env;
   const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
@@ -211,31 +291,84 @@ export async function authorizePaidWorkflow(context) {
   gate(Date.now() < Date.parse(PAID_POLICY.tariffExpires), "TARIFF_EXPIRED");
   await verifyHostedMetaPolicy(head);
   const identity = await signedIdentity(env);
-  const body = prepareMetaMigration(context, {
-    unitId: "workshop-api",
-    tier: "spark",
-    action: "generate",
-    attempt: 1,
-    repairFeedback: null,
-  });
+  let request,
+    previous = [];
+  if (attempt === 2) {
+    gate(
+      event.inputs.execution_mode === "generate_then_repair" &&
+        event.inputs.confirm_paid === "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+      "PAID_CONFIRMATION_BLOCKED",
+    );
+    request = {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "repair",
+      attempt: 2,
+      repairFeedback: options.feedback,
+    };
+    previous = options.previousChanges;
+  } else {
+    request = {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "generate",
+      attempt: 1,
+      repairFeedback: null,
+    };
+  }
+  const body = prepareMetaMigration(context, request, previous);
   const projection = paidProjection(body);
-  gate(
-    projection.worstCaseEstimatedUsd <= Number(event.inputs.max_estimated_usd),
-    "ESTIMATED_BUDGET_BLOCKED",
-  );
+  if (attempt === 2) {
+    gate(Buffer.byteLength(body) <= PAID_POLICY.repairWireBytes, "INPUT_LIMIT");
+    gate(
+      options.firstAttemptEstimatedUsd + projection.worstCaseEstimatedUsd <=
+        Number(event.inputs.max_estimated_usd),
+      "ESTIMATED_BUDGET_BLOCKED",
+    );
+  } else {
+    gate(
+      projection.worstCaseEstimatedUsd +
+        (plan === "generate_then_repair"
+          ? repairProjection().worstCaseEstimatedUsd
+          : 0) <=
+        Number(event.inputs.max_estimated_usd),
+      "ESTIMATED_BUDGET_BLOCKED",
+    );
+  }
   gate(
     typeof env.RUNNER_TEMP === "string" && env.RUNNER_TEMP.length > 0,
     "SIGNED_IDENTITY_BLOCKED",
   );
-  const preflight = generationPreflight({
-    context,
-    headSha: head,
-    workflowBytes: readFileSync(
-      join(root, ".github/workflows/meta-paid-migration.yml"),
-    ),
-    actor: identity.actor,
-    maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
-  });
+  const workflowBytes = readFileSync(
+    join(root, ".github/workflows/meta-paid-migration.yml"),
+  );
+  const preflight =
+    attempt === 2
+      ? repairPreflight({
+          context,
+          headSha: head,
+          workflowBytes,
+          actor: identity.actor,
+          maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
+          feedback: options.feedback,
+          previousChanges: options.previousChanges,
+          firstAttemptEstimatedUsd: options.firstAttemptEstimatedUsd,
+          firstAttemptCandidateSha: options.firstAttemptCandidateSha,
+          confirmation: event.inputs.confirm_paid,
+        })
+      : generationPreflight({
+          context,
+          headSha: head,
+          workflowBytes,
+          actor: identity.actor,
+          maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
+          ...(plan === "generate_then_repair"
+            ? {
+                plan,
+                confirmation: event.inputs.confirm_paid,
+              }
+            : {}),
+        });
   const summary = Object.freeze({
     kind: PAID_POLICY.version,
     actor: identity.actor,
@@ -250,6 +383,14 @@ export async function authorizePaidWorkflow(context) {
     workflowSha256: preflight.workflowSha256,
     preflightSha256: preflight.sha256,
     maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
+    attempt,
+    plan:
+      attempt === 2 || plan === "generate_then_repair"
+        ? "generate_then_repair"
+        : "single_generation",
+    ...(attempt === 2
+      ? { firstAttemptCandidateSha: options.firstAttemptCandidateSha }
+      : {}),
     ...projection,
     monetaryCap: "NO_PROVIDER_HARD_CAP",
   });
@@ -259,11 +400,19 @@ export async function authorizePaidWorkflow(context) {
     summary,
     expires: Date.now() + 240000,
     consumed: false,
-    ledger: join(env.RUNNER_TEMP, `mmp078-${identity.run_id}-attempt.json`),
+    attempt,
+    ledger: join(
+      env.RUNNER_TEMP,
+      attempt === 2
+        ? `mmp078-${identity.run_id}-attempt-2.json`
+        : `mmp078-${identity.run_id}-attempt.json`,
+    ),
     preflight,
     preflightPath: join(
       env.RUNNER_TEMP,
-      `mmp154-${identity.run_id}-preflight.json`,
+      attempt === 2
+        ? `mmp154-${identity.run_id}-repair-preflight.json`
+        : `mmp154-${identity.run_id}-preflight.json`,
     ),
   });
   return auth;

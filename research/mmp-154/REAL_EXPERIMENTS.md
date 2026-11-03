@@ -47,3 +47,24 @@ Oracle/comparator/reference change, no repair-eligibility change, no paid
 call. Next run needs independent exact-HEAD review, merge, a new exact-main
 preflight card (ceiling $0.229517 worst case at the 2026-11-03 tariff) and
 explicit operator launch.
+
+**2026-11-03 (MMP-158, implementation): no new real experiment launched by this
+task. Actual Meta requests: 0.**
+
+The signed two-attempt repair vertical (MMP-158) is implemented for operator
+review: `generate_then_repair` performs generation → full independent Oracle →
+one repair POST, only after a complete eligible public FAIL (the exact
+`COMPLETE_PUBLIC_FAIL` + `HTTP_JSON_TYPE` shape recorded by real run
+[#41703793337](https://github.com/Meta-Project2026/Metamorph/actions/runs/41703793337),
+whose sanitized receipt is embedded read-only as test evidence) → fresh
+attempt-2 custody and a second full Oracle. Cross-run reuse of the sealed
+#41703793337 candidate was rejected: it would need out-of-run candidate bytes
+or runner-side decryption, both outside the trust contract. Per-attempt OIDC
+admissions, distinct custody artifacts/readbacks, pessimistic two-send
+reservation before the first POST, no third POST and fail-closed gates are
+unit-tested offline (real-receipt eligibility, session sequence, custody
+capsules, mode/confirmation pairing, preflight aggregates, scorecard
+refusals). Full suite: 846 tests, 733 pass, 113 platform skips, 0 fail on the
+implementation host; hosted CI records its own result. The live two-attempt
+run remains NOT_RUN and requires the same review/merge/operator gate as
+before; product NOT_ESTABLISHED.

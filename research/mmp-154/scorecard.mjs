@@ -1,7 +1,11 @@
 // Always-run, credential-free workflow projection; no network or candidate reads.
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { generationScorecard } from "../../packages/agent-real/src/live-experiment.mjs";
+import {
+  generationScorecard,
+  repairScorecard,
+} from "../../packages/agent-real/src/live-experiment.mjs";
 import { commitPreflight } from "../../packages/agent-real/src/migration-preflight.mjs";
 import { readPrivateJson } from "../../packages/agent-real/src/private-diagnostics.mjs";
 
@@ -23,6 +27,26 @@ export function recordScorecard(env) {
     headSha: env.GITHUB_SHA,
   });
   commitPreflight(join(output, "scorecard.json"), scorecard);
+  // The signed two-attempt plan adds its own attempt-2 projection; the final
+  // verdict stays per-trial and never grants product acceptance.
+  if (existsSync(join(output, "trial-repair.json"))) {
+    const repair = repairScorecard({
+      preflight: read(join(output, "preflight-repair.json")),
+      generation: read(join(output, "generation-repair.json")),
+      trial: read(join(output, "trial-repair.json")),
+      stored: read(join(output, "custody-repair-stored.json")),
+      transport: read(join(env.RUNNER_TEMP, "mmp115-custody-repair/transport.json")),
+      finalizer: read(join(output, "finalizer.json")),
+      runId: env.GITHUB_RUN_ID,
+      headSha: env.GITHUB_SHA,
+      firstAttempt: {
+        candidateSha: scorecard.candidateSha,
+        headSha: scorecard.headSha,
+        estimatedCostUsd: scorecard.observedEstimatedCostUsd,
+      },
+    });
+    commitPreflight(join(output, "scorecard-repair.json"), repair);
+  }
   return scorecard;
 }
 

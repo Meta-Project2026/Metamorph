@@ -64,6 +64,7 @@ export function createProductionMigrationProvider(
   selection,
   authorization,
   checkpoint,
+  extraOptions = {},
 ) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
   const status = migrationProviderStatus(selection, authorization, context);
@@ -71,6 +72,7 @@ export function createProductionMigrationProvider(
     const live = createMetaMigrationProvider(context, {
       authorization,
       checkpoint,
+      ...extraOptions,
     });
     return Object.freeze({ ...live, status });
   }

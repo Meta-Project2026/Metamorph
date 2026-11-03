@@ -8,18 +8,20 @@ import {
 } from "./custody-contract.mjs";
 import { cipherAt, readRecord } from "./custody-files.mjs";
 
-export async function captureLease(token, lease, receipt, signal) {
-  const capsule = await capsuleFromLease(token, lease, receipt),
+export async function captureLease(token, lease, receipt, signal, attempt = 1) {
+  const capsule = await capsuleFromLease(token, lease, receipt, attempt),
     env = process.env;
   requireCustody(
     process.platform === "linux" &&
       capsule.identity.runId === env.GITHUB_RUN_ID &&
       capsule.identity.headSha === env.GITHUB_SHA &&
-      env.GITHUB_RUN_ATTEMPT === "1",
+      env.GITHUB_RUN_ATTEMPT === "1" &&
+      (attempt === 1 || attempt === 2),
   );
   const plaintext = Buffer.from(JSON.stringify(capsule));
   try {
     signal.throwIfAborted();
+    const spool = `mmp115-custody${attempt === 2 ? "-repair" : ""}`;
     const ok = await new Promise((resolveResult) => {
       const child = spawn(
         process.execPath,
@@ -36,6 +38,7 @@ export async function captureLease(token, lease, receipt, signal) {
             GITHUB_RUN_ID: env.GITHUB_RUN_ID,
             GITHUB_RUN_ATTEMPT: "1",
             GITHUB_SHA: env.GITHUB_SHA,
+            MMP115_SPOOL: spool,
           },
         },
       );
@@ -72,13 +75,13 @@ export async function captureLease(token, lease, receipt, signal) {
     });
     requireCustody(ok && !signal.aborted);
     await lease.assertUnchanged();
-    const spool = join(env.RUNNER_TEMP, "mmp115-custody");
+    const spoolPath = join(env.RUNNER_TEMP, spool);
     const record = validateReceipt(
-      readRecord(join(spool, "capture.json")),
+      readRecord(join(spoolPath, "capture.json")),
       capsule.identity,
       "CAPTURED_UNVERIFIED",
     );
-    cipherAt(join(spool, "candidate.age"), record);
+    cipherAt(join(spoolPath, "candidate.age"), record);
     return record;
   } finally {
     plaintext.fill(0);

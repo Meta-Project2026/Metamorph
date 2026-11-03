@@ -20,7 +20,9 @@ export function validateWorkflowIdentity(env, head, inputs, paid = false) {
   );
   gate(Object.hasOwn(META_OWNERS, env.GITHUB_ACTOR), "ACTOR_BLOCKED");
   if (paid) {
-    requireMigrationMode(inputs.execution_mode);
+    // Absent execution_mode keeps the historical single_generation default.
+    const mode = inputs.execution_mode ?? "single_generation";
+    requireMigrationMode(mode);
     gate(
       env.GITHUB_ACTOR_ID === META_OWNERS[env.GITHUB_ACTOR] &&
         env.GITHUB_RUN_ATTEMPT === "1" &&
@@ -28,11 +30,14 @@ export function validateWorkflowIdentity(env, head, inputs, paid = false) {
         env.RUNNER_ENVIRONMENT === "github-hosted" &&
         env.GITHUB_WORKFLOW_REF ===
           `${META_REPOSITORY}/.github/workflows/meta-paid-migration.yml@refs/heads/main` &&
-        inputs.confirm_paid === "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP" &&
         inputs.model_provider === "meta" &&
         ["0.10", "0.20", "0.25", "0.50", "0.75", "1.00"].includes(
           inputs.max_estimated_usd,
-        ),
+        ) &&
+        ((mode === "single_generation" &&
+          inputs.confirm_paid === "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP") ||
+          (mode === "generate_then_repair" &&
+            inputs.confirm_paid === "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP")),
       "PAID_CONFIRMATION_BLOCKED",
     );
   }

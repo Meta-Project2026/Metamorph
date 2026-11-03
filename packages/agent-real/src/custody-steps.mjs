@@ -17,9 +17,14 @@ import {
 } from "./custody-files.mjs";
 import { readPrivateJson } from "./private-diagnostics.mjs";
 
-export async function custodyStep(mode, env) {
-  requireCustody(!env.MODEL_API_KEY && process.platform === "linux");
-  const spool = join(env.RUNNER_TEMP, "mmp115-custody"),
+export async function custodyStep(mode, env, attempt = 1) {
+  requireCustody(
+    !env.MODEL_API_KEY &&
+      process.platform === "linux" &&
+      (attempt === 1 || attempt === 2),
+  );
+  const suffix = attempt === 2 ? "-repair" : "";
+  const spool = join(env.RUNNER_TEMP, `mmp115-custody${suffix}`),
     output = join(env.RUNNER_TEMP, "meta-paid-public");
   const expected = {
     runId: env.GITHUB_RUN_ID,
@@ -33,7 +38,9 @@ export async function custodyStep(mode, env) {
   );
   cipherAt(join(spool, "candidate.age"), capture);
   if (mode === "capture") {
-    const trial = readPrivateJson(join(output, "trial.json")).value;
+    const trial = readPrivateJson(
+      join(output, attempt === 2 ? "trial-repair.json" : "trial.json"),
+    ).value;
     requireCustody(
       trial.modelGeneration === "GENERATED" &&
         trial.candidateSha === capture.identity.candidateSha &&
@@ -41,13 +48,13 @@ export async function custodyStep(mode, env) {
         trial.sourceSha === capture.identity.sourceSha &&
         JSON.stringify(trial.custody) === JSON.stringify(capture),
     );
-    commitRecord(join(output, "custody-capture.json"), capture);
+    commitRecord(join(output, `custody${suffix}-capture.json`), capture);
     return capture;
   }
   if (mode === "finalize") {
     const finalizer = await finalizeCustody(capture.identity);
     commitRecord(join(spool, "finalizer.json"), finalizer);
-    commitRecord(join(output, "custody-finalizer.json"), finalizer);
+    commitRecord(join(output, `custody${suffix}-finalizer.json`), finalizer);
     // Emergency cleanup is useful but must never satisfy checkpoint readiness.
     checkpointReady(capture, finalizer, expected);
     return finalizer;
@@ -58,10 +65,10 @@ export async function custodyStep(mode, env) {
     expected,
   );
   if (mode === "prepare-upload") {
-    const readback = join(env.RUNNER_TEMP, "mmp115-readback");
+    const readback = join(env.RUNNER_TEMP, `mmp115-readback${suffix}`);
     privateDirectory(readback, true);
     commitRecord(join(spool, "ready.json"), ready);
-    commitRecord(join(output, "custody-checkpoint.json"), ready);
+    commitRecord(join(output, `custody${suffix}-checkpoint.json`), ready);
     return ready;
   }
   requireCustody(
@@ -86,17 +93,19 @@ export async function custodyStep(mode, env) {
     artifact,
     run,
     ack,
-    join(env.RUNNER_TEMP, "mmp115-readback"),
+    join(env.RUNNER_TEMP, `mmp115-readback${suffix}`),
+    attempt,
   );
-  commitRecord(join(output, "custody-stored.json"), stored);
+  commitRecord(join(output, `custody${suffix}-stored.json`), stored);
   return stored;
 }
 if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
+  const attempt = process.argv[3] === "2" ? 2 : 1;
   try {
-    await custodyStep(process.argv[2], process.env);
+    await custodyStep(process.argv[2], process.env, attempt);
     process.stdout.write("CUSTODY_STEP_COMPLETED_UNVERIFIED\n");
   } catch {
     // Independent cleanup still runs when capture failed or its record is missing.
@@ -110,18 +119,21 @@ if (
     try {
       const output = join(process.env.RUNNER_TEMP, "meta-paid-public");
       mkdirSync(output, { recursive: true, mode: 0o700 });
-      commitRecord(join(output, "custody-failure.json"), {
-        format: "mmp115-custody-failure-v1",
-        state: "NO_GO",
-        verification: "UNVERIFIED",
-        phase:
-          {
-            capture: "CAPTURE",
-            finalize: "CHECKPOINT",
-            "prepare-upload": "UPLOAD_GATE",
-            "verify-download": "READBACK",
-          }[process.argv[2]] ?? "UNAVAILABLE",
-      });
+      commitRecord(
+        join(output, `custody${attempt === 2 ? "-repair" : ""}-failure.json`),
+        {
+          format: "mmp115-custody-failure-v1",
+          state: "NO_GO",
+          verification: "UNVERIFIED",
+          phase:
+            {
+              capture: "CAPTURE",
+              finalize: "CHECKPOINT",
+              "prepare-upload": "UPLOAD_GATE",
+              "verify-download": "READBACK",
+            }[process.argv[2]] ?? "UNAVAILABLE",
+        },
+      );
     } catch {
       /* never replace a committed record */
     }

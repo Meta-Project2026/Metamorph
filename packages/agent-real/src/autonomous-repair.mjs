@@ -34,7 +34,8 @@ export const REPAIR_POLICY = Object.freeze({
   maxRequests: 2,
   maxRepairs: 1,
   maxAggregateUsd: 1,
-  repairWireBytes: 96 * 1024,
+  // Single source: the signed two-attempt plan reserves the same bound.
+  repairWireBytes: PAID_POLICY.repairWireBytes,
   monetaryCap: "NO_PROVIDER_HARD_CAP",
 });
 const safeCodes = new Set([
