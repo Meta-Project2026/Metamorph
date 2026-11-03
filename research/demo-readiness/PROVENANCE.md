@@ -342,3 +342,141 @@ retained public source bytes**, not a new Oracle run, digital executor signature
 independent behavior attestation, current owner restore or product acceptance.
 No billing settlement, live job, repair, new model authorization or private G4 is
 established. The snapshot ends with the 2 November run; later work is separate.
+
+
+## F — first real repair, historical public FAIL
+
+**GO source decision: 4 November 2026 (Europe/Bucharest).** This lane is #162,
+independent of active #161. Fresh main and execution head both equal
+`f034d4dfcc30dcc82300e93002b5a55206c7dc04` at preparation; implementation has its
+own branch/head. Read-only GitHub metadata confirmed [run 41726833705](https://github.com/Meta-Project2026/Metamorph/actions/runs/41726833705),
+workflow attempt 1, workflow_dispatch, started 2026-11-03T22:00:07Z, completed
+2026-11-03T22:05:14Z, conclusion success. **Success is workflow completion only.**
+
+Only the expressly authorized PUBLIC artifact was retrieved:
+`meta-paid-public-41726833705`, ID **13274647279**, created 2026-11-03T22:05:10Z,
+**28147 bytes**, ZIP SHA-256
+`c860c609444d1d591d68dde6531e85b5c95e9f4cc33af1956500315d5f0b4e5d`.
+GitHub digest and locally computed digest agree. The connector returned a remote
+file reference; read-only `gh api` for the same explicit ID materialized local
+bytes. No other artifact was fetched. [Issue #162](https://github.com/Meta-Project2026/Metamorph/issues/162)
+and [reporting issue #161](https://github.com/Meta-Project2026/Metamorph/issues/161)
+were cross-checked, not used as substitutes for the original receipts.
+
+### Privacy review and immutable source
+
+The original ZIP was hashed before parsing; all **24** member names, sizes,
+digests and formats were verified. Object field sets were reviewed first, then
+all unique string categories and nested objects: public identity hashes/UUIDs,
+model request IDs, usage counts/estimates, run/admission metadata, categorical
+findings, empty diagnostics, telemetry stage labels, public comparison/control
+IDs, ciphertext custody **hashes/statuses only**, and zero-resource finalizers.
+Authorization here is public dispatch metadata, not a bearer token. No raw model
+body, generated source, reference HTTP/SQLite body, private observation, private
+G4 input, credential, owner key, sensitive absolute path or ciphertext content
+was present. `prepare-track-f.py` freezes these reviewed object field sets in
+PUBLIC_FIELDS and rejects unknown field sets, duplicate/prototype keys, unsafe
+strings/numbers and altered ZIP/member pins. This is a single-snapshot privacy
+audit, not permission to retain arbitrary artifacts named PUBLIC.
+
+Retained unchanged: [PUBLIC source ZIP](provenance/track-f/public-receipts.zip).
+The archive includes historical inconsistent reports; it is **not** HTTP served.
+The browser also cannot fetch either preparation/test Python script. Custody
+fields are historical UNVERIFIED source records, not a current restore claim,
+and are excluded from the displayed projection. No private candidate*.age ZIP,
+diagnostics pack, key or held-out data was retrieved or executed.
+
+### All original members
+
+| Original member | Bytes | SHA-256 | Format |
+| --- | --- | --- | --- |
+| meta-paid-public/generation.json | 2380 | 0296373d787ea1bb95b5db8e81b61c478a22d33d6ea42b2b63cfd7e9eeb3502b | meta-generation-v1 |
+| meta-paid-public/scorecard.json | 2469 | d8a0ad3bae8c413a232c3be1016b2d0860769fa026b9dfd7cd2addb076ce9ea1 | mmp154-generation-scorecard-v1 |
+| meta-paid-public/preflight.json | 2402 | 4bbf47a7d319208f8863cfb268421a9ba78a758618c474c7d42bd0917762cb8e | mmp154-generation-preflight-v1 |
+| meta-paid-public/send-receipts/1.json | 2158 | f4014b263d9d7c4269c31e7026e468adcc70bb759028eb26247a3a1d189c4fce | meta-generation-v1 |
+| meta-paid-public/send-receipts/2.json | 2380 | 0296373d787ea1bb95b5db8e81b61c478a22d33d6ea42b2b63cfd7e9eeb3502b | meta-generation-v1 |
+| meta-paid-public/trial.json | 21549 | cd79258c0fd5b2d6f0dddd2fedfb2cd7ef6ba53938f330fe10bf7f03300d73aa | mmp078-public-paid-trial-v1 |
+| meta-paid-public/finalizer.json | 165 | e0c05f52968ef1c67906c282be0b1d622d8bfe4becdab4b17d6838aa6aab43eb | absent |
+| meta-paid-public/preservation.json | 1020 | 6bd1d91917c8a3339eff13647ce0049a596ce9dd200cdd353cc5ad299dec4658 | mmp097-preservation-v1 |
+| meta-paid-public/custody-capture.json | 655 | 2cf99eeb39b5025822338849d5f9848d86760e8d9e58002a715f5ae7bf686ddf | mmp115-custody-v1 |
+| meta-paid-public/custody-finalizer.json | 406 | 1669a5e311f7eceb2231ba532ede8b300030483c2e0a14a0de26fd5d64170888 | mmp115-pre-oracle-finalizer-v1 |
+| meta-paid-public/custody-checkpoint.json | 663 | da46931ce7eaa93b1e56cb60cfe55cd4c3e2d6df21a954b56b270d75d9180b58 | mmp115-custody-v1 |
+| meta-paid-public/custody-stored.json | 660 | 2343e41ee2f50b84da13cf6731a3c9d332c3df5fd8f813132a55db6b12351250 | mmp115-custody-v1 |
+| meta-paid-public/preflight-repair.json | 2368 | 939ebd5726441e2a698d4d9540a6fbc1c06c4365a1efe5e9f5a6f78d56ee5e09 | mmp154-repair-preflight-v1 |
+| meta-paid-public/generation-repair.json | 2480 | 506501c373697b4cf51c365b14cd09f893ea9aecb21eeb0290a0392bb15a7704 | meta-generation-v1 |
+| meta-paid-public/trial-repair.json | 21756 | 9149785b34eace5bba5bb03b753f82545aa47a9c588756344583c27d0b998055 | mmp078-public-repair-trial-v1 |
+| meta-paid-public/repair-send-receipts/1.json | 2256 | adc51a1d497d6002143e7137c87ecfe2be2c4454c83aede8b9edd1cbd82892b9 | meta-generation-v1 |
+| meta-paid-public/scorecard-repair.json | 2513 | d7c9e37f932e670058e2ab10cad1f2ca20fbdce8ae8ab854a81977d52555733c | mmp154-repair-scorecard-v1 |
+| meta-paid-public/repair-send-receipts/2.json | 2480 | 506501c373697b4cf51c365b14cd09f893ea9aecb21eeb0290a0392bb15a7704 | meta-generation-v1 |
+| meta-paid-public/custody-repair-capture.json | 655 | 468cd72588a435c1749e40e7a2a821310a397ddf57931520d012bbbde5c980fb | mmp115-custody-v1 |
+| meta-paid-public/custody-repair-finalizer.json | 406 | 0b3d8a8f21f81ab40040f9caee6d47dd0cd74fd374bebe4dc7084d79adfa4517 | mmp115-pre-oracle-finalizer-v1 |
+| meta-paid-public/custody-repair-checkpoint.json | 663 | 0b54f79292013bc9a5f748d0bc61d7ead92c565dcd342cc9902dd7ce789c494c | mmp115-custody-v1 |
+| meta-paid-public/custody-repair-stored.json | 660 | 37a3a0cf06990c64f3bf5cd2424712720372a06bdd9bd118c4de7a58a7a9b0f0 | mmp115-custody-v1 |
+| mmp078-41726833705-attempt.json | 976 | 35d97fa725dc6d6d8932d0b55209952a1621849c5620ef86e3ee3bce746924a9 | absent |
+| mmp078-41726833705-attempt-2.json | 1070 | f6ef99c7a61250997a9fe7bf5ab1204beffcceeb11ab078b2d629e0fb240031b | absent |
+
+### Deterministic public projection / independent adapter
+
+```powershell
+python research/demo-readiness/prepare-track-f.py research/demo-readiness/provenance/track-f/public-receipts.zip '<scratch output JSON>'
+python research/demo-readiness/prepare-track-f.test.py
+```
+
+Both ran exit 0; two preparations and comparison with the committed projection
+were byte-for-byte identical. Versioned output `mmp162-public-repair-v1`, scope
+RECORDED_PUBLIC_MANIFEST: **27687 bytes**, SHA-256
+`d2bf5aaafea0d7431fee00463ec6cf4c926e24004efb3d97133eee4175ee78d3`.
+Python stdlib only, exact fixed input, no extraction, network or source execution.
+This is a new, smaller allowlisted projection, not an original producer receipt.
+
+| Projected fact | Original evidence / derivation |
+| --- | --- |
+| Run / start / workflow conclusion | Independently fetched GitHub run metadata; attempt 1, head f034d4d…, start 22:00:07 UTC / 00:00:07 Kishinev; no individual-attempt clock claim |
+| Attempt 1 generate | generation.json linked exactly to trial.json.modelReceipts/budgetAuth, first ledger, preflight request/body and final send-receipts/2.json |
+| Attempt 2 repair | generation-repair.json linked exactly to trial-repair.json.modelReceipts/budgetAuth, attempt-2 ledger, repair preflight and repair-send-receipts/2.json |
+| Candidate / Oracle binding | Candidate SHA agrees across generation, trial, attempt, compiler identity, telemetry binding and custody identity; custodyLink names that verifier attempt |
+| Real feedback → repair | preflight-repair.repairFeedbackCodes=HTTP_JSON_TYPE and firstAttemptCandidateSha bind the first candidate; second authorization repeats it; second request/response/candidate hashes all differ |
+| G0–G4 / coverage | Each trial.attempts[0].gates and exact IDs; six build IDs, 17 HTTP, 20 SQLite, 27 public runtime control IDs; G0/G4 INCONCLUSIVE, held-out NOT_RUN |
+| Scenario outcome | Each trial pair compiler G1 PASS and gates: business FAIL/FAIL, rejected FAIL/FAIL, capacity PASS/PASS; HTTP counts 6/5/6, SQLite 7/6/7 |
+| Generation and usage | Each original generation: REAL_INFERENCE, provider meta-model-api, muse-spark-1.3, 1 confirmed response HTTP200, 6188/10556 and 14148/9179; estimates 0.052598 / 0.05669575; charged null |
+| Aggregate usage | Decimal sum of original estimates 0.10929375; 2 confirmed responses; no billing settlement claim |
+| Cleanup | Both trial cleanups and all scenario cleanups VERIFIED_ZERO_RESOURCES; pre-Oracle custody finalizers zero; independent finalizer PASS zero |
+| Limits | Product NOT_ESTABLISHED copied; exact field/type/root cause UNCONFIRMED, individual step improvements UNKNOWN are evidence limits, not a new execution |
+
+The early `send-receipts/1.json` and `repair-send-receipts/1.json` are preliminary
+UNKNOWN-send / zero-confirmed-response records for their respective authorization.
+Each final `/2.json` equals its generation receipt; these are **not four model
+responses**. Final generation/trial pairs each confirm one response. No retry or
+third request is inferred from preliminary journal entries.
+
+### Intermediate report inconsistency is preserved, not repaired here
+
+Initial preflight.maximumPosts=2. Intermediate scorecard.json.maximumPosts=1,
+repairs=0 and stopReason=PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED contradict the
+subsequent authenticated repair receipts. They remain untouched in the original
+ZIP and are **excluded as session authorities**. Projection.reporting explicitly
+marks NONFINAL_INCONSISTENT_EXCLUDED and PER_ATTEMPT_GENERATION_TRIAL. The final
+scorecard-repair stopReason COMPLETE_PUBLIC_FAIL_AFTER_SIGNED_REPAIR is copied
+only after candidate/request/response and first-candidate links are checked.
+#161 owns any production fix. F is immutable historical run 41726833705, even if
+#161 later completes. New live evidence requires a separately reviewed pin.
+
+Both attempts have the same published aggregate and per-scenario verdict
+pattern; this **does not establish identical individual check outcomes**.
+The only published parity failure code is HTTP_JSON_TYPE. G3 includes HTTP
+findings (unchanged `packages/oracle/src/runner.ts`); no independent DB defect,
+exact field, expected/actual value/type or generated source line is established.
+No private pack or candidate diff was inspected.
+
+The browser checks new basename, exact size/hash on a private memory copy,
+then unchanged bounded strict parse, then a separate exact semantic validator:
+identities/order, model/usage/null charge, all five gates, executed IDs/findings,
+per-scenario verdicts, feedback link, reporting basis, cleanup, and scope.
+A–E original bytes/pins/adapters/tests are unchanged. Bundled A–F validation is
+atomic; D/E/F are lone file selections; missing/corrupt F clears all old results.
+Stale fetched/file-read F cannot overwrite a newer failed selection.
+
+Snapshot SHA identity is not a digital executor signature, fresh Oracle run,
+current custody/restore proof, owner approval or product PASS. Formal G4 remains
+INCONCLUSIVE / held-out NOT_RUN. No new model request, paid admission, workflow
+dispatch, candidate execution, Docker, production or shared API change occurred.

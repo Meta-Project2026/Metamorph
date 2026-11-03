@@ -16,12 +16,21 @@ const routes = new Map([
     "incident-pins.mjs",
     "track-e-adapter.mjs",
     "track-e-pins.mjs",
+    "track-f-adapter.mjs",
+    "track-f-pins.mjs",
   ].map((name) => [`/${name}`, [name, "text/javascript; charset=utf-8"]]),
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
   [
     "/evidence/real-ai-41505679809/mmp148-track-e-v1.json",
     [
       "evidence/real-ai-41505679809/mmp148-track-e-v1.json",
+      "application/json; charset=utf-8",
+    ],
+  ],
+  [
+    "/evidence/real-ai-41726833705/mmp162-track-f-v1.json",
+    [
+      "evidence/real-ai-41726833705/mmp162-track-f-v1.json",
       "application/json; charset=utf-8",
     ],
   ],

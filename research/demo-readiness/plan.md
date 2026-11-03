@@ -158,3 +158,24 @@ owner-restore fields, candidate source or private observations enter E.
 
 Details and limits: VALIDATION-148.md. No live job/API, paid/model request, Docker,
 candidate execution/repair/decryption, private/G4 access or shared API change.
+
+
+## MMP-162 — first real two-response repair in Track F (4 November 2026)
+
+Fresh base main f034d4dfcc30dcc82300e93002b5a55206c7dc04, branch
+codex/mmp162-demo-track-f. Only demo-readiness changes; #161 production lane
+remains separate. Scope: verified original PUBLIC ZIP 13274647279 (24 members),
+new reproducible versioned projection, strict independent adapter, two candidate
+cards with recorded feedback/repair/Oracle FAIL, eight chapters and nine matrix
+rows. No successful migration, individual step delta or exact root cause claim.
+
+- [x] Fetch latest main and inspect policies, #162/#161, previous merged PRs.
+- [x] Independently verify original ZIP/member pins, public field safety and linkage.
+- [x] Retain unchanged PUBLIC metadata unserved; deterministic stdlib preparation.
+- [x] New pin-before-parse/semantic adapter and adversarial source/projection tests.
+- [x] Preserve A–E bytes/pins/adapters/tests, offline allowlist/CSP, atomic reset/races.
+- [x] Side-by-side REAL generation / REAL repair, coverage vs PASS, honest unknowns.
+- [x] Local unit/root/browser checks and actual screenshots: VALIDATION-162.md.
+- [x] 90s target with F25s and 3–5min target script; no measured timing claim.
+- [ ] Independent ChatGPT exact-SHA review; no self-approve or merge.
+- [ ] Human timed rehearsal, physical offline laptop, full screen-reader audit: NOT_RUN.

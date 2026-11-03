@@ -1,0 +1,226 @@
+// Frozen public snapshot identity; this is not a fresh Oracle execution.
+function freeze(value) {
+  for (const item of Object.values(value))
+    if (item && typeof item === "object") freeze(item);
+  return Object.freeze(value);
+}
+export const TRACK_F_PINS = freeze({
+  filename: "mmp162-track-f-v1.json",
+  directory: "evidence/real-ai-41726833705",
+  bytes: 27687,
+  sha256: "d2bf5aaafea0d7431fee00463ec6cf4c926e24004efb3d97133eee4175ee78d3",
+  provenance: {
+    runId: "41726833705",
+    runAttempt: 1,
+    runStartedAt: "2026-11-03T22:00:07Z",
+    workflowConclusion: "success",
+    headSha: "f034d4dfcc30dcc82300e93002b5a55206c7dc04",
+    sourceRepository: "tanjilaafsarirubina/car-workshop",
+    sourceSha: "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    sourceArchiveSha256:
+      "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    contextSha256:
+      "267749515c49e6834342db934ed4fb35b1bc07e8fe9517fcc3ff70a805045580",
+    manifestSha256:
+      "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+    artifactId: "13274647279",
+    artifactName: "meta-paid-public-41726833705",
+    zipBytes: 28147,
+    zipSha256:
+      "c860c609444d1d591d68dde6531e85b5c95e9f4cc33af1956500315d5f0b4e5d",
+    members: [
+      {
+        name: "meta-paid-public/generation.json",
+        bytes: 2380,
+        sha256:
+          "0296373d787ea1bb95b5db8e81b61c478a22d33d6ea42b2b63cfd7e9eeb3502b",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/scorecard.json",
+        bytes: 2469,
+        sha256:
+          "d8a0ad3bae8c413a232c3be1016b2d0860769fa026b9dfd7cd2addb076ce9ea1",
+        format: "mmp154-generation-scorecard-v1",
+      },
+      {
+        name: "meta-paid-public/preflight.json",
+        bytes: 2402,
+        sha256:
+          "4bbf47a7d319208f8863cfb268421a9ba78a758618c474c7d42bd0917762cb8e",
+        format: "mmp154-generation-preflight-v1",
+      },
+      {
+        name: "meta-paid-public/send-receipts/1.json",
+        bytes: 2158,
+        sha256:
+          "f4014b263d9d7c4269c31e7026e468adcc70bb759028eb26247a3a1d189c4fce",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/send-receipts/2.json",
+        bytes: 2380,
+        sha256:
+          "0296373d787ea1bb95b5db8e81b61c478a22d33d6ea42b2b63cfd7e9eeb3502b",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/trial.json",
+        bytes: 21549,
+        sha256:
+          "cd79258c0fd5b2d6f0dddd2fedfb2cd7ef6ba53938f330fe10bf7f03300d73aa",
+        format: "mmp078-public-paid-trial-v1",
+      },
+      {
+        name: "meta-paid-public/finalizer.json",
+        bytes: 165,
+        sha256:
+          "e0c05f52968ef1c67906c282be0b1d622d8bfe4becdab4b17d6838aa6aab43eb",
+        format: null,
+      },
+      {
+        name: "meta-paid-public/preservation.json",
+        bytes: 1020,
+        sha256:
+          "6bd1d91917c8a3339eff13647ce0049a596ce9dd200cdd353cc5ad299dec4658",
+        format: "mmp097-preservation-v1",
+      },
+      {
+        name: "meta-paid-public/custody-capture.json",
+        bytes: 655,
+        sha256:
+          "2cf99eeb39b5025822338849d5f9848d86760e8d9e58002a715f5ae7bf686ddf",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-finalizer.json",
+        bytes: 406,
+        sha256:
+          "1669a5e311f7eceb2231ba532ede8b300030483c2e0a14a0de26fd5d64170888",
+        format: "mmp115-pre-oracle-finalizer-v1",
+      },
+      {
+        name: "meta-paid-public/custody-checkpoint.json",
+        bytes: 663,
+        sha256:
+          "da46931ce7eaa93b1e56cb60cfe55cd4c3e2d6df21a954b56b270d75d9180b58",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-stored.json",
+        bytes: 660,
+        sha256:
+          "2343e41ee2f50b84da13cf6731a3c9d332c3df5fd8f813132a55db6b12351250",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/preflight-repair.json",
+        bytes: 2368,
+        sha256:
+          "939ebd5726441e2a698d4d9540a6fbc1c06c4365a1efe5e9f5a6f78d56ee5e09",
+        format: "mmp154-repair-preflight-v1",
+      },
+      {
+        name: "meta-paid-public/generation-repair.json",
+        bytes: 2480,
+        sha256:
+          "506501c373697b4cf51c365b14cd09f893ea9aecb21eeb0290a0392bb15a7704",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/trial-repair.json",
+        bytes: 21756,
+        sha256:
+          "9149785b34eace5bba5bb03b753f82545aa47a9c588756344583c27d0b998055",
+        format: "mmp078-public-repair-trial-v1",
+      },
+      {
+        name: "meta-paid-public/repair-send-receipts/1.json",
+        bytes: 2256,
+        sha256:
+          "adc51a1d497d6002143e7137c87ecfe2be2c4454c83aede8b9edd1cbd82892b9",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/scorecard-repair.json",
+        bytes: 2513,
+        sha256:
+          "d7c9e37f932e670058e2ab10cad1f2ca20fbdce8ae8ab854a81977d52555733c",
+        format: "mmp154-repair-scorecard-v1",
+      },
+      {
+        name: "meta-paid-public/repair-send-receipts/2.json",
+        bytes: 2480,
+        sha256:
+          "506501c373697b4cf51c365b14cd09f893ea9aecb21eeb0290a0392bb15a7704",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/custody-repair-capture.json",
+        bytes: 655,
+        sha256:
+          "468cd72588a435c1749e40e7a2a821310a397ddf57931520d012bbbde5c980fb",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-repair-finalizer.json",
+        bytes: 406,
+        sha256:
+          "0b3d8a8f21f81ab40040f9caee6d47dd0cd74fd374bebe4dc7084d79adfa4517",
+        format: "mmp115-pre-oracle-finalizer-v1",
+      },
+      {
+        name: "meta-paid-public/custody-repair-checkpoint.json",
+        bytes: 663,
+        sha256:
+          "0b54f79292013bc9a5f748d0bc61d7ead92c565dcd342cc9902dd7ce789c494c",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-repair-stored.json",
+        bytes: 660,
+        sha256:
+          "37a3a0cf06990c64f3bf5cd2424712720372a06bdd9bd118c4de7a58a7a9b0f0",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "mmp078-41726833705-attempt.json",
+        bytes: 976,
+        sha256:
+          "35d97fa725dc6d6d8932d0b55209952a1621849c5620ef86e3ee3bce746924a9",
+        format: null,
+      },
+      {
+        name: "mmp078-41726833705-attempt-2.json",
+        bytes: 1070,
+        sha256:
+          "f6ef99c7a61250997a9fe7bf5ab1204beffcceeb11ab078b2d629e0fb240031b",
+        format: null,
+      },
+    ],
+  },
+  attempts: [
+    {
+      attempt: 1,
+      action: "generate",
+      candidateSha256:
+        "329cdcca096461c2357b157f162daec3a4bf2eaaf5b1036a8d62026545b76fa3",
+      requestSha256:
+        "81fcd6aaa02d7b69e18caeda887c67909cfd2c62d9900375961c43eec374a1b2",
+      responseSha256:
+        "222ff656e934dcdbd6a24d5bc05c759aa050eb922b77b78a2b92e2a36a2083e5",
+      oracleAttemptId: "690852f2-8ecc-42ca-aad1-6a7df692bb27",
+    },
+    {
+      attempt: 2,
+      action: "repair",
+      candidateSha256:
+        "572c6db97f279ac34224e847e8790516fb20bbf50fd6d131aa8ee44b9c68cd03",
+      requestSha256:
+        "5209cd2b081c70ca506a72f3f4ff34e4ca3170f2d495ecb964215d8001658af6",
+      responseSha256:
+        "20ac53e0e5ea1162244ee76bb3ccd34c0192744239683264eb16a844fcfa9ecd",
+      oracleAttemptId: "6743ada8-b9b6-43f6-b6a2-c025f6aeae4c",
+    },
+  ],
+});
