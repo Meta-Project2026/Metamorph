@@ -399,6 +399,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Manual offline generation preflight and trusted workflow scorecard receive syntax checks here; package preflight/evidence/negative tests use the existing pnpm test glob. No Meta call, Docker run or workflow dispatch from CI. Live execution requires independently reviewed merged main and authentic operator admission; actual real/synthetic results are recorded separately. Default generation stays one POST; production repair remains blocked. Existing CI commands are unchanged."
+    },
+    {
+      "path": "research/mmp-156",
+      "lifecycle": "ACTIVE",
+      "execution": "LOCAL_ONLY",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Offline initial-DB_SCHEMA diagnosis of paid run 41696312924: the comparator-mechanics test exercises only the locally built trusted @metamorph/oracle dist with the pinned public PHP source DDL, the trusted known-good workshop fixture string and synthetic reformatting variants, and skips honestly without a build; no hosted test step is added. No candidate plaintext, age identity, private Oracle evidence, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action. The paid candidate's exact DDL delta stays UNKNOWN."
     }
   ],
   "skips": [

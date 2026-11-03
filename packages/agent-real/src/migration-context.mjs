@@ -41,6 +41,8 @@ const target = Object.freeze({
     "For every HTTP response, echo the incoming x-request-id request-header value verbatim in the x-request-id response header. Never generate, replace, or invent a request ID. This is a target-service wrapper requirement, not PHP business semantics; preserve the original PHP status, JSON body and content-type (application/json; charset=utf-8 where specified).",
   startup:
     "src/main.ts must initialize schema and seeds in /state/target.sqlite, then listen on 127.0.0.1:3000 and serve the original /api.php action routes. No application configuration environment variables are supplied.",
+  schemaContract:
+    "The verifier compares the initial /state/target.sqlite schema against the reference by exact stored sqlite_schema DDL text per object (type, name, SQL), not by semantic equivalence. Copy the source's table-creation SQL byte-for-byte into generated code, preserving every space, newline and indentation level, IF NOT EXISTS, keyword and identifier spelling and statement order, and execute it verbatim. Never reformat, re-indent, retype, rename, merge, split, add or drop any table, column, constraint, index, trigger or view; keep AUTOINCREMENT exactly because its sqlite_sequence table is part of the comparison.",
   permissions:
     "Only /work/out read and /state read/write. No child processes, downloads, reference access or external network.",
 });
