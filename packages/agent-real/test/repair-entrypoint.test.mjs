@@ -563,6 +563,11 @@ test(
       GITHUB_RUN_ATTEMPT: "1",
       GITHUB_SHA: head,
     };
+    // The custody and scorecard steps commit records into these run outputs.
+    const output = join(env.directory, "meta-paid-public");
+    const privateRoot = join(env.directory, "meta-paid-private");
+    mkdirSync(output, { recursive: true, mode: 0o700 });
+    mkdirSync(privateRoot, { recursive: true, mode: 0o700 });
     installFetch(t, identity);
     await custodyStep("prepare-upload", custodyEnv, 1);
     // Downloaded bytes land in the readback directory created above.
@@ -689,11 +694,18 @@ test(
     // Attempt-2 custody capture keeps the collector contract but swaps the
     // age/Docker encryption for a fake ciphertext; capsule validation, spool
     // layout and receipt commits stay identical to production.
+    // The repair reply must carry the pinned license notice: candidate
+    // custody validates that every capsule embeds it.
+    const license = JSON.parse(source).license;
     const repairCalls = nativeStub(t, {
       replyChanges: [
         {
           path: "src/main.ts",
-          content: "export const repairedModelOutput = 2;",
+          content: `/*
+${license.trim()}
+*/
+export const repairedModelOutput = 2;
+`,
         },
       ],
     });
@@ -786,5 +798,8 @@ test(
       readFileSync(join(output, "trial-repair.json"), "utf8"),
     );
     assert.equal(blocked.modelGeneration, "BLOCKED");
+    // The blocked entrypoint sets process.exitCode; reset it so the test
+    // process itself still reports success.
+    process.exitCode = 0;
   },
 );
