@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { validateCustodiedMigration } from "../../packages/agent-real/src/migration-trial.mjs";
 import { requireStoredCheckpoint } from "../../packages/agent-real/src/custody-checkpoint.mjs";
+import { publicTrialOutcome } from "../../packages/agent-real/src/live-experiment.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = join(process.env.RUNNER_TEMP, "meta-paid-public");
 try {
@@ -22,9 +23,12 @@ try {
   let result;
   try { result = await validateCustodiedMigration({ context, root, parent, headSha: trial.headSha, ...transfer, signal: shutdown.signal }, permit); }
   finally { process.removeListener("SIGTERM", stop); process.removeListener("SIGINT", stop); }
-  writeFileSync(join(output, "trial.json"), JSON.stringify({ ...trial, ...result }, null, 2) + "\n", { mode: 0o600 });
-  if (!["publicG1", "publicG2", "publicG3"].every((g) => result[g] === "PASS") || result.cleanup.status !== "VERIFIED_ZERO_RESOURCES") process.exitCode = 1;
-  console.log(`META_PUBLIC_DOCKER G1=${result.publicG1} G2=${result.publicG2} G3=${result.publicG3}; product=NOT_ESTABLISHED`);
+  const validationOutcome = publicTrialOutcome(result);
+  writeFileSync(join(output, "trial.json"), JSON.stringify({ ...trial, ...result, validationOutcome }, null, 2) + "\n", { mode: 0o600 });
+  // Exit 0 means a complete comparison, including a genuine public FAIL. The
+  // explicit verdict remains FAIL; no migration PASS or repair permit is minted.
+  if (!validationOutcome.complete) process.exitCode = 1;
+  console.log(`META_PUBLIC_DOCKER ${validationOutcome.status}; G1=${result.publicG1} G2=${result.publicG2} G3=${result.publicG3}; product=NOT_ESTABLISHED`);
 } catch {
   console.error("META_PUBLIC_DOCKER_ERROR; inspect sanitized trial, validation pending"); process.exitCode = 1;
 }

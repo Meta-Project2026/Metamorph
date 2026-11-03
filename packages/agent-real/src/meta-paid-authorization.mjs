@@ -278,6 +278,7 @@ export function paidAdmission(authorization, context, body) {
     a &&
       a.context === context &&
       Date.now() < a.expires &&
+      Date.now() < Date.parse(PAID_POLICY.tariffExpires) &&
       (!body || hash(body) === a.summary.bodySha256),
     "PAID_DISPATCH_NOT_AUTHORIZED",
   );
