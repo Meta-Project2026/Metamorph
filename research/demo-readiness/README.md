@@ -21,6 +21,12 @@ are in [RUNBOOK.md](RUNBOOK.md). Current executed checks and before/after browse
 screenshots are in [VALIDATION-140.md](VALIDATION-140.md). Target pacing is not a
 measured human rehearsal.
 
+MMP-145 corrects the duplicate desktop baseline evidence image: the home capture
+is preserved, and the evidence viewport is genuinely recaptured from baseline
+`d31711f…` at 1440×1000, scroll y=887. [Exact provenance and correction](VALIDATION-140.md#mmp-145-correction--3-november-2026-europebucharest)
+and [capture metadata](screenshots/mmp140/recapture-145.json) distinguish it from
+the original duplicate. The UI, adapters, pins and receipts are unchanged.
+
 Read-only presentation built for the 2026-10-30 event (historical date), extended on 2026-11-02 with track D. Refs [#118](https://github.com/Meta-Project2026/Metamorph/issues/118), [#85](https://github.com/Meta-Project2026/Metamorph/issues/85), [#71](https://github.com/Meta-Project2026/Metamorph/issues/71), [#61](https://github.com/Meta-Project2026/Metamorph/issues/61), [#81](https://github.com/Meta-Project2026/Metamorph/issues/81), [#104](https://github.com/Meta-Project2026/Metamorph/issues/104).
 
 From the repository root, with Node 22.13+ / 24 and a modern browser:
