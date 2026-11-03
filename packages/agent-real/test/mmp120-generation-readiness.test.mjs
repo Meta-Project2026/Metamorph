@@ -175,6 +175,15 @@ test("target contract pins NodeNext/CommonJS, node:sqlite and the offline sandbo
   assert.match(target.modules, /No top-level await or import\.meta/);
   assert.match(target.modules, /relative \.js imports/);
   assert.match(target.strictTypes, /node:sqlite get\(\) may be undefined/);
+  assert.match(target.startup, /initialize schema and seeds/);
+  assert.match(target.schemaContract, /exact stored sqlite_schema DDL text/);
+  assert.match(target.schemaContract, /byte-for-byte/);
+  assert.match(target.schemaContract, /IF NOT EXISTS/);
+  assert.match(target.schemaContract, /keep AUTOINCREMENT exactly/);
+  assert.match(
+    target.schemaContract,
+    /sqlite_sequence table is part of the comparison/,
+  );
   assert.match(target.permissions, /No child processes, downloads/);
   assert.match(target.permissions, /external network/);
 });

@@ -45,6 +45,8 @@ const target = {
     "Type all parameters without contextual types; narrow unknown caught errors and nullable values. node:sqlite get() may be undefined; row values are string | number | bigint | Uint8Array | null. Validate/narrow values before typed use; serialize bigint explicitly.",
   startup:
     "src/main.ts must initialize schema and seeds in /state/target.sqlite, then listen on 127.0.0.1:3000 and serve the original /api.php action routes. No application configuration environment variables are supplied.",
+  schemaContract:
+    "The verifier compares the initial /state/target.sqlite schema against the reference by exact stored sqlite_schema DDL text per object (type, name, SQL), not by semantic equivalence. Copy the source's table-creation SQL byte-for-byte into generated code, preserving every space, newline and indentation level, IF NOT EXISTS, keyword and identifier spelling and statement order, and execute it verbatim. Never reformat, re-indent, retype, rename, merge, split, add or drop any table, column, constraint, index, trigger or view; keep AUTOINCREMENT exactly because its sqlite_sequence table is part of the comparison.",
   permissions:
     "Only /work/out read and /state read/write. No child processes, downloads, reference access or external network.",
 };
@@ -65,6 +67,7 @@ for (const [label, literal] of [
   ["target.modules", target.modules],
   ["target.strictTypes", target.strictTypes],
   ["target.startup", target.startup],
+  ["target.schemaContract", target.schemaContract],
   ["target.permissions", target.permissions],
   ["scope", scope],
 ]) {
