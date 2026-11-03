@@ -624,7 +624,7 @@ test(
       copy.custody.identity = {
         runId: RUN,
         runAttempt: "1",
-        headSha,
+        headSha: head,
         sourceSha: SOURCE.commit,
         candidateSha,
         attemptId: staged.capture.identity.attemptId,
