@@ -57,7 +57,7 @@ test "$(git rev-parse HEAD)" = "$MMP151_HEAD"
 pnpm install --frozen-lockfile >"$MMP151_PRIVATE/install.log" 2>&1
 pnpm build >"$MMP151_PRIVATE/build.log" 2>&1
 RUNNER_TEMP="$MMP151_PRIVATE/tools" node research/mmp-089/install-age.mjs >"$MMP151_PRIVATE/tools.log" 2>&1
-node research/mmp-115/run-offline.mjs
+node research/mmp-151/docker-smoke.mjs
 '@
   $program = $program.Replace("`r`n", "`n")
   $started = $true
