@@ -525,7 +525,7 @@ test("P1-D: repair scorecard refuses complete outcomes without first-candidate p
 
 const linux = { skip: process.platform !== "linux" };
 
-function stageFirstAttemptCustody(t, directory) {
+function stageFirstAttemptCustody(directory) {
   // Synthetic sealed custody for attempt 1: the real receipt/checkpoint/
   // transport machinery over a fake ciphertext (no age binary, no Docker).
   const capsule = syntheticCapsule();
@@ -541,14 +541,12 @@ function stageFirstAttemptCustody(t, directory) {
   );
   const fixture = artifactFixture(capture);
   const spool = join(directory, "mmp115-custody");
-  const download = join(directory, "mmp115-readback");
+  // The readback directory is created by the real prepare-upload custody step.
   privateDirectory(spool, true);
-  privateDirectory(download, true);
   commitPrivate(join(spool, "candidate.age"), bytes, CUSTODY.ciphertext);
   commitRecord(join(spool, "capture.json"), capture);
   commitRecord(join(spool, "finalizer.json"), fixture.finalizer);
-  commitPrivate(join(download, "candidate.age"), bytes, CUSTODY.ciphertext);
-  return { capsule, bytes, capture, fixture, spool, download };
+  return { capsule, bytes, capture, fixture, spool };
 }
 
 test(
@@ -557,7 +555,7 @@ test(
   async (t) => {
     const env = environment(t);
     const identity = fakeIdentity(t, env);
-    const staged = stageFirstAttemptCustody(t, env.directory);
+    const staged = stageFirstAttemptCustody(env.directory);
     requireCustody(staged.capsule.identity.runId === RUN);
     const custodyEnv = {
       RUNNER_TEMP: env.directory,
@@ -567,6 +565,12 @@ test(
     };
     installFetch(t, identity);
     await custodyStep("prepare-upload", custodyEnv, 1);
+    // Downloaded bytes land in the readback directory created above.
+    commitPrivate(
+      join(env.directory, "mmp115-readback", "candidate.age"),
+      staged.bytes,
+      CUSTODY.ciphertext,
+    );
     identity.stageArtifactProvenance(staged.fixture);
     const stored = await custodyStep(
       "verify-download",
@@ -583,10 +587,6 @@ test(
 
     // Stage the recorded trial (real #41703793337 receipt, rebound to this run),
     // the custody-bound candidate directory and the public stored receipt.
-    const output = join(env.directory, "meta-paid-public");
-    const privateRoot = join(env.directory, "meta-paid-private");
-    mkdirSync(output, { recursive: true, mode: 0o700 });
-    mkdirSync(privateRoot, { recursive: true, mode: 0o700 });
     const realTrial = JSON.parse(
       readFileSync(
         join(
@@ -603,13 +603,29 @@ test(
         mode: 0o600,
       });
     }
-    const rebound = () => ({
-      ...realTrial,
-      headSha: head,
-      trialRunId: RUN,
-      candidateSha: staged.capsule.identity.candidateSha,
-      sourceSha: SOURCE.commit,
-    });
+    const rebound = () => {
+      // Rebind every recorded occurrence of the real run identity (trial,
+      // authorization, receipts, diagnostics, custody links) to this
+      // synthetic run so the receipt stays internally consistent.
+      const candidateSha = staged.capsule.identity.candidateSha;
+      const copy = JSON.parse(
+        JSON.stringify(realTrial)
+          .replaceAll(realTrial.candidateSha, candidateSha)
+          .replaceAll(realTrial.headSha, head),
+      );
+      copy.trialRunId = RUN;
+      copy.sourceSha = SOURCE.commit;
+      copy.custody.identity = {
+        runId: RUN,
+        runAttempt: "1",
+        headSha,
+        sourceSha: SOURCE.commit,
+        candidateSha,
+        attemptId: staged.capture.identity.attemptId,
+      };
+      copy.custodyLink.identity = { ...copy.custody.identity };
+      return copy;
+    };
     const passTrial = () => {
       const copy = rebound();
       copy.publicG2 = "PASS";
@@ -681,7 +697,7 @@ test(
         },
       ],
     });
-    t.mock.method(childProcess, "spawn", (exe, args, opts) => {
+    t.mock.method(childProcess, "spawn", (_exe, args, opts) => {
       assert.ok(String(args[0]).endsWith("custody-collector.mjs"));
       const child = new EventEmitter();
       child.stdin = new EventEmitter();
