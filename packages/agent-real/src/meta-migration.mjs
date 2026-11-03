@@ -283,13 +283,30 @@ function session(
     now = () => performance.now(),
     authorization,
     checkpoint,
+    firstAttempt = 1,
+    previousChanges,
   },
 ) {
   metaCheck(isMigrationContext(context), "SOURCE_IDENTITY");
+  metaCheck(
+    (firstAttempt === 1 ||
+      (firstAttempt === 2 &&
+        Array.isArray(previousChanges) &&
+        previousChanges.length > 0 &&
+        previousChanges.every(
+          (change) =>
+            change !== null &&
+            typeof change === "object" &&
+            typeof change.path === "string" &&
+            typeof change.content === "string",
+        ))) &&
+      (firstAttempt === 1 || previousChanges !== undefined),
+    "CONFIG_DENIED",
+  );
   const receipts = [];
   let stopped = false,
     busy = false,
-    previous = [],
+    previous = previousChanges ? structuredClone(previousChanges) : [],
     pending = null;
   const started = now();
   const provider = Object.freeze({
@@ -309,7 +326,10 @@ function session(
         now() - started < META_MIGRATION_POLICY.sessionTtlMs,
         "TIMEOUT",
       );
-      metaCheck(request.attempt === receipts.length + 1, "REQUEST_SEQUENCE");
+      metaCheck(
+        request.attempt === receipts.length + firstAttempt,
+        "REQUEST_SEQUENCE",
+      );
       const body = prepareMetaMigration(context, request, previous);
       const admission = production
         ? paidAdmission(authorization, context, body)
@@ -472,7 +492,12 @@ export function createMetaMigrationProvider(context, options = {}) {
   metaCheck(
     object(options) &&
       Object.keys(options).every((k) =>
-        ["authorization", "checkpoint"].includes(k),
+        [
+          "authorization",
+          "checkpoint",
+          "firstAttempt",
+          "previousChanges",
+        ].includes(k),
       ) &&
       (options.checkpoint === undefined ||
         typeof options.checkpoint === "function"),
@@ -489,7 +514,7 @@ export function createMetaMigrationProvider(context, options = {}) {
 export function createOfflineMetaWireHarness(
   context,
   transport,
-  { timeoutMs = 100, now } = {},
+  { timeoutMs = 100, now, firstAttempt, previousChanges } = {},
 ) {
   metaCheck(
     typeof transport === "function" &&
@@ -498,5 +523,12 @@ export function createOfflineMetaWireHarness(
       timeoutMs <= 5000,
     "CONFIG_DENIED",
   );
-  return session(context, { production: false, transport, timeoutMs, now });
+  return session(context, {
+    production: false,
+    transport,
+    timeoutMs,
+    now,
+    firstAttempt,
+    previousChanges,
+  });
 }

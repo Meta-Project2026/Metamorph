@@ -790,6 +790,15 @@ test("workflow order, credential boundary, exact ciphertext transport and origin
       "custody-download",
       "custody-stored",
       "validation",
+      "repair-gate",
+      "repair",
+      "custody-repair-capture",
+      "custody-repair-finalizer",
+      "custody-repair-gate",
+      "custody-repair-upload",
+      "custody-repair-download",
+      "custody-repair-stored",
+      "validation-repair",
       "preservation",
       "finalizer",
       "diagnostic-gate",
@@ -801,6 +810,14 @@ test("workflow order, credential boundary, exact ciphertext transport and origin
     steps.find((s) => s.id === "validation").if,
     /steps.custody-stored.outcome == 'success'/,
   );
+  assert.match(
+    steps.find((s) => s.id === "repair").if,
+    /steps.repair-gate.outputs.eligible == 'true'/,
+  );
+  assert.match(
+    steps.find((s) => s.id === "validation-repair").if,
+    /steps.custody-repair-stored.outcome == 'success'/,
+  );
   assert.equal(steps.find((s) => s.id === "finalizer").if, "always()");
   const upload = steps.find((s) => s.id === "custody-upload");
   assert.equal(
@@ -809,11 +826,24 @@ test("workflow order, credential boundary, exact ciphertext transport and origin
     "${{ runner.temp }}/mmp115-custody/candidate.age",
   );
   assert.equal(upload.with["retention-days"], 7);
+  const repairUpload = steps.find((s) => s.id === "custody-repair-upload");
+  assert.equal(
+    repairUpload.with.name,
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: literal GitHub expression
+    "mmp107-candidate-${{ github.run_id }}-1-repair",
+  );
+  assert.equal(
+    repairUpload.with.path,
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: literal GitHub expression
+    "${{ runner.temp }}/mmp115-custody-repair/candidate.age",
+  );
+  assert.equal(repairUpload.with["retention-days"], 7);
   assert.equal(
     workflow.on.workflow_dispatch.inputs.max_estimated_usd.default,
     "0.10",
   );
-  assert.equal((raw.match(/secrets.META/g) ?? []).length, 1);
+  // The Meta secret maps to exactly the two signed POST steps.
+  assert.equal((raw.match(/secrets.META/g) ?? []).length, 2);
   assert.match(
     fs.readFileSync(
       join(ROOT, "research/mmp-078/validate-candidate.mjs"),

@@ -26,7 +26,10 @@ process.on("SIGTERM", stop); process.on("SIGINT", stop);
 let result;
 try {
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
-  const authorization = await authorizePaidWorkflow(context);
+  // The signed two-attempt plan reserves BOTH sends (generation + bounded
+  // repair projection) before the first POST; the POST itself is unchanged.
+  const mode = process.env.MMP158_EXECUTION_MODE === "generate_then_repair" ? "generate_then_repair" : "single_generation";
+  const authorization = await authorizePaidWorkflow(context, mode === "generate_then_repair" ? { plan: mode } : undefined);
   commitPreflight(join(output, "preflight.json"), paidPreflight(authorization, context));
   result = await runPublicMigration({ context, selection: "meta", headSha: authorization.headSha,
     parent: privateRoot, signal: shutdown.signal, authorization,

@@ -159,15 +159,24 @@ export function validateCapsule(input, expected) {
     "manifest",
     "files",
   ]);
+  const generationAttempt =
+    v.attemptKind === "GENERATION_CUSTODY"
+      ? 1
+      : v.attemptKind === "REPAIR_CUSTODY"
+        ? 2
+        : 0;
   requireCustody(
     v.format === CUSTODY.format &&
       v.verification === "UNVERIFIED" &&
-      v.attemptKind === "GENERATION_CUSTODY",
+      generationAttempt > 0,
   );
   custodyIdentity(v.identity, expected);
   requireCustody(
     v.admission.contextSha256 === publicContext.contextSha256 &&
-      v.admission.requestBodySha256 === publicBodySha256,
+      v.admission.requestBodySha256 ===
+        (generationAttempt === 1
+          ? publicBodySha256
+          : v.admission.requestBodySha256),
   );
   exact(v.admission, [
     "generationAttempt",
@@ -177,7 +186,7 @@ export function validateCapsule(input, expected) {
     "manifestSha256",
   ]);
   requireCustody(
-    v.admission.generationAttempt === 1 &&
+    v.admission.generationAttempt === generationAttempt &&
       [
         v.admission.requestBodySha256,
         v.admission.responseSha256,
@@ -222,9 +231,11 @@ export function beginCustody(context, authorization) {
   attempts.set(token, { auth, context, attemptId: randomUUID(), used: false });
   return token;
 }
-export async function capsuleFromLease(token, lease, receipt) {
+export async function capsuleFromLease(token, lease, receipt, attempt = 1) {
   const a = attempts.get(token);
-  requireCustody(a && !a.used && isSourceLease(lease));
+  requireCustody(
+    a && !a.used && isSourceLease(lease) && (attempt === 1 || attempt === 2),
+  );
   a.used = true;
   await lease.assertUnchanged();
   // Known credential echo is checked only in the trusted generation adapter.
@@ -321,8 +332,8 @@ export async function capsuleFromLease(token, lease, receipt) {
       r.status === "PASS" &&
       r.generationKind === "REAL_INFERENCE" &&
       r.attemptedRequests === 1 &&
-      r.attempt === 1 &&
-      r.action === "generate" &&
+      r.attempt === attempt &&
+      r.action === (attempt === 1 ? "generate" : "repair") &&
       r.sourceSha === auth.sourceSha &&
       r.contextSha256 === auth.contextSha256 &&
       r.manifestSha256 === auth.manifestSha256 &&
@@ -339,7 +350,7 @@ export async function capsuleFromLease(token, lease, receipt) {
   return validateCapsule({
     format: CUSTODY.format,
     verification: "UNVERIFIED",
-    attemptKind: "GENERATION_CUSTODY",
+    attemptKind: attempt === 1 ? "GENERATION_CUSTODY" : "REPAIR_CUSTODY",
     identity: {
       runId: auth.runId,
       runAttempt: "1",
@@ -349,7 +360,7 @@ export async function capsuleFromLease(token, lease, receipt) {
       attemptId: a.attemptId,
     },
     admission: {
-      generationAttempt: 1,
+      generationAttempt: attempt,
       requestBodySha256: r.inputSha256,
       responseSha256: r.responseSha256,
       contextSha256: r.contextSha256,

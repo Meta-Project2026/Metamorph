@@ -105,3 +105,22 @@ custody identity, usage/estimate, public verdict/coverage/cleanup and a concrete
 next hypothesis to REAL_EXPERIMENTS.md. Have ChatGPT independently review that
 exact result. Do not copy synthetic fixtures or a manually repaired derivative
 into this log as model output.
+
+## MMP-158 two-attempt launch addendum (signed generate_then_repair)
+
+The reviewed `generate_then_repair` mode performs at most two signed POSTs in
+one workflow run: generation → independent Docker Oracle →, only on a complete
+eligible public FAIL (`publicRepairDecision` FAIL with allowlisted codes and
+verified stored attempt-1 custody), one repair POST → second independent
+Docker Oracle. Both sends are projected and reserved before the first POST on
+the immutable card (maximumPosts 2, maximumRepairs 1, aggregate worst case);
+the attempt-2 card binds the exact repair body (genuine previous model changes
+plus public feedback codes only) and re-checks the aggregate. Each attempt has
+its own OIDC admission, candidate-only age custody, distinct artifact
+(`mmp107-candidate-<run>-1` / `-1-repair`), verified readback and fresh
+Oracle. A first-attempt PASS stops after one POST; there is no third POST and
+no automatic retry. Dispatch with `execution_mode=generate_then_repair` and
+`confirm_paid=I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP`; the single-generation
+default path is unchanged. All other preflight/launch conditions above apply
+unchanged, including independent exact-HEAD review, merge to protected main
+and authentic operator action. No dispatch happened from implementation.

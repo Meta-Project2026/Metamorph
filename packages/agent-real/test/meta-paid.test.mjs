@@ -620,7 +620,17 @@ test("workflow maps one secret to one step only; per-owner queue and explicit pu
   assert.match(yml, /group: meta-paid-\$\{\{ github.actor \}\}/);
   assert.match(yml, /cancel-in-progress: false/);
   assert.doesNotMatch(yml, /pull_request|pull_request_target|push:|\*\.json/);
-  assert.equal((yml.match(/secrets\.META/g) ?? []).length, 1);
+  // The Meta secret maps to exactly the two signed POST steps (generation and
+  // the eligible repair) and to no job level, Oracle, custody or scorecard step.
+  assert.equal((yml.match(/secrets\.META/g) ?? []).length, 2);
+  assert.match(
+    yml,
+    /secrets\.META[\s\S]{0,200}run: node research\/mmp-078\/paid-run\.mjs/,
+  );
+  assert.match(
+    yml,
+    /secrets\.META[\s\S]{0,200}run: node research\/mmp-078\/repair-run\.mjs/,
+  );
   assert.match(yml, /id-token: write/);
   assert.ok(yml.indexOf("pnpm build") < yml.indexOf("MODEL_API_KEY:"));
   assert.match(yml, /retention-days: 7/);
