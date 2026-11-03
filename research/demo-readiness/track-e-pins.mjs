@@ -1,0 +1,100 @@
+// Exact identity of the public-only projection; source members independently rehashed.
+// SHA identity is not a fresh Oracle run or independent executor attestation.
+function freeze(value) {
+  for (const item of Object.values(value))
+    if (item && typeof item === "object") freeze(item);
+  return Object.freeze(value);
+}
+export const TRACK_E_PINS = freeze({
+  filename: "mmp148-track-e-v1.json",
+  directory: "evidence/real-ai-41505679809",
+  bytes: 11960,
+  sha256: "6442e5e8893cf44ae926d66a92d2fc38cd1ae07230b250b48d8ba2e0db1f237b",
+  provenance: {
+    runId: "41505679809",
+    runAttempt: 1,
+    headSha: "a01bb65f8bb58c02c7a59e06ffedc9662576478e",
+    sourceRepository: "tanjilaafsarirubina/car-workshop",
+    sourceSha: "d272170d0aecbd28eb5b13e272d9dd11d545b66c",
+    sourceArchiveSha256:
+      "32ef29fd0a13c4184785d74228bd8e300ae507cb8a4a60adfa48215c2e43eae4",
+    contextSha256:
+      "1c42ae8cb147aac54e0e7a767d66b77c4213137046bace47d5bed3560defaed3",
+    manifestSha256:
+      "d800a9a5e874545040438d4dce822da6e0d6b71fb094bcac7f06a6ad05610fd4",
+    requestSha256:
+      "d0e5c872a735ca5a039820147177f9eb2d2a2da4f9d0b6f5a93180f66dd7da46",
+    candidateSha256:
+      "6140dbed4afb0d2068db17facb0e14ff9c2ffb61aaaf2b64207b9a8aa2125d38",
+    artifactId: "13169804253",
+    artifactName: "meta-paid-public-41505679809",
+    zipBytes: 8733,
+    zipSha256:
+      "2aab13dd092d20a864b347fbeb2efea0caae10f22b28a4a24c39e78581862ee8",
+    members: [
+      {
+        name: "meta-paid-public/generation.json",
+        bytes: 2151,
+        sha256:
+          "c17667ff67b1289884b3beacb11e5d86f4cdab9d31498b48df323469e1411201",
+        format: "meta-generation-v1",
+      },
+      {
+        name: "meta-paid-public/trial.json",
+        bytes: 20930,
+        sha256:
+          "0250d5d06ab36362434fb20d92f85e355a6d254b33f9fc7cfe785cdb10bae5e0",
+        format: "mmp078-public-paid-trial-v1",
+      },
+      {
+        name: "meta-paid-public/finalizer.json",
+        bytes: 165,
+        sha256:
+          "348746249e45b15da0972fdf88843807d03619d7795fef067095d54351a6cdb8",
+        format: null,
+      },
+      {
+        name: "meta-paid-public/preservation.json",
+        bytes: 1020,
+        sha256:
+          "c7a19894f48dccaad484516289124bff3a57764a9666227c20749a03c8de796c",
+        format: "mmp097-preservation-v1",
+      },
+      {
+        name: "meta-paid-public/custody-capture.json",
+        bytes: 655,
+        sha256:
+          "ff5a1b5f24b4fe0fda2c2383184ab39c8d1b8a9c257350e101476ce023f2d5a7",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-finalizer.json",
+        bytes: 406,
+        sha256:
+          "3679a278825d83e008036d9405b71a4ed723f37d5c98dfe04a2dc223240f22e6",
+        format: "mmp115-pre-oracle-finalizer-v1",
+      },
+      {
+        name: "meta-paid-public/custody-checkpoint.json",
+        bytes: 663,
+        sha256:
+          "9e3d7bef11eaa7bbb31971fcb447498e3e7fbdce9fec6563d1f4bb0de95408f2",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "meta-paid-public/custody-stored.json",
+        bytes: 660,
+        sha256:
+          "d7b4589e2d63ad41a5968a2899c1c9f3b7493b8c8b2be23bff1e49a3512ed8d3",
+        format: "mmp115-custody-v1",
+      },
+      {
+        name: "mmp078-41505679809-attempt.json",
+        bytes: 765,
+        sha256:
+          "7d02aee55a7501e22aa188796813a728f21903b8035be4d3ee98596f6a532b7a",
+        format: null,
+      },
+    ],
+  },
+});

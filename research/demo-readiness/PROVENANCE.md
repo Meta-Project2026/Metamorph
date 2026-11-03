@@ -1,5 +1,10 @@
 # Public snapshots and receipt trust
 
+MMP-148 adds E from independently retrieved original PUBLIC metadata of run
+41505679809; see the final section below. Earlier A–D preparation records retain
+their historical scope and do not establish current custody/owner-restore state.
+All A–D receipt bytes, pins, adapters and existing test files are unchanged.
+
 MMP-085 adds C independently of historical A/B below. The five original historical
 files, pins.mjs, adapter.mjs and demo.test.mjs are byte-identical to the base.
 C is a review candidate; independent ChatGPT review is pending.
@@ -233,3 +238,107 @@ never mixed across B, C and D. Track D claims no production stage telemetry:
 was added later. No ORACLE_PASS, VERIFIED_REAL_CANDIDATE or product PASS is
 displayed for D. A future incident summary (different run) must never reuse
 these pins; it requires a separate reviewed content/adapter update.
+
+## E — 2 November 2026 real build PASS, HTTP JSON type FAIL
+
+**GO source decision, 3 November 2026 (Europe/Bucharest).** Read-only GitHub
+metadata independently confirmed run 41505679809, attempt 1, workflow Meta paid
+migration, event workflow_dispatch, actor barbalatv, head
+`a01bb65f8bb58c02c7a59e06ffedc9662576478e`, completed/failure. The explicitly
+authorized artifact was **13169804253**, `meta-paid-public-41505679809`, 8733 bytes,
+created 2026-11-02T19:02:24Z. Its GitHub digest and independently calculated ZIP
+SHA-256 both equal `2aab13dd092d20a864b347fbeb2efea0caae10f22b28a4a24c39e78581862ee8`,
+matching the earlier research validation cross-check. Source: [public run](https://github.com/Meta-Project2026/Metamorph/actions/runs/41505679809),
+[#137](https://github.com/Meta-Project2026/Metamorph/issues/137).
+
+The GitHub connector verified artifact metadata and retrieved a reusable file
+reference. Local `gh api` read-only retrieval materialized the same explicit
+public ZIP for hashing, inventory and projection; no other artifact was fetched.
+Eight members are under meta-paid-public; the top-level attempt receipt makes
+**nine ZIP members**, not eight total. Every member was size/hash checked before
+JSON parsing, inspected as metadata only, and reconciled across generation,
+trial, attempt and finalizers. No candidate source, raw response/body, private
+observations, held-out input, key or sensitive absolute path was found. Original
+public authorization metadata and ciphertext hashes are identifiers, not secrets
+or ciphertext contents. No private candidate/diagnostics ZIP was retrieved.
+
+The original **PUBLIC metadata only** ZIP is retained unchanged at
+[provenance/track-e/public-receipts.zip](provenance/track-e/public-receipts.zip),
+outside the HTTP allowlist. It contains categorical public receipts, not
+candidate.age or candidate-diagnostics.age. The viewer serves only the narrower
+versioned projection. Original recorded custody fields inside the audit source
+are historical, **not current custody/restore status** and are excluded from E.
+
+### Original member inventory
+
+The table below records original bytes, not reformatted JSON. Formats absent in
+the producer are labelled absent, not invented. All are public metadata scope.
+
+| Member | Bytes | SHA-256 | Format |
+| --- | --- | --- | --- |
+| meta-paid-public/generation.json | 2151 | c17667ff67b1289884b3beacb11e5d86f4cdab9d31498b48df323469e1411201 | meta-generation-v1 |
+| meta-paid-public/trial.json | 20930 | 0250d5d06ab36362434fb20d92f85e355a6d254b33f9fc7cfe785cdb10bae5e0 | mmp078-public-paid-trial-v1 |
+| meta-paid-public/finalizer.json | 165 | 348746249e45b15da0972fdf88843807d03619d7795fef067095d54351a6cdb8 | absent |
+| meta-paid-public/preservation.json | 1020 | c7a19894f48dccaad484516289124bff3a57764a9666227c20749a03c8de796c | mmp097-preservation-v1 |
+| meta-paid-public/custody-capture.json | 655 | ff5a1b5f24b4fe0fda2c2383184ab39c8d1b8a9c257350e101476ce023f2d5a7 | mmp115-custody-v1 |
+| meta-paid-public/custody-finalizer.json | 406 | 3679a278825d83e008036d9405b71a4ed723f37d5c98dfe04a2dc223240f22e6 | mmp115-pre-oracle-finalizer-v1 |
+| meta-paid-public/custody-checkpoint.json | 663 | 9e3d7bef11eaa7bbb31971fcb447498e3e7fbdce9fec6563d1f4bb0de95408f2 | mmp115-custody-v1 |
+| meta-paid-public/custody-stored.json | 660 | d7b4589e2d63ad41a5968a2899c1c9f3b7493b8c8b2be23bff1e49a3512ed8d3 | mmp115-custody-v1 |
+| mmp078-41505679809-attempt.json | 765 | 7d02aee55a7501e22aa188796813a728f21903b8035be4d3ee98596f6a532b7a | absent |
+
+### Projection and validation
+
+`prepare-track-e.py` uses only Python's standard library. It requires the exact
+8733-byte ZIP hash and the exact nine member names/lengths/digests **before**
+parsing; it rejects duplicate/prototype keys, unsafe field/value categories and
+cross-file identity discrepancies. No extraction to arbitrary paths, network,
+candidate import/execution or private inputs. The output is deterministic:
+
+```powershell
+python research/demo-readiness/prepare-track-e.py research/demo-readiness/provenance/track-e/public-receipts.zip '<scratch output JSON>'
+```
+
+Reproduction executed: exit 0, output byte-for-byte equal to
+`evidence/real-ai-41505679809/mmp148-track-e-v1.json`, **11960 bytes**, SHA-256
+`6442e5e8893cf44ae926d66a92d2fc38cd1ae07230b250b48d8ba2e0db1f237b`.
+This is `format=mmp148-public-parity-v1`, scope RECORDED_PUBLIC_MANIFEST. It is a
+new **public projection** with a new format, not an original producer receipt.
+`research/mmp-137/evidence.json` is not the input and its stale owner-restore
+fields are not copied.
+
+| Displayed fact | Original source / derivation |
+| --- | --- |
+| Run/head/source/context/manifest/request/candidate | generation.authorization + generation identities, trial identities and top-level attempt receipt; cross-linked before projection |
+| Model/generation/usage | generation.json: real inference PASS, provider HTTP 200, one request and confirmed response, 6060/9554 tokens, estimate 0.0481795, charged null |
+| Aggregate G0–G4 and exact executed IDs | trial.attempts[0].gates; G1 PASS (6), G2 FAIL (17), G3 FAIL (20), G0/G4 INCONCLUSIVE, public runtime IDs 27; held-out NOT_RUN |
+| Per-scenario scope | trial.attempts[0].pairs: compilerDiagnostics.g1Verdict PASS for each, public gates/findings and scenario cleanup; no diagnostics text or telemetry payload copied |
+| Comparison counts | trial.attempts[0].coverage: HTTP 17/17, SQLite 20/20, executed rather than passing coverage |
+| Cleanup / finalizer | trial.cleanup VERIFIED_ZERO_RESOURCES and finalizer.json PASS, 0/0/0 |
+| SQLite conclusion | Bounded inference: all 20 G3 IDs executed and no DB_SCHEMA/DB_STATE findings, with the unchanged comparator/aggregator semantics described below |
+| Root cause / product | UNCONFIRMED is an explicit limit of categorical evidence; product NOT_ESTABLISHED is copied from trial |
+
+G3 aggregates HTTP and database findings (`packages/oracle/src/runner.ts`,
+makeGate G2/G3); SQLite mismatches emit DB_SCHEMA/DB_STATE (`sqlite.ts`). Exact
+G2/G3 findings are HTTP_JSON_TYPE in each of three scenarios and aggregate, so
+the compared initial/step SQLite snapshots match **within the compared manifest**.
+This is a source-backed inference, not new execution, universal business parity,
+an independently reported DB defect or proof of the exact JSON field. `jsonDiff`
+stops descending at kind mismatch (`http.ts`), so unvisited nested differences
+cannot be excluded. These source files were read, never changed.
+
+The browser checks the exact E basename, size and digest on a private memory
+copy **before** unchanged bounded `parseStrict`, then an independent exact-field
+semantic validator. It binds every displayed identity, status, field allowlist,
+executed ID/coverage, per-scenario finding, cost-null, cleanup/finalizer and scope.
+Altered bytes fail even if they claim PASS. Direct semantic adversarial tests
+also ensure a future reviewed pin move cannot silently relabel this historical
+run. Existing A–D pins/adapters/tests remain unchanged. D/E are lone picker
+selections; bundled A–E load is atomic, with no fallback to four while claiming
+five. Reset clears overview, selected details, matrix, identities, JSON and preview;
+the async generation guard remains intact.
+
+SHA matching establishes **identity of this reviewed public snapshot and its
+retained public source bytes**, not a new Oracle run, digital executor signature,
+independent behavior attestation, current owner restore or product acceptance.
+No billing settlement, live job, repair, new model authorization or private G4 is
+established. The snapshot ends with the 2 November run; later work is separate.

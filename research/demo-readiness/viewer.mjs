@@ -8,6 +8,8 @@ import { readIncident } from "./incident-adapter.mjs";
 import { PINS } from "./pins.mjs";
 import { REAL_AI_NAMES, readRealBundle } from "./real-ai-adapter.mjs";
 import { REAL_AI_PINS } from "./real-ai-pins.mjs";
+import { readTrackE } from "./track-e-adapter.mjs";
+import { TRACK_E_PINS } from "./track-e-pins.mjs";
 
 const INCIDENT_DIRECTORY = "evidence/mmp-104";
 
@@ -21,12 +23,13 @@ const TRACK_SECTIONS = {
   B: "historical-replay",
   C: "real-ai",
   D: "incident",
+  E: "parity",
 };
 const CHAPTERS = [
   [
     null,
     "A response is a beginning. Verification is the question.",
-    "Explore four historical tracks, from an unadmitted provider to two genuine AI responses. The viewer reads saved public receipts; it does not run a migration.",
+    "Explore five historical tracks: admission, a scripted control and three genuine AI responses. C failed build; D ended in a verifier error; E passed all public builds but failed JSON type parity. No migration runs in this viewer.",
   ],
   [
     "A",
@@ -49,6 +52,11 @@ const CHAPTERS = [
     "1 November: generation PASS and workshop-business per-pair G1 PASS. Aggregate G1 remains INCONCLUSIVE / BUILD_NOT_RUN. G2/G3 ERROR / VERIFIER_ERROR: HTTP 0/17 completed, SQLite 1/20. Candidate source UNAVAILABLE; historical root cause UNKNOWN.",
   ],
   [
+    "E",
+    "E / All builds pass. HTTP types still differ.",
+    "2 November: genuine generation, aggregate G1 PASS across three scenarios and six typecheck/build IDs. G2/G3 FAIL / HTTP_JSON_TYPE, with 17/17 HTTP and 20/20 SQLite comparisons executed. Compared SQLite snapshots match within this manifest. The exact HTTP field is UNCONFIRMED; PRODUCT NOT_ESTABLISHED.",
+  ],
+  [
     null,
     "What would establish acceptance?",
     "An independent complete target, the applicable mandatory G0–G4 gates and complete mandatory scenario evidence for that exact candidate. These receipts do not establish that. PRODUCT NOT_ESTABLISHED. Newer experiments are outside this snapshot.",
@@ -56,7 +64,7 @@ const CHAPTERS = [
 ];
 const STAGES = [
   "A frozen PHP source and explicit public scope make the inputs inspectable. No source code executes in this viewer.",
-  "A bounded agent requests a model response. Track A did not generate; tracks C and D record genuine responses. No request is sent now.",
+  "A bounded agent requests a model response. Track A did not generate; C, D and E record genuine responses. No request is sent now.",
   "The generated TypeScript candidate has its own content hash. A candidate identity is not a build result; D's historical candidate source is unavailable.",
   "Independent isolated checks cover G0 completeness, G1 build, G2 HTTP, G3 stateful parity and G4 independent controls. These receipts do not establish all gates.",
   "Recorded outcomes retain FAIL, ERROR, INCONCLUSIVE and NOT_RUN. A matching receipt pin proves snapshot byte identity, not new execution or product acceptance.",
@@ -89,6 +97,7 @@ function reset() {
     "historical-context",
     "real-ai",
     "incident",
+    "parity",
   ])
     byId(id).hidden = true;
   for (const id of [
@@ -111,6 +120,9 @@ function reset() {
     "incident-gates",
     "incident-timeline",
     "incident-identities",
+    "parity-metrics",
+    "parity-gates",
+    "parity-identities",
   ])
     byId(id).replaceChildren();
   updateGuide();
@@ -128,9 +140,9 @@ function updateGuide() {
   byId("guide-title").textContent = title;
   byId("guide-description").textContent = description;
   byId("guide-position").textContent =
-    `CHAPTER ${String(chapter + 1).padStart(2, "0")} / 06`;
+    `CHAPTER ${String(chapter + 1).padStart(2, "0")} / ${String(CHAPTERS.length).padStart(2, "0")}`;
   byId("guide-progress").textContent =
-    `${chapter + 1} of 6 · no automatic transitions`;
+    `${chapter + 1} of ${CHAPTERS.length} · no automatic transitions`;
   byId("guide-prev").disabled = chapter === 0;
   byId("guide-next").disabled = chapter === CHAPTERS.length - 1;
   for (const button of document.querySelectorAll("[data-chapter]")) {
@@ -142,24 +154,24 @@ function updateGuide() {
   byId("guide-evidence-note").textContent = loaded
     ? `Track ${track} is loaded from validated pinned bytes. Inspect its recorded results below.`
     : track
-      ? `Track ${track} is not loaded. The narration describes the historical snapshot; it is not loaded evidence.`
+      ? `Track ${track} is not loaded (${track}_NOT_LOADED). The narration describes the historical snapshot; it is not loaded evidence.`
       : "This is a recorded walkthrough, with no live execution or automatic transitions.";
   byId("guide-target").setAttribute(
     "href",
     loaded
       ? `#${TRACK_SECTIONS[track]}`
-      : chapter === 5
+      : chapter === CHAPTERS.length - 1
         ? "#acceptance"
         : "#receipt-desk",
   );
   byId("guide-target").textContent = loaded
     ? `Inspect track ${track} ↓`
-    : chapter === 5
+    : chapter === CHAPTERS.length - 1
       ? "Revisit product acceptance ↑"
       : "Load and inspect receipts ↓";
   if (loaded) selectTrack(track);
 }
-function renderOverview(historical, real, incident) {
+function renderOverview(historical, real, incident, parity) {
   const matrix = [];
   function row(label, gates, http, sqlite) {
     const tr = element("tr");
@@ -225,6 +237,21 @@ function renderOverview(historical, real, incident) {
       `${incident.coverage.sqlite}/${incident.coverage.requiredSqlite}`,
     );
   }
+  if (parity) {
+    availableTracks.set("E", [
+      "Real AI · JSON type failure",
+      "2 NOV 2026 · REAL AI",
+      `G2/G3 ${parity.gates.G2}`,
+      "Aggregate G1 PASS · all 3 scenarios",
+      `HTTP ${parity.coverage.http}/${parity.coverage.requiredHttp} · SQLite ${parity.coverage.sqlite}/${parity.coverage.requiredSqlite} executed`,
+    ]);
+    row(
+      "E · Real AI",
+      parity.gates,
+      `${parity.coverage.http}/${parity.coverage.requiredHttp}`,
+      `${parity.coverage.sqlite}/${parity.coverage.requiredSqlite}`,
+    );
+  }
   for (const [
     id,
     [title, provenance, outcome, distinction, coverage],
@@ -241,7 +268,7 @@ function renderOverview(historical, real, incident) {
       element(
         "span",
         outcome,
-        id === "C" || id === "D"
+        id === "C" || id === "D" || id === "E"
           ? "outcome verdict-ERROR"
           : "outcome verdict-INCONCLUSIVE",
       ),
@@ -249,7 +276,7 @@ function renderOverview(historical, real, incident) {
       element("span", coverage, "track-coverage"),
     );
     button.addEventListener("click", () => {
-      chapter = "ABCD".indexOf(id) + 1;
+      chapter = CHAPTERS.findIndex(([track]) => track === id);
       updateGuide();
     });
     byId("track-cards").append(button);
@@ -448,15 +475,77 @@ function renderIncident(value) {
   );
   byId("incident").hidden = false;
 }
-function renderBundles(historical, real, incident) {
+function renderTrackE(value) {
+  const g = value.generation;
+  const p = value.provenance;
+  byId("parity-metrics").append(
+    definitions([
+      ["Model / generation", `${g.modelId} / ${g.status} (generation only)`],
+      [
+        "Requests / confirmed responses / provider HTTP",
+        `${g.attemptedRequests} / ${g.confirmedResponseCount} / ${g.httpStatus}`,
+      ],
+      [
+        "Aggregate G1",
+        `${value.gates.G1} · 3 scenarios · ${value.executed.G1.length} typecheck/build IDs`,
+      ],
+      [
+        "G2 / completed HTTP comparisons",
+        `${value.gates.G2} / HTTP_JSON_TYPE · ${value.coverage.http}/${value.coverage.requiredHttp} executed`,
+      ],
+      [
+        "G3 / typed SQLite comparisons",
+        `${value.gates.G3} / HTTP_JSON_TYPE · ${value.coverage.sqlite}/${value.coverage.requiredSqlite} executed`,
+      ],
+      [
+        "SQLite conclusion (bounded inference)",
+        "Compared initial/post-step snapshots match within this manifest; G3 also includes HTTP findings.",
+      ],
+      ["Input / output tokens", `${g.inputTokens} / ${g.outputTokens}`],
+      [
+        "Estimated USD / charged USD",
+        `${g.estimatedCostUsd} ESTIMATE_ONLY / null (UNKNOWN, not zero)`,
+      ],
+      [
+        "Cleanup / independent finalizer",
+        `${value.cleanup.status} / ${value.finalizer.status} · 0 containers / 0 volumes / 0 emergency removals`,
+      ],
+      ["Formal held-out / product", "NOT_RUN / NOT_ESTABLISHED"],
+    ]),
+  );
+  for (const [gate, status] of Object.entries(value.gates))
+    byId("parity-gates").append(
+      element("span", `${gate} ${status}`, `verdict-${status}`),
+    );
+  byId("parity-identities").append(
+    definitions([
+      ["Run / attempt", `${p.runId} / ${p.runAttempt}`],
+      ["Execution head SHA", p.headSha],
+      ["Frozen source SHA", p.sourceSha],
+      ["Generated candidate SHA", p.candidateSha256],
+      [
+        "Original PUBLIC artifact ID / ZIP SHA-256",
+        `${p.artifactId} / ${p.zipSha256}`,
+      ],
+      [
+        "Pinned derived public snapshot",
+        `${TRACK_E_PINS.filename} · ${TRACK_E_PINS.bytes} bytes · SHA-256 ${TRACK_E_PINS.sha256}`,
+      ],
+    ]),
+  );
+  byId("parity").hidden = false;
+}
+function renderBundles(historical, real, incident, parity) {
   bundle = { receipts: {} };
   if (historical) renderHistorical(historical);
   if (real) renderReal(real);
   if (incident) renderIncident(incident);
+  if (parity) renderTrackE(parity);
   for (const [label, value] of [
     ["Historical #70", historical],
     ["Real AI #81", real],
     ["Incident #104", incident],
+    ["Real AI #137", parity],
   ]) {
     if (!value) continue;
     for (const [name, receipt] of Object.entries(value.receipts)) {
@@ -468,7 +557,7 @@ function renderBundles(historical, real, incident) {
     }
   }
   showRaw();
-  renderOverview(historical, real, incident);
+  renderOverview(historical, real, incident, parity);
   byId("evidence").hidden = false;
 }
 function showRaw() {
@@ -490,11 +579,14 @@ async function load(getFiles) {
     let historical;
     let real;
     let incident;
+    let parity;
     if (Array.isArray(input)) {
       if (input.length === 1 && input[0].name === "future-model.json")
         future = readFuture(input[0].name, input[0].bytes);
       else if (input.length === 1 && input[0].name === "incident.json")
         incident = await readIncident(input[0].bytes);
+      else if (input.length === 1 && input[0].name === TRACK_E_PINS.filename)
+        parity = await readTrackE(input[0].name, input[0].bytes);
       else if (
         input.some(
           (file) =>
@@ -507,21 +599,23 @@ async function load(getFiles) {
     } else {
       // All bundled tracks are validated before displaying any results; one invalid
       // or missing track fails the whole load and clears prior results.
-      [historical, real, incident] = await Promise.all([
+      [historical, real, incident, parity] = await Promise.all([
         readBundle(input.historical),
         readRealBundle(input.real),
         readIncident(input.incident.bytes),
+        readTrackE(input.parity.name, input.parity.bytes),
       ]);
     }
     if (current !== generation) return;
     if (future) {
       byId("future-content").textContent = JSON.stringify(future, null, 2);
       byId("future").hidden = false;
-    } else renderBundles(historical, real, incident);
+    } else renderBundles(historical, real, incident, parity);
     const loaded = [
       historical && "historical A/B (5 receipts)",
       real && "PINNED_REAL_AI_SNAPSHOT C (4 receipts)",
       incident && "PINNED_INCIDENT_SUMMARY D (1 receipt)",
+      parity && "PINNED_PUBLIC_PARITY_SUMMARY E (1 public projection)",
     ].filter(Boolean);
     byId("status").textContent = future
       ? "NOT_VERIFIED — declaration only; no independent execution established."
@@ -575,12 +669,18 @@ byId("load").addEventListener("click", () =>
           return { name, bytes };
         }),
       );
-    const [historical, real, incidentFiles] = await Promise.all([
+    const [historical, real, incidentFiles, parityFiles] = await Promise.all([
       fetchFiles(RECEIPT_NAMES, "evidence"),
       fetchFiles(REAL_AI_NAMES, REAL_AI_PINS.directory),
       fetchFiles(["incident.json"], INCIDENT_DIRECTORY),
+      fetchFiles([TRACK_E_PINS.filename], TRACK_E_PINS.directory),
     ]);
-    return { historical, real, incident: incidentFiles[0] };
+    return {
+      historical,
+      real,
+      incident: incidentFiles[0],
+      parity: parityFiles[0],
+    };
   }),
 );
 byId("files").addEventListener("change", (event) => {
@@ -595,14 +695,17 @@ byId("files").addEventListener("change", (event) => {
           !RECEIPT_NAMES.includes(file.name) &&
           !REAL_AI_NAMES.includes(file.name) &&
           file.name !== "future-model.json" &&
-          file.name !== "incident.json",
+          file.name !== "incident.json" &&
+          file.name !== TRACK_E_PINS.filename,
       )
     )
       throw new Error("FILE_NOT_ALLOWLISTED");
-    // The derived D summary is accepted only as a single exact-pinned selection;
-    // mixing it with A/B/C files would invite cross-track receipt blending.
+    // Derived D/E summaries are lone selections, never mixed with another track.
     if (
-      selected.some((file) => file.name === "incident.json") &&
+      selected.some(
+        (file) =>
+          file.name === "incident.json" || file.name === TRACK_E_PINS.filename,
+      ) &&
       selected.length > 1
     )
       throw new Error("MIXED_SELECTION");
