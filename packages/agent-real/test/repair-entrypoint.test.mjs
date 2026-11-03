@@ -665,9 +665,27 @@ test(
     const { runRepairSend } = await import(
       "../../../research/mmp-078/repair-run.mjs"
     );
-    // First-attempt PASS: the gate refuses; no repair POST follows.
-    writeTrial(passTrial());
-    assert.equal(repairGate(custodyEnv).eligible, false);
+    // First-attempt PASS: the gate refuses; no repair POST follows. The gate
+    // record is no-clobber, so this evaluation runs in its own run directory.
+    const passDirectory = mkdtempSync(join(tmpdir(), "mmp158-gate-pass-"));
+    t.after(() => rmSync(passDirectory, { recursive: true, force: true }));
+    mkdirSync(join(passDirectory, "meta-paid-public"), {
+      recursive: true,
+      mode: 0o700,
+    });
+    mkdirSync(join(passDirectory, "meta-paid-private"), {
+      recursive: true,
+      mode: 0o700,
+    });
+    writeFileSync(
+      join(passDirectory, "meta-paid-public", "trial.json"),
+      JSON.stringify(passTrial()),
+      { mode: 0o600 },
+    );
+    assert.equal(
+      repairGate({ ...custodyEnv, RUNNER_TEMP: passDirectory }).eligible,
+      false,
+    );
     // Eligible complete FAIL: the gate admits and the repair POST executes once.
     writeTrial(rebound());
     writeFileSync(join(output, "custody-stored.json"), JSON.stringify(stored), {
