@@ -85,4 +85,3 @@ function Invoke-Control($container) {
   $global:LASTEXITCODE = 0
 }
 & $Launcher -ScratchRoot $Scratch
-
