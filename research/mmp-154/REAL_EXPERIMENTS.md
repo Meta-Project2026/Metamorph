@@ -108,3 +108,31 @@ request body 23,785 → 24,570 bytes (`c2db6096…`), worst case $0.233442,
 two-attempt aggregate $0.835554. Live effect on parity: NOT_RUN — no paid
 call was made by this task; the next authentic run needs the usual
 review/merge/operator gate.
+
+**2026-11-04 (MMP-165, offline diagnosis): no new real experiment launched by
+this task. Actual Meta requests: 0.**
+
+Real run [#41739486774](https://github.com/Meta-Project2026/Metamorph/actions/runs/41739486774)
+(`main@ba7f2d1`, actor `barbalatv`, signed `generate_then_repair` plan,
+allowance $1.00 estimated, NO_PROVIDER_HARD_CAP): one genuine
+`muse-spark-1.3` Standard POST, HTTP 200, TLS verified,
+`networkSend=RESPONSE_RECEIVED`, 6,392 in / 11,581 out tokens, estimated
+$0.05720925, charged UNKNOWN; model status PASS, candidate SHA `670cc208…`,
+prompt body 24,780 bytes (`9b0a41c8…`). The candidate then FAILED encrypted
+custody capture before any checkpoint: `trial.json.blockers=
+["CUSTODY_CAPTURE_FAILED"]`, no `CAPTURED_UNVERIFIED` receipt, no ciphertext
+artifact, G1/G2/G3 NOT_RUN, no repair send, normal cleanup NOT_ESTABLISHED,
+independent cleanup PASS (zero resources). The exact internal cause is
+UNKNOWN from public evidence — the capture error was swallowed silently at
+the `runPaidAttempt` boundary; do not attribute it to the JSON prompt, the
+MIT notice, secrets scanning, POSIX mode, age or Docker without evidence.
+Diagnostic gap closed offline by this task (PR linked from #165): a coarse
+allowlisted `CUSTODY_CAPTURE_STAGES` enum (capsule/host rejection, collector
+abort/timeout/kill/error/exit, source-lease change, host receipt mismatch,
+unknown) now travels with `trial.json.custodyCaptureStage`; a credential-free
+readiness probe (pinned age hash, worker file, Docker daemon, pinned
+encryptor image) runs BEFORE the paid send so environmental failures cost
+nothing; the attempt-1 scorecard reports
+`CUSTODY_CAPTURE_FAILED_NO_ORACLE` instead of a generic not-run reason. The
+failed run stays immutable; the next live attempt requires fresh review,
+merge and owner authorization.

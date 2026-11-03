@@ -1,6 +1,6 @@
 import { ModelResponseSchema } from "@metamorph/agent";
 import { admitDirectory } from "../../target-worker/src/admission.mjs";
-import { captureLease } from "./custody-capture.mjs";
+import { CUSTODY_CAPTURE_STAGES, captureLease } from "./custody-capture.mjs";
 import {
   consumeOraclePermit,
   custodyVerificationLink,
@@ -162,7 +162,8 @@ async function runPaidAttempt({
       "SOURCE_IDENTITY",
     );
     let custody,
-      captureFailed = false;
+      captureFailed = false,
+      captureStage = null;
     try {
       custody = await captureLease(
         custodyAttempt,
@@ -171,8 +172,14 @@ async function runPaidAttempt({
         signal,
         attempt,
       );
-    } catch {
+    } catch (error) {
       captureFailed = true;
+      // Coarse allowlisted stage only (see CUSTODY_CAPTURE_STAGES): the
+      // original error never crosses; the stage grants nothing and the
+      // capture stays fail-closed.
+      captureStage = CUSTODY_CAPTURE_STAGES.includes(error?.custodyStage)
+        ? error.custodyStage
+        : "UNKNOWN";
     } finally {
       await lease.release();
     }
@@ -181,6 +188,7 @@ async function runPaidAttempt({
       attempt === 1 ? "REAL_INFERENCE_GENERATED" : "REAL_INFERENCE_REPAIRED";
     if (captureFailed) {
       result.blockers = ["CUSTODY_CAPTURE_FAILED"];
+      result.custodyCaptureStage = captureStage;
       return result;
     }
     result.custody = custody;

@@ -9,7 +9,10 @@ import { basename, dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { parse } from "yaml";
 import { sha256 } from "../../target-worker/src/admission.mjs";
-import { captureLease } from "../src/custody-capture.mjs";
+import {
+  CUSTODY_CAPTURE_STAGES,
+  captureLease,
+} from "../src/custody-capture.mjs";
 import {
   artifactMetadata,
   authenticatedArtifactMetadata,
@@ -310,6 +313,10 @@ test("generation stays GENERATED when custody rejects, with no second model requ
   assert.equal(r.custody, undefined);
   assert.equal(r.publicG1, "NOT_RUN");
   assert.equal(r.generatedRequests, 1);
+  // Coarse allowlisted stage: capsule/host rejection is what fails here
+  // (missing MIT notice); no error text ever surfaces.
+  assert.equal(r.custodyCaptureStage, "CAPSULE_REJECTED");
+  assert.ok(CUSTODY_CAPTURE_STAGES.includes(r.custodyCaptureStage));
   assert.equal(f.calls.length, 1);
   await assert.rejects(
     runPublicMigration({
