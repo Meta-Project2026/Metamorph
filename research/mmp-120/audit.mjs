@@ -322,11 +322,18 @@ export function audit({ headProvider = auditedHead, rawSource } = {}) {
     check(
       "tariff_snapshot_locked",
       META_PRICE_SNAPSHOT.version === PAID_POLICY.tariff &&
-        META_PRICE_SNAPSHOT.version === "meta-standard-2026-10-29" &&
+        // MMP-154 refreshed the current snapshot from official docs; historical
+        // audit receipts remain unchanged. Keep exact rates and deadline locked.
+        META_PRICE_SNAPSHOT.version === "meta-standard-2026-11-03" &&
+        META_PRICE_SNAPSHOT.verifiedOn === "2026-11-03" &&
+        META_PRICE_SNAPSHOT.documentationUrl === "https://dev.meta.ai/docs/pricing-rate-limits" &&
+        META_PRICE_SNAPSHOT.inputPerMillion === 1.25 &&
+        META_PRICE_SNAPSHOT.cachedPerMillion === 0.15 &&
+        META_PRICE_SNAPSHOT.outputPerMillion === 4.25 &&
         META_PRICE_SNAPSHOT.inputPerMillion === PAID_POLICY.inputPerMillion &&
         META_PRICE_SNAPSHOT.cachedPerMillion === PAID_POLICY.cachedPerMillion &&
         META_PRICE_SNAPSHOT.outputPerMillion === PAID_POLICY.outputPerMillion &&
-        PAID_POLICY.tariffExpires === "2026-11-05T00:00:00Z",
+        PAID_POLICY.tariffExpires === "2026-11-10T00:00:00Z",
     ),
     check(
       "projection_within_context_bound",

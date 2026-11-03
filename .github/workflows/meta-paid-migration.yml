@@ -178,12 +178,19 @@ jobs:
         env:
           MMP089_UPLOAD_OUTCOME: ${{ steps.diagnostic-upload.outcome }}
         run: node research/mmp-089/record-upload.mjs
+      - name: Record immutable sanitized experiment outcome without credentials
+        if: ${{ always() && !inputs.validate_only }}
+        run: node research/mmp-154/scorecard.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: meta-paid-public-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/meta-paid-public/generation.json
+            ${{ runner.temp }}/meta-paid-public/preflight.json
+            ${{ runner.temp }}/meta-paid-public/scorecard.json
+            ${{ runner.temp }}/meta-paid-public/send-receipts/1.json
+            ${{ runner.temp }}/meta-paid-public/send-receipts/2.json
             ${{ runner.temp }}/meta-paid-public/trial.json
             ${{ runner.temp }}/meta-paid-public/finalizer.json
             ${{ runner.temp }}/meta-paid-public/authorization.json

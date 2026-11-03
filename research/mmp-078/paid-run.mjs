@@ -3,13 +3,18 @@ import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { authorizePaidWorkflow, safePaidAdmissionCode } from "../../packages/agent-real/src/meta-paid-authorization.mjs";
+import { paidPreflight } from "../../packages/agent-real/src/meta-paid-authorization.mjs";
+import { commitPreflight } from "../../packages/agent-real/src/migration-preflight.mjs";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { runPublicMigration } from "../../packages/agent-real/src/migration-trial.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = join(process.env.RUNNER_TEMP, "meta-paid-public");
 const privateRoot = join(process.env.RUNNER_TEMP, "meta-paid-private");
+const receiptRoot = join(output, "send-receipts");
 mkdirSync(output, { recursive: true, mode: 0o700 });
 mkdirSync(privateRoot, { recursive: true, mode: 0o700 });
+mkdirSync(receiptRoot, { mode: 0o700 });
+let receiptSequence = 0;
 const save = (name, value) => {
   const pending = join(output, `${name}.pending`);
   writeFileSync(pending, JSON.stringify(value, null, 2) + "\n", { mode: 0o600, flush: true });
@@ -22,9 +27,13 @@ let result;
 try {
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
   const authorization = await authorizePaidWorkflow(context);
+  commitPreflight(join(output, "preflight.json"), paidPreflight(authorization, context));
   result = await runPublicMigration({ context, selection: "meta", headSha: authorization.headSha,
     parent: privateRoot, signal: shutdown.signal, authorization,
-    checkpoint: (receipt) => save("generation.json", receipt),
+    checkpoint: (receipt) => {
+      commitPreflight(join(receiptRoot, `${++receiptSequence}.json`), receipt);
+      save("generation.json", receipt);
+    },
   });
   save("trial.json", result);
   if (result.modelGeneration !== "GENERATED" || result.custody?.state !== "CAPTURED_UNVERIFIED") { process.exitCode = 1; }
