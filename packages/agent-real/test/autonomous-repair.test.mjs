@@ -252,6 +252,36 @@ test("feedback ignores private diagnostics, raw blockers and G0/G4 information",
   assert.equal(d.feedback, "HTTP_JSON_TYPE");
   assert.doesNotMatch(JSON.stringify(d), /private-value|HELD_OUT/);
 });
+test("real Oracle per-pair G4 stays INCONCLUSIVE; missing or failed public controls block repair", () => {
+  const sha = "a".repeat(64);
+  const valid = syntheticVerification(sha, true);
+  assert.ok(
+    valid.attempts[0].pairs.every((p) => p.gates[2].verdict === "INCONCLUSIVE"),
+  );
+  assert.equal(publicRepairDecision(valid, sha).feedback, "HTTP_JSON_TYPE");
+  for (const mutate of [
+    (g) => {
+      g.executedTestIds.pop();
+    },
+    (g) => {
+      g.verdict = "FAIL";
+      g.findingCodes = ["CONTROL_FAILURE"];
+    },
+    (g) => {
+      g.verdict = "PASS";
+      g.findingCodes = [];
+    },
+    (g) => {
+      g.findingCodes = ["HELD_OUT_NOT_RUN", "CONTROL_FAILURE"];
+    },
+  ]) {
+    const invalid = syntheticVerification(sha, true);
+    mutate(invalid.attempts[0].pairs[0].gates[2]);
+    assert.throws(() => publicRepairDecision(invalid, sha), {
+      code: "VERIFICATION_INCOMPLETE",
+    });
+  }
+});
 test("corrupt ciphertext, missing ack, wrong custody SHA and cleanup failure block Oracle", async (t) => {
   for (const mutate of [
     (s) => {

@@ -103,9 +103,10 @@ export function syntheticVerification(candidateSha, fail = false) {
       },
       gates: ["G2", "G3", "G4"].map((gate) => ({
         gate,
-        verdict: fail && gate !== "G4" ? "FAIL" : "PASS",
+        verdict: gate === "G4" ? "INCONCLUSIVE" : fail ? "FAIL" : "PASS",
         executedTestIds: gate === "G4" ? CONTROL_IDS : expectedIds(s, gate),
-        findingCodes: fail && gate !== "G4" ? ["HTTP_JSON_TYPE"] : [],
+        findingCodes:
+          gate === "G4" ? ["HELD_OUT_NOT_RUN"] : fail ? ["HTTP_JSON_TYPE"] : [],
       })),
     })),
   });

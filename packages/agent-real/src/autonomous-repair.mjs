@@ -283,8 +283,10 @@ export function publicRepairDecision(value, candidateSha) {
       const g = p.gates.find((item) => item.gate === name);
       insist(
         g &&
-          ["PASS", "FAIL"].includes(g.verdict) &&
-          (name !== "G4" || g.verdict === "PASS") &&
+          (name === "G4"
+            ? g.verdict === "INCONCLUSIVE" &&
+              same(g.findingCodes, ["HELD_OUT_NOT_RUN"])
+            : ["PASS", "FAIL"].includes(g.verdict)) &&
           same(g.executedTestIds, expectedIds(MANIFEST[i], name)),
         "VERIFICATION_INCOMPLETE",
       );
