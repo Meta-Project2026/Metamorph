@@ -581,6 +581,7 @@ test(
       "verify-download",
       {
         ...custodyEnv,
+        GH_TOKEN: "fake-github-token",
         MMP115_ARTIFACT_ID: String(staged.fixture.ack.artifactId),
         MMP115_ARCHIVE_SHA256: staged.fixture.ack.archiveSha256,
         MMP115_UPLOAD_OUTCOME: "success",
