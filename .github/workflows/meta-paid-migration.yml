@@ -2,6 +2,12 @@ name: Meta paid migration
 on:
   workflow_dispatch:
     inputs:
+      execution_mode:
+        description: 'Single generation remains default. Autonomous repair is blocked pending financial guarantee and independent review.'
+        required: true
+        type: choice
+        default: single_generation
+        options: [single_generation, autonomous_repair]
       reviewed_sha:
         description: 'Exact reviewed main SHA; public workshop source only'
         required: true

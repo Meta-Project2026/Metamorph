@@ -12,8 +12,8 @@ try {
   const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
   validateWorkflowIdentity(process.env, head, event.inputs, process.env.GITHUB_WORKFLOW_REF?.includes("meta-paid-migration.yml@"));
   result = await verifyHostedMetaPolicy(head);
-} catch {
-  result = { status: "BLOCKED", code: "GITHUB_POLICY_UNVERIFIED_OR_BLOCKED" };
+} catch (error) {
+  result = { status: "BLOCKED", code: ["BLOCKED_BUDGET_GUARANTEE", "MIGRATION_MODE_BLOCKED"].includes(error?.code) ? error.code : "GITHUB_POLICY_UNVERIFIED_OR_BLOCKED" };
   process.exitCode = 1;
 }
 writeFileSync(join(output, "policy.json"), JSON.stringify(result, null, 2) + "\n", { mode: 0o600 });

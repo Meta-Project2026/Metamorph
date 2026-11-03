@@ -37,6 +37,8 @@ export const PAID_POLICY = Object.freeze({
 });
 const admissions = new WeakMap();
 const admissionCodes = new Set([
+  "BLOCKED_BUDGET_GUARANTEE",
+  "MIGRATION_MODE_BLOCKED",
   "SOURCE_IDENTITY",
   "WORKFLOW_IDENTITY_BLOCKED",
   "ACTOR_BLOCKED",
