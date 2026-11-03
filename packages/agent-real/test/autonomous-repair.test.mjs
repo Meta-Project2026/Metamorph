@@ -244,10 +244,9 @@ test("missing feedback, G1 failure, wrong SHA, incomplete or stale receipts neve
     assert.doesNotMatch(JSON.stringify(r), /private-value/);
   }
 });
-test("feedback ignores private diagnostics, raw blockers and G0/G4 information", () => {
+test("feedback ignores non-authoritative raw blockers and G0/G4 information", () => {
   const v = syntheticVerification("a".repeat(64), true);
   v.blockers = ["SQL private-value", "HELD_OUT_SECRET"];
-  v.attempts[0].pairs[0].compilerDiagnostics = { raw: "private-value" };
   const d = publicRepairDecision(v, "a".repeat(64));
   assert.equal(d.feedback, "HTTP_JSON_TYPE");
   assert.doesNotMatch(JSON.stringify(d), /private-value|HELD_OUT/);
@@ -336,6 +335,7 @@ test("late response cannot write candidate, repair or overwrite timed out outcom
   let finish;
   const h = harness(t, {
     timeoutMs: 10,
+    stopGraceMs: 20,
     transport: () =>
       new Promise((resolve) => {
         finish = resolve;
@@ -343,7 +343,8 @@ test("late response cannot write candidate, repair or overwrite timed out outcom
   });
   const r = await h.run(),
     before = JSON.stringify(r);
-  assert.equal(r.code, "TIMEOUT");
+  assert.equal(r.code, "OPERATION_UNSETTLED");
+  assert.equal(r.cleanup, "UNVERIFIED_OPERATION_ACTIVE");
   assert.equal(r.simulatedRequests, 1);
   finish(wireReply());
   await new Promise((resolve) => setImmediate(resolve));

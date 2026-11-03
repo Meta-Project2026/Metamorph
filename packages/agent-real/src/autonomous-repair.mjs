@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { MANIFEST } from "@metamorph/oracle";
+import { MANIFEST, SOURCE } from "@metamorph/oracle";
 import { sha256 } from "../../target-worker/src/admission.mjs";
 import {
   decodeMetaMigration,
@@ -59,6 +59,7 @@ const safeCodes = new Set([
   "OUTPUT_INVALID",
   "USAGE_INVALID",
   "SYNTHETIC_PORT_ERROR",
+  "OPERATION_UNSETTLED",
 ]);
 const failureCodes = new Set([
   "DB_SCHEMA",
@@ -73,6 +74,12 @@ const failureCodes = new Set([
 ]);
 const hash = /^[a-f0-9]{64}$/;
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const exactKeys = (value, required, optional = []) =>
+  value !== null &&
+  typeof value === "object" &&
+  !Array.isArray(value) &&
+  required.every((key) => Object.hasOwn(value, key)) &&
+  Object.keys(value).every((key) => [...required, ...optional].includes(key));
 const requestFor = (attempt, repairFeedback) => ({
   unitId: "workshop-api",
   tier: "spark",
@@ -198,6 +205,15 @@ export function publicRepairDecision(value, candidateSha) {
   );
   const a = value.attempts[0];
   insist(
+    exactKeys(
+      a,
+      ["attemptId", "candidateSha", "gates", "coverage", "pairs"],
+      ["errorCode"],
+    ) &&
+      (!Object.hasOwn(a, "errorCode") || a.errorCode === null),
+    "VERIFICATION_INCOMPLETE",
+  );
+  insist(
     a.candidateSha === candidateSha && /^[a-f0-9-]{36}$/.test(a.attemptId),
     "SOURCE_IDENTITY",
   );
@@ -261,7 +277,20 @@ export function publicRepairDecision(value, candidateSha) {
     packIds = new Set();
   for (const [i, p] of a.pairs.entries()) {
     insist(
-      p.scenarioId === MANIFEST[i].id &&
+      exactKeys(
+        p,
+        [
+          "scenarioId",
+          "pairId",
+          "packs",
+          "cleanup",
+          "targetLifetimePolicyMs",
+          "compilerDiagnostics",
+          "gates",
+        ],
+        ["failureTelemetry", "candidateSha", "attemptId", "errorCode", "build"],
+      ) &&
+        p.scenarioId === MANIFEST[i].id &&
         /^[a-f0-9-]{36}$/.test(p.pairId) &&
         !pairIds.has(p.pairId) &&
         p.cleanup === "VERIFIED_ZERO_RESOURCES" &&
@@ -269,6 +298,58 @@ export function publicRepairDecision(value, candidateSha) {
         p.gates?.length === 3,
       "VERIFICATION_INCOMPLETE",
     );
+    // publicAttempt deliberately omits raw pair fields. Its existing diagnostics
+    // envelope binds the successful build to this candidate/attempt/pair. Never
+    // infer raw errorCode=null from omission; reject contradictions when supplied.
+    const diagnostic = p.compilerDiagnostics;
+    insist(
+      exactKeys(diagnostic, [
+        "format",
+        "sourceSha",
+        "candidateSha",
+        "attemptId",
+        "pairId",
+        "g1Verdict",
+        "status",
+        "entries",
+        "errorCount",
+        "truncated",
+      ]) &&
+        diagnostic.format === "mmp082-g1-diagnostics-v1" &&
+        diagnostic.sourceSha === SOURCE.commit &&
+        diagnostic.candidateSha === candidateSha &&
+        diagnostic.attemptId === a.attemptId &&
+        diagnostic.pairId === p.pairId &&
+        diagnostic.g1Verdict === "PASS" &&
+        diagnostic.status === "DIAGNOSTIC_UNAVAILABLE" &&
+        same(diagnostic.entries, []) &&
+        diagnostic.errorCount === null &&
+        diagnostic.truncated === false &&
+        p.targetLifetimePolicyMs === 180000 &&
+        (!Object.hasOwn(p, "candidateSha") ||
+          p.candidateSha === candidateSha) &&
+        (!Object.hasOwn(p, "attemptId") || p.attemptId === a.attemptId) &&
+        (!Object.hasOwn(p, "errorCode") || p.errorCode === null),
+      "VERIFICATION_INCOMPLETE",
+    );
+    if (Object.hasOwn(p, "build")) {
+      insist(
+        exactKeys(p.build, [
+          "gate",
+          "verdict",
+          "executedTestIds",
+          "findingCodes",
+        ]) &&
+          p.build.gate === "G1" &&
+          p.build.verdict === "PASS" &&
+          same(p.build.executedTestIds, [
+            `${p.scenarioId}:typecheck`,
+            `${p.scenarioId}:build`,
+          ]) &&
+          same(p.build.findingCodes, []),
+        "VERIFICATION_INCOMPLETE",
+      );
+    }
     pairIds.add(p.pairId);
     for (const pack of p.packs) {
       insist(
@@ -334,30 +415,111 @@ export function publicRepairDecision(value, candidateSha) {
   };
 }
 
-async function bounded(operation, signal, timeoutMs) {
+async function bounded(operation, signal, timeoutMs, lifecycle) {
   const controller = new AbortController();
-  let timer, cancel;
+  const resources = [];
+  let timer, cancel, joinTimer;
+  let stopped = false;
+  const stop = (resource) => {
+    if (resource.stopped) return;
+    resource.stopped = true;
+    // closed, not a successful kill() return, is the termination proof.
+    Promise.resolve()
+      .then(() => resource.stop())
+      .catch(() => {});
+  };
+  const abort = () => {
+    stopped = true;
+    controller.abort();
+    for (const resource of resources) stop(resource);
+  };
+  const registerResource = ({ stop: terminate, closed }) => {
+    insist(
+      typeof terminate === "function" &&
+        closed &&
+        typeof closed.then === "function",
+      "CONFIG_DENIED",
+    );
+    const resource = {
+      stop: terminate,
+      stopped: false,
+      closed: false,
+      failed: false,
+    };
+    resource.settlement = Promise.resolve(closed).then(
+      () => {
+        resource.closed = true;
+      },
+      () => {
+        resource.failed = true;
+      },
+    );
+    resources.push(resource);
+    if (stopped) stop(resource);
+  };
+  // Reflect rejection so even timeout/error branches explicitly join operation.
+  let operationSettled = false;
+  let pending;
   try {
     const aborted = new Promise((_, reject) => {
       cancel = () => {
-        controller.abort();
+        abort();
         reject(Object.assign(new Error("CANCELLED"), { code: "CANCELLED" }));
       };
       signal.addEventListener("abort", cancel, { once: true });
       timer = setTimeout(() => {
-        controller.abort();
+        abort();
         reject(Object.assign(new Error("TIMEOUT"), { code: "TIMEOUT" }));
       }, timeoutMs);
     });
     signal.throwIfAborted();
-    const value = await Promise.race([
-      Promise.resolve().then(() => operation(controller.signal)),
-      aborted,
-    ]);
+    pending = Promise.resolve().then(() =>
+      operation(controller.signal, registerResource),
+    );
+    pending.then(
+      () => {
+        operationSettled = true;
+      },
+      () => {
+        operationSettled = true;
+      },
+    );
+    const complete = pending.then(async (value) => {
+      await Promise.all(resources.map((r) => r.settlement));
+      insist(
+        resources.every((r) => r.closed && !r.failed),
+        "OPERATION_UNSETTLED",
+      );
+      return value;
+    });
+    const value = await Promise.race([complete, aborted]);
     insist(!signal.aborted && !controller.signal.aborted, "CANCELLED");
     return value;
+  } catch (error) {
+    abort();
+    const joined = await Promise.race([
+      (async () => {
+        await pending?.catch(() => {});
+        // Registration is synchronous with resource creation; join after the
+        // operation settles so late registration cannot escape the snapshot.
+        await Promise.all(resources.map((r) => r.settlement));
+        return (
+          (!pending || operationSettled) &&
+          resources.every((r) => r.closed && !r.failed)
+        );
+      })(),
+      new Promise((resolve) => {
+        joinTimer = setTimeout(() => resolve(false), lifecycle.stopGraceMs);
+      }),
+    ]);
+    if (!joined) {
+      lifecycle.unsettled = true;
+      insist(false, "OPERATION_UNSETTLED");
+    }
+    throw error;
   } finally {
     clearTimeout(timer);
+    clearTimeout(joinTimer);
     signal.removeEventListener("abort", cancel);
     controller.abort();
   }
@@ -379,6 +541,7 @@ export async function runSyntheticAutonomousRepair({
   timeoutMs = 5000,
   oracleTimeoutMs = 600000,
   custodyTimeoutMs = 30000,
+  stopGraceMs = 30000,
   budgetUsd = 1,
 }) {
   const result = {
@@ -404,12 +567,14 @@ export async function runSyntheticAutonomousRepair({
     receipts: [],
     transitions: [],
     cleanup: "NOT_RUN",
+    sourceLease: "NOT_ACQUIRED",
   };
   let directory,
     previous = [],
     feedback = null,
     seenOracleIds = new Set();
   const transition = (state) => result.transitions.push(state);
+  const lifecycle = { stopGraceMs, unsettled: false };
   try {
     insist(
       !process.env.MODEL_API_KEY &&
@@ -429,6 +594,10 @@ export async function runSyntheticAutonomousRepair({
       Number.isInteger(custodyTimeoutMs) &&
         custodyTimeoutMs > 0 &&
         custodyTimeoutMs <= 60000,
+      "CONFIG_DENIED",
+    );
+    insist(
+      Number.isInteger(stopGraceMs) && stopGraceMs > 0 && stopGraceMs <= 30000,
       "CONFIG_DENIED",
     );
     insist(!signal.aborted, "CANCELLED");
@@ -491,14 +660,15 @@ export async function runSyntheticAutonomousRepair({
       transition(attempt === 1 ? "GENERATE_RESERVED" : "REPAIR_RESERVED");
       result.receipts.push(receipt);
       const reply = await bounded(
-        (sendSignal) => {
+        (sendSignal, registerResource) => {
           insist(!sendSignal.aborted, "CANCELLED");
           result.simulatedRequests++;
           if (attempt === 2) result.repairs++;
-          return transport({ body, signal: sendSignal });
+          return transport({ body, signal: sendSignal, registerResource });
         },
         signal,
         timeoutMs,
+        lifecycle,
       );
       checkMetaHttp(reply);
       const decoded = decodeMetaMigration(reply.body, 0);
@@ -515,6 +685,7 @@ export async function runSyntheticAutonomousRepair({
       const session = createSourceSession(directory);
       await session.writer.write(decoded.response.changes, signal);
       const lease = await session.acquire(session.writer.root, signal);
+      result.sourceLease = "HELD";
       try {
         insist(
           lease.bundle.candidateSha === decoded.candidateSha,
@@ -524,16 +695,18 @@ export async function runSyntheticAutonomousRepair({
         result.candidates.push(decoded.candidateSha);
         transition(`CANDIDATE_${attempt}`);
         const stored = await bounded(
-          (s) =>
+          (s, registerResource) =>
             custody({
               attempt,
               candidateSha: decoded.candidateSha,
               candidateRoot: session.writer.root,
               bundle: lease.bundle,
               signal: s,
+              registerResource,
             }),
           signal,
           custodyTimeoutMs,
+          lifecycle,
         );
         insist(
           stored?.execution === "SYNTHETIC" &&
@@ -553,15 +726,17 @@ export async function runSyntheticAutonomousRepair({
         transition(`CUSTODY_${attempt}_ACKNOWLEDGED`);
         result.oracleInvocations++;
         const verified = await bounded(
-          (s) =>
+          (s, registerResource) =>
             verify({
               attempt,
               candidateRoot: session.writer.root,
               candidateSha: decoded.candidateSha,
               signal: s,
+              registerResource,
             }),
           signal,
           oracleTimeoutMs,
+          lifecycle,
         );
         await lease.assertUnchanged();
         const decision = publicRepairDecision(verified, decoded.candidateSha);
@@ -589,33 +764,46 @@ export async function runSyntheticAutonomousRepair({
         feedback = decision.feedback;
         previous = structuredClone(decoded.response.changes);
       } finally {
-        await lease.release();
+        if (lifecycle.unsettled) result.sourceLease = "QUARANTINED";
+        else {
+          await lease.release();
+          result.sourceLease = "RELEASED";
+        }
       }
     }
   } catch (error) {
     result.status = "ERROR";
-    result.code = signal.aborted
-      ? "CANCELLED"
-      : safeCodes.has(error?.code)
-        ? error.code
-        : "SYNTHETIC_PORT_ERROR";
+    result.code = lifecycle.unsettled
+      ? "OPERATION_UNSETTLED"
+      : signal.aborted
+        ? "CANCELLED"
+        : safeCodes.has(error?.code)
+          ? error.code
+          : "SYNTHETIC_PORT_ERROR";
     transition("STOPPED");
   } finally {
     // Independent cleanup after the operation signal expires. No cleanup of an
     // already-claimed other process's run; that process owns its resources.
-    if (directory) {
+    if (directory && lifecycle.unsettled) {
+      result.cleanup = "UNVERIFIED_OPERATION_ACTIVE";
+    } else if (directory) {
       try {
         const finished = await bounded(
-          (s) => cleanup(s),
+          (s, registerResource) => cleanup(s, registerResource),
           new AbortController().signal,
           30000,
+          lifecycle,
         );
         insist(clean(finished), "CLEANUP_ERROR");
         result.cleanup = "VERIFIED_ZERO_RESOURCES";
       } catch {
-        result.cleanup = "CLEANUP_ERROR";
+        result.cleanup = lifecycle.unsettled
+          ? "UNVERIFIED_OPERATION_ACTIVE"
+          : "CLEANUP_ERROR";
         result.status = "ERROR";
-        result.code = "CLEANUP_ERROR";
+        result.code = lifecycle.unsettled
+          ? "OPERATION_UNSETTLED"
+          : "CLEANUP_ERROR";
       }
     }
     result.estimatedCostUsd =

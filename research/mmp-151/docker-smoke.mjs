@@ -1,17 +1,19 @@
 // Manual local SYNTHETIC smoke. No paid provider, GH API or workflow dispatch.
 import assert from "node:assert/strict";
-import { execFileSync, spawn } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runSyntheticAutonomousRepair } from "../../packages/agent-real/src/autonomous-repair.mjs";
+import { spawnJoinedProcess } from "../../packages/agent-real/src/joined-process.mjs";
 import { finalizeCustody } from "../../packages/agent-real/src/custody-checkpoint.mjs";
 import { encryptDiagnostic } from "../../packages/agent-real/src/encrypt-diagnostics.mjs";
 import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 import { context, wireReply } from "../../packages/agent-real/test/autonomous-repair-fixture.mjs";
 import { WORKSHOP_CANDIDATE_SHA } from "../../packages/differential/src/workshop-policy.mjs";
 import { admitDirectory, sha256 } from "../../packages/target-worker/src/admission.mjs";
+import { auditDedicatedDaemon, requireDedicatedDaemon } from "./daemon-boundary.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const parent = process.env.MMP151_PRIVATE, output = process.env.MMP151_OUTPUT;
@@ -20,6 +22,9 @@ assert.equal(process.platform, "linux");
 assert.ok(parent?.startsWith("/var/lib/docker/volumes/mmp151-private-"));
 assert.ok(output?.startsWith("/var/lib/docker/volumes/mmp151-output-"));
 assert.ok(!process.env.MODEL_API_KEY && !process.env.GH_TOKEN && !process.env.ACTIONS_RUNTIME_TOKEN);
+await auditDedicatedDaemon();
+env.MMP151_DAEMON_RUN = process.env.MMP151_DAEMON_RUN;
+env.MMP151_DAEMON_ID = process.env.MMP151_DAEMON_ID;
 process.umask(0o077);
 const headSha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
 assert.equal(headSha, process.env.MMP151_HEAD);
@@ -36,7 +41,7 @@ assert.equal(sha256(readFileSync(keygen)), DIAGNOSTIC_POLICY.keygenSha256);
 const identity = join(parent, "test-identity");
 execFileSync(keygen, ["--output", identity], { env, stdio: "pipe" });
 const recipient = execFileSync(keygen, ["-y", identity], { env, encoding: "utf8", stdio: "pipe" }).trim();
-const verifications = [], children = new Set();
+const verifications = [];
 let sends = 0;
 const shutdown = new AbortController();
 process.on("SIGTERM", () => shutdown.abort());
@@ -69,20 +74,22 @@ const result = await runSyntheticAutonomousRepair({
     return { execution: "SYNTHETIC", attempt, candidateSha, acknowledged: true,
       cleanup: encrypted.cleanup, ciphertext: encrypted.ciphertext, readback, ciphertextSha256: sha256(readback) };
   },
-  verify: async ({ attempt, candidateRoot, candidateSha, signal }) => {
+  verify: async ({ attempt, candidateRoot, candidateSha, signal, registerResource }) => {
+    await requireDedicatedDaemon();
     const dir = join(parent, `oracle-${attempt}`); mkdirSync(dir, { mode: 0o700 });
     const transfer = join(parent, `transfer-${attempt}.json`), report = join(parent, `verification-${attempt}.json`);
     writeFileSync(transfer, JSON.stringify({ candidateRoot, candidateSha, parent: dir, headSha }), { flag: "wx", mode: 0o600 });
-    const child = spawn(process.execPath, [join(root, "research/mmp-151/oracle-child.mjs"), transfer, report], { env, cwd: root, stdio: ["ignore", "ignore", "ignore"] });
-    const settled = new Promise((resolve, reject) => {
-      const stop = () => child.kill("SIGTERM");
-      signal.addEventListener("abort", stop, { once: true });
-      if (signal.aborted) stop();
-      const kill = setTimeout(() => child.kill("SIGKILL"), 13 * 60 * 1000);
-      child.on("error", reject);
-      child.on("close", (code) => { clearTimeout(kill); signal.removeEventListener("abort", stop); code === 0 ? resolve() : reject(Error("ORACLE_CHILD_ERROR")); });
-    });
-    children.add(settled); await settled;
+    const processGroup = spawnJoinedProcess(process.execPath,
+      [join(root, "research/mmp-151/oracle-child.mjs"), transfer, report], { env, cwd: root });
+    // A killed Docker client does not independently prove daemon-side build
+    // settlement. Any interruption poisons the custody/cleanup claim; the outer
+    // launcher then destroys the entire exclusive daemon and its data volume.
+    let interrupted = false;
+    registerResource({ closed: processGroup.closed.then(() => {
+      if (interrupted) throw Error("DAEMON_OPERATION_UNVERIFIED");
+    }), stop: () => { interrupted = true; processGroup.stop(); } });
+    const completion = await processGroup.closed;
+    if (completion.failed || completion.exitCode !== 0 || signal.aborted) throw Error("ORACLE_CHILD_ERROR");
     const verified = JSON.parse(readFileSync(report, "utf8"));
     verifications.push({ candidateSha, publicG1: verified.publicG1, publicG2: verified.publicG2,
       publicG3: verified.publicG3, coverage: verified.attempts[0]?.coverage ?? null,
@@ -92,12 +99,16 @@ const result = await runSyntheticAutonomousRepair({
     return verified;
   },
   cleanup: async () => {
-    await Promise.allSettled([...children]);
+    // The controller has joined all registered operations before reaching here.
+    // Prefix-based legacy cleanup is safe only inside this exclusive daemon.
+    await requireDedicatedDaemon();
     const f = await finalizeCustody(null);
+    await auditDedicatedDaemon();
     return { status: "VERIFIED_ZERO_RESOURCES", containers: f.containers, volumes: f.volumes, emergencyRemoved: f.emergencyRemoved };
   },
 });
 const record = { headSha, ...result, verifications, crypto: "PINNED_AGE_EPHEMERAL_TEST_KEY",
+  daemonIsolation: "DEDICATED_DISPOSABLE_DAEMON",
   artifactTransport: "LOCAL_READBACK_ONLY", signedRepairAdmission: "NOT_IMPLEMENTED",
   fixture: "REUSED_PUBLIC_WORKSHOP_WITH_ORIGINAL_BOOLEAN_MUTANT", historicalCandidates: "NOT_USED" };
 writeFileSync(join(output, "summary.json"), `${JSON.stringify(record, null, 2)}\n`, { flag: "wx", mode: 0o600 });
