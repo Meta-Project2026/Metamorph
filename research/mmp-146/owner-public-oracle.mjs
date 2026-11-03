@@ -144,7 +144,14 @@ try {
   // Metadata-only sanitized report, NOT the raw HTTP/DB/Oracle packs.
   writeFileSync(join(PRIVATE_RUN,'summary-mmp146.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
   console.log(JSON.stringify(report,null,2));
-  process.exitCode = result.cleanup?.status === 'VERIFIED_ZERO_RESOURCES' ? 0 : 2;
+  // Cleanup alone is not a parity verdict. Fail closed on zero attempts,
+  // incomplete public coverage, any gate failure or unsuccessful resource cleanup.
+  process.exitCode = result.attempts?.length === 1 &&
+    attempt?.pairs?.length === 3 &&
+    result.publicG1 === 'PASS' && result.publicG2 === 'PASS' &&
+    result.publicG3 === 'PASS' &&
+    attempt.coverage?.http === 17 && attempt.coverage?.sqlite === 20 &&
+    result.cleanup?.status === 'VERIFIED_ZERO_RESOURCES' ? 0 : 2;
 } catch {
   // Keep private paths, build compiler diagnostics and Oracle observations
   // out of stdout/stderr and chat. Any incomplete cleanup needs inspection.
