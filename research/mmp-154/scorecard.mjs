@@ -16,6 +16,10 @@ export function recordScorecard(env) {
     try { return readPrivateJson(path, 1024 * 1024, false).value; }
     catch (error) { if (error.code === "ENOENT") return null; throw error; }
   };
+  // A confirmed repair response distinguishes an executed signed repair from
+  // an authorized-but-undispatched one in the attempt-1 scorecard's stop
+  // reason; the scorecard stays evidence and never grants spend authority.
+  const repairReceipt = read(join(output, "generation-repair.json"));
   const scorecard = generationScorecard({
     preflight: read(join(output, "preflight.json")),
     generation: read(join(output, "generation.json")),
@@ -25,6 +29,7 @@ export function recordScorecard(env) {
     finalizer: read(join(output, "finalizer.json")),
     runId: env.GITHUB_RUN_ID,
     headSha: env.GITHUB_SHA,
+    repairAttempted: repairReceipt?.networkSend === "RESPONSE_RECEIVED",
   });
   commitPreflight(join(output, "scorecard.json"), scorecard);
   // The signed two-attempt plan adds its own attempt-2 projection; the final

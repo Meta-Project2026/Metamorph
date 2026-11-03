@@ -33,14 +33,15 @@ test("offline preflight computes current request without any fetch and never aut
     assert.equal(p.required.G2.length, 17);
     assert.equal(p.required.G3.length, 20);
     // Current production wire request; old MMP-107 base had 22,762 bytes.
-    // MMP-129 Option A and the MMP-156 target.schemaContract paragraph change
-    // prompt identity only, not this preflight's NO_GO.
-    assert.equal(p.serializedBytes, 23785);
+    // MMP-129, the MMP-156 target.schemaContract paragraph and the MMP-161
+    // target.jsonContract paragraph change prompt identity only, not this
+    // preflight's NO_GO.
+    assert.equal(p.serializedBytes, 24570);
     assert.equal(
       p.serializedSha256,
-      "81fcd6aaa02d7b69e18caeda887c67909cfd2c62d9900375961c43eec374a1b2",
+      "c2db6096d6bbda0b08659e08cedcd29107a3de6d3d5a82e0b2e3516561830df0",
     );
-    assert.equal(p.projection.worstCaseEstimatedUsd, 0.229517);
+    assert.equal(p.projection.worstCaseEstimatedUsd, 0.233442);
     assert.equal(p.defaultBudgetAdmits, false);
     assert.equal(p.chargedUsd, null);
     assert.equal(p.recordedChecks.length, 2);

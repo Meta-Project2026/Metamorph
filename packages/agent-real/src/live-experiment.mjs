@@ -138,6 +138,7 @@ export function generationScorecard({
   finalizer,
   runId,
   headSha,
+  repairAttempted = false,
 }) {
   const validCard = cardValid(preflight) && preflight.headSha === headSha;
   const receipt = generation ?? trial?.modelReceipts?.[0];
@@ -217,10 +218,19 @@ export function generationScorecard({
       ),
     ]),
   );
+  // The signed two-attempt plan authorizes a repair send; the attempt-1
+  // scorecard must not claim repair is unimplemented when the plan card
+  // reserved it and the repair receipt confirms a confirmed response.
+  const planTwoPost =
+    validCard && preflight.maximumPosts === 2 && preflight.maximumRepairs === 1;
   const stopReason = outcome.complete
     ? outcome.publicVerdict === "PASS"
       ? "FIRST_PUBLIC_PASS_STOP"
-      : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
+      : planTwoPost
+        ? repairAttempted
+          ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_EXECUTED"
+          : "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
+        : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
     : receipt?.status === "ERROR" && attempted === 1
       ? "GENERATION_ERROR_NO_RETRY"
       : execution === "NOT_ESTABLISHED"
@@ -255,7 +265,8 @@ export function generationScorecard({
       /^meta-standard-\d{4}-\d{2}-\d{2}$/.test(preflight.tariff?.version)
         ? preflight.tariff.version
         : null,
-    maximumPosts: 1,
+    maximumPosts: validCard ? preflight.maximumPosts : 1,
+    maximumRepairs: validCard ? preflight.maximumRepairs : 0,
     attemptedRequests: attempted,
     confirmedResponses:
       receipt?.confirmedResponseCount === 1
@@ -312,6 +323,7 @@ export function generationScorecard({
     },
     outcome,
     stopReason,
+    repairs: repairAttempted ? 1 : 0,
     publicFindingCodes: [
       ...new Set(
         trial?.attempts?.flatMap(
@@ -322,7 +334,6 @@ export function generationScorecard({
         ) ?? [],
       ),
     ],
-    repairs: 0,
     G0: "INCONCLUSIVE",
     G4: "INCONCLUSIVE",
     product: "NOT_ESTABLISHED",

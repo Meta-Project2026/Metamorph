@@ -188,6 +188,71 @@ test("scorecard projects recorded generation, per-gate counts, custody, usage an
   }
 });
 
+test("signed two-attempt scorecards never misstate the authorized maximum or the executed repair", () => {
+  const planFixture = fixture(true);
+  const planCard = generationPreflight({
+    context: context(),
+    headSha: planFixture.headSha,
+    actor: "barbalatv",
+    workflowBytes: Buffer.from("synthetic workflow"),
+    maxEstimatedUsd: 1,
+    plan: "generate_then_repair",
+    confirmation: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+    now: Date.parse("2026-11-03T16:00:00Z"),
+  });
+  planFixture.preflight = planCard;
+  planFixture.generation.authorization.preflightSha256 = planCard.sha256;
+  planFixture.generation.authorization.workflowSha256 = planCard.workflowSha256;
+  planFixture.generation.inputSha256 = planCard.requestBodySha256;
+  // Confirmed repair response: the attempt-1 scorecard reports the executed
+  // signed repair and the authorized two-send maximum; it never fabricates a
+  // first-Oracle PASS or product acceptance.
+  const executed = generationScorecard({
+    ...planFixture,
+    repairAttempted: true,
+  });
+  assert.equal(executed.maximumPosts, 2);
+  assert.equal(executed.maximumRepairs, 1);
+  assert.equal(executed.repairs, 1);
+  assert.equal(executed.stopReason, "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_EXECUTED");
+  assert.equal(executed.outcome.publicVerdict, "FAIL");
+  assert.equal(executed.outcome.status, "COMPLETE_PUBLIC_FAIL");
+  assert.equal(executed.product, "NOT_ESTABLISHED");
+  // Authorized but not dispatched: honest intermediate state, still 2 posts.
+  const notDispatched = generationScorecard({
+    ...planFixture,
+    repairAttempted: false,
+  });
+  assert.equal(
+    notDispatched.stopReason,
+    "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED",
+  );
+  assert.equal(notDispatched.maximumPosts, 2);
+  assert.equal(notDispatched.maximumRepairs, 1);
+  assert.equal(notDispatched.repairs, 0);
+  // Single-generation reporting is byte-for-byte the historical semantics.
+  const single = generationScorecard(fixture(true));
+  assert.equal(single.maximumPosts, 1);
+  assert.equal(single.maximumRepairs, 0);
+  assert.equal(single.stopReason, "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED");
+  assert.equal(single.repairs, 0);
+  // The real run #41703793337 receipt under a plan card is never promoted to
+  // PASS by this projection; custody remains unbound in the fixture.
+  const realTrial = JSON.parse(
+    readFileSync(
+      new URL("fixtures/mmp158-real-trial-41703793337.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  const realScore = generationScorecard({
+    ...planFixture,
+    trial: realTrial,
+    repairAttempted: true,
+  });
+  assert.equal(realScore.outcome.publicVerdict, "INCONCLUSIVE");
+  assert.equal(realScore.product, "NOT_ESTABLISHED");
+});
+
 test("foreign run/head/body/card/candidate/artifact/Oracle or abnormal cleanup suppress complete result", () => {
   for (const mutate of [
     (v) => {
