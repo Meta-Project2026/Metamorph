@@ -20,6 +20,9 @@ commit in this report. Older [validation.md](validation.md) is PR #178 history.
 | `node --test --test-reporter=spec research/mmp-160/offline-spike.test.mjs` | 0 | 84 passed, 0 failed/skipped |
 | Focused command below | 0 | 175 tests: 173 passed, 2 Linux-only skips, 0 failed |
 | `node research/mmp-120/audit.mjs` | 0 | 20 invariants PASS; unchanged generation body 25,625 bytes, SHA `01cb64b4…`; audit remains NO_GO, not paid authority |
+| `node research/mmp-069/validate.mjs` | 0 | VALID; 11 workspace packages, 138 research modules; new folder explicitly LOCAL_ONLY, tests NOT_VERIFIED for hosted discovery |
+| `node research/mmp-069/check-syntax.mjs` | 0 | 137 active modules parse successfully; no module executed |
+| `node --test --test-reporter=spec research/mmp-069/validate.test.mjs` | 0 | 45 inventory/CI validator controls passed, 0 failed/skipped |
 | `git diff --exit-code origin/main -- packages apps .github .specify .agents pnpm-lock.yaml package.json biome.json` | 0 | No production/workflow/scaffold/root config/dependency changes |
 | `git diff --cached --check` | 0 | Staged whitespace check |
 
@@ -41,6 +44,16 @@ Initial local tooling failures were resolved: an unsupported Biome
 exited 1. The final non-root research config works through ordinary directory
 discovery. An initial combined lint/typecheck shell exited 1 due to that config;
 the actual typecheck invocation exited 0. No lint/test checks were disabled.
+
+Initial hosted [Fast CI 41844241342](https://github.com/Meta-Project2026/Metamorph/actions/runs/41844241342)
+on `77831f41e9b78899155e3c558f23f891188de183` failed both Node 22/24 jobs at
+Active research syntax with RESEARCH_INVENTORY_DRIFT. The executor had omitted
+the mandatory static inventory registration for this newly executable research
+folder. Adding its LOCAL_ONLY / hosted tests NOT_VERIFIED record to
+`research/mmp-069/coverage-matrix.json` restores the existing inventory invariant;
+no validator, tests, workflow or safeguard was weakened. This follow-up was
+checked with the real syntax sweep and all 45 validator controls above. The
+final-head hosted result is recorded separately in the Draft PR.
 
 ## Executed acceptance matrix
 

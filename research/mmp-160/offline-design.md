@@ -180,6 +180,9 @@ The research simulation does not implement OIDC, receipts authenticity, protecte
 main admission, finances, durable cross-process claims, cancellation, Docker or age.
 Its single-use in-memory context is a test control, not proof of production crash
 safety. Root Fast CI does not discover these research tests; run them explicitly.
+The required `research/mmp-069/coverage-matrix.json` registration labels this
+folder LOCAL_ONLY / tests NOT_VERIFIED (hosted discovery), with syntax checking
+only. No validator, workflow or safeguard is relaxed.
 
 ## Owner decision and remaining evaluation
 
