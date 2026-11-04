@@ -407,6 +407,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Offline initial-DB_SCHEMA diagnosis of paid run 41696312924: the comparator-mechanics test exercises only the locally built trusted @metamorph/oracle dist with the pinned public PHP source DDL, the trusted known-good workshop fixture string and synthetic reformatting variants, and skips honestly without a build; no hosted test step is added. No candidate plaintext, age identity, private Oracle evidence, Docker, Meta/model call, workflow change, dispatch, artifact transfer or paid action. The paid candidate's exact DDL delta stays UNKNOWN."
+    },
+    {
+      "path": "research/mmp-167",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Offline source-grounded diagnosis of paid run 41749479450 and synthetic build-phase controls receive hosted syntax checking only; the production buildReceipt/observeBuild/publicAttempt matrix runs through the existing packages/agent-real test glob in pnpm test, and the research-local negative-controls.mjs is a manual assertion receipt. One bounded manual Docker measurement used only the trusted workshop fixture on a locally cached node 24.11.0 / typescript 5.9.3 image with network none; no candidate bytes, Meta call, paid dispatch/rerun, candidate decryption, artifact upload or gate weakening. The real run's exact build-phase subtype stays UNKNOWN."
     }
   ],
   "skips": [

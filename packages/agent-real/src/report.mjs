@@ -8,6 +8,7 @@ import {
   unavailableFailureTelemetry,
 } from "@metamorph/oracle";
 import { POLICY } from "../../target-worker/src/controller.mjs";
+import { publicBuildPhaseDiagnostics } from "./build-phase-diagnostics.mjs";
 import { publicCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import { check } from "./source.mjs";
 
@@ -398,6 +399,20 @@ export function publicAttempt(attempt) {
             g1Verdict: p.build.verdict,
           })
         : null,
+      ...(p.buildPhaseDiagnostics
+        ? {
+            buildPhaseDiagnostics: publicBuildPhaseDiagnostics(
+              p.buildPhaseDiagnostics,
+              {
+                sourceSha: SOURCE.commit,
+                candidateSha: attempt.candidateSha,
+                attemptId: attempt.attemptId,
+                pairId: p.pairId,
+                g1Verdict: p.build.verdict,
+              },
+            ),
+          }
+        : {}),
       ...publicPairFailureTelemetry(p, attempt, i),
       gates:
         p.gates?.map((g) => ({

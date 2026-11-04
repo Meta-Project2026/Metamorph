@@ -35,6 +35,7 @@ import {
   TargetWorker,
 } from "../../target-worker/src/controller.mjs";
 import { buildTrustedRuntime } from "../../target-worker/src/runtime-broker.mjs";
+import { summarizeBuildPhaseDiagnostics } from "./build-phase-diagnostics.mjs";
 import { completedRetentionReceipt } from "./candidate-retention.mjs";
 import { summarizeCompilerDiagnostics } from "./compiler-diagnostics.mjs";
 import {
@@ -304,7 +305,21 @@ export function buildReceipt(worker, scenarioId) {
 // Gate API stays unchanged; diagnostic data travels in a separate sidecar.
 export function observeBuild(worker, scenarioId) {
   const build = buildReceipt(worker, scenarioId);
-  return { build, compilerDiagnostics: compilerDiagnostics.get(build) };
+  const buildPhaseDiagnostics =
+    build.verdict === "ERROR"
+      ? summarizeBuildPhaseDiagnostics(
+          worker.evidence.build,
+          worker.bundle?.candidateSha,
+        )
+      : null;
+  return {
+    build,
+    compilerDiagnostics: compilerDiagnostics.get(build),
+    buildPhaseDiagnostics:
+      buildPhaseDiagnostics?.status === "AVAILABLE"
+        ? buildPhaseDiagnostics
+        : null,
+  };
 }
 
 export function validateTargetBudget(worker) {
@@ -367,7 +382,8 @@ async function runPair(context, lease, attemptId, scenario, signal) {
     failure = null,
     cleanup = "CLEANUP_ERROR",
     build,
-    diagnostics;
+    diagnostics,
+    phaseDiagnostics;
   try {
     context.check();
     await lease.assertUnchanged();
@@ -440,6 +456,7 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       const observed = observeBuild(worker, scenario.id);
       build = observed.build;
       diagnostics = observed.compilerDiagnostics;
+      phaseDiagnostics = observed.buildPhaseDiagnostics;
       await lease.assertUnchanged();
       context.check();
     } catch (error) {
@@ -482,6 +499,7 @@ async function runPair(context, lease, attemptId, scenario, signal) {
       gates,
       build,
       compilerDiagnostics: diagnostics,
+      buildPhaseDiagnostics: phaseDiagnostics,
       cleanup,
       errorCode: failure,
       packs: [context.seal(phpPack), context.seal(bridge)],
