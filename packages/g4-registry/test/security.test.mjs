@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { syntheticSample } from "../src/sampler.mjs";
 import { apply, initialState } from "../src/state.mjs";
 import { commitment, RegistryError } from "../src/validation.mjs";
 import {
@@ -151,6 +152,15 @@ test("commitment serialization matches an independent fixed test vector", () => 
   );
 });
 
+test("AES-CTR sampler matches an independently computed first-word vector", () => {
+  const f = fixture();
+  assert.deepEqual(syntheticSample(f.registration, "03".repeat(32)), [
+    "synthetic-case-a",
+    "synthetic-case-c",
+    "synthetic-case-d",
+  ]);
+});
+
 test("private callback errors do not escape to public callers", () => {
   const f = fixture();
   f.config.authorize = () => {
@@ -206,6 +216,16 @@ test("selection validation rejects duplicate, omitted, reordered and substituted
       },
       /UNKNOWN_SELECTED_CASE/,
     ],
+    [
+      "valid alternate",
+      (p) => {
+        p.selected[1] =
+          p.selected[1] === "synthetic-case-b"
+            ? "synthetic-case-c"
+            : "synthetic-case-b";
+      },
+      /SAMPLER_TRANSCRIPT_MISMATCH/,
+    ],
   ]) {
     const altered = structuredClone(original);
     change(altered.payload);
@@ -214,6 +234,7 @@ test("selection validation rejects duplicate, omitted, reordered and substituted
       altered.payload.opening,
       {
         drawId: altered.payload.drawId,
+        drawEntropy: altered.payload.drawEntropy,
         selected: altered.payload.selected,
         candidateCommitment: beforeSelection.candidateCommitment,
         registrationCommitment: beforeSelection.registrationCommitment,

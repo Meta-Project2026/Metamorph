@@ -56,8 +56,8 @@ SHA-256(UTF8(domain) || 0x00 || 32-byte private random opening
 Domains are `MMP-056-REGISTRATION-V1`, `MMP-056-CANDIDATE-V1` and
 `MMP-056-SELECTION-V1`; openings must differ. Registration commits to the
 entire ordered synthetic registration including provenance, pool and policy;
-the selection commitment also binds the candidate and registration
-commitments and draw ID. The public commitment is blinded, not a plain hash of
+the selection commitment also binds the private draw entropy, candidate and
+registration commitments and draw ID. The public commitment is blinded, not a plain hash of
 a guessable case. The independently computed test vector is opening
 `000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f`, domain
 `MMP-056-REGISTRATION-V1`, value
@@ -73,8 +73,23 @@ signs SHA-256 of canonical
 establish clock integrity or independent operation.
 
 The only sampler is `stratified-fisher-yates-v1`: strata follow registration
-order, mandatory case IDs follow pool order, remaining eligible IDs are
-Fisher–Yates shuffled using Node's `crypto.randomInt`, and the predeclared
-count is selected. Randomness is requested only after witnessed and locally
-persisted `DRAW_STARTED`. The synthetic API has no seed input; the test-only
-entropy seam cannot admit a real registration.
+order, mandatory case IDs follow pool order, and remaining eligible IDs are
+Fisher–Yates shuffled before selecting the predeclared count. After witnessed
+and locally persisted `DRAW_STARTED`, Node's OS-backed `crypto.randomBytes`
+generates one private 256-bit key. AES-256-CTR with IV equal to the first 16
+bytes of SHA-256 over `MMP-056-SAMPLER-STREAM-V1` followed by a zero byte
+produces the deterministic stream. Each random index consumes 32-bit big-endian
+words with rejection sampling to avoid modulo bias; at most 1,024 words are
+attempted per index. The private synthetic selection record includes the key
+and selected IDs; replay checks the exact output. The synthetic API has no seed
+input; the test-only entropy seam cannot admit a real registration. Correct
+replay does not prove an operator or witness was independent or prevented from
+running modified code.
+
+For the synthetic test pool, a key of 32 bytes each equal to `03` produces IV
+`240ed8f8847c686bbe11662f1bc0fdd1` and the first AES stream block
+`0cb1791ec0db60703b56b6759335fc9f`; the independent .NET AES-ECB calculation
+of the initial counter block produces the same bytes. With that test pool,
+the ordered result is `synthetic-case-a`, `synthetic-case-c`,
+`synthetic-case-d`. This fixed vector tests encoding and replay, not
+independence or entropy quality.

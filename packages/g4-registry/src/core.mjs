@@ -1,4 +1,4 @@
-import { randomBytes, randomInt, verify } from "node:crypto";
+import { randomBytes, verify } from "node:crypto";
 import {
   closeSync,
   existsSync,
@@ -10,6 +10,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { isAbsolute } from "node:path";
+import { syntheticSample } from "./sampler.mjs";
 import { apply, EMPTY_HASH, initialState, signers } from "./state.mjs";
 import {
   canonical,
@@ -25,10 +26,7 @@ import {
 const MAX_JOURNAL_BYTES = 2 * 1024 * 1024;
 const MAX_LINE_BYTES = 128 * 1024;
 const MAX_EVENTS = 64;
-const ENTROPY = {
-  bytes: (n) => randomBytes(n),
-  int: (maximum) => randomInt(maximum),
-};
+const ENTROPY = { bytes: (n) => randomBytes(n) };
 
 function adapterCall(fn) {
   try {
@@ -367,38 +365,25 @@ class SyntheticRegistry {
         current,
       );
       const reg = current.state.registration;
-      const selected = [];
-      for (const stratum of reg.policy.strata) {
-        const pool = reg.pool.filter((entry) => entry.stratum === stratum.id);
-        const mandatory = pool
-          .filter((entry) => reg.policy.mandatoryCaseIds.includes(entry.id))
-          .map((entry) => entry.id);
-        const optional = pool
-          .filter((entry) => !reg.policy.mandatoryCaseIds.includes(entry.id))
-          .map((entry) => entry.id);
-        for (let i = optional.length - 1; i > 0; i--) {
-          const j = adapterCall(() => this.#entropy.int(i + 1));
-          requireThat(
-            Number.isSafeInteger(j) && j >= 0 && j <= i,
-            "ENTROPY_ERROR",
-          );
-          [optional[i], optional[j]] = [optional[j], optional[i]];
-        }
-        selected.push(
-          ...mandatory,
-          ...optional.slice(0, stratum.count - mandatory.length),
-        );
-      }
+      const drawEntropy = this.#opening();
+      const selected = syntheticSample(reg, drawEntropy);
       const opening = this.#opening();
       const selectionCommitment = commitment("MMP-056-SELECTION-V1", opening, {
         drawId: request.drawId,
+        drawEntropy,
         selected,
         candidateCommitment: current.state.candidateCommitment,
         registrationCommitment: current.state.registrationCommitment,
       });
       this.#append(
         "SELECTION",
-        { drawId: request.drawId, selected, opening, selectionCommitment },
+        {
+          drawId: request.drawId,
+          selected,
+          opening,
+          drawEntropy,
+          selectionCommitment,
+        },
         current,
       );
       return this.#receiptUnlocked();

@@ -43,6 +43,7 @@ test("witnessed registration, freeze, one draw and complete synthetic attempt su
     ...f.registry.syntheticSelection(),
     f.freeze.candidateGitSha,
     f.records()[0].event.payload.opening,
+    f.records()[3].event.payload.drawEntropy,
   ])
     assert.equal(publicText.includes(secret), false);
 });

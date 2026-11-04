@@ -127,10 +127,6 @@ export function fixture({ deterministic = true } = {}) {
       if (entropyFail) throw new Error("SYNTHETIC_ENTROPY_FAILURE");
       return Buffer.alloc(size, entropyConstant ? 1 : ++entropyCounter);
     },
-    int: (maximum) => {
-      if (entropyFail) throw new Error("SYNTHETIC_ENTROPY_FAILURE");
-      return entropyCounter++ % maximum;
-    },
   };
   const journalPath = join(directory, "journal.ndjson");
   const config = { journalPath, trust, witness, authorize };

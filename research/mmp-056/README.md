@@ -23,7 +23,9 @@ declarations and the fixed sampler before the candidate freeze. Owner,
 custodian and reviewer signatures cover the appropriate transition, and the
 test witness checks and signs its checkpoint. A separate witnessed
 `DRAW_STARTED` is durably appended before random selection. If processing
-stops after that point, no API resumes or repeats the draw. Attempt authorization
+stops after that point, no API resumes or repeats the draw. The synthetic
+private journal retains the generated draw entropy and selected IDs so a
+witness can replay the committed sampler. Attempt authorization
 binds the current candidate/selection and is valid only for the next transition
 and a maximum of five minutes. A second attempt requires predeclared ERROR
 classification, explicit reviewer/custodian and both synthetic owner signatures,
@@ -65,7 +67,7 @@ verdict in the receipt remains INCONCLUSIVE.
   recovery blocks instead of silently replaying or drawing again.
 - The synthetic owner callback signs a digest; the tests do not establish that
   real owners independently reviewed its meaning. The journal contains
-  synthetic pool entries, selected IDs and nonce openings in plaintext.
+  synthetic pool entries, selected IDs, draw entropy and nonce openings in plaintext.
   **Do not point it at real or private material.** Its declaration checks are
   not evidence that a real corpus is unexposed, licensed, complete or safely
   stored. Production custody, key isolation and a reviewed signing protocol

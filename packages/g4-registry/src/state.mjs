@@ -1,3 +1,4 @@
+import { syntheticSample } from "./sampler.mjs";
 import {
   canonical,
   commitment,
@@ -138,19 +139,37 @@ export function apply(state, event, trust, eventHash = null) {
     }
     case "SELECTION": {
       requireThat(state.stage === "DRAW_STARTED", "SELECTION_ORDER");
-      object(p, ["drawId", "selected", "opening", "selectionCommitment"]);
+      object(p, [
+        "drawId",
+        "selected",
+        "opening",
+        "drawEntropy",
+        "selectionCommitment",
+      ]);
       requireThat(p.drawId === state.drawId, "DRAW_MISMATCH");
       selectionValid(state.registration, p.selected);
+      digest(p.drawEntropy);
+      requireThat(
+        canonical(syntheticSample(state.registration, p.drawEntropy)) ===
+          canonical(p.selected),
+        "SAMPLER_TRANSCRIPT_MISMATCH",
+      );
       opening(p, "selectionCommitment", "MMP-056-SELECTION-V1", {
         drawId: p.drawId,
+        drawEntropy: p.drawEntropy,
         selected: p.selected,
         candidateCommitment: state.candidateCommitment,
         registrationCommitment: state.registrationCommitment,
       });
-      requireThat(!state.openings.includes(p.opening), "NONCE_REUSE");
+      requireThat(
+        !state.openings.includes(p.opening) &&
+          !state.openings.includes(p.drawEntropy) &&
+          p.opening !== p.drawEntropy,
+        "NONCE_REUSE",
+      );
       next.selected = p.selected;
       next.selectionCommitment = p.selectionCommitment;
-      next.openings = [...state.openings, p.opening];
+      next.openings = [...state.openings, p.opening, p.drawEntropy];
       next.stage = "SELECTION_COMMITTED";
       break;
     }
