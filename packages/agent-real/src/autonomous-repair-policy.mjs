@@ -5,7 +5,12 @@
 // eligible public FAIL of the first candidate. The legacy autonomous_repair
 // mode stays blocked pending an independent financial guarantee.
 export function requireMigrationMode(mode = "single_generation") {
-  if (mode === "single_generation" || mode === "generate_then_repair") return;
+  if (
+    mode === "single_generation" ||
+    mode === "generate_then_repair" ||
+    mode === "generate_then_repair_g1_v2"
+  )
+    return;
   const code =
     mode === "autonomous_repair"
       ? "BLOCKED_BUDGET_GUARANTEE"

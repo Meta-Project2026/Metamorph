@@ -11,7 +11,9 @@ let result;
 try {
   if (process.env.MODEL_API_KEY) throw Error();
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
-  const authorization = await authorizePaidWorkflow(context);
+  const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
+  const mode = event.inputs.execution_mode ?? "single_generation";
+  const authorization = mode === "single_generation" ? await authorizePaidWorkflow(context) : await authorizePaidWorkflow(context, { plan: mode });
   result = { status: "SIGNED_ADMISSION_VERIFIED_NO_CREDENTIAL", authorization,
     metaGetRequests: 0, metaPostRequests: 0, modelGeneration: "NOT_RUN", candidateSha: null, chargedCostUsd: null };
 } catch (error) {

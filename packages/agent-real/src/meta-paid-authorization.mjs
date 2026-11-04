@@ -9,8 +9,9 @@ import {
   readFileSync,
   writeFileSync,
 } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { G1_RECOVERY_MODE } from "./g1-repair-eligibility.mjs";
 import {
   gate,
   META_OWNERS,
@@ -45,6 +46,7 @@ export const PAID_POLICY = Object.freeze({
   repairWireBytes: 96 * 1024,
 });
 const admissions = new WeakMap();
+let recoveryHost;
 const admissionCodes = new Set([
   "BLOCKED_BUDGET_GUARANTEE",
   "MIGRATION_MODE_BLOCKED",
@@ -242,6 +244,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
           "previousChanges",
           "firstAttemptEstimatedUsd",
           "firstAttemptCandidateSha",
+          "g1Capability",
         ].includes(k),
       ),
     "CONFIG_DENIED",
@@ -249,16 +252,19 @@ export async function authorizePaidWorkflow(context, options = {}) {
   const plan =
     options.plan === undefined || options.plan === "single_generation"
       ? "single_generation"
-      : options.plan === "generate_then_repair"
-        ? "generate_then_repair"
+      : ["generate_then_repair", G1_RECOVERY_MODE].includes(options.plan)
+        ? options.plan
         : null;
   const attempt = options.attempt ?? 1;
   gate(
     plan !== null &&
       (attempt === 1 || attempt === 2) &&
       (attempt === 2
-        ? plan === "generate_then_repair" &&
-          typeof options.feedback === "string" &&
+        ? (plan === "generate_then_repair" || plan === G1_RECOVERY_MODE) &&
+          (plan === G1_RECOVERY_MODE
+            ? options.g1Capability !== undefined
+            : typeof options.feedback === "string" &&
+              options.g1Capability === undefined) &&
           Array.isArray(options.previousChanges) &&
           options.previousChanges.length > 0 &&
           options.previousChanges.every(
@@ -277,7 +283,8 @@ export async function authorizePaidWorkflow(context, options = {}) {
         : options.feedback === undefined &&
           options.previousChanges === undefined &&
           options.firstAttemptEstimatedUsd === undefined &&
-          options.firstAttemptCandidateSha === undefined),
+          options.firstAttemptCandidateSha === undefined &&
+          options.g1Capability === undefined),
     "CONFIG_DENIED",
   );
   gate(isMigrationContext(context), "SOURCE_IDENTITY");
@@ -288,14 +295,49 @@ export async function authorizePaidWorkflow(context, options = {}) {
     encoding: "utf8",
   }).trim();
   validateWorkflowIdentity(env, head, event.inputs, true);
+  // v2 is a distinct original opt-in, never inferred from an output/env flag.
+  if (
+    plan === G1_RECOVERY_MODE ||
+    event.inputs.execution_mode === G1_RECOVERY_MODE
+  )
+    gate(
+      plan === G1_RECOVERY_MODE && event.inputs.execution_mode === plan,
+      "PAID_CONFIRMATION_BLOCKED",
+    );
   gate(Date.now() < Date.parse(PAID_POLICY.tariffExpires), "TARIFF_EXPIRED");
   await verifyHostedMetaPolicy(head);
   const identity = await signedIdentity(env);
+  if (plan === G1_RECOVERY_MODE && attempt === 2) {
+    recoveryHost ??= await import("./g1-repair-host.mjs");
+    const facts = recoveryHost.g1CapabilityDetails(
+      options.g1Capability,
+      context,
+    );
+    gate(
+      facts.firstAuthorization.runId === identity.run_id &&
+        facts.firstAuthorization.headSha === head &&
+        facts.firstAuthorization.actor === identity.actor &&
+        facts.firstPreflight.maxEstimatedUsd ===
+          Number(event.inputs.max_estimated_usd) &&
+        JSON.stringify(facts.feedback) === JSON.stringify(options.feedback) &&
+        JSON.stringify(facts.previousChanges) ===
+          JSON.stringify(options.previousChanges) &&
+        facts.firstAttemptCandidateSha === options.firstAttemptCandidateSha &&
+        facts.firstAttemptEstimatedUsd === options.firstAttemptEstimatedUsd,
+      "PAID_DISPATCH_NOT_AUTHORIZED",
+    );
+    // Keep the originally reserved aggregate bound, even if observed usage is lower.
+    gate(
+      facts.firstPreflight.aggregateWorstCaseEstimatedUsd <=
+        Number(event.inputs.max_estimated_usd),
+      "ESTIMATED_BUDGET_BLOCKED",
+    );
+  }
   let request,
     previous = [];
   if (attempt === 2) {
     gate(
-      event.inputs.execution_mode === "generate_then_repair" &&
+      event.inputs.execution_mode === plan &&
         event.inputs.confirm_paid === "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
       "PAID_CONFIRMATION_BLOCKED",
     );
@@ -328,7 +370,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
   } else {
     gate(
       projection.worstCaseEstimatedUsd +
-        (plan === "generate_then_repair"
+        (plan !== "single_generation"
           ? repairProjection().worstCaseEstimatedUsd
           : 0) <=
         Number(event.inputs.max_estimated_usd),
@@ -355,6 +397,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
           firstAttemptEstimatedUsd: options.firstAttemptEstimatedUsd,
           firstAttemptCandidateSha: options.firstAttemptCandidateSha,
           confirmation: event.inputs.confirm_paid,
+          ...(plan === G1_RECOVERY_MODE ? { plan } : {}),
         })
       : generationPreflight({
           context,
@@ -362,7 +405,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
           workflowBytes,
           actor: identity.actor,
           maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
-          ...(plan === "generate_then_repair"
+          ...(plan !== "single_generation"
             ? {
                 plan,
                 confirmation: event.inputs.confirm_paid,
@@ -384,10 +427,15 @@ export async function authorizePaidWorkflow(context, options = {}) {
     preflightSha256: preflight.sha256,
     maxEstimatedUsd: Number(event.inputs.max_estimated_usd),
     attempt,
-    plan:
-      attempt === 2 || plan === "generate_then_repair"
-        ? "generate_then_repair"
-        : "single_generation",
+    plan: plan,
+    ...(plan === G1_RECOVERY_MODE
+      ? {
+          maximumPosts: 2,
+          maximumRepairs: 1,
+          automaticRetries: 0,
+          allowedRepairKinds: ["G1_BUILD_RECOVERABLE"],
+        }
+      : {}),
     ...(attempt === 2
       ? { firstAttemptCandidateSha: options.firstAttemptCandidateSha }
       : {}),
@@ -408,6 +456,7 @@ export async function authorizePaidWorkflow(context, options = {}) {
         : `mmp078-${identity.run_id}-attempt.json`,
     ),
     preflight,
+    g1Capability: options.g1Capability,
     preflightPath: join(
       env.RUNNER_TEMP,
       attempt === 2
@@ -438,6 +487,7 @@ export function reservePaidAttempt(authorization, context, body) {
   const a = admissions.get(authorization);
   gate(!a.consumed, "REQUEST_LIMIT");
   a.consumed = true; // synchronized before any await/send, including another session
+  if (a.g1Capability) recoveryHost.consumeG1Capability(a.g1Capability, context);
   let descriptor;
   try {
     // The exact human-readable card is durable before UNKNOWN and any POST.
@@ -453,10 +503,27 @@ export function reservePaidAttempt(authorization, context, body) {
       }),
     );
     fsyncSync(descriptor);
+    if (process.platform === "linux") {
+      const directory = openSync(dirname(a.ledger), "r");
+      try {
+        fsyncSync(directory);
+      } finally {
+        closeSync(directory);
+      }
+    }
   } catch {
     gate(false, "REQUEST_LIMIT");
   } finally {
     if (descriptor !== undefined) closeSync(descriptor);
   }
   return summary;
+}
+// Production session calls this immediately before the synchronous exclusive
+// reservation. Re-reading the signed journal, source, readback and cleanup closes
+// the gap between proposal/admission and a possible second network send.
+export async function revalidatePaidRecovery(authorization, context) {
+  paidAdmission(authorization, context);
+  const a = admissions.get(authorization);
+  if (a.g1Capability)
+    await recoveryHost.revalidateG1Capability(a.g1Capability, context);
 }

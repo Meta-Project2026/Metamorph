@@ -3,6 +3,8 @@
 import { closeSync, fsyncSync, openSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { sha256 } from "../../target-worker/src/admission.mjs";
+import { G1_RECOVERY_MODE } from "./g1-repair-eligibility.mjs";
+import { compilerFeedback } from "./g1-repair-feedback.mjs";
 import { META_OWNERS, META_REPOSITORY } from "./github-meta-guard.mjs";
 import { prepareMetaMigration } from "./meta-migration.mjs";
 import {
@@ -16,6 +18,7 @@ import { insist, isMigrationContext } from "./migration-context.mjs";
 const confirmations = {
   single_generation: "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP",
   generate_then_repair: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+  [G1_RECOVERY_MODE]: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
 };
 
 export function generationPreflight({
@@ -35,7 +38,7 @@ export function generationPreflight({
       workflowBytes.length > 0 &&
       workflowBytes.length <= 65536 &&
       Object.hasOwn(META_OWNERS, actor) &&
-      (plan === "single_generation" || plan === "generate_then_repair") &&
+      Object.hasOwn(confirmations, plan) &&
       (confirmation === undefined || confirmation === confirmations[plan]),
     "WORKFLOW_IDENTITY_BLOCKED",
   );
@@ -53,7 +56,7 @@ export function generationPreflight({
     repairFeedback: null,
   });
   const projection = paidProjection(body);
-  const repair = plan === "generate_then_repair" ? repairProjection() : null;
+  const repair = plan !== "single_generation" ? repairProjection() : null;
   // Both sends of the signed two-attempt plan are projected before the first
   // POST; the allowance must cover the pessimistic aggregate, not one send.
   insist(
@@ -63,7 +66,10 @@ export function generationPreflight({
     "ESTIMATED_BUDGET_BLOCKED",
   );
   const card = {
-    format: "mmp154-generation-preflight-v1",
+    format:
+      plan === G1_RECOVERY_MODE
+        ? "mmp180-generation-preflight-v2"
+        : "mmp154-generation-preflight-v1",
     repository: META_REPOSITORY,
     headSha,
     workflowPath: ".github/workflows/meta-paid-migration.yml",
@@ -81,8 +87,11 @@ export function generationPreflight({
     requestBytes: Buffer.byteLength(body),
     ...projection,
     maxEstimatedUsd,
-    maximumPosts: plan === "generate_then_repair" ? 2 : 1,
-    maximumRepairs: plan === "generate_then_repair" ? 1 : 0,
+    maximumPosts: repair ? 2 : 1,
+    maximumRepairs: repair ? 1 : 0,
+    ...(plan === G1_RECOVERY_MODE
+      ? { allowedRepairKinds: ["G1_BUILD_RECOVERABLE"] }
+      : {}),
     ...(repair
       ? {
           plan,
@@ -124,6 +133,7 @@ export function repairPreflight({
   firstAttemptEstimatedUsd,
   firstAttemptCandidateSha,
   confirmation,
+  plan = "generate_then_repair",
   now = Date.now(),
 }) {
   insist(isMigrationContext(context), "SOURCE_IDENTITY");
@@ -133,9 +143,11 @@ export function repairPreflight({
       workflowBytes.length > 0 &&
       workflowBytes.length <= 65536 &&
       Object.hasOwn(META_OWNERS, actor) &&
-      typeof feedback === "string" &&
-      feedback.length > 0 &&
-      Buffer.byteLength(feedback) <= 512 &&
+      ((plan === "generate_then_repair" &&
+        typeof feedback === "string" &&
+        feedback.length > 0 &&
+        Buffer.byteLength(feedback) <= 512) ||
+        (plan === G1_RECOVERY_MODE && compilerFeedback(feedback))) &&
       Array.isArray(previousChanges) &&
       previousChanges.length > 0 &&
       Number.isFinite(firstAttemptEstimatedUsd) &&
@@ -171,7 +183,10 @@ export function repairPreflight({
     "ESTIMATED_BUDGET_BLOCKED",
   );
   const card = {
-    format: "mmp154-repair-preflight-v1",
+    format:
+      plan === G1_RECOVERY_MODE
+        ? "mmp180-repair-preflight-v2"
+        : "mmp154-repair-preflight-v1",
     repository: META_REPOSITORY,
     headSha,
     workflowPath: ".github/workflows/meta-paid-migration.yml",
@@ -191,7 +206,13 @@ export function repairPreflight({
     maxEstimatedUsd,
     attempt: 2,
     action: "repair",
-    repairFeedbackCodes: feedback,
+    ...(plan === G1_RECOVERY_MODE
+      ? {
+          plan,
+          repairKind: "G1_BUILD_RECOVERABLE",
+          compilerFeedback: compilerFeedback(feedback),
+        }
+      : { repairFeedbackCodes: feedback }),
     firstAttemptEstimatedUsd,
     firstAttemptCandidateSha,
     aggregateWorstCaseEstimatedUsd:

@@ -6,11 +6,25 @@ import {
   custodyVerificationLink,
 } from "./custody-checkpoint.mjs";
 import { beginCustody } from "./custody-contract.mjs";
+import { G1_RECOVERY_MODE } from "./g1-repair-eligibility.mjs";
+import { startG1Recovery } from "./g1-repair-host.mjs";
 import { insist, isMigrationContext } from "./migration-context.mjs";
 import { createProductionMigrationProvider } from "./migration-provider.mjs";
 import { publicAttempt } from "./report.mjs";
-import { createEnvironment, RealVerifier } from "./runtime.mjs";
+import {
+  createEnvironment,
+  RealVerifier,
+  trustedFirstTypecheck,
+} from "./runtime.mjs";
 import { createSourceSession } from "./source.mjs";
+
+const verificationOrigins = new WeakMap();
+export function takeG1VerificationOrigin(result) {
+  const fact = verificationOrigins.get(result);
+  insist(fact, "G1_REPAIR_NO_GO");
+  verificationOrigins.delete(result);
+  return fact;
+}
 
 /** Pure post-capture outcome resolution. A failed capture keeps its own
  * coarse stage even when the release also fails; a successful capture whose
@@ -82,8 +96,8 @@ export async function runPublicRepair({
   insist(
     Array.isArray(previousChanges) &&
       previousChanges.length > 0 &&
-      typeof feedback === "string" &&
-      feedback.length > 0,
+      ((typeof feedback === "string" && feedback.length > 0) ||
+        feedback?.format === "mmp160-g1-feedback-v1"),
     "SOURCE_IDENTITY",
   );
   return runPaidAttempt({
@@ -171,6 +185,10 @@ async function runPaidAttempt({
   result.trialRunId = selected.status.authorization.runId;
   result.blockers = [];
   const session = createSourceSession(parent);
+  const recovery =
+    selected.status.authorization.plan === G1_RECOVERY_MODE && attempt === 1
+      ? startG1Recovery(context, authorization, session.writer.root)
+      : null;
   const custodyAttempt = beginCustody(context, authorization);
   try {
     const response = ModelResponseSchema.parse(
@@ -251,6 +269,8 @@ async function runPaidAttempt({
     result.chargedCostUsd = null;
     result.totalCostUsd = null;
   }
+  if (recovery && result.modelGeneration === "GENERATED" && result.custody)
+    recovery.confirm(result.modelReceipts[0], result.custody);
   return result;
 }
 
@@ -263,13 +283,17 @@ export async function validateCustodiedMigration(options, permit) {
     sourceSha: options.context.sourceSha,
   });
   const result = await validateGeneratedMigration(options);
-  return {
+  const linked = {
     ...result,
     custodyLink: custodyVerificationLink(
       custodyIdentity,
       result.attempts.map((a) => a.attemptId),
     ),
   };
+  const origin = verificationOrigins.get(result);
+  verificationOrigins.delete(result);
+  if (origin) verificationOrigins.set(linked, { ...origin, custodyIdentity });
+  return linked;
 }
 
 /** Fresh process after the secret-bearing step. No provider or credentials here.
@@ -346,5 +370,12 @@ export async function validateGeneratedMigration({
         emergencyRemoved: completion.emergencyRemoved,
       };
   }
+  if (verifier && result.attempts.length === 1 && !signal.aborted)
+    verificationOrigins.set(result, {
+      firstTypecheckNormal: trustedFirstTypecheck(verifier.attempts[0]),
+      candidateRoot,
+      candidateSha,
+      headSha,
+    });
   return result;
 }

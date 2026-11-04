@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
     inputs:
       execution_mode:
-        description: 'Single generation remains default. generate_then_repair performs at most two signed POSTs (generate -> Oracle -> one repair -> Oracle) after an eligible complete public FAIL. Autonomous repair stays blocked pending financial guarantee and independent review.'
+        description: 'Default: one generation. v1 repairs complete public parity FAIL only. generate_then_repair_g1_v2 explicitly reserves one early TS2339/TS2769 repair, two POSTs total, zero retries. Autonomous stays blocked.'
         required: true
         type: choice
         default: single_generation
-        options: [single_generation, generate_then_repair, autonomous_repair]
+        options: [single_generation, generate_then_repair, generate_then_repair_g1_v2, autonomous_repair]
       reviewed_sha:
         description: 'Exact reviewed main SHA; public workshop source only'
         required: true
@@ -151,28 +151,32 @@ jobs:
         id: repair-gate
         if: ${{ !inputs.validate_only && inputs.execution_mode == 'generate_then_repair' && steps.validation.outcome == 'success' }}
         run: node research/mmp-078/repair-gate.mjs
+      - name: Inspect persisted failed first G1 and independent cleanup for signed v2 (no credential)
+        id: g1-repair-gate
+        if: ${{ always() && !cancelled() && !inputs.validate_only && inputs.execution_mode == 'generate_then_repair_g1_v2' && github.run_attempt == 1 && steps.generation.outcome == 'success' && steps.custody-stored.outcome == 'success' && steps.validation.outcome == 'failure' }}
+        run: node research/mmp-078/repair-gate.mjs g1-v2
       - name: One signed-identity-authorized bounded Meta repair POST; no code execution
         id: repair
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.repair-gate.outputs.eligible == 'true' && steps.generation.outcome == 'success' }}
+        if: ${{ !cancelled() && !inputs.validate_only && steps.generation.outcome == 'success' && ((inputs.execution_mode == 'generate_then_repair' && steps.repair-gate.outcome == 'success' && steps.repair-gate.outputs.eligible == 'true') || (inputs.execution_mode == 'generate_then_repair_g1_v2' && steps.validation.outcome == 'failure' && steps.custody-stored.outcome == 'success' && steps.g1-repair-gate.outcome == 'success' && steps.g1-repair-gate.outputs.eligible == 'true')) }}
         env:
           MODEL_API_KEY: ${{ secrets.META }}
           GH_TOKEN: ${{ github.token }}
         run: node research/mmp-078/repair-run.mjs
       - name: Publish admitted repair candidate capture receipt without credentials
         id: custody-repair-capture
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.repair.outcome == 'success' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.repair.outcome == 'success' }}
         run: node packages/agent-real/src/custody-steps.mjs capture 2
       - name: Independent pre-Oracle owned-resource checkpoint for the repair candidate
         id: custody-repair-finalizer
-        if: ${{ always() && inputs.execution_mode == 'generate_then_repair' && steps.repair.outcome != 'skipped' && !inputs.validate_only }}
+        if: ${{ always() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.repair.outcome != 'skipped' && !inputs.validate_only }}
         run: node packages/agent-real/src/custody-steps.mjs finalize 2
       - name: Require early repair capture and independent pre-Oracle zero-resource proof
         id: custody-repair-gate
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.custody-repair-capture.outcome == 'success' && steps.custody-repair-finalizer.outcome == 'success' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.custody-repair-capture.outcome == 'success' && steps.custody-repair-finalizer.outcome == 'success' }}
         run: node packages/agent-real/src/custody-steps.mjs prepare-upload 2
       - name: Store only the unverified repair candidate ciphertext for seven days
         id: custody-repair-upload
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.custody-repair-gate.outcome == 'success' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.custody-repair-gate.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: mmp107-candidate-${{ github.run_id }}-1-repair
@@ -182,7 +186,7 @@ jobs:
           compression-level: 0
       - name: Retrieve the exact newly acknowledged repair artifact by ID
         id: custody-repair-download
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.custody-repair-upload.outcome == 'success' && steps.custody-repair-upload.outputs.artifact-id != '' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.custody-repair-upload.outcome == 'success' && steps.custody-repair-upload.outputs.artifact-id != '' }}
         uses: actions/download-artifact@v4
         with:
           artifact-ids: ${{ steps.custody-repair-upload.outputs.artifact-id }}
@@ -190,7 +194,7 @@ jobs:
           merge-multiple: true
       - name: Verify authenticated run metadata and retrieved repair ciphertext bytes
         id: custody-repair-stored
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.custody-repair-download.outcome == 'success' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.custody-repair-download.outcome == 'success' }}
         env:
           GH_TOKEN: ${{ github.token }}
           MMP115_ARTIFACT_ID: ${{ steps.custody-repair-upload.outputs.artifact-id }}
@@ -200,7 +204,7 @@ jobs:
         run: node packages/agent-real/src/custody-steps.mjs verify-download 2
       - name: Independent Docker Oracle for the repaired candidate
         id: validation-repair
-        if: ${{ !cancelled() && inputs.execution_mode == 'generate_then_repair' && steps.repair.outcome == 'success' && steps.custody-repair-stored.outcome == 'success' }}
+        if: ${{ !cancelled() && contains(fromJSON('["generate_then_repair","generate_then_repair_g1_v2"]'), inputs.execution_mode) && steps.repair.outcome == 'success' && steps.custody-repair-stored.outcome == 'success' }}
         run: node research/mmp-078/validate-candidate.mjs repair
       - name: Preserve one attributable candidate under approved encrypted export policy
         id: preservation

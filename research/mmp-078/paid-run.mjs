@@ -46,8 +46,9 @@ try {
   }
   // The signed two-attempt plan reserves BOTH sends (generation + bounded
   // repair projection) before the first POST; the POST itself is unchanged.
-  const mode = process.env.MMP158_EXECUTION_MODE === "generate_then_repair" ? "generate_then_repair" : "single_generation";
-  const authorization = await authorizePaidWorkflow(context, mode === "generate_then_repair" ? { plan: mode } : undefined);
+  const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
+  const mode = event.inputs.execution_mode ?? "single_generation";
+  const authorization = await authorizePaidWorkflow(context, { plan: mode });
   commitPreflight(join(output, "preflight.json"), paidPreflight(authorization, context));
   result = await runPublicMigration({ context, selection: "meta", headSha: authorization.headSha,
     parent: privateRoot, signal: shutdown.signal, authorization,

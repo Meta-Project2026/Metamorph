@@ -20,6 +20,8 @@ import { commitPreflight } from "../../packages/agent-real/src/migration-preflig
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { runPublicRepair } from "../../packages/agent-real/src/migration-trial.mjs";
 import { readPrivateJson } from "../../packages/agent-real/src/private-diagnostics.mjs";
+import { g1CapabilityDetails, requireG1RepairCapability } from "../../packages/agent-real/src/g1-repair-host.mjs";
+import { G1_RECOVERY_MODE } from "../../packages/agent-real/src/g1-repair-eligibility.mjs";
 
 export async function runRepairSend(env) {
   const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -27,7 +29,6 @@ export async function runRepairSend(env) {
   const privateRoot = join(env.RUNNER_TEMP, "meta-paid-private");
   const receiptRoot = join(output, "repair-send-receipts");
   mkdirSync(output, { recursive: true, mode: 0o700 });
-  mkdirSync(receiptRoot, { mode: 0o700 });
   let receiptSequence = 0;
   const save = (name, value) => {
     const pending = join(output, `${name}.pending`);
@@ -38,10 +39,20 @@ export async function runRepairSend(env) {
   const stop = () => shutdown.abort();
   process.on("SIGTERM", stop); process.on("SIGINT", stop);
   let result;
+  let claimed = false;
   try {
+    mkdirSync(receiptRoot, { mode: 0o700 });
+    claimed = true;
     if (!env.MODEL_API_KEY) throw Error("CREDENTIAL_REQUIRED");
     const gate = readPrivateJson(join(privateRoot, "repair-gate.json"), 65536).value;
     const trial = readPrivateJson(join(output, "trial.json"), 16 * 1024 * 1024).value;
+    const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
+    const v2 = event.inputs.execution_mode === G1_RECOVERY_MODE;
+    const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
+    // A gate output is routing only. The v2 host issues fresh opaque authority
+    // from its sealed original plan, actual verifier origin and renewed custody.
+    const capability = v2 ? await requireG1RepairCapability(env, context) : null;
+    const g1 = capability ? g1CapabilityDetails(capability, context) : null;
     // Independent renewed binding of the sealed first candidate before any
     // second admission: spool records, authenticated artifact provenance,
     // exact readback bytes and the pre-Oracle zero-resource proof are all
@@ -65,16 +76,17 @@ export async function runRepairSend(env) {
       sourceSha: trial.sourceSha,
     });
     // The recorded trial is evidence; eligibility is recomputed, not trusted.
-    const decision = publicRepairDecision(trial, trial.candidateSha);
+    const decision = v2 ? { verdict: "FAIL", feedback: g1.feedback } : publicRepairDecision(trial, trial.candidateSha);
     if (
-      gate?.format !== "mmp158-repair-gate-v1" ||
+      gate?.format !== (v2 ? "mmp180-repair-gate-v2" : "mmp158-repair-gate-v1") ||
       gate.eligible !== true ||
-      gate.candidateSha !== trial.candidateSha ||
+      (!v2 && gate.candidateSha !== trial.candidateSha) ||
       gate.headSha !== env.GITHUB_SHA ||
       gate.runId !== env.GITHUB_RUN_ID ||
-      gate.feedback !== decision.feedback ||
+      (v2 && gate.runAttempt !== "1") ||
+      JSON.stringify(gate.feedback) !== JSON.stringify(decision.feedback) ||
       decision.verdict !== "FAIL" ||
-      typeof decision.feedback !== "string" ||
+      (!v2 && typeof decision.feedback !== "string") ||
       custodyIdentity.candidateSha !== trial.candidateSha ||
       custodyIdentity.headSha !== env.GITHUB_SHA
     )
@@ -85,14 +97,14 @@ export async function runRepairSend(env) {
     if (transfer.candidateSha !== custodyIdentity.candidateSha) throw Error("SOURCE_IDENTITY");
     const bundle = await admitDirectory(transfer.candidateRoot, custodyIdentity.candidateSha);
     const previousChanges = bundle.files.map(({ path, content }) => ({ path, content }));
-    const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
     const authorization = await authorizePaidWorkflow(context, {
-      plan: "generate_then_repair",
+      plan: v2 ? G1_RECOVERY_MODE : "generate_then_repair",
       attempt: 2,
       feedback: decision.feedback,
       previousChanges,
       firstAttemptEstimatedUsd: trial.estimatedCostUsd,
       firstAttemptCandidateSha: custodyIdentity.candidateSha,
+      ...(v2 ? { g1Capability: capability } : {}),
     });
     commitPreflight(join(output, "preflight-repair.json"), paidPreflight(authorization, context));
     result = await runPublicRepair({
@@ -115,7 +127,8 @@ export async function runRepairSend(env) {
     }
     console.log(`META_PAID_REPAIR ${result.modelGeneration}; attempts=2; charged=UNKNOWN`);
   } catch (error) {
-    save("trial-repair.json", result ? { ...result, blockers: ["POST_REPAIR_TRANSFER_OR_RECEIPT_ERROR"] } : { format: "mmp078-public-repair-trial-v1", modelGeneration: "BLOCKED", code: safePaidAdmissionCode(error), publicG1: "NOT_RUN", publicG2: "NOT_RUN", publicG3: "NOT_RUN", G0: "INCONCLUSIVE", G4: "INCONCLUSIVE", product: "NOT_ESTABLISHED", chargedCostUsd: null });
+    // A duplicate/restarted caller must preserve the original attempt's evidence.
+    if (claimed) save("trial-repair.json", result ? { ...result, blockers: ["POST_REPAIR_TRANSFER_OR_RECEIPT_ERROR"] } : { format: "mmp078-public-repair-trial-v1", modelGeneration: "BLOCKED", code: safePaidAdmissionCode(error), publicG1: "NOT_RUN", publicG2: "NOT_RUN", publicG3: "NOT_RUN", G0: "INCONCLUSIVE", G4: "INCONCLUSIVE", product: "NOT_ESTABLISHED", chargedCostUsd: null });
     console.error("META_PAID_REPAIR_BLOCKED"); process.exitCode = 1;
   } finally {
     process.removeListener("SIGTERM", stop); process.removeListener("SIGINT", stop);
@@ -123,5 +136,6 @@ export async function runRepairSend(env) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await runRepairSend(process.env);
+  try { await runRepairSend(process.env); }
+  catch { console.error("META_PAID_REPAIR_BLOCKED"); process.exitCode = 1; }
 }
