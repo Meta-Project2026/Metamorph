@@ -5,6 +5,7 @@ import {
   paidAdmission,
   paidProjection,
   reservePaidAttempt,
+  revalidatePaidRecovery,
 } from "./meta-paid-authorization.mjs";
 import { META_STANDARD_TARIFF } from "./meta-tariff.mjs";
 import {
@@ -51,6 +52,22 @@ function keys(value, required, optional = [], code = "RESPONSE_INVALID") {
   );
 }
 const count = (x) => Number.isSafeInteger(x) && x >= 0;
+const nativeReceiptOrigins = new WeakMap();
+// Only a completed native session can brand a receipt. Plain JSON, an opaque
+// unused admission, an offline transport and mutated/cloned receipts cannot
+// manufacture the confirmed first response needed by the v2 journal.
+export function consumeNativeResponseOrigin(receipt, authorization) {
+  const origin = nativeReceiptOrigins.get(receipt);
+  metaCheck(
+    origin &&
+      origin.authorization === authorization &&
+      !origin.state.consumed &&
+      origin.sha256 === sha256(JSON.stringify(receipt)),
+    "RESPONSE_INVALID",
+  );
+  origin.state.consumed = true;
+  nativeReceiptOrigins.delete(receipt);
+}
 export function prepareMetaMigration(context, request, previousChanges = []) {
   metaCheck(isMigrationContext(context), "SOURCE_IDENTITY");
   let prompt;
@@ -304,6 +321,7 @@ function session(
     "CONFIG_DENIED",
   );
   const receipts = [];
+  const confirmed = new Map();
   let stopped = false,
     busy = false,
     previous = previousChanges ? structuredClone(previousChanges) : [],
@@ -395,9 +413,11 @@ function session(
             ),
           );
         });
-        pending = Promise.resolve().then(() => {
+        pending = Promise.resolve().then(async () => {
           metaCheck(!controller.signal.aborted, "CANCELLED");
           if (production) {
+            await revalidatePaidRecovery(authorization, context);
+            metaCheck(!controller.signal.aborted, "CANCELLED");
             const key = readCredential();
             const code = credentialCode(key);
             if (code) throw new MetaWireError(code);
@@ -462,6 +482,7 @@ function session(
         }
         previous = structuredClone(decoded.response.changes);
         receipt.status = "PASS";
+        if (production) confirmed.set(receipt, { consumed: false });
         // No second call while charge is unknown; first pilot is one request anyway.
         stopped = true;
         return decoded.response;
@@ -484,7 +505,18 @@ function session(
   });
   return Object.freeze({
     provider,
-    receipts: () => structuredClone(receipts),
+    receipts: () =>
+      receipts.map((receipt) => {
+        const copy = structuredClone(receipt);
+        const state = confirmed.get(receipt);
+        if (state)
+          nativeReceiptOrigins.set(copy, {
+            authorization,
+            state,
+            sha256: sha256(JSON.stringify(copy)),
+          });
+        return copy;
+      }),
     waitForIdle: () => pending?.catch(() => {}),
   });
 }

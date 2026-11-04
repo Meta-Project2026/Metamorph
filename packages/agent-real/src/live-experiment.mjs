@@ -3,6 +3,8 @@ import { sha256 } from "../../target-worker/src/admission.mjs";
 import { publicRepairDecision } from "./autonomous-repair.mjs";
 import { artifactMetadata } from "./custody-checkpoint.mjs";
 import { receiptFor, validateReceipt } from "./custody-contract.mjs";
+import { G1_RECOVERY_MODE } from "./g1-repair-eligibility.mjs";
+import { compilerFeedback } from "./g1-repair-feedback.mjs";
 import { META_REPOSITORY } from "./github-meta-guard.mjs";
 import { MetaWireError } from "./meta-wire.mjs";
 import { CODES } from "./report.mjs";
@@ -42,6 +44,26 @@ export function publicTrialOutcome(trial) {
       repair: "NOT_AUTHORIZED_BY_THIS_REPORT",
       code: "VERIFICATION_NOT_RUN",
     };
+  }
+  if (
+    trial?.g1Recovery?.kind === "G1_BUILD_RECOVERABLE" &&
+    trial.publicG1 === "FAIL" &&
+    trial.publicG2 === "INCONCLUSIVE" &&
+    trial.publicG3 === "INCONCLUSIVE"
+  ) {
+    try {
+      compilerFeedback(trial.g1Recovery.feedback);
+      return {
+        status: "EARLY_G1_FAIL",
+        publicVerdict: "FAIL",
+        complete: false,
+        feedbackCodes: [],
+        repair: "NOT_AUTHORIZED_BY_THIS_REPORT",
+        code: "G1_FAILED",
+      };
+    } catch {
+      /* invalid projection falls through to existing strict decision */
+    }
   }
   try {
     const decision = publicRepairDecision(trial, trial.candidateSha);
@@ -117,7 +139,12 @@ function cardValid(card) {
   const { sha256: digest, ...content } = card;
   return (
     digest === sha256(JSON.stringify(content)) &&
-    card.format === "mmp154-generation-preflight-v1" &&
+    (card.format === "mmp154-generation-preflight-v1" ||
+      (card.format === "mmp180-generation-preflight-v2" &&
+        card.plan === G1_RECOVERY_MODE &&
+        JSON.stringify(card.allowedRepairKinds) ===
+          '["G1_BUILD_RECOVERABLE"]' &&
+        card.automaticRetries === 0)) &&
     card.repository === META_REPOSITORY &&
     card.model === "muse-spark-1.3" &&
     card.mode === "STANDARD" &&
@@ -125,7 +152,7 @@ function cardValid(card) {
     ((card.maximumPosts === 1 && card.maximumRepairs === 0) ||
       (card.maximumPosts === 2 &&
         card.maximumRepairs === 1 &&
-        card.plan === "generate_then_repair"))
+        ["generate_then_repair", G1_RECOVERY_MODE].includes(card.plan)))
   );
 }
 
@@ -225,23 +252,38 @@ export function generationScorecard({
   // reserved it and the repair receipt confirms a confirmed response.
   const planTwoPost =
     validCard && preflight.maximumPosts === 2 && preflight.maximumRepairs === 1;
-  const stopReason = outcome.complete
-    ? outcome.publicVerdict === "PASS"
-      ? "FIRST_PUBLIC_PASS_STOP"
-      : planTwoPost
-        ? repairExecution === "EXECUTED"
-          ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_EXECUTED"
-          : repairExecution === "SEND_UNKNOWN"
-            ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_SEND_UNKNOWN"
-            : "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
-        : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
-    : trial?.blockers?.includes("CUSTODY_CAPTURE_FAILED")
-      ? "CUSTODY_CAPTURE_FAILED_NO_ORACLE"
-      : receipt?.status === "ERROR" && attempted === 1
-        ? "GENERATION_ERROR_NO_RETRY"
-        : execution === "NOT_ESTABLISHED"
-          ? "LIVE_EXECUTION_NOT_ESTABLISHED"
-          : outcome.code;
+  const earlyG1 =
+    validCard &&
+    preflight.plan === G1_RECOVERY_MODE &&
+    bound &&
+    custody &&
+    independentZero &&
+    execution === "REAL_META" &&
+    receipt?.status === "PASS" &&
+    outcome.status === "EARLY_G1_FAIL";
+  const stopReason = earlyG1
+    ? repairExecution === "EXECUTED"
+      ? "FIRST_G1_FAIL_SIGNED_REPAIR_EXECUTED"
+      : repairExecution === "SEND_UNKNOWN"
+        ? "FIRST_G1_FAIL_SIGNED_REPAIR_SEND_UNKNOWN"
+        : "FIRST_G1_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
+    : outcome.complete
+      ? outcome.publicVerdict === "PASS"
+        ? "FIRST_PUBLIC_PASS_STOP"
+        : planTwoPost
+          ? repairExecution === "EXECUTED"
+            ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_EXECUTED"
+            : repairExecution === "SEND_UNKNOWN"
+              ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_SEND_UNKNOWN"
+              : "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
+          : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
+      : trial?.blockers?.includes("CUSTODY_CAPTURE_FAILED")
+        ? "CUSTODY_CAPTURE_FAILED_NO_ORACLE"
+        : receipt?.status === "ERROR" && attempted === 1
+          ? "GENERATION_ERROR_NO_RETRY"
+          : execution === "NOT_ESTABLISHED"
+            ? "LIVE_EXECUTION_NOT_ESTABLISHED"
+            : outcome.code;
   return {
     format: "mmp154-generation-scorecard-v1",
     evidenceBasis: "RECORDED_TRUSTED_ADAPTER_RECEIPTS",
@@ -275,6 +317,12 @@ export function generationScorecard({
     // Plan-specific key only: single_generation keeps the exact baseline
     // key set and serialized shape.
     ...(planTwoPost ? { maximumRepairs: preflight.maximumRepairs } : {}),
+    ...(validCard && preflight.plan === G1_RECOVERY_MODE
+      ? {
+          executionMode: G1_RECOVERY_MODE,
+          repairKind: earlyG1 ? "G1_BUILD_RECOVERABLE" : null,
+        }
+      : {}),
     attemptedRequests: attempted,
     confirmedResponses:
       receipt?.confirmedResponseCount === 1
@@ -425,7 +473,7 @@ export function repairExecutionStatus({
       r.authorization?.runId === runId &&
       r.authorization?.headSha === headSha &&
       r.authorization?.attempt === 2 &&
-      r.authorization?.plan === "generate_then_repair" &&
+      r.authorization?.plan === (preflight.plan ?? "generate_then_repair") &&
       r.authorization?.preflightSha256 === repairPreflight.sha256 &&
       r.authorization?.workflowSha256 === repairPreflight.workflowSha256 &&
       r.inputSha256 === repairPreflight.requestBodySha256 &&
@@ -452,7 +500,10 @@ function repairCardValid(card) {
   const { sha256: digest, ...content } = card;
   return (
     digest === sha256(JSON.stringify(content)) &&
-    card.format === "mmp154-repair-preflight-v1" &&
+    (card.format === "mmp154-repair-preflight-v1" ||
+      (card.format === "mmp180-repair-preflight-v2" &&
+        card.plan === G1_RECOVERY_MODE &&
+        card.repairKind === "G1_BUILD_RECOVERABLE")) &&
     card.repository === META_REPOSITORY &&
     card.model === "muse-spark-1.3" &&
     card.mode === "STANDARD" &&
@@ -460,9 +511,19 @@ function repairCardValid(card) {
     card.maximumRepairs === 1 &&
     card.attempt === 2 &&
     card.action === "repair" &&
-    typeof card.repairFeedbackCodes === "string" &&
-    card.repairFeedbackCodes.length > 0
+    (card.plan === G1_RECOVERY_MODE
+      ? validCompilerFeedback(card.compilerFeedback)
+      : typeof card.repairFeedbackCodes === "string" &&
+        card.repairFeedbackCodes.length > 0)
   );
+}
+function validCompilerFeedback(value) {
+  try {
+    compilerFeedback(value);
+    return true;
+  } catch {
+    return false;
+  }
 }
 export function repairScorecard({
   preflight,
@@ -578,7 +639,15 @@ export function repairScorecard({
       receipt?.status === "PASS" && bound ? "muse-spark-1.3" : null,
     attempt: 2,
     action: "repair",
-    repairFeedbackCodes: validCard ? preflight.repairFeedbackCodes : null,
+    ...(validCard && preflight.plan === G1_RECOVERY_MODE
+      ? {
+          executionMode: G1_RECOVERY_MODE,
+          repairKind: "G1_BUILD_RECOVERABLE",
+          compilerFeedback: compilerFeedback(preflight.compilerFeedback),
+        }
+      : {
+          repairFeedbackCodes: validCard ? preflight.repairFeedbackCodes : null,
+        }),
     generationStatus: ["PASS", "ERROR"].includes(receipt?.status)
       ? receipt.status
       : "NOT_RUN",

@@ -14,6 +14,7 @@ const allowances = ["0.10", "0.20", "0.25", "0.50", "0.75", "1.00"];
 const modes = {
   single_generation: "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP",
   generate_then_repair: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+  generate_then_repair_g1_v2: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
 };
 
 export function previewGeneration(actor, allowance, destination, mode = "single_generation") {

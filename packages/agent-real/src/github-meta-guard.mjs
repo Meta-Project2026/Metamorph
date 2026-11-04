@@ -36,7 +36,9 @@ export function validateWorkflowIdentity(env, head, inputs, paid = false) {
         ) &&
         ((mode === "single_generation" &&
           inputs.confirm_paid === "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP") ||
-          (mode === "generate_then_repair" &&
+          (["generate_then_repair", "generate_then_repair_g1_v2"].includes(
+            mode,
+          ) &&
             inputs.confirm_paid === "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP")),
       "PAID_CONFIRMATION_BLOCKED",
     );

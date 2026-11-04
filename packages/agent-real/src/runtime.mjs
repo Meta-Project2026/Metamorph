@@ -52,6 +52,13 @@ export const RECIPE_PIN =
   "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3";
 const readyEnvironments = new WeakSet();
 const compilerDiagnostics = new WeakMap();
+const normalFirstTypechecks = new WeakSet();
+export const isNormalFirstTypecheck = (build) =>
+  normalFirstTypechecks.has(build);
+const verifiedFirstTypechecks = new WeakMap();
+// Only an actual completed RealVerifier attempt can establish this fact.
+export const trustedFirstTypecheck = (attempt) =>
+  verifiedFirstTypechecks.get(attempt) === true;
 const environmentTelemetry = new WeakMap();
 const frozenSource = JSON.stringify(SOURCE);
 const digest = (path) => sha256(readFileSync(path));
@@ -291,6 +298,23 @@ export function buildReceipt(worker, scenarioId) {
       failure,
       summarizeCompilerDiagnostics(output.checks, worker.bundle),
     );
+    const phase = output.checks[0];
+    if (
+      receipt.exitCode === 2 &&
+      receipt.signal === null &&
+      receipt.timedOut === false &&
+      receipt.cancelled === false &&
+      receipt.overflow === false &&
+      receipt.spawnError === null &&
+      output.checks.length === 1 &&
+      scenarioId === "workshop-business" &&
+      phase.phase === "typecheck" &&
+      Number.isSafeInteger(phase.exitCode) &&
+      phase.exitCode > 0 &&
+      phase.error === null &&
+      phase.signal === null
+    )
+      normalFirstTypechecks.add(failure);
     return failure;
   }
   check(
@@ -579,6 +603,14 @@ export class RealVerifier {
     }
     if (signal.aborted) attempt.errorCode ??= "CANCELLED";
     const report = aggregateAttempt(attempt);
+    verifiedFirstTypechecks.set(
+      attempt,
+      attempt.errorCode === null &&
+        !signal.aborted &&
+        attempt.pairs.length === 1 &&
+        attempt.pairs[0].errorCode === null &&
+        normalFirstTypechecks.has(attempt.pairs[0].build),
+    );
     this.context.record("attempt", { ...attempt, report });
     this.attempts.push(attempt);
     return report;

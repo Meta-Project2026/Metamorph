@@ -7,6 +7,7 @@ import {
 } from "@metamorph/oracle";
 import { fields, strictJson } from "../../differential/src/strict.mjs";
 import { sha256 } from "../../target-worker/src/admission.mjs";
+import { compilerFeedback } from "./g1-repair-feedback.mjs";
 import { CODES } from "./report.mjs";
 
 const inventory = JSON.parse(
@@ -131,10 +132,16 @@ export function bindMigrationContext(raw) {
             request.repairFeedback === null) ||
             (request.attempt === 2 &&
               request.action === "repair" &&
-              typeof request.repairFeedback === "string")),
+              (typeof request.repairFeedback === "string" ||
+                request.repairFeedback?.format === "mmp160-g1-feedback-v1"))),
         "REQUEST_SEQUENCE",
       );
-      if (request.repairFeedback !== null) {
+      const compiler =
+        request.repairFeedback !== null &&
+        typeof request.repairFeedback === "object"
+          ? compilerFeedback(request.repairFeedback)
+          : null;
+      if (request.repairFeedback !== null && !compiler) {
         insist(
           request.repairFeedback.length > 0 &&
             request.repairFeedback.length <= 512 &&
@@ -145,7 +152,9 @@ export function bindMigrationContext(raw) {
       const body = JSON.stringify({
         context: JSON.parse(payload),
         action: request.action,
-        repairCodes: request.repairFeedback?.split(";") ?? [],
+        ...(compiler
+          ? { compilerFeedback: compiler }
+          : { repairCodes: request.repairFeedback?.split(";") ?? [] }),
         previousGeneratedChanges: previousChanges,
       });
       insist(Buffer.byteLength(body) <= INPUT_LIMIT, "INPUT_LIMIT");

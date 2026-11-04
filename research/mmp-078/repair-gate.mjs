@@ -8,6 +8,7 @@ import { pathToFileURL } from "node:url";
 import { publicRepairDecision } from "../../packages/agent-real/src/autonomous-repair.mjs";
 import { commitRecord, readRecord } from "../../packages/agent-real/src/custody-files.mjs";
 import { readPrivateJson } from "../../packages/agent-real/src/private-diagnostics.mjs";
+import { g1RecoveryProposal } from "../../packages/agent-real/src/g1-repair-host.mjs";
 
 export function repairGate(env) {
   if (env.MODEL_API_KEY || process.platform !== "linux")
@@ -63,9 +64,23 @@ export function repairGate(env) {
   return record;
 }
 
+export async function compilerRepairGate(env) {
+  if (env.MODEL_API_KEY || process.platform !== "linux") throw Error("CREDENTIAL_ISOLATION");
+  let decision = null;
+  try { decision = await g1RecoveryProposal(env); } catch { /* fixed NO_GO; no exception data */ }
+  const record = { format: "mmp180-repair-gate-v2", runId: env.GITHUB_RUN_ID,
+    runAttempt: env.GITHUB_RUN_ATTEMPT, headSha: env.GITHUB_SHA,
+    kind: decision?.kind ?? "NO_GO", feedback: decision?.feedback ?? null,
+    eligible: decision !== null, repair: "NOT_AUTHORIZED_BY_THIS_RECORD" };
+  commitRecord(join(env.RUNNER_TEMP, "meta-paid-private/repair-gate.json"), record);
+  if (typeof env.GITHUB_OUTPUT === "string" && env.GITHUB_OUTPUT.length > 0)
+    appendFileSync(env.GITHUB_OUTPUT, `eligible=${record.eligible}\n`);
+  return record;
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const record = repairGate(process.env);
+    const record = process.argv[2] === "g1-v2" ? await compilerRepairGate(process.env) : repairGate(process.env);
     process.stdout.write(
       `MMP158_REPAIR_GATE eligible=${record.eligible}; firstAttempt=${record.firstAttemptVerdict ?? record.firstAttemptIncompleteCode}\n`,
     );

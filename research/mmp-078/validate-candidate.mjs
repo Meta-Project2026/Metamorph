@@ -7,6 +7,8 @@ import { bindMigrationContext } from "../../packages/agent-real/src/migration-co
 import { validateCustodiedMigration } from "../../packages/agent-real/src/migration-trial.mjs";
 import { requireStoredCheckpoint } from "../../packages/agent-real/src/custody-checkpoint.mjs";
 import { publicTrialOutcome } from "../../packages/agent-real/src/live-experiment.mjs";
+import { verifyG1RecoveryCandidate } from "../../packages/agent-real/src/g1-repair-host.mjs";
+import { G1_RECOVERY_MODE } from "../../packages/agent-real/src/g1-repair-eligibility.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const attempt = process.argv[2] === "repair" ? 2 : 1;
 const suffix = attempt === 2 ? "-repair" : "";
@@ -25,7 +27,11 @@ try {
   const stop = () => shutdown.abort();
   process.on("SIGTERM", stop); process.on("SIGINT", stop);
   let result;
-  try { result = await validateCustodiedMigration({ context, root, parent, headSha: trial.headSha, ...transfer, signal: shutdown.signal }, permit); }
+  try {
+    const verify = attempt === 1 && trial.budgetAuth?.plan === G1_RECOVERY_MODE
+      ? verifyG1RecoveryCandidate : validateCustodiedMigration;
+    result = await verify({ context, root, parent, headSha: trial.headSha, ...transfer, signal: shutdown.signal }, permit);
+  }
   finally { process.removeListener("SIGTERM", stop); process.removeListener("SIGINT", stop); }
   const validationOutcome = publicTrialOutcome(result);
   writeFileSync(join(output, `trial${suffix}.json`), JSON.stringify({ ...trial, ...result, validationOutcome }, null, 2) + "\n", { mode: 0o600 });
