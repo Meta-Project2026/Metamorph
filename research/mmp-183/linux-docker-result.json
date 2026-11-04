@@ -1,0 +1,494 @@
+{
+  "version": "mmp183-linux-docker-result-v1",
+  "sourceSha": "48f182374b260cc3bcaaeeed0569a1eeb50979ad",
+  "imageId": "sha256:816fa45d27e76735487dbc9db5d848eef2f90530c9d9e93c584da0db664a7e02",
+  "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "status": "PUBLIC_SYNTHETIC_DOCKER_QUALIFIED",
+  "observations": [
+    {
+      "id": "positive",
+      "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+      "runId": "g0-84b80826-1ec5-4e81-ba2f-7b3a31f94bbd",
+      "expected": "INCONCLUSIVE",
+      "actual": "INCONCLUSIVE",
+      "code": "G0_QUALIFICATION_REQUIRED",
+      "driver": "items-v1",
+      "status": "G0_INCONCLUSIVE",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "15cfacb6c1fbe46ea24c076a23019ba08a984df0921c4dd3cbea63b40f9b5a3f",
+      "finalizerTraceSha256": "0c6e56f614559b8029527780801435df89ec4cd5480dfcbdf812809e5a9b6592",
+      "receiptSha256": "313466796a9392f4be364c1636c1a1c302fed49e5da8aba589d35c06b954761f",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 2,
+      "denialProbes": 2
+    },
+    {
+      "id": "static",
+      "candidateSha": "fa7078b4aa4daf429e13563d9ea82b15a75150d359463142c8e7b501980a496a",
+      "runId": "g0-f17e43cf-32a6-45df-8c4d-89672fbd0747",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_CHALLENGE",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "0225441883d57f4ea4af5ce3d6935b115b6262e473ee1bac9319489c8f7b1e33",
+      "finalizerTraceSha256": "4c1dc88c967f03e3e818ca39091b9b58ffb691ddd167f77aaacc41cec6664a5b",
+      "receiptSha256": "5d119b8f132ebfa26ae6b6e6a10e1a7460a291b8a421b31a97f9535e976cb198",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "golden-replay",
+      "candidateSha": "47fed3b9ef0e159671824a984b7838848ebcba7c1ff9111de31cf302dee63fe7",
+      "runId": "g0-e6382761-f391-40ec-925f-97a8a90b3cee",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_CHALLENGE",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "2236024de11d00112519387c4c54cddadcf26ac8e933c81440b195f7e70e2b2b",
+      "finalizerTraceSha256": "e17959e82f160419df4a703206dfc560b334650bd98a1682126f29f435eb0cdf",
+      "receiptSha256": "71110945505436a9a99c821854a8cd90317cee0297914b5c5701406fe2e19d74",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "missing-route",
+      "candidateSha": "eb485e2ed2c1c919f557b6627568fbf7ad2a985646204742817d6d7bc7df35db",
+      "runId": "g0-fe320041-4dcd-42d2-8ef5-54fa25ebeaf7",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_CHALLENGE",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "db6bbd65fe1cd5940bfe9c3cb912382dff5dbcb40b62f1310d2f974bcf445bff",
+      "finalizerTraceSha256": "0f8706d9cfc4591da5697c43280017ca4f40e7d0cdead1f31c992d2fcf604926",
+      "receiptSha256": "1d3cd81e4ee7a165f42ca1643c07c5c6c856c6295da5ea478b176155d29ca737",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "reference",
+      "candidateSha": "a2e06099ab2204f4401eefb70e96d371c7a53100df32c326daca962da9615758",
+      "runId": "g0-46a7856c-da97-4525-9749-8789773f29a4",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_DEFECT_REFERENCE",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "2bbc1dba6bcd55c3a12cf473f3a7c2259879f791f350c99071064e125d2bb5d3",
+      "finalizerTraceSha256": "f1a78eeb77ee5f4f6a729551822bc457502d4c53cd4d9333792368c3e451dd02",
+      "receiptSha256": "de350ac4a03c1fc03cfe8c161f1bfc1b8192a01b0f912fecf8730bfa546ecff9",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "corpus",
+      "candidateSha": "ffac74cfe29bbcef622d13a1d2cbb63fc80013cb5f1bddd1206d7cc0f6eb2f0e",
+      "runId": "g0-e553e6dd-3fd8-481e-b84d-8b384835eacf",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_DEFECT_CORPUS",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "83f9bb21d465e2ff9be99f049e1a4fbafa3a246d1643a5954386c834eb067607",
+      "finalizerTraceSha256": "dfa2db0f4e265bcdf70eef7414881f8d31e58e2d41e62a475dcf840dc75a1a06",
+      "receiptSha256": "8965399e51f600357bc00ceca71221ff58e635b9b53347ddca2b087118cd6884",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "docker-socket",
+      "candidateSha": "5386cd8586af243dbaa69f905e19a7b6d27562c2a519eec27af6fe1318e9272e",
+      "runId": "g0-92cb3dc2-ef9d-4879-8b7e-f8d4202ceb32",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_DEFECT_DOCKER",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "a33b44d01e99e4aa7f010f895e4b59c705da99268d1e54166af411313e06b74f",
+      "finalizerTraceSha256": "6c67a0c4115861ce3f2d112faa572f69ccfa636dba1d512755b870a7cb2400d4",
+      "receiptSha256": "eadfca91384d5e575365695cd8e3d431fb7fd1c3b198747ef6c5cf320e5e8b4a",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "proxy",
+      "candidateSha": "25316ea7a3e6b0a0264c9780ab62d16e0895e8e6f83425a8ca8bac3dd58dbfa5",
+      "runId": "g0-558ccfd2-e92d-4bee-9b70-294f6809cba1",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_DEFECT_NETWORK",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "7fb507fc09292dcc5e436048dbfcedc7e692aed50e518944edc55fcfd84fb3f9",
+      "finalizerTraceSha256": "4905c5b639eb26b43e9f67c784c5b2bd8b034858b23187a9175c2580bb6fb510",
+      "receiptSha256": "c55f8ad19e1ca9c4b31677b125d316e6ee99746834a139b8b891e478b3144cc5",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "spawn-import",
+      "candidateSha": "2aa9e2f9b7251ae38826cb98941e4ba074e287ab5fd7c83d53b38ed67865e374",
+      "runId": "g0-74a8c61a-e3b7-414b-a6b4-f45f262977c0",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_FORBIDDEN_IMPORT",
+      "driver": "items-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "01f41bef870ea7101e7bffd5aae932eeb404f5839f6475777c859ef27a3bfcb8",
+      "finalizerTraceSha256": "cba9ddb26dca1d6a6a3bad5f0aa06c3a7eb240b03a0ff647f22f47dce136137e",
+      "receiptSha256": "f5a75f137f002448cc90e613e067584b936e4067523f81d9d81fab9b4735d919",
+      "dockerCandidateExecuted": false,
+      "inspections": 0,
+      "processProbes": 0,
+      "denialProbes": 0
+    },
+    {
+      "id": "workshop-positive",
+      "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+      "runId": "g0-ba8ca545-3746-4e38-ac1e-4dfd962c75ab",
+      "expected": "INCONCLUSIVE",
+      "actual": "INCONCLUSIVE",
+      "code": "G0_QUALIFICATION_REQUIRED",
+      "driver": "workshop-v1",
+      "status": "G0_INCONCLUSIVE",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "7e5aef48d1d34e6ec4e7156161aa77c7a6d5b358ca2e323d656db0fcaddabdae",
+      "finalizerTraceSha256": "f082e4f8d23756025b39e14e72ce460c27b39f4d7c3b617bb89ca6e5b3d9d760",
+      "receiptSha256": "9ee62e82acec1717345d324efba7c735f94669ed84a007f6c60351ec92e63a5f",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 2,
+      "denialProbes": 2
+    },
+    {
+      "id": "workshop-static-cancel",
+      "candidateSha": "45ba939eb4be760414998a9ab8d1fd474fe2fa84441f621e35c3f945a6b7828f",
+      "runId": "g0-9fd6a53d-84d2-4e6b-b3f8-26fe16dcd99f",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "code": "G0_CHALLENGE",
+      "driver": "workshop-v1",
+      "status": "G0_FAIL",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "894f4556c5fe91c1dfd3c74f0ad4fd7c23d9999a6c6f6e259c387014d4c20b50",
+      "finalizerTraceSha256": "123b3e3149bb182270d2b538ba20e342ac333e057cdaf84e28d5f4dcfe5a633b",
+      "receiptSha256": "ef223d890c0feccd6a22d642c5e81d777764d7fe67708108b60ae62f492d77c7",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 1,
+      "denialProbes": 1
+    },
+    {
+      "id": "qualified-positive",
+      "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+      "runId": "g0-9cd4345e-c8fd-4a7b-b4da-ebf8aceb548b",
+      "expected": "PASS",
+      "actual": "PASS",
+      "code": null,
+      "driver": "items-v1",
+      "status": "G0_PASS",
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "traceSha256": "8d50ba27574dcf5223f53fa52844484b2a4c056203a3719ca27096f7481c5da3",
+      "finalizerTraceSha256": "fbadb782d7899a901af7b2a8397d176a442eca62f15d139da52bdb70f26d5c9c",
+      "receiptSha256": "ba316afe4850d7656365dfe09004020a4da1ed84e2907187489debcef5b1ffd9",
+      "dockerCandidateExecuted": true,
+      "inspections": 7,
+      "processProbes": 2,
+      "denialProbes": 2
+    }
+  ],
+  "privateCatalogSha256": "c09a75dc5a525e915841e5110b33a60c16662be2d7f47341196e2b40f4c40df5",
+  "recordedAtUtc": "2026-11-04T21:55:58.467170+00:00",
+  "baseSha": "297919d3e1476eb7f17b1fb59e7e671787e0af94",
+  "scope": "fixed-public-synthetic-only",
+  "executor": {
+    "session": "Codex",
+    "requestedModel": "sol 6.1",
+    "requestedEffort": "ultra",
+    "actualBackendAndEffort": "NOT_EXPOSED_BY_SESSION"
+  },
+  "runner": {
+    "class": "owner-workstation-wsl2-linux-amd64-docker-desktop",
+    "kernel": "6.18.54.1-microsoft-standard-WSL2",
+    "dockerEngine": "29.9.2",
+    "dockerDesktop": "4.97.0",
+    "rootless": false,
+    "cgroupVersion": 2,
+    "seccomp": true,
+    "hostNode": "v22.22.1",
+    "pnpm": "11.25.0",
+    "workerNode": "v24.11.0",
+    "workerSqlite": "3.50.4",
+    "workerTypescript": "5.9.3",
+    "workerFaketime": "0.9.10-2.1"
+  },
+  "inventory": {
+    "beforeContainers": 1,
+    "afterContainers": 1,
+    "beforeVolumes": 0,
+    "afterVolumes": 0,
+    "foreignContainerIdsAndInspectUnchanged": true,
+    "foreignDeletion": false,
+    "remainingG0Containers": 0
+  },
+  "earlierAttempts": {
+    "attempt-01": {
+      "sourceSha": "297919d3e1476eb7f17b1fb59e7e671787e0af94",
+      "runId": "g0-f09e53d1-9691-4f2f-842b-38095b297c62",
+      "imageId": "sha256:9bad01eb7d14651a96d2fb23d68862fef8653231de232255f8305a330191afb8",
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+      "verdict": "ERROR",
+      "faults": [
+        "G0_ENVIRONMENT"
+      ],
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "classification": "ENVIRONMENT"
+    },
+    "attempt-02": {
+      "sourceSha": "297919d3e1476eb7f17b1fb59e7e671787e0af94",
+      "runId": "g0-59f918cb-a363-471b-b9f8-33f4e5d52fde",
+      "imageId": "sha256:c7bf89f871fc35fca26c0fe2db88871b184f4000735cdda4bbe74903792be958",
+      "recipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+      "candidateSha": "67dbb4b31a245ac304ebe7722aa7bfc13d6263001b3eea7e850e92e4edad1af0",
+      "verdict": "ERROR",
+      "faults": [
+        "G0_CONTROL_FAILED"
+      ],
+      "evidenceVerified": true,
+      "cleanup": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "finalizer": {
+        "containers": 0,
+        "volumes": 0,
+        "emergencyRemoved": 0
+      },
+      "classification": "IMPLEMENTATION_BUG"
+    }
+  },
+  "faultControls": [
+    {
+      "id": "abort-cancel",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "memory-exhaustion",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "cpu-limit-stress",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "pid-limit-stress",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "abort-ignoring-process",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "partial-create",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "unknown-inventory",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "unavailable-docker-socket",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "mismatched-labels-or-id",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "same-prefix-foreign-container-and-volume",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "lost-finalizer",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    },
+    {
+      "id": "late-writer",
+      "status": "NOT_RUN",
+      "reason": "No shipped engine-backed fault injector; dedicated-daemon injection design requires both owners."
+    }
+  ],
+  "g0RealCandidate": "NOT_RUN",
+  "g4": "INCONCLUSIVE",
+  "product": "NOT_ESTABLISHED",
+  "independentHumanReview": "PENDING",
+  "qualifiedReceiptIsOwnerAttestation": false
+}

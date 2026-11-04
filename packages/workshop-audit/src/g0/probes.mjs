@@ -10,7 +10,7 @@ export const DENIAL_PROBE = `
 const fs = require('node:fs');
 const net = require('node:net');
 const cp = require('node:child_process');
-const denied = (fn) => { try { fn(); return false; } catch(e) { return e.code === 'ERR_ACCESS_DENIED'; } };
+const denied = (fn, code = 'ERR_ACCESS_DENIED') => { try { fn(); return false; } catch(e) { return e.code === code; } };
 const socketDenied = (options) => new Promise(resolve => {
   let s;
   try { s = net.createConnection(options); } catch(e) { resolve(e.code === 'ERR_ACCESS_DENIED'); return; }
@@ -26,7 +26,7 @@ const result = {
  corpus: denied(() => fs.readdirSync('/corpus')),
  docker: denied(() => fs.readFileSync('/var/run/docker.sock')),
  spawn: denied(() => cp.spawnSync('/usr/local/bin/node', ['-e','process.exit(0)'])),
- native: denied(() => process.dlopen({}, '/tmp/foreign.node')),
+ native: denied(() => process.dlopen({}, '/tmp/foreign.node'), 'ERR_DLOPEN_DISABLED'),
  network: await socketDenied({host:'198.51.100.1',port:80}),
  ipc: await socketDenied({path:'/var/run/docker.sock'}),
 };
