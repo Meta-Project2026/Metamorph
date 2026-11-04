@@ -52,7 +52,8 @@ export function classifyCollectorOutcome({
   killed = false,
   errored = false,
   overflow = false,
-  code = null,
+  // `code` is intentionally unused: a plain nonzero exit carries no safe
+  // information beyond COLLECTOR_EXITED, and exit text must never surface.
   termSignal = null,
 }) {
   if (ok) return null;
