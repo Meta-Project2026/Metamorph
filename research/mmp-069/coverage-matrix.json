@@ -194,7 +194,10 @@
       "name": "@metamorph/workshop-audit",
       "scripts": {
         "test": "node --test test/*.test.mjs",
-        "audit:isolated": "node src/run.mjs"
+        "audit:isolated": "node src/run.mjs",
+        "g0:synthetic": "node src/g0/cli.mjs synthetic",
+        "g0:run": "node src/g0/cli.mjs run",
+        "g0:finalize": "node src/g0/cli.mjs finalize"
       }
     }
   ],
@@ -466,6 +469,12 @@
       "status": "HOSTED_SKIP",
       "reason": "Requires uid 0",
       "guard": "process.getuid?.() !== 0"
+    },
+    {
+      "title": "POSIX G0 staging and evidence reject links and permission tamper",
+      "status": "WINDOWS_NOT_RUN",
+      "reason": "Requires POSIX mode/link semantics; executes on hosted Linux",
+      "guard": "skip: process.platform === \"win32\""
     }
   ],
   "privilegedRunner": {
