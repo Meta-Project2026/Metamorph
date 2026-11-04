@@ -259,3 +259,23 @@ Meta root cause must not be inferred from GLM alone.
 Changing shared Oracle/API/schema, comparator, G0–G4 or isolation semantics
 requires explicit Vladimir + Ilia agreement. The P0 finalizer remediation and
 any image-pin change are therefore listed as blockers, not fixed in this PR.
+
+## Current status addendum — 2026-11-04 (append-only; BLOCKED snapshot above is preserved)
+
+The readiness package's BLOCKED status remains true for its original purpose: no
+second diagnostic of the frozen GLM candidate `0cf5ba0b…` was ever authorized,
+executed, or re-planned, and this package's blockers (P0 finalizer decision gate,
+outer-harness image identity, Docker host health) are unchanged. What changed: the
+**present goal this diagnostic served** — de-risking the first-HTTP verifier path
+before further paid attempts — is now answered directly by authentic run
+[#41856569137](https://github.com/Meta-Project2026/Metamorph/actions/runs/41856569137)
+at exact `main@95397bbff94f3e0121ebdc9fa375880762bcbac7`: genuine model-generated
+candidate `4207053ada…`, **G1 6/6, G2 17/17, G3 20/20 PASS** (`COMPLETE_PUBLIC_PASS`),
+zero repair POSTs. Supersession verdict and the executed no-dependency check live in
+[`research/issue-closeout-2026-11-04/125-obsolete-diagnostic.md`](../issue-closeout-2026-11-04/125-obsolete-diagnostic.md).
+Unchanged: the historical `0/17, 1/20` cause, failed side and error class remain
+**UNKNOWN**; the GLM candidate stays frozen and neither exonerated nor convicted;
+the consumed `ERROR_ENVIRONMENT` attempt stands; **#134 stays OPEN** — the shared
+`packages/differential/src/workshop-finalizer.mjs` still deletes by broad name
+prefix without per-run owner-label verification (source-inspected at `95397bbf`),
+and its remediation remains a separate Vladimir+Ilia P0 decision gate.

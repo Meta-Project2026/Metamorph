@@ -214,3 +214,22 @@ node research/mmp-167/negative-controls.mjs
 The local timing procedure (manual, network `none`, no candidate) is described
 in `RESULTS.md`; it is not run by PR CI. Docker integration is otherwise
 **NOT_RUN** unless `RESULTS.md` records a successful command.
+
+## Current status addendum — 2026-11-04 (append-only; status above is preserved)
+
+The investigation deliverables are now complete and accounted for: bounded
+build-phase diagnostic sidecar (PR #168), hosted credential-free G1 qualification
+with CRLF provenance reconciliation and Decision B0 keeping production 12s/35s/180s
+constants unchanged (PR #172/#173; hosted runs 10/10 PASS each), tiered hosted
+stress 27/27 PASS (PR #175), and the owner-only offline G1 replay helper +
+OWNER-RUNBOOK (PR #177). The one unresolved item — the actual build-phase subtype
+of paid run 41749479450 — is explicitly retained by **open #176**, whose exit
+criteria require a separately owner-run real-candidate replay; #167 is proposed
+`not_planned` (superseded by #176) in
+[`research/issue-closeout-2026-11-04/167-incident-handoff.md`](../issue-closeout-2026-11-04/167-incident-handoff.md).
+Unchanged: synthetic hosted PASSes and the new candidate's authentic G1 PASS (run
+#41856569137) are not evidence about the historical failure's cause; the subtype
+remains **UNKNOWN**; production constants were not changed on synthetic evidence.
+**Owner-only, urgent:** artifacts 13284218898 (encrypted `candidate.age`) and
+13285336430 (public custody receipt) from run 41749479450 expire **2026-11-11
+00:49 UTC**; only the owner can retain them for any future replay.
