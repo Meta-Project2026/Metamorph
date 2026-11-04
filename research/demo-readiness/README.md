@@ -2,24 +2,25 @@
 
 [MMP-140](https://github.com/Meta-Project2026/Metamorph/issues/140) improves the
 existing vanilla HTML/CSS/ESM viewer. It presents **PHP → TypeScript with independent
-behavioral verification**, using five recorded public tracks (A–E). It is not a live
+behavioral verification**, using six recorded public tracks (A–F). It is not a live
 migration application. **PRODUCT NOT_ESTABLISHED** stays visible before loading
-and throughout the walkthrough. A–D end at 1 November; E adds the 2 November 2026
-run 41505679809 from independently retrieved public receipts. This is a recorded
+and throughout the walkthrough. A–D end at 1 November; E adds 2 November run 41505679809, F adds the real
+generate → Oracle → repair → Oracle run 41726833705 (3 November UTC / 4 November
+Kishinev). Both are independently retrieved public snapshots. This is a recorded
 snapshot, not a live feed or the latest complete project state. Later research,
 owner actions and new experiments remain separate.
 
 The first screen explains the product and acceptance gap; five selectable pipeline
-stages explain the architecture. **Guided Demo** has seven manually selected chapters
+stages explain the architecture. **Guided Demo** has eight manually selected chapters
 and Previous/Next buttons, with no timer or simulated execution. After loading,
-five track cards select focused details; expand the seven-row comparison matrix for all
+six track cards select focused details; expand the nine-row comparison matrix for all
 G0–G4 rows, identities for exact SHAs, and the JSON inspector for original fields.
 Chapter narration remains clearly separate from loaded, validated evidence.
 An absent track in a picker selection is labelled not loaded.
 
 Design rationale and scope are in [plan.md](plan.md); target narration and fallback
 are in [RUNBOOK.md](RUNBOOK.md). Current executed checks and before/after browser
-screenshots are in [VALIDATION-148.md](VALIDATION-148.md). Target pacing is not a
+screenshots are in [VALIDATION-162.md](VALIDATION-162.md). Target pacing is not a
 measured human rehearsal.
 
 MMP-145 corrects the duplicate desktop baseline evidence image: the home capture
@@ -37,7 +38,7 @@ node research/demo-readiness/serve.mjs
 ```
 
 Open [the local viewer](http://127.0.0.1:4171/) and click **Load pinned public receipts**.
-Eleven exact local public inputs load all five tracks. Stop with Ctrl+C. Fixed allowlist,
+Twelve exact local public inputs load all six tracks. Stop with Ctrl+C. Fixed allowlist,
 loopback only (`127.0.0.1:4171`). No API key, Docker, PHP, pnpm install, GitHub,
 Internet or candidate execution is needed to present. Direct file:// is unsupported.
 
@@ -95,6 +96,45 @@ after the GitHub artifact expires. It contains categorical public receipts,
 not candidate/diagnostics ciphertext. The browser cannot fetch that ZIP or run
 the preparation tool; it loads only the narrow pinned E projection.
 
+**F — first genuine model repair, still public FAIL:** run 41726833705 started
+2026-11-03T22:00:07Z (4 November 00:00:07 Kishinev), workflow attempt 1,
+execution head `f034d4dfcc30dcc82300e93002b5a55206c7dc04`. Two real Muse Spark 1.3
+responses produced different candidates:
+
+| Attempt | Candidate SHA-256 | Input / output tokens | Estimated USD |
+| --- | --- | --- | --- |
+| 1 / REAL generation | 329cdcca096461c2357b157f162daec3a4bf2eaaf5b1036a8d62026545b76fa3 | 6188 / 10556 | 0.052598 |
+| 2 / REAL repair | 572c6db97f279ac34224e847e8790516fb20bbf50fd6d131aa8ee44b9c68cd03 | 14148 / 9179 | 0.05669575 |
+
+Both: G1 PASS six build/typecheck IDs, G2 FAIL HTTP_JSON_TYPE with 17/17 executed,
+G3 FAIL HTTP_JSON_TYPE with 20/20 executed. Business/rejected G2/G3 FAIL/FAIL,
+capacity PASS/PASS in both attempts. G3 includes HTTP findings; a separate DB
+defect and exact mismatched field/type are not established. **Published aggregate
+outcome pattern unchanged; per-step improvements unknown.** Sum estimated USD
+**0.10929375**; charged USD **null / UNKNOWN**, never zero. G0/G4 INCONCLUSIVE,
+held-out NOT_RUN, PRODUCT NOT_ESTABLISHED. Workflow success is process completion,
+not migration PASS.
+
+F's new `mmp162-public-repair-v1` projection is **27687 bytes**, SHA-256
+`d2bf5aaafea0d7431fee00463ec6cf4c926e24004efb3d97133eee4175ee78d3`.
+The original PUBLIC ZIP artifact 13274647279 (28147 bytes, 24 metadata members)
+was verified by exact size/hash and allowlist-first field/privacy audit, then
+retained unchanged and **unserved** in `provenance/track-f/`. No private artifact,
+candidate source, raw response or decryption was used. [Full inventory and
+reproduction](PROVENANCE.md#f--first-real-repair-historical-public-fail) use only
+Python stdlib, without network or candidate execution. `track-f-adapter.mjs`
+checks the new size/hash **before** the unchanged bounded strict parser, then
+independently validates exact identities, attempt order, gates, executed IDs,
+per-scenario verdicts, usage and limits. A–E pins/adapters/tests remain unchanged.
+
+The intermediate source scorecard incorrectly says maximumPosts=1 and
+PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED. F derives truth from the linked
+per-attempt generation/trial receipts, excludes these nonfinal fields, and records
+the final repair stop reason COMPLETE_PUBLIC_FAIL_AFTER_SIGNED_REPAIR. The ZIP
+is never rewritten. #161 owns production reporting fixes; any later run needs
+separate evidence/pins. Per-attempt wall-clock timestamps are unavailable; the
+UI labels the run start explicitly. Snapshot identity is not a fresh Oracle run.
+
 | C identity | Exact value |
 | --- | --- |
 | Run / execution head | `40900698372` / `d21376747c7147043ca618e149fac87c0df80111` |
@@ -128,15 +168,16 @@ C pins/adapter were merged through reviewed [PR #87](https://github.com/Meta-Pro
 (2026-10-31; owner review comments — GitHub disallows native self-approval).
 
 Picker: one complete set of five historical files, four C files, the single
-`incident.json` D summary, the lone `mmp148-track-e-v1.json` E projection, or one future-model.json declaration preview (always
+`incident.json` D summary, the lone `mmp148-track-e-v1.json` E projection, the lone
+`mmp162-track-f-v1.json` F projection, or one future-model.json declaration preview (always
 NOT_VERIFIED). `incident.json` is accepted only as a lone selection (exact pin);
-E is also accepted only alone. Names overlap across A/B/C — select from one folder at a time. Bundled A–E tracks
+E/F are also accepted only alone. Names overlap across A/B/C — select from one folder at a time. Bundled A–F tracks
 validate atomically; new selection or error clears prior results. Byte identity
 is not independent executor attestation.
 
 - [Russian runbook](RUNBOOK.md): 90-second / ~4-minute target pacing and fallbacks.
 - [Provenance / trust policy](PROVENANCE.md): exact original identities and hashes.
-- [Current E validation](VALIDATION-148.md); [MMP-140 UI validation](VALIDATION-140.md);
+- [Current F validation](VALIDATION-162.md); [historical E validation](VALIDATION-148.md); [MMP-140 UI validation](VALIDATION-140.md);
   [separate screenshot correction #145 / PR #149](https://github.com/Meta-Project2026/Metamorph/pull/149); [MMP-085 validation](VALIDATION-085.md);
   [historical validation](VALIDATION.md).
 - [Compact scope / plan / tasks](plan.md).
@@ -146,6 +187,8 @@ node --test research/demo-readiness/demo.test.mjs
 node --test research/demo-readiness/real-ai.test.mjs
 node --test research/demo-readiness/incident.test.mjs
 node --test research/demo-readiness/track-e.test.mjs
+node --test research/demo-readiness/track-f.test.mjs
+python research/demo-readiness/prepare-track-f.test.py
 pnpm exec biome check research/demo-readiness
 ```
 

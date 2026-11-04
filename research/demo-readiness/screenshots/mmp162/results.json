@@ -1,0 +1,193 @@
+{
+  "checks": [
+    "empty state, skip link, keyboard stage selection and visible focus",
+    "all six pinned tracks, nine gate rows, C/D/E/F outcomes and executed counts",
+    "eight manual chapters, previous/next boundaries and JSON drill-down",
+    "responsive 1440px, A/B/C/D/E/F and expanded matrix, screenshots",
+    "responsive 768px, A/B/C/D/E/F and expanded matrix, screenshots",
+    "responsive 390px, A/B/C/D/E/F and expanded matrix, screenshots",
+    "picker accepts complete historical, C, lone D, lone E and lone F sets",
+    "E_NOT_LOADED stays distinct from a loaded FAIL or INCONCLUSIVE",
+    "F_NOT_LOADED remains narration without displaying a repaired candidate",
+    "missing chapter stays narration; future declaration clears trusted overview and stays NOT_VERIFIED",
+    "failed E selection clears prior future preview and trusted DOM",
+    "fail-closed picker: incomplete C, old details and summary cleared",
+    "fail-closed picker: forged D PASS, old details and summary cleared",
+    "fail-closed picker: malformed JSON, old details and summary cleared",
+    "fail-closed picker: mixed D/C, old details and summary cleared",
+    "fail-closed picker: mixed D/E, old details and summary cleared",
+    "fail-closed picker: mixed E/F, old details and summary cleared",
+    "fail-closed picker: mixed F/C, old details and summary cleared",
+    "fail-closed picker: duplicated F, old details and summary cleared",
+    "fail-closed picker: modified repaired PASS, old details and summary cleared",
+    "fail-closed picker: modified E, old details and summary cleared",
+    "fail-closed picker: unknown filename, old details and summary cleared",
+    "atomic load: replaced D rejects all six tracks and clears old evidence",
+    "bad or missing E fails entire A–F bundled load, without fallback",
+    "bad or missing F fails entire A–F bundled load and clears all prior attempt DOM",
+    "stale successful evidence/mmp-104/incident.json load cannot overwrite newer failed selection",
+    "stale successful evidence/real-ai-41726833705/mmp162-track-f-v1.json load cannot overwrite newer failed selection",
+    "stale successful mmp148-track-e-v1.json file read cannot overwrite a newer failed selection",
+    "stale successful mmp162-track-f-v1.json file read cannot overwrite a newer failed selection",
+    "F before/after preserves both real responses, distinct identities, exact per-scenario verdicts and unknown billing/deltas",
+    "recovery, reduced-motion mode, no JS exceptions or external requests"
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "browser": "157.0.8103.38",
+  "capturedUtc": "2026-11-03T22:50:00.793Z",
+  "captures": [
+    {
+      "name": "track-e-1440.png",
+      "requestedRegion": "Track E selected details",
+      "capturedUtc": "2026-11-03T22:49:55.912Z",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2148,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-1440.png",
+      "requestedRegion": "Track F / #repair",
+      "capturedUtc": "2026-11-03T22:49:56.031Z",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2324,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-attempts-1440.png",
+      "requestedRegion": "Track F / #repair-attempts",
+      "capturedUtc": "2026-11-03T22:49:56.095Z",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2796,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-1440.png",
+      "requestedRegion": "Evidence desk, A–F loaded, F selected",
+      "capturedUtc": "2026-11-03T22:49:56.178Z",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 1357,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-1440.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "capturedUtc": "2026-11-03T22:49:56.247Z",
+      "width": 1440,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-768.png",
+      "requestedRegion": "Track F / #repair",
+      "capturedUtc": "2026-11-03T22:49:56.664Z",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 3211,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-attempts-768.png",
+      "requestedRegion": "Track F / #repair-attempts",
+      "capturedUtc": "2026-11-03T22:49:56.717Z",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 3892,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-768.png",
+      "requestedRegion": "Evidence desk, A–F loaded, F selected",
+      "capturedUtc": "2026-11-03T22:49:56.796Z",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2081,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-768.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "capturedUtc": "2026-11-03T22:49:56.846Z",
+      "width": 768,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-e-390.png",
+      "requestedRegion": "Track E selected details",
+      "capturedUtc": "2026-11-03T22:49:57.244Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 3935,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-390.png",
+      "requestedRegion": "Track F / #repair",
+      "capturedUtc": "2026-11-03T22:49:57.346Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 3949,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-attempts-390.png",
+      "requestedRegion": "Track F / #repair-attempts",
+      "capturedUtc": "2026-11-03T22:49:57.385Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 5133,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "track-f-second-390.png",
+      "requestedRegion": "Track F / #repair-attempts article:last-child",
+      "capturedUtc": "2026-11-03T22:49:57.418Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 6162,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "evidence-390.png",
+      "requestedRegion": "Evidence desk, A–F loaded, F selected",
+      "capturedUtc": "2026-11-03T22:49:57.493Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 2537,
+      "deviceScaleFactor": 1
+    },
+    {
+      "name": "home-390.png",
+      "requestedRegion": "Home, scroll reset to zero",
+      "capturedUtc": "2026-11-03T22:49:57.539Z",
+      "width": 390,
+      "height": 1000,
+      "scrollX": 0,
+      "scrollY": 0,
+      "deviceScaleFactor": 1
+    }
+  ],
+  "humanTimedRehearsal": "NOT_RUN",
+  "screenReaderAudit": "NOT_RUN"
+}

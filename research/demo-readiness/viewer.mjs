@@ -10,6 +10,8 @@ import { REAL_AI_NAMES, readRealBundle } from "./real-ai-adapter.mjs";
 import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 import { readTrackE } from "./track-e-adapter.mjs";
 import { TRACK_E_PINS } from "./track-e-pins.mjs";
+import { readTrackF } from "./track-f-adapter.mjs";
+import { TRACK_F_PINS } from "./track-f-pins.mjs";
 
 const INCIDENT_DIRECTORY = "evidence/mmp-104";
 
@@ -24,12 +26,13 @@ const TRACK_SECTIONS = {
   C: "real-ai",
   D: "incident",
   E: "parity",
+  F: "repair",
 };
 const CHAPTERS = [
   [
     null,
     "A response is a beginning. Verification is the question.",
-    "Explore five historical tracks: admission, a scripted control and three genuine AI responses. C failed build; D ended in a verifier error; E passed all public builds but failed JSON type parity. No migration runs in this viewer.",
+    "Explore six historical tracks: admission, a scripted control, three single-response AI runs and the two-response real repair loop F. C failed build; D ended in a verifier error; E and both F candidates failed public JSON type parity. No migration runs in this viewer.",
   ],
   [
     "A",
@@ -57,6 +60,11 @@ const CHAPTERS = [
     "2 November: genuine generation, aggregate G1 PASS across three scenarios and six typecheck/build IDs. G2/G3 FAIL / HTTP_JSON_TYPE, with 17/17 HTTP and 20/20 SQLite comparisons executed. Compared SQLite snapshots match within this manifest. The exact HTTP field is UNCONFIRMED; PRODUCT NOT_ESTABLISHED.",
   ],
   [
+    "F",
+    "F / Real generation → Oracle → real repair → Oracle",
+    "3 November UTC / 4 November Kishinev: two genuine responses, two different candidates, two full public Oracle attempts. Both G1 PASS; both G2/G3 FAIL / HTTP_JSON_TYPE with 17/17 and 20/20 comparisons executed. Published aggregate outcome pattern unchanged; per-step improvements unknown. PRODUCT NOT_ESTABLISHED.",
+  ],
+  [
     null,
     "What would establish acceptance?",
     "An independent complete target, the applicable mandatory G0–G4 gates and complete mandatory scenario evidence for that exact candidate. These receipts do not establish that. PRODUCT NOT_ESTABLISHED. Newer experiments are outside this snapshot.",
@@ -64,7 +72,7 @@ const CHAPTERS = [
 ];
 const STAGES = [
   "A frozen PHP source and explicit public scope make the inputs inspectable. No source code executes in this viewer.",
-  "A bounded agent requests a model response. Track A did not generate; C, D and E record genuine responses. No request is sent now.",
+  "A bounded agent requests a model response. Track A did not generate; C, D, E and F record genuine responses; F includes a real repair response. No request is sent now.",
   "The generated TypeScript candidate has its own content hash. A candidate identity is not a build result; D's historical candidate source is unavailable.",
   "Independent isolated checks cover G0 completeness, G1 build, G2 HTTP, G3 stateful parity and G4 independent controls. These receipts do not establish all gates.",
   "Recorded outcomes retain FAIL, ERROR, INCONCLUSIVE and NOT_RUN. A matching receipt pin proves snapshot byte identity, not new execution or product acceptance.",
@@ -98,6 +106,7 @@ function reset() {
     "real-ai",
     "incident",
     "parity",
+    "repair",
   ])
     byId(id).hidden = true;
   for (const id of [
@@ -123,6 +132,9 @@ function reset() {
     "parity-metrics",
     "parity-gates",
     "parity-identities",
+    "repair-attempts",
+    "repair-identities",
+    "repair-session",
   ])
     byId(id).replaceChildren();
   updateGuide();
@@ -171,7 +183,7 @@ function updateGuide() {
       : "Load and inspect receipts ↓";
   if (loaded) selectTrack(track);
 }
-function renderOverview(historical, real, incident, parity) {
+function renderOverview(historical, real, incident, parity, repair) {
   const matrix = [];
   function row(label, gates, http, sqlite) {
     const tr = element("tr");
@@ -252,6 +264,22 @@ function renderOverview(historical, real, incident, parity) {
       `${parity.coverage.sqlite}/${parity.coverage.requiredSqlite}`,
     );
   }
+  if (repair) {
+    availableTracks.set("F", [
+      "Real AI · repair measured",
+      "3 NOV UTC · TWO REAL RESPONSES",
+      "FAIL → FAIL",
+      "Different candidates · aggregate pattern unchanged",
+      "Each: HTTP 17/17 · SQLite 20/20 executed",
+    ]);
+    for (const a of repair.attempts)
+      row(
+        `F · ${a.attempt} / ${a.action}`,
+        a.gates,
+        "17/17 executed",
+        "20/20 executed",
+      );
+  }
   for (const [
     id,
     [title, provenance, outcome, distinction, coverage],
@@ -268,7 +296,7 @@ function renderOverview(historical, real, incident, parity) {
       element(
         "span",
         outcome,
-        id === "C" || id === "D" || id === "E"
+        id === "C" || id === "D" || id === "E" || id === "F"
           ? "outcome verdict-ERROR"
           : "outcome verdict-INCONCLUSIVE",
       ),
@@ -535,17 +563,148 @@ function renderTrackE(value) {
   );
   byId("parity").hidden = false;
 }
-function renderBundles(historical, real, incident, parity) {
+function renderTrackF(value) {
+  const p = value.provenance;
+  byId("repair-session").append(
+    definitions([
+      [
+        "Recorded run started UTC",
+        `${p.runStartedAt} · 4 November 00:00:07 Kishinev (UTC+2)`,
+      ],
+      [
+        "Session",
+        "2 genuine model responses · 2 distinct candidates · 2 public Oracle attempts",
+      ],
+      [
+        "Estimated USD / charged USD",
+        `${value.usage.estimatedCostUsd} ESTIMATE_ONLY / null (UNKNOWN, not zero)`,
+      ],
+      [
+        "Workflow success",
+        "Process completion only; public migration verdict FAIL",
+      ],
+    ]),
+  );
+  for (const a of value.attempts) {
+    const card = element("article", undefined, "repair-attempt");
+    card.append(
+      element("p", `ATTEMPT ${a.attempt}`, "eyebrow"),
+      element(
+        "h3",
+        a.action === "generate" ? "REAL generation" : "REAL repair",
+      ),
+    );
+    const g = a.generation;
+    card.append(
+      element("p", "G1 PASS · G2/G3 FAIL", "outcome verdict-FAIL"),
+      definitions([
+        ["Candidate SHA-256", a.candidateSha256],
+        [
+          "Model / response",
+          `${g.modelId} · REAL_INFERENCE · 1 response · HTTP ${g.httpStatus}`,
+        ],
+        ["Input / output tokens", `${g.inputTokens} / ${g.outputTokens}`],
+        [
+          "Estimated USD / charged USD",
+          `${g.estimatedCostUsd} ESTIMATE_ONLY / null UNKNOWN`,
+        ],
+        [
+          "G1 executed",
+          `${a.executed.G1.length} typecheck/build IDs · all 3 public scenarios`,
+        ],
+        ["G2 executed", "17/17 HTTP comparisons · HTTP_JSON_TYPE"],
+        [
+          "G3 executed",
+          "20/20 typed SQLite comparisons · includes HTTP_JSON_TYPE",
+        ],
+        [
+          "Cleanup",
+          `${a.cleanup.status} · 0 containers / 0 volumes / 0 emergency removals`,
+        ],
+      ]),
+    );
+    const strip = element("div", undefined, "gate-strip");
+    for (const [id, verdict] of Object.entries(a.gates))
+      strip.append(element("span", `${id} ${verdict}`, `verdict-${verdict}`));
+    card.append(strip);
+    const wrap = element("div", undefined, "table-wrap");
+    wrap.tabIndex = 0;
+    wrap.setAttribute("role", "region");
+    wrap.setAttribute(
+      "aria-label",
+      `Attempt ${a.attempt} public scenario verdicts`,
+    );
+    const table = element("table");
+    table.append(
+      element(
+        "caption",
+        "Scenario verdicts · executed counts are separate from PASS",
+      ),
+    );
+    const head = element("thead");
+    const header = element("tr");
+    for (const title of ["Scenario", "G1", "G2 / HTTP", "G3 / SQLite"]) {
+      const cell = element("th", title);
+      cell.scope = "col";
+      header.append(cell);
+    }
+    head.append(header);
+    const body = element("tbody");
+    for (const scenario of a.scenarios) {
+      const row = element("tr");
+      const label = element("th", scenario.scenarioId.replace("workshop-", ""));
+      label.scope = "row";
+      row.append(label, element("td", scenario.g1Verdict, "verdict-PASS"));
+      for (const gate of scenario.gates.slice(0, 2)) {
+        const cell = element("td", gate.verdict, `verdict-${gate.verdict}`);
+        cell.append(
+          element("small", `${gate.executedTestIds.length} executed`),
+        );
+        row.append(cell);
+      }
+      body.append(row);
+    }
+    table.append(head, body);
+    wrap.append(table);
+    card.append(wrap);
+    byId("repair-attempts").append(card);
+  }
+  byId("repair-identities").append(
+    definitions([
+      ["Run / workflow attempt", `${p.runId} / ${p.runAttempt}`],
+      ["Execution head SHA", p.headSha],
+      ["Frozen source SHA", p.sourceSha],
+      [
+        "Original PUBLIC artifact / ZIP SHA-256",
+        `${p.artifactId} / ${p.zipSha256}`,
+      ],
+      [
+        "Pinned projection",
+        `${TRACK_F_PINS.filename} · ${TRACK_F_PINS.bytes} bytes · SHA-256 ${TRACK_F_PINS.sha256}`,
+      ],
+      ...value.attempts.flatMap((a) => [
+        [
+          `Attempt ${a.attempt} request / response SHA-256`,
+          `${a.requestSha256} / ${a.responseSha256}`,
+        ],
+        [`Attempt ${a.attempt} Oracle identity`, a.oracleAttemptId],
+      ]),
+    ]),
+  );
+}
+function renderBundles(historical, real, incident, parity, repair) {
   bundle = { receipts: {} };
   if (historical) renderHistorical(historical);
   if (real) renderReal(real);
   if (incident) renderIncident(incident);
   if (parity) renderTrackE(parity);
+  if (repair) renderTrackF(repair);
   for (const [label, value] of [
     ["Historical #70", historical],
     ["Real AI #81", real],
     ["Incident #104", incident],
     ["Real AI #137", parity],
+    ["Real repair #162", repair],
   ]) {
     if (!value) continue;
     for (const [name, receipt] of Object.entries(value.receipts)) {
@@ -557,7 +716,7 @@ function renderBundles(historical, real, incident, parity) {
     }
   }
   showRaw();
-  renderOverview(historical, real, incident, parity);
+  renderOverview(historical, real, incident, parity, repair);
   byId("evidence").hidden = false;
 }
 function showRaw() {
@@ -580,6 +739,7 @@ async function load(getFiles) {
     let real;
     let incident;
     let parity;
+    let repair;
     if (Array.isArray(input)) {
       if (input.length === 1 && input[0].name === "future-model.json")
         future = readFuture(input[0].name, input[0].bytes);
@@ -587,6 +747,8 @@ async function load(getFiles) {
         incident = await readIncident(input[0].bytes);
       else if (input.length === 1 && input[0].name === TRACK_E_PINS.filename)
         parity = await readTrackE(input[0].name, input[0].bytes);
+      else if (input.length === 1 && input[0].name === TRACK_F_PINS.filename)
+        repair = await readTrackF(input[0].name, input[0].bytes);
       else if (
         input.some(
           (file) =>
@@ -599,23 +761,26 @@ async function load(getFiles) {
     } else {
       // All bundled tracks are validated before displaying any results; one invalid
       // or missing track fails the whole load and clears prior results.
-      [historical, real, incident, parity] = await Promise.all([
+      [historical, real, incident, parity, repair] = await Promise.all([
         readBundle(input.historical),
         readRealBundle(input.real),
         readIncident(input.incident.bytes),
         readTrackE(input.parity.name, input.parity.bytes),
+        readTrackF(input.repair.name, input.repair.bytes),
       ]);
     }
     if (current !== generation) return;
     if (future) {
       byId("future-content").textContent = JSON.stringify(future, null, 2);
       byId("future").hidden = false;
-    } else renderBundles(historical, real, incident, parity);
+    } else renderBundles(historical, real, incident, parity, repair);
     const loaded = [
       historical && "historical A/B (5 receipts)",
       real && "PINNED_REAL_AI_SNAPSHOT C (4 receipts)",
       incident && "PINNED_INCIDENT_SUMMARY D (1 receipt)",
       parity && "PINNED_PUBLIC_PARITY_SUMMARY E (1 public projection)",
+      repair &&
+        "PINNED_PUBLIC_REPAIR_SUMMARY F (2 real attempts, 1 public projection)",
     ].filter(Boolean);
     byId("status").textContent = future
       ? "NOT_VERIFIED — declaration only; no independent execution established."
@@ -669,17 +834,20 @@ byId("load").addEventListener("click", () =>
           return { name, bytes };
         }),
       );
-    const [historical, real, incidentFiles, parityFiles] = await Promise.all([
-      fetchFiles(RECEIPT_NAMES, "evidence"),
-      fetchFiles(REAL_AI_NAMES, REAL_AI_PINS.directory),
-      fetchFiles(["incident.json"], INCIDENT_DIRECTORY),
-      fetchFiles([TRACK_E_PINS.filename], TRACK_E_PINS.directory),
-    ]);
+    const [historical, real, incidentFiles, parityFiles, repairFiles] =
+      await Promise.all([
+        fetchFiles(RECEIPT_NAMES, "evidence"),
+        fetchFiles(REAL_AI_NAMES, REAL_AI_PINS.directory),
+        fetchFiles(["incident.json"], INCIDENT_DIRECTORY),
+        fetchFiles([TRACK_E_PINS.filename], TRACK_E_PINS.directory),
+        fetchFiles([TRACK_F_PINS.filename], TRACK_F_PINS.directory),
+      ]);
     return {
       historical,
       real,
       incident: incidentFiles[0],
       parity: parityFiles[0],
+      repair: repairFiles[0],
     };
   }),
 );
@@ -696,15 +864,18 @@ byId("files").addEventListener("change", (event) => {
           !REAL_AI_NAMES.includes(file.name) &&
           file.name !== "future-model.json" &&
           file.name !== "incident.json" &&
-          file.name !== TRACK_E_PINS.filename,
+          file.name !== TRACK_E_PINS.filename &&
+          file.name !== TRACK_F_PINS.filename,
       )
     )
       throw new Error("FILE_NOT_ALLOWLISTED");
-    // Derived D/E summaries are lone selections, never mixed with another track.
+    // Derived D/E/F summaries are lone selections, never mixed with another track.
     if (
       selected.some(
         (file) =>
-          file.name === "incident.json" || file.name === TRACK_E_PINS.filename,
+          file.name === "incident.json" ||
+          file.name === TRACK_E_PINS.filename ||
+          file.name === TRACK_F_PINS.filename,
       ) &&
       selected.length > 1
     )

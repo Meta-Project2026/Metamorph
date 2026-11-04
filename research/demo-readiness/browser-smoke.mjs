@@ -8,6 +8,7 @@ import { PINS } from "./pins.mjs";
 import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 import { makeServer } from "./serve.mjs";
 import { TRACK_E_PINS } from "./track-e-pins.mjs";
+import { TRACK_F_PINS } from "./track-f-pins.mjs";
 
 const [modulePath, browserPath, outputPath] = process.argv.slice(2);
 if (!modulePath || !browserPath || !outputPath)
@@ -50,6 +51,7 @@ try {
   const page = await context.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
   async function capture(name, requestedRegion) {
+    const capturedUtc = new Date().toISOString();
     const position = await page.evaluate(() => ({
       width: innerWidth,
       height: innerHeight,
@@ -58,12 +60,12 @@ try {
       deviceScaleFactor: devicePixelRatio,
     }));
     await page.screenshot({ path: resolve(output, name) });
-    captures.push({ name, requestedRegion, ...position });
+    captures.push({ name, requestedRegion, capturedUtc, ...position });
   }
   const load = async () => {
     await page.locator("#load").click();
     await page.locator("#evidence").waitFor({ state: "visible" });
-    assert.equal(await page.locator("#track-cards button").count(), 5);
+    assert.equal(await page.locator("#track-cards button").count(), 6);
   };
   const empty = async (preview = false) => {
     await page.locator("#evidence").waitFor({ state: "hidden" });
@@ -85,6 +87,9 @@ try {
       "parity-gates",
       "parity-identities",
       "parity-metrics",
+      "repair-attempts",
+      "repair-identities",
+      "repair-session",
     ])
       assert.equal(await page.locator(`#${id}`).textContent(), "");
     assert.match(await page.locator("#status").textContent(), /NOT_VERIFIED/);
@@ -92,6 +97,10 @@ try {
   await page.goto("http://127.0.0.1:4171/");
   assert.equal(await page.locator("#evidence").isVisible(), false);
   assert.equal(await page.locator("#track-cards button").count(), 0);
+  assert.equal(
+    await page.locator("#acceptance strong").textContent(),
+    "NOT_ESTABLISHED",
+  );
   await page.keyboard.press("Tab");
   assert.equal(
     await page
@@ -113,14 +122,15 @@ try {
   assert.deepEqual(focus, { width: "3px", style: "solid" });
   checked("empty state, skip link, keyboard stage selection and visible focus");
   await load();
-  assert.equal(await page.locator("#receipt option").count(), 11);
-  assert.equal(await page.locator("#gate-matrix tr").count(), 7);
+  assert.equal(await page.locator("#receipt option").count(), 12);
+  assert.equal(await page.locator("#gate-matrix tr").count(), 9);
   for (const [id, section] of [
     ["A", "historical-model"],
     ["B", "historical-replay"],
     ["C", "real-ai"],
     ["D", "incident"],
     ["E", "parity"],
+    ["F", "repair"],
   ]) {
     await page.locator(`[data-track="${id}"]`).focus();
     await page.keyboard.press("Space");
@@ -151,11 +161,11 @@ try {
     /G1 PASSG2 FAILG3 FAIL/,
   );
   checked(
-    "all five pinned tracks, seven gate rows, C/D/E outcomes and executed counts",
+    "all six pinned tracks, nine gate rows, C/D/E/F outcomes and executed counts",
   );
   const chapterCount = await page.locator("[data-chapter]").count();
-  assert.equal(chapterCount, 7);
-  const trackIds = ["A", "B", "C", "D", "E"];
+  assert.equal(chapterCount, 8);
+  const trackIds = ["A", "B", "C", "D", "E", "F"];
   for (let i = 0; i < chapterCount; i++) {
     await page.locator(`[data-chapter="${i}"]`).click();
     assert.equal(
@@ -173,14 +183,14 @@ try {
   assert.equal(await page.locator("#guide-next").isDisabled(), true);
   await page.locator("#guide-prev").click();
   assert.equal(
-    await page.locator('[data-chapter="5"]').getAttribute("aria-current"),
+    await page.locator('[data-chapter="6"]').getAttribute("aria-current"),
     "step",
   );
   await page.locator("#json-inspector summary").click();
   await page.locator("#receipt").selectOption("Incident #104 / incident.json");
   assert.match(await page.locator("#raw").textContent(), /41327197036/);
   checked(
-    "seven manual chapters, previous/next boundaries and JSON drill-down",
+    "eight manual chapters, previous/next boundaries and JSON drill-down",
   );
   for (const width of [1440, 768, 390]) {
     await page.setViewportSize({ width, height: 1000 });
@@ -203,19 +213,33 @@ try {
       `${width} / open matrix`,
     );
     await page.locator(".matrix-details summary").click();
+    await page.locator('[data-track="E"]').click();
     if (width !== 768) {
       await page.locator("#parity").scrollIntoViewIfNeeded();
       await capture(`track-e-${width}.png`, "Track E selected details");
     }
+    await page.locator('[data-track="F"]').click();
+    for (const [suffix, selector] of [
+      ["", "#repair"],
+      ["-attempts", "#repair-attempts"],
+      ...(width === 390
+        ? [["-second", "#repair-attempts article:last-child"]]
+        : []),
+    ]) {
+      await page
+        .locator(selector)
+        .evaluate((node) => node.scrollIntoView({ block: "start" }));
+      await capture(`track-f${suffix}-${width}.png`, `Track F / ${selector}`);
+    }
     await page.locator("#receipt-desk").scrollIntoViewIfNeeded();
     await capture(
       `evidence-${width}.png`,
-      "Evidence desk, A–E loaded, E selected",
+      "Evidence desk, A–F loaded, F selected",
     );
     await page.evaluate(() => window.scrollTo(0, 0));
     await capture(`home-${width}.png`, "Home, scroll reset to zero");
     checked(
-      `responsive ${width}px, A/B/C/D/E and expanded matrix, screenshots`,
+      `responsive ${width}px, A/B/C/D/E/F and expanded matrix, screenshots`,
     );
   }
   const history = await Promise.all(
@@ -251,17 +275,30 @@ try {
       ),
     ),
   };
+  const repair = {
+    name: TRACK_F_PINS.filename,
+    mimeType: "application/json",
+    buffer: await readFile(
+      new URL(
+        `${TRACK_F_PINS.directory}/${TRACK_F_PINS.filename}`,
+        import.meta.url,
+      ),
+    ),
+  };
   for (const [files, count] of [
     [history, 2],
     [real, 1],
     [[incident], 1],
     [[parity], 1],
+    [[repair], 1],
   ]) {
     await page.locator("#files").setInputFiles(files);
     await page.locator("#evidence").waitFor({ state: "visible" });
     assert.equal(await page.locator("#track-cards button").count(), count);
   }
-  checked("picker accepts complete historical, C, lone D and lone E sets");
+  checked(
+    "picker accepts complete historical, C, lone D, lone E and lone F sets",
+  );
   await page.locator('[data-chapter="1"]').click();
   assert.match(
     await page.locator("#guide-evidence-note").textContent(),
@@ -271,7 +308,7 @@ try {
     await page.locator("#guide-target").getAttribute("href"),
     "#receipt-desk",
   );
-  assert.equal(await page.locator("#parity").isVisible(), true);
+  assert.equal(await page.locator("#repair").isVisible(), true);
   await page.locator("#files").setInputFiles([incident]);
   await page.locator("#evidence").waitFor({ state: "visible" });
   await page.locator('[data-chapter="5"]').click();
@@ -282,6 +319,16 @@ try {
   assert.equal(await page.locator("#parity").isVisible(), false);
   assert.equal(await page.locator('[data-track="E"]').count(), 0);
   checked("E_NOT_LOADED stays distinct from a loaded FAIL or INCONCLUSIVE");
+  await page.locator('[data-chapter="6"]').click();
+  assert.match(
+    await page.locator("#guide-evidence-note").textContent(),
+    /F_NOT_LOADED/,
+  );
+  assert.equal(await page.locator("#repair").isVisible(), false);
+  assert.equal(await page.locator('[data-track="F"]').count(), 0);
+  checked(
+    "F_NOT_LOADED remains narration without displaying a repaired candidate",
+  );
   // Synthetic declaration tests the preview boundary, never execution evidence.
   const declaration = {
     format: "mmp071-model-preview-v1",
@@ -343,6 +390,22 @@ try {
     ],
     ["mixed D/C", [incident, real[0]]],
     ["mixed D/E", [incident, parity]],
+    ["mixed E/F", [parity, repair]],
+    ["mixed F/C", [repair, real[0]]],
+    ["duplicated F", [repair, repair]],
+    [
+      "modified repaired PASS",
+      [
+        {
+          ...repair,
+          buffer: Buffer.from(
+            repair.buffer
+              .toString()
+              .replaceAll('"verdict": "FAIL"', '"verdict": "PASS"'),
+          ),
+        },
+      ],
+    ],
     [
       "modified E",
       [
@@ -386,7 +449,7 @@ try {
   await empty();
   await page.unroute("**/evidence/mmp-104/incident.json");
   checked(
-    "atomic load: replaced D rejects all five tracks and clears old evidence",
+    "atomic load: replaced D rejects all six tracks and clears old evidence",
   );
   for (const status of [200, 404]) {
     await load();
@@ -400,65 +463,92 @@ try {
     await empty();
     await page.unroute(`**/${TRACK_E_PINS.filename}`);
   }
-  checked("bad or missing E fails entire A–E bundled load, without fallback");
-  // A pending older successful load must not overwrite a newer failed selection.
-  let release;
-  let intercepted;
-  const entered = new Promise((accept) => {
-    intercepted = accept;
-  });
-  const hold = new Promise((accept) => {
-    release = accept;
-  });
-  await page.route("**/evidence/mmp-104/incident.json", async (route) => {
-    intercepted();
-    await hold;
-    await route.continue();
-  });
-  await page.locator("#load").click();
-  await entered;
-  await page.locator("#files").setInputFiles([real[0]]);
-  await page.waitForFunction(() =>
-    document.getElementById("status").textContent.includes("NOT_VERIFIED"),
-  );
-  release();
-  await page.waitForResponse((response) =>
-    response.url().endsWith("/evidence/mmp-104/incident.json"),
-  );
-  // Wait until validation of the released response completes, then another task.
-  await page.evaluate(() => new Promise((accept) => setTimeout(accept, 150)));
-  await empty();
-  await page.unroute("**/evidence/mmp-104/incident.json");
-  checked("stale successful load cannot overwrite newer failed selection");
-  await page.evaluate((name) => {
-    const original = File.prototype.arrayBuffer;
-    window.restoreFileReader = () => {
-      File.prototype.arrayBuffer = original;
-    };
-    File.prototype.arrayBuffer = async function () {
-      const bytes = await original.call(this);
-      if (this.name !== name) return bytes;
-      window.heldFileReadEntered = true;
-      return new Promise((accept) => {
-        window.releaseFileRead = () => accept(bytes);
-      });
-    };
-  }, TRACK_E_PINS.filename);
-  await page.locator("#files").setInputFiles([parity]);
-  await page.waitForFunction(() => window.heldFileReadEntered);
-  await page.locator("#files").setInputFiles([real[0]]);
-  await page.waitForFunction(() =>
-    document.getElementById("status").textContent.includes("NOT_VERIFIED"),
-  );
-  await page.evaluate(() => {
-    window.releaseFileRead();
-    window.restoreFileReader();
-  });
-  await page.evaluate(() => new Promise((accept) => setTimeout(accept, 150)));
-  await empty();
+  checked("bad or missing E fails entire A–F bundled load, without fallback");
+  for (const status of [200, 404]) {
+    await load();
+    await page.route(`**/${TRACK_F_PINS.filename}`, (route) =>
+      route.fulfill({ status, body: "{}", contentType: "application/json" }),
+    );
+    await page.locator("#load").click();
+    await page.waitForFunction(() =>
+      document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+    );
+    await empty();
+    await page.unroute(`**/${TRACK_F_PINS.filename}`);
+  }
   checked(
-    "stale successful E file read cannot overwrite a newer failed selection",
+    "bad or missing F fails entire A–F bundled load and clears all prior attempt DOM",
   );
+  // A pending older successful load must not overwrite a newer failed selection.
+  for (const racePath of [
+    "evidence/mmp-104/incident.json",
+    `${TRACK_F_PINS.directory}/${TRACK_F_PINS.filename}`,
+  ]) {
+    let release;
+    let intercepted;
+    const entered = new Promise((accept) => {
+      intercepted = accept;
+    });
+    const hold = new Promise((accept) => {
+      release = accept;
+    });
+    await page.route(`**/${racePath}`, async (route) => {
+      intercepted();
+      await hold;
+      await route.continue();
+    });
+    await page.locator("#load").click();
+    await entered;
+    await page.locator("#files").setInputFiles([real[0]]);
+    await page.waitForFunction(() =>
+      document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+    );
+    const observed = page.waitForResponse((response) =>
+      response.url().endsWith(`/${racePath}`),
+    );
+    release();
+    await observed;
+    // Wait until validation of the released response completes, then another task.
+    await page.evaluate(() => new Promise((accept) => setTimeout(accept, 150)));
+    await empty();
+    await page.unroute(`**/${racePath}`);
+    checked(
+      `stale successful ${racePath} load cannot overwrite newer failed selection`,
+    );
+  }
+  for (const selected of [parity, repair]) {
+    await page.evaluate((name) => {
+      window.heldFileReadEntered = false;
+      window.releaseFileRead = undefined;
+      const original = File.prototype.arrayBuffer;
+      window.restoreFileReader = () => {
+        File.prototype.arrayBuffer = original;
+      };
+      File.prototype.arrayBuffer = async function () {
+        const bytes = await original.call(this);
+        if (this.name !== name) return bytes;
+        window.heldFileReadEntered = true;
+        return new Promise((accept) => {
+          window.releaseFileRead = () => accept(bytes);
+        });
+      };
+    }, selected.name);
+    await page.locator("#files").setInputFiles([selected]);
+    await page.waitForFunction(() => window.heldFileReadEntered);
+    await page.locator("#files").setInputFiles([real[0]]);
+    await page.waitForFunction(() =>
+      document.getElementById("status").textContent.includes("NOT_VERIFIED"),
+    );
+    await page.evaluate(() => {
+      window.releaseFileRead();
+      window.restoreFileReader();
+    });
+    await page.evaluate(() => new Promise((accept) => setTimeout(accept, 150)));
+    await empty();
+    checked(
+      `stale successful ${selected.name} file read cannot overwrite a newer failed selection`,
+    );
+  }
   await load();
   await page
     .locator("#receipt")
@@ -467,6 +557,38 @@ try {
   assert.match(
     await page.locator("#raw").textContent(),
     /"chargedCostUsd": null/,
+  );
+  await page.locator('[data-track="F"]').click();
+  assert.equal(await page.locator("#repair-attempts article").count(), 2);
+  const text = await page.locator("#repair").textContent();
+  for (const expected of [
+    "REAL generation",
+    "REAL repair",
+    "0.10929375 ESTIMATE_ONLY / null",
+    "per-step improvements unknown",
+    "capacity",
+    "6 executed",
+    "5 executed",
+    "7 executed",
+    "nonfinal",
+  ]) {
+    assert.ok(text.includes(expected), expected);
+  }
+  for (const a of TRACK_F_PINS.attempts)
+    assert.ok(text.includes(a.candidateSha256));
+  for (const article of await page.locator("#repair-attempts article").all()) {
+    assert.match(
+      await article.locator(".gate-strip").textContent(),
+      /G0 INCONCLUSIVEG1 PASSG2 FAILG3 FAILG4 INCONCLUSIVE/,
+    );
+    assert.deepEqual(await article.locator("tbody tr").allTextContents(), [
+      "businessPASSFAIL6 executedFAIL7 executed",
+      "rejectedPASSFAIL5 executedFAIL6 executed",
+      "capacityPASSPASS6 executedPASS7 executed",
+    ]);
+  }
+  checked(
+    "F before/after preserves both real responses, distinct identities, exact per-scenario verdicts and unknown billing/deltas",
   );
   assert.deepEqual(errors, []);
   assert.deepEqual(externalRequests, []);
