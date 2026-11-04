@@ -6,18 +6,18 @@ The delivered exact HEAD and matching Fast CI are attached to the Draft PR;
 independent review/merge remains pending. No production file, workflow, fixture,
 Oracle/comparator, prompt, timeout or recipe pin changed.
 
-| ACTUALLY_RUN | Result / exit |
-| --- | --- |
-| `pnpm install --frozen-lockfile` | PASS / 0, Windows; repeated in disposable Linux checkout / 0 |
-| `pnpm lint` | PASS / 0; four existing warnings and two infos in unrelated files |
-| `pnpm typecheck` | PASS / 0 |
-| `pnpm test` | PASS / 0; 920 tests, 807 PASS, 113 platform/environment SKIP, 0 FAIL |
-| `pnpm build` | PASS / 0 (also executed by typecheck/test and on Linux) |
-| `pnpm --filter @metamorph/target-worker test` | PASS / 0; 69/69 |
-| `node --test packages/agent-real/test/owner-local-g1.test.mjs` | PASS / 0; 11/11 on Windows/root suite and 11/11 on Linux |
+| ACTUALLY_RUN                                                                                     | Result / exit                                                            |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `pnpm install --frozen-lockfile`                                                                 | PASS / 0, Windows; repeated in disposable Linux checkout / 0             |
+| `pnpm lint`                                                                                      | PASS / 0; four existing warnings and two infos in unrelated files        |
+| `pnpm typecheck`                                                                                 | PASS / 0                                                                 |
+| `pnpm test`                                                                                      | PASS / 0; 920 tests, 807 PASS, 113 platform/environment SKIP, 0 FAIL     |
+| `pnpm build`                                                                                     | PASS / 0 (also executed by typecheck/test and on Linux)                  |
+| `pnpm --filter @metamorph/target-worker test`                                                    | PASS / 0; 69/69                                                          |
+| `node --test packages/agent-real/test/owner-local-g1.test.mjs`                                   | PASS / 0; 11/11 on Windows/root suite and 11/11 on Linux                 |
 | `MMP176_TEST_TOOLS=<qualified-test-tools> node --test research/mmp-176/synthetic-acceptance.mjs` | PASS / 0; 6/6 Linux, real pinned age + generated TEST keys + real Docker |
-| Biome on new research files with standalone recommended config | PASS / 0 |
-| Authenticated run/artifact API + original public ZIP download/hash/structure | PASS / 0; exact metadata and `custody-stored.json` binding checked |
+| Biome on new research files with standalone recommended config                                   | PASS / 0                                                                 |
+| Authenticated run/artifact API + original public ZIP download/hash/structure                     | PASS / 0; exact metadata and `custody-stored.json` binding checked       |
 
 Linux acceptance: isolated disposable **source checkout**, Node `v22.22.1`, Docker
 server `29.9.2`. This was not an offline owner-private VM. Trusted image preparation
@@ -58,15 +58,15 @@ research-lint check caught cleanup-precedence control flow in `finally`; the
 function now performs explicit cleanup after capturing a preparation error, with
 cleanup failure taking precedence. Neither finding involved private data.
 
-| NOT_RUN | Status / reason |
-| --- | --- |
-| Owner ciphertext download/retention | OWNER_ACTION_REQUIRED; agent did not download genuine candidate ciphertext |
-| Real owner-key possession, restore or G1 replay | NOT_RUN; owner-exclusive separate context |
+| NOT_RUN                                                             | Status / reason                                                                                      |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Owner ciphertext download/retention                                 | OWNER_ACTION_REQUIRED; agent did not download genuine candidate ciphertext                           |
+| Real owner-key possession, restore or G1 replay                     | NOT_RUN; owner-exclusive separate context                                                            |
 | End-to-end owner CLI private phase under externally disconnected VM | NOT_RUN; tested component path with generated keys, actual private guard refuses current environment |
-| Historical #41749479450 G1 subtype | UNKNOWN; the synthetic result proves nothing about that candidate |
-| New Meta POST, paid dispatch/rerun, OIDC paid admission | NOT_RUN; not authorized |
-| Real G2 17 HTTP / G3 20 SQLite / formal G4 | NOT_RUN in this task; product NOT_ESTABLISHED, G0/G4 INCONCLUSIVE |
-| Independent review / merge | PENDING; Draft PR only, no self-merge |
+| Historical #41749479450 G1 subtype                                  | UNKNOWN; the synthetic result proves nothing about that candidate                                    |
+| New Meta POST, paid dispatch/rerun, OIDC paid admission             | NOT_RUN; not authorized                                                                              |
+| Real G2 17 HTTP / G3 20 SQLite / formal G4                          | NOT_RUN in this task; product NOT_ESTABLISHED, G0/G4 INCONCLUSIVE                                    |
+| Independent review / merge                                          | PENDING; Draft PR only, no self-merge                                                                |
 
 **Decision: OWNER_ACTION_REQUIRED / NO_GO for agent-run real replay.** The next
 action with the greatest immediate value is owner retention of the exact
