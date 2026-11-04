@@ -235,11 +235,13 @@ export function generationScorecard({
             ? "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_SEND_UNKNOWN"
             : "FIRST_PUBLIC_FAIL_SIGNED_REPAIR_NOT_DISPATCHED"
         : "PUBLIC_FAIL_SIGNED_REPAIR_NOT_IMPLEMENTED"
-    : receipt?.status === "ERROR" && attempted === 1
-      ? "GENERATION_ERROR_NO_RETRY"
-      : execution === "NOT_ESTABLISHED"
-        ? "LIVE_EXECUTION_NOT_ESTABLISHED"
-        : outcome.code;
+    : trial?.blockers?.includes("CUSTODY_CAPTURE_FAILED")
+      ? "CUSTODY_CAPTURE_FAILED_NO_ORACLE"
+      : receipt?.status === "ERROR" && attempted === 1
+        ? "GENERATION_ERROR_NO_RETRY"
+        : execution === "NOT_ESTABLISHED"
+          ? "LIVE_EXECUTION_NOT_ESTABLISHED"
+          : outcome.code;
   return {
     format: "mmp154-generation-scorecard-v1",
     evidenceBasis: "RECORDED_TRUSTED_ADAPTER_RECEIPTS",

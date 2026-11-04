@@ -1,6 +1,6 @@
 import { ModelResponseSchema } from "@metamorph/agent";
 import { admitDirectory } from "../../target-worker/src/admission.mjs";
-import { captureLease } from "./custody-capture.mjs";
+import { CUSTODY_CAPTURE_STAGES, captureLease } from "./custody-capture.mjs";
 import {
   consumeOraclePermit,
   custodyVerificationLink,
@@ -11,6 +11,28 @@ import { createProductionMigrationProvider } from "./migration-provider.mjs";
 import { publicAttempt } from "./report.mjs";
 import { createEnvironment, RealVerifier } from "./runtime.mjs";
 import { createSourceSession } from "./source.mjs";
+
+/** Pure post-capture outcome resolution. A failed capture keeps its own
+ * coarse stage even when the release also fails; a successful capture whose
+ * release fails is a real post-capture integrity finding and fails closed
+ * as SOURCE_LEASE_CHANGED. Null means the capture and release both proved
+ * the candidate source intact. */
+export function resolveCaptureOutcome({
+  captureFailed,
+  captureStage = null,
+  releaseFailed,
+}) {
+  if (captureFailed)
+    return {
+      blocker: "CUSTODY_CAPTURE_FAILED",
+      stage: CUSTODY_CAPTURE_STAGES.includes(captureStage)
+        ? captureStage
+        : "UNKNOWN",
+    };
+  if (releaseFailed)
+    return { blocker: "CUSTODY_CAPTURE_FAILED", stage: "SOURCE_LEASE_CHANGED" };
+  return null;
+}
 
 /** Missing admission is a first-class result before filesystem/worker effects.
  * Keep production construction here: callers cannot inject a synthetic provider
@@ -162,7 +184,9 @@ async function runPaidAttempt({
       "SOURCE_IDENTITY",
     );
     let custody,
-      captureFailed = false;
+      captureFailed = false,
+      captureStage = null,
+      releaseFailed = false;
     try {
       custody = await captureLease(
         custodyAttempt,
@@ -171,16 +195,35 @@ async function runPaidAttempt({
         signal,
         attempt,
       );
-    } catch {
+    } catch (error) {
       captureFailed = true;
-    } finally {
+      // Coarse allowlisted stage only (see CUSTODY_CAPTURE_STAGES): the
+      // original error never crosses; the stage grants nothing and the
+      // capture stays fail-closed.
+      captureStage = CUSTODY_CAPTURE_STAGES.includes(error?.custodyStage)
+        ? error.custodyStage
+        : "UNKNOWN";
+    }
+    // Release re-admits the source fresh: a failure here is a real
+    // post-capture integrity finding, never masked and never masking the
+    // capture outcome above. The candidate root is not exposed in either
+    // failure branch, so no stored/Oracle transfer can start from it.
+    try {
       await lease.release();
+    } catch {
+      releaseFailed = true;
     }
     result.modelGeneration = "GENERATED";
     result.aiGeneration =
       attempt === 1 ? "REAL_INFERENCE_GENERATED" : "REAL_INFERENCE_REPAIRED";
-    if (captureFailed) {
+    const captureOutcome = resolveCaptureOutcome({
+      captureFailed,
+      captureStage,
+      releaseFailed,
+    });
+    if (captureOutcome !== null) {
       result.blockers = ["CUSTODY_CAPTURE_FAILED"];
+      result.custodyCaptureStage = captureOutcome.stage;
       return result;
     }
     result.custody = custody;

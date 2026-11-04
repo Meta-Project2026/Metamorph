@@ -7,6 +7,11 @@ import { paidPreflight } from "../../packages/agent-real/src/meta-paid-authoriza
 import { commitPreflight } from "../../packages/agent-real/src/migration-preflight.mjs";
 import { bindMigrationContext } from "../../packages/agent-real/src/migration-context.mjs";
 import { runPublicMigration } from "../../packages/agent-real/src/migration-trial.mjs";
+import {
+  custodyReadiness,
+  CUSTODY_READINESS,
+} from "../../packages/agent-real/src/custody-readiness.mjs";
+import { DIAGNOSTIC_POLICY } from "../../packages/agent-real/src/private-diagnostics.mjs";
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const output = join(process.env.RUNNER_TEMP, "meta-paid-public");
 const privateRoot = join(process.env.RUNNER_TEMP, "meta-paid-private");
@@ -26,6 +31,19 @@ process.on("SIGTERM", stop); process.on("SIGINT", stop);
 let result;
 try {
   const context = bindMigrationContext(readFileSync(join(root, "research/mmp-061/public-source.json"), "utf8"));
+  // Credential-free custody readiness BEFORE any paid send: an environment
+  // that cannot encrypt/store the candidate must not cost a generation.
+  // Read-only checks (pinned age tool hash, worker file, Docker daemon and
+  // pinned encryptor image); the verdict grants nothing by itself.
+  const readiness = await custodyReadiness({
+    agePath: join(process.env.RUNNER_TEMP, "mmp089-tools/age"),
+    workerPath: join(root, "research/mmp-089/encrypt-worker.mjs"),
+    image: DIAGNOSTIC_POLICY.image,
+    expectedAgeSha256: DIAGNOSTIC_POLICY.ageSha256,
+  });
+  if (readiness !== "READY") {
+    throw Object.assign(new Error(readiness), { code: readiness });
+  }
   // The signed two-attempt plan reserves BOTH sends (generation + bounded
   // repair projection) before the first POST; the POST itself is unchanged.
   const mode = process.env.MMP158_EXECUTION_MODE === "generate_then_repair" ? "generate_then_repair" : "single_generation";
@@ -45,7 +63,10 @@ try {
   }
   console.log(`META_PAID ${result.modelGeneration}; attempts=${result.generatedRequests}; charged=UNKNOWN`);
 } catch (error) {
-  save("trial.json", result ? { ...result, blockers: ["POST_GENERATION_TRANSFER_OR_RECEIPT_ERROR"] } : { modelGeneration: "BLOCKED", code: safePaidAdmissionCode(error), publicG1: "NOT_RUN", publicG2: "NOT_RUN", publicG3: "NOT_RUN", G0: "INCONCLUSIVE", G4: "INCONCLUSIVE", product: "NOT_ESTABLISHED", chargedCostUsd: null });
+  // Readiness refusals surface their fixed verdict (CUSTODY_READINESS enum)
+  // instead of the generic admission code; both stay public-safe enums.
+  const readinessBlocked = CUSTODY_READINESS.includes(error?.code);
+  save("trial.json", result ? { ...result, blockers: ["POST_GENERATION_TRANSFER_OR_RECEIPT_ERROR"] } : { modelGeneration: "BLOCKED", code: readinessBlocked ? error.code : safePaidAdmissionCode(error), blockers: readinessBlocked ? ["CUSTODY_NOT_READY"] : undefined, publicG1: "NOT_RUN", publicG2: "NOT_RUN", publicG3: "NOT_RUN", G0: "INCONCLUSIVE", G4: "INCONCLUSIVE", product: "NOT_ESTABLISHED", chargedCostUsd: null });
   console.error("META_PAID_BLOCKED"); process.exitCode = 1;
 } finally {
   process.removeListener("SIGTERM", stop); process.removeListener("SIGINT", stop);
