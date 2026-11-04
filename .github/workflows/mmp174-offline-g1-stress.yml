@@ -1,0 +1,69 @@
+name: MMP-174 Hosted G1 Stress Qualification
+
+on:
+  push:
+    branches:
+      - 'research/mmp-174-*'
+    paths:
+      - '.github/workflows/mmp174-offline-g1-stress.yml'
+      - 'packages/target-worker/**'
+      - 'packages/agent-real/**'
+      - 'research/mmp-174/**'
+      - '.gitattributes'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mmp174-hosted-g1-stress-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  stress-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Runner Environment Diagnostic
+        run: |
+          echo "=== RUNNER ENVIRONMENT ==="
+          uname -a
+          docker version
+          git rev-parse HEAD
+          git status --porcelain=v1
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages
+        run: pnpm build
+
+      - name: Verify deterministic qualification unit tests
+        run: |
+          node --test packages/agent-real/test/g1-stress.test.mjs
+          node --test research/mmp-174/stress.test.mjs
+
+      - name: Run Hosted G1 Stress Qualification Harness (3 Trials per Tier, 9 Total)
+        id: run_harness
+        run: node research/mmp-174/measure-stress.mjs --trials-per-tier=3
+
+      - name: Upload Sanitized Stress Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmp174-hosted-stress-results
+          path: research/mmp-174/stress-results.json
+          if-no-files-found: warn
