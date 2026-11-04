@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "audit:isolated": "node src/run.mjs"
+    "audit:isolated": "node src/run.mjs",
+    "g0:synthetic": "node src/g0/cli.mjs synthetic",
+    "g0:run": "node src/g0/cli.mjs run",
+    "g0:finalize": "node src/g0/cli.mjs finalize"
   },
   "dependencies": {
     "@metamorph/oracle": "workspace:*",
