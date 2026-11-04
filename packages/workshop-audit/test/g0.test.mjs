@@ -859,3 +859,49 @@ test("POSIX G0 staging and evidence reject links and permission tamper", {
     rmSync(parent, { recursive: true, force: true });
   }
 });
+
+test("G0 native denial requires the pinned Node addon-disabled code", async () => {
+  // Hermetic observation model: no real filesystem, process, native or network
+  // API is exposed. This tests probe classification, not Docker enforcement.
+  for (const code of [
+    "ERR_DLOPEN_DISABLED",
+    "ERR_DLOPEN_FAILED",
+    "ERR_ACCESS_DENIED",
+    null,
+  ]) {
+    let result,
+      nativeCalls = 0;
+    const denied = () => {
+      throw Object.assign(new Error("model denial"), {
+        code: "ERR_ACCESS_DENIED",
+      });
+    };
+    const modules = {
+      "node:fs": { readFileSync: denied, readdirSync: denied },
+      "node:net": { createConnection: denied },
+      "node:child_process": { spawnSync: denied },
+    };
+    await new Script(DENIAL_PROBE).runInNewContext({
+      require(name) {
+        assert.ok(Object.hasOwn(modules, name));
+        return modules[name];
+      },
+      process: {
+        dlopen() {
+          nativeCalls++;
+          if (code) throw Object.assign(new Error("model native"), { code });
+        },
+      },
+      console: {
+        log(value) {
+          result = JSON.parse(value);
+        },
+      },
+    });
+    assert.equal(nativeCalls, 1);
+    assert.equal(result.native, code === "ERR_DLOPEN_DISABLED", String(code));
+    assert.ok(
+      Object.entries(result).every(([key, value]) => key === "native" || value),
+    );
+  }
+});
