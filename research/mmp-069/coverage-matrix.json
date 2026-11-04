@@ -87,7 +87,7 @@
       "scripts": {
         "lint": "biome check .",
         "typecheck": "pnpm build && pnpm -r typecheck",
-        "test": "pnpm build && node --test packages/contracts/test/contracts.test.mjs apps/server/test/health.test.mjs packages/agent/test/*.test.mjs packages/oracle/test/oracle.test.mjs packages/integration/test/*.test.mjs packages/agent-real/test/*.test.mjs packages/evidence-retention/test/*.test.mjs",
+        "test": "pnpm build && node --test packages/contracts/test/contracts.test.mjs apps/server/test/health.test.mjs packages/agent/test/*.test.mjs packages/oracle/test/oracle.test.mjs packages/integration/test/*.test.mjs packages/agent-real/test/*.test.mjs packages/evidence-retention/test/*.test.mjs packages/g4-registry/test/*.test.mjs",
         "build": "pnpm -r build",
         "start": "pnpm --filter @metamorph/server start",
         "demo:agent": "pnpm build && pnpm --filter @metamorph/agent demo",
@@ -150,6 +150,13 @@
         "build": "tsc -p tsconfig.json",
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "pnpm --filter @metamorph/oracle... build && node --test test/*.test.mjs"
+      }
+    },
+    {
+      "path": "packages/g4-registry",
+      "name": "@metamorph/g4-registry",
+      "scripts": {
+        "test": "node --test test/*.test.mjs"
       }
     },
     {
