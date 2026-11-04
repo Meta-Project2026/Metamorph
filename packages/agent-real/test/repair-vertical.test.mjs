@@ -414,7 +414,7 @@ test("plan card reserves both sends before the first POST", () => {
     card.worstCaseEstimatedUsd + repairProjection().worstCaseEstimatedUsd,
   );
   assert.ok(card.aggregateWorstCaseEstimatedUsd <= 1);
-  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.836604) < 1e-9);
+  assert.ok(Math.abs(card.aggregateWorstCaseEstimatedUsd - 0.840829) < 1e-9);
   assert.equal(card.confirmation, "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP");
   // An allowance that cannot cover the pessimistic aggregate is refused.
   assert.throws(
