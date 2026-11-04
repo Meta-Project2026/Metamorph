@@ -72,3 +72,28 @@ private key stays on that owner's machine. Only generated ephemeral TEST identit
 be used by this task's offline exercise; a test restore is not owner-key possession proof.
 The module-only testRecipient parameter is for trusted generated-key controls; the CLI
 has no recipient override and never reads one from a capsule or environment.
+
+## Current status addendum — 2026-11-04 (append-only; the snapshot above is preserved)
+
+Post-snapshot facts, each within its own evidence boundary: the full production
+chain for one real candidate was executed in paid run
+[#41505679809](https://github.com/Meta-Project2026/Metamorph/actions/runs/41505679809)
+at exact `main@a01bb65f8bb58c02c7a59e06ffedc9662576478e` — generate (candidate
+`6140dbed…`), custody capture/encrypt (`CAPTURED_UNVERIFIED` →
+`CHECKPOINT_READY_UNVERIFIED` → `STORED_UNVERIFIED`), pre-Oracle finalizer 0/0/0,
+authenticated artifact upload (13169609004, ciphertext SHA `1afcc2a0…`, 31094
+bytes) and exact-ID readback verified against the public receipt, then Oracle
+`G1=PASS G2=FAIL G3=FAIL` and post-Oracle finalizer 0/0/0. Custody repeated with
+cleanups 0/0/0 in run #41856569137 (artifact 13338306385). The earlier sentence
+"Full production generate/capture/transport/readback/Oracle E2E and actual
+owner-key restore remain NOT_RUN" is therefore **superseded for this specific
+candidate/run**: the E2E chain ran, and `OWNER_RESTORE_PASS` for artifact
+13169609004 is `owner-reported` (2026-11-02, #115) — attested by the owner with
+the private age identity offline, not independently rerun by any agent or
+reviewer. The acceptance verdict and matrix live in
+[`research/issue-closeout-2026-11-04/115-custody-acceptance.md`](../issue-closeout-2026-11-04/115-custody-acceptance.md).
+Unchanged: this is not formal G4 dual-domain durability (#55/#57), not product
+acceptance (#61 NOT_ESTABLISHED); artifacts are GitHub-public-downloadable for
+seven days, not owner-only or revocable; `STORED_UNVERIFIED` refers to pre-Oracle
+product verification state only; cross-revision capsule restore compatibility is
+still NOT_RUN. Custody artifacts for this run expire 2026-11-09 ~19:00 UTC.
