@@ -28,6 +28,7 @@ const runtime = {
   recipeSha: "a".repeat(64),
 };
 let fault = null,
+  cleanupMs = policy.LIMITS.cleanupMs,
   stuck = false,
   backgroundCapture = false,
   finalizations = 0,
@@ -36,7 +37,9 @@ let fault = null,
 class ObservedDocker extends G0Docker {
   constructor(runId, sink) {
     super(runId, sink, {
-      cleanupMs: 25,
+      // Integrity controls use the normal bounded budget. Timeout controls
+      // opt into their own tight deadline rather than constraining every run.
+      cleanupMs,
       execute: (args) =>
         args[0] === "start"
           ? new Promise((resolve) => {
@@ -129,6 +132,7 @@ async function inPrivateParent(fn) {
     await fn(parent);
   } finally {
     stuck = false;
+    cleanupMs = policy.LIMITS.cleanupMs;
     backgroundCapture = false;
     fault = null;
     rmSync(parent, { recursive: true, force: true });
@@ -151,13 +155,41 @@ function corruptSeal(t, predicate) {
     return proof;
   });
 }
+function advanceCleanupCapture(t, milliseconds) {
+  const now = performance.now.bind(performance);
+  const record = Evidence.prototype.record;
+  let offset = 0;
+  t.mock.method(performance, "now", () => now() + offset);
+  t.mock.method(Evidence.prototype, "record", function (kind, value) {
+    const result = record.call(this, kind, value);
+    // Model a scheduler/fsync pause after the first normal inventory capture.
+    // Keep real cleanup, evidence, deadline checks and finalization in the path.
+    if (
+      offset === 0 &&
+      this === active.sink &&
+      kind === "command" &&
+      value?.args?.[0] === "container"
+    )
+      offset = milliseconds;
+    return result;
+  });
+  return () =>
+    assert.equal(offset, milliseconds, "cleanup delay was exercised");
+}
+
 test("behavioral failure followed by post-seal tamper is ERROR with both findings retained", async (t) => {
   await inPrivateParent(async (parent) => {
     const output = join(parent, "static");
+    const delayed = advanceCleanupCapture(t, 50);
+    const before = finalizations;
     corruptSeal(t, (root) => root === output);
     const receipt = await run(fixtures[1], output);
+    delayed();
     assert.equal(receipt.verdict, "ERROR");
     assert.deepEqual(receipt.faults, ["G0_CHALLENGE", "G0_EVIDENCE"]);
+    assert.deepEqual(receipt.cleanup, zero);
+    assert.ok(receipt.controls.includes("cleanup"));
+    assert.equal(finalizations, before + 1);
     assert.equal(receipt.evidenceVerified, false);
     assert.equal(
       JSON.parse(readFileSync(join(output, "receipt.json"))).verdict,
@@ -165,6 +197,35 @@ test("behavioral failure followed by post-seal tamper is ERROR with both finding
     );
   });
 });
+test("explicit tight cleanup deadline retains cleanup and evidence faults after delayed capture", async (t) => {
+  await inPrivateParent(async (parent) => {
+    cleanupMs = 25;
+    const output = join(parent, "delayed");
+    const delayed = advanceCleanupCapture(t, 50);
+    const before = finalizations;
+    corruptSeal(t, (root) => root === output);
+    const receipt = await run(fixtures[1], output);
+    delayed();
+    assert.equal(receipt.verdict, "ERROR");
+    assert.deepEqual(receipt.faults, [
+      "G0_CHALLENGE",
+      "G0_CLEANUP",
+      "G0_EVIDENCE",
+    ]);
+    assert.equal(receipt.cleanup, null);
+    assert.equal(receipt.evidenceVerified, false);
+    assert.equal(finalizations, before + 1);
+    assert.deepEqual(
+      { ...receipt.finalizer, evidence: undefined },
+      { ...zero, evidence: undefined },
+    );
+    assert.throws(
+      () => consumePass(receipt, receipt.identity),
+      /G0_UNTRUSTED_RECEIPT/,
+    );
+  });
+});
+
 test("qualification rejects a live negative control with failed capture integrity", async (t) => {
   await inPrivateParent(async (parent) => {
     corruptSeal(t, (root) => root === join(parent, "static"));
@@ -220,6 +281,7 @@ test("a swallowed background capture error still overrides the original behavior
 test("abort-ignoring work cannot block the separate ledger finalizer or mutate sealed evidence later", async () => {
   await inPrivateParent(async (parent) => {
     stuck = true;
+    cleanupMs = 25;
     const before = finalizations;
     const output = join(parent, "stuck");
     let guard;
@@ -232,8 +294,9 @@ test("abort-ignoring work cannot block the separate ledger finalizer or mutate s
       ]);
       assert.notEqual(receipt, "HUNG");
       assert.equal(receipt.verdict, "ERROR");
-      assert.ok(receipt.faults.includes("G0_CLEANUP"));
+      assert.deepEqual(receipt.faults, ["G0_CHALLENGE", "G0_CLEANUP"]);
       assert.equal(receipt.cleanup, null);
+      assert.equal(receipt.evidenceVerified, true);
       assert.equal(finalizations, before + 1);
       assert.deepEqual(
         { ...receipt.finalizer, evidence: undefined },
@@ -243,6 +306,16 @@ test("abort-ignoring work cannot block the separate ledger finalizer or mutate s
       await new Promise((resolve) => setImmediate(resolve));
       verifyEvidence(output, receipt.evidence);
       await assert.rejects(() => active.call(["rm", "late"]), /G0_CANCELLED/);
+      stuck = false;
+      cleanupMs = policy.LIMITS.cleanupMs;
+      const receipts = [];
+      for (const fixture of fixtures)
+        receipts.push(
+          fixture === fixtures[1]
+            ? receipt
+            : await run(fixture, join(parent, fixture.id)),
+        );
+      await assert.rejects(() => qualifyAdapter(receipts), /G0_CONTROL_FAILED/);
     } finally {
       clearTimeout(guard);
     }
@@ -256,6 +329,10 @@ test("verified live controls still qualify; copies have no authority and real pr
     for (const receipt of receipts)
       assert.equal(receipt.evidenceVerified, true);
     await assert.rejects(
+      () => qualifyAdapter(receipts.slice(1)),
+      /G0_CONTROL_FAILED/,
+    );
+    await assert.rejects(
       () => qualifyAdapter(structuredClone(receipts)),
       /G0_CONTROL_FAILED/,
     );
@@ -263,6 +340,14 @@ test("verified live controls still qualify; copies have no authority and real pr
     const receipt = await run(fixtures[0], join(parent, "qualified"));
     assert.equal(receipt.verdict, "PASS");
     assert.equal(receipt.realCandidate, "NOT_RUN");
+    assert.throws(
+      () =>
+        consumePass(receipt, {
+          ...receipt.identity,
+          candidateSha: "f".repeat(64),
+        }),
+      /G0_UNTRUSTED_RECEIPT/,
+    );
     assert.equal(consumePass(receipt, receipt.identity), receipt);
     assert.throws(
       () => consumePass(receipt, receipt.identity),
