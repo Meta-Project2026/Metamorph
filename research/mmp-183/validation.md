@@ -75,7 +75,8 @@ Neither result is counted as a product regression. An initial sandbox formatter
 attempt exited 1 when pnpm's store symlink was denied. Host-permission reruns
 below succeeded; these environment failures are retained, not reclassified PASS.
 
-Final local checks used Node `v24.21.0`, pinned pnpm `11.25.0`, Windows PowerShell,
+Initial remediation local checks (committed as `1b39aabd926c39a327e2a952b1a3c78c49e9bba4`)
+used Node `v24.21.0`, pinned pnpm `11.25.0`, Windows PowerShell,
 the merged 12-package workspace and only original public/synthetic fixtures.
 Normal host permissions were used for pnpm and evidence/ownership tests after
 the observed sandbox failures. No candidate/probe programs ran on the host.
@@ -120,3 +121,48 @@ POSIX Windows skips remain NOT_RUN locally. Green Fast CI is implementation
 evidence only. Independent exact-head ChatGPT re-review, real Linux Docker fault
 qualification and owner-local authenticated candidate admission remain pending;
 PR #184 stays Draft, #183 stays open and product acceptance is NOT_ESTABLISHED.
+
+### Hosted cleanup race found and corrected before re-review
+
+[Fast CI 41897530820](https://github.com/Meta-Project2026/Metamorph/actions/runs/41897530820)
+at initial remediation HEAD `1b39aabd926c39a327e2a952b1a3c78c49e9bba4`, merge-ref
+`f52df59984ac9008aca7bf1f9ebe3f576e0f4c6e`, **FAILED** on both Node22 job
+`126810957501` and Node24 job `126810957644`. Both passed install/lint/typecheck/
+root tests/build and earlier boundary checks, then workshop-audit exited 1:
+78 pass / 1 fail / 0 skip. The strict abort-ignoring-cleanup regression observed
+two (Node22) or three (Node24) commands where only one was safe. The later
+coverage steps were skipped, not PASS. The merge tree matched HEAD tree
+`3d5eb02862af48739a863acadd650a5c43df07d4`; this is a real implementation FAIL,
+not an environment error or evidence for a real Docker verdict.
+
+Cause: a fractional-duration timer can fire just before the monotonic deadline;
+remaining clock time then allowed another cleanup command while the timed-out
+operation still ignored abort. The correction adds a sticky cleanup-uncertainty
+interlock and requires zero pending underlying commands before another cleanup
+operation. It preserves the strict command-count assertion and exact-ID labels.
+The independent finalizer uses its own fresh adapter and remains available.
+
+A deterministic local regression gives cleanup one second but its first command
+only five milliseconds. Before the interlock it exited 1 (0 pass / 1 fail,
+two commands started). After the fix, that case and the existing cleanup-budget
+case both passed (exit 0, 2 pass / 0 fail). No test or timeout was weakened.
+
+Final targeted local reruns after this correction:
+
+| Command | Exit / actual result |
+| --- | --- |
+| Scoped Biome format | 0; Docker adapter and G0 test only |
+| `pnpm install --frozen-lockfile` | 0; lockfile unchanged |
+| `pnpm lint` | 0; same four existing warnings/two infos |
+| `pnpm typecheck` | 0 |
+| `pnpm test` | 0; 947 pass / 131 platform skips / 0 fail |
+| `pnpm build` | 0 |
+| `pnpm --filter @metamorph/workshop-audit test` | 0; 78 pass / 2 Windows skips / 0 fail |
+| `node --test packages/workshop-audit/test/g0.test.mjs` | 0; 25 pass / 1 Windows POSIX skip / 0 fail, including the seven inner lifecycle controls |
+| `node research/mmp-069/validate.mjs` | 0; VALID, 12 packages; privileged runner NOT_RUN |
+| `node --test research/mmp-069/validate.test.mjs` | 0; 45 pass / 0 fail / 0 skip |
+| `git diff --check` | 0 |
+
+The final exact HEAD, full check rerun results and replacement hosted Fast CI
+run/merge-ref are recorded in the PR follow-up. The failed run above remains
+part of the history; it was not rerun or renamed success.

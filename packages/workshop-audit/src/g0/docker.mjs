@@ -223,6 +223,8 @@ export class G0Docker {
     const remaining =
       (cleanup ? this.cleanupDeadline : this.deadline) - performance.now();
     check(remaining > 0, cleanup ? "G0_CLEANUP" : "G0_TIMEOUT");
+    if (cleanup)
+      check(!this.cleanupUncertain && this.pending.size === 0, "G0_CLEANUP");
     if (!cleanup)
       check(
         !this.closing && !this.workAbort.signal.aborted && !signal?.aborted,
@@ -250,13 +252,21 @@ export class G0Docker {
       () => this.pending.delete(task),
       () => this.pending.delete(task),
     );
-    const result = await bounded(
-      task,
-      duration,
-      cleanup ? "G0_CLEANUP" : "G0_TIMEOUT",
-      abort,
-      cancellation,
-    );
+    let result;
+    try {
+      result = await bounded(
+        task,
+        duration,
+        cleanup ? "G0_CLEANUP" : "G0_TIMEOUT",
+        abort,
+        cancellation,
+      );
+    } catch (e) {
+      // Timers may fire just before the monotonic deadline. The unresolved
+      // operation itself, not remaining clock time, prohibits another mutation.
+      if (cleanup) this.cleanupUncertain = true;
+      throw e;
+    }
     if (!cleanup) check(!this.closing, "G0_CANCELLED");
     check(
       performance.now() < (cleanup ? this.cleanupDeadline : this.deadline),

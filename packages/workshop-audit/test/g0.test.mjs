@@ -606,6 +606,30 @@ test("G0 abort-ignoring cleanup commands cannot overrun close or independent fin
     }
   }
 });
+test("G0 uncertain cleanup blocks another command even before the deadline expires", async () => {
+  const h = harness();
+  h.adapter.cleanupDeadline = performance.now() + 1000;
+  let started = 0;
+  h.adapter.execute = () => {
+    started++;
+    return new Promise(() => {});
+  };
+  await assert.rejects(
+    () =>
+      h.adapter.call(["inspect", "test-only"], { cleanup: true, timeoutMs: 5 }),
+    /G0_CLEANUP/,
+  );
+  assert.ok(performance.now() < h.adapter.cleanupDeadline);
+  await assert.rejects(
+    () => h.adapter.call(["rm", "test-only"], { cleanup: true, timeoutMs: 5 }),
+    /G0_CLEANUP/,
+  );
+  assert.equal(
+    started,
+    1,
+    "no concurrent mutation after a command ignores abort",
+  );
+});
 test("G0 finalizer never deletes a foreign same-prefix container or volume", async () => {
   const h = harness();
   await h.adapter.create("runtime", "/opt/worker/launch.mjs");
