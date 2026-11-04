@@ -25,7 +25,7 @@ on:
         default: '0.10'
         options: ['0.10', '0.20', '0.25', '0.50', '0.75', '1.00']
       model_provider:
-        description: 'Fixed Meta Muse Spark 1.3 Standard; one POST (two in generate_then_repair: one repair); zero retries'
+        description: 'Fixed Meta Muse Spark 1.3 Standard; one POST, or at most two in the explicit v1/v2 repair modes; zero retries'
         type: choice
         default: meta
         options: [meta]
@@ -96,7 +96,6 @@ jobs:
         env:
           MODEL_API_KEY: ${{ secrets.META }}
           GH_TOKEN: ${{ github.token }}
-          MMP158_EXECUTION_MODE: ${{ inputs.execution_mode }}
         run: node research/mmp-078/paid-run.mjs
       - name: Validate real signed authorization without Meta credential or provider invocation
         if: ${{ inputs.validate_only }}

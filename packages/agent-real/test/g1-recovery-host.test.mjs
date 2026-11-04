@@ -1,6 +1,7 @@
 // Signed-shape TEST-only full vertical. Never sends real network requests or
 // executes candidates; Node's test-only loader replaces qualified OS operations.
 import assert from "node:assert/strict";
+import { EventEmitter } from "node:events";
 import {
   existsSync,
   mkdirSync,
@@ -9,6 +10,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import https from "node:https";
 import { registerHooks } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -59,9 +61,98 @@ const { runRepairSend } = await import(
 const { prepareMetaMigration, createMetaMigrationProvider } = await import(
   "../src/meta-migration.mjs"
 );
+const { consumeNativeResponseOrigin } = await import(
+  "../src/meta-migration.mjs"
+);
 const { publicTrialOutcome, generationScorecard, repairExecutionStatus } =
   await import("../src/live-experiment.mjs");
 const linux = { skip: process.platform !== "linux" };
+
+test("credential-free guard records the distinct original v2 policy without a send", async (t) => {
+  const directory = mkdtempSync(join(tmpdir(), "mmp180-guard-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const f = await offlinePaid(t, directory);
+  const event = JSON.parse(readFileSync(f.values.GITHUB_EVENT_PATH, "utf8"));
+  Object.assign(event.inputs, {
+    execution_mode: G1_RECOVERY_MODE,
+    confirm_paid: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+  });
+  writeFileSync(f.values.GITHUB_EVENT_PATH, JSON.stringify(event));
+  delete process.env.MODEL_API_KEY;
+  await import("../../../research/mmp-078/guard.mjs");
+  const policy = JSON.parse(
+    readFileSync(join(directory, "meta-paid-public/policy.json"), "utf8"),
+  );
+  assert.equal(policy.status, "VERIFIED");
+  assert.equal(policy.executionMode, G1_RECOVERY_MODE);
+  assert.equal(policy.maximumPosts, 2);
+  assert.deepEqual(policy.allowedRepairKinds, ["G1_BUILD_RECOVERABLE"]);
+  assert.equal(f.calls.length, 0);
+});
+
+test("native response origin cannot be cloned, changed, reused or issued from admission JSON", async (t) => {
+  const directory = mkdtempSync(join(tmpdir(), "mmp180-native-"));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const f = await offlinePaid(t, directory);
+  const provider = createMetaMigrationProvider(f.context, {
+    authorization: f.authorization,
+  });
+  await provider.provider.generate(
+    {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "generate",
+      attempt: 1,
+      repairFeedback: null,
+    },
+    new AbortController().signal,
+  );
+  const receipt = provider.receipts()[0];
+  assert.throws(
+    () =>
+      consumeNativeResponseOrigin(structuredClone(receipt), f.authorization),
+    { code: "RESPONSE_INVALID" },
+  );
+  const changed = provider.receipts()[0];
+  changed.candidateSha = "f".repeat(64);
+  assert.throws(() => consumeNativeResponseOrigin(changed, f.authorization), {
+    code: "RESPONSE_INVALID",
+  });
+  consumeNativeResponseOrigin(receipt, f.authorization);
+  assert.throws(
+    () => consumeNativeResponseOrigin(provider.receipts()[0], f.authorization),
+    { code: "RESPONSE_INVALID" },
+  );
+  assert.equal(f.calls.length, 1);
+});
+
+for (const field of [
+  "confirm_paid",
+  "model_provider",
+  "max_estimated_usd",
+  "execution_mode",
+])
+  test(`signed v2 refuses wrong ${field}`, async (t) => {
+    const directory = mkdtempSync(join(tmpdir(), "mmp180-optin-"));
+    t.after(() => rmSync(directory, { recursive: true, force: true }));
+    const f = await offlinePaid(t, directory);
+    const event = JSON.parse(readFileSync(f.values.GITHUB_EVENT_PATH, "utf8"));
+    Object.assign(event.inputs, {
+      execution_mode: G1_RECOVERY_MODE,
+      confirm_paid: "I_ACCEPT_TWO_PAID_ATTEMPTS_NO_HARD_CAP",
+    });
+    event.inputs[field] = {
+      confirm_paid: "I_ACCEPT_ONE_PAID_ATTEMPT_NO_HARD_CAP",
+      model_provider: "local",
+      max_estimated_usd: "0.75",
+      execution_mode: "single_generation",
+    }[field];
+    writeFileSync(f.values.GITHUB_EVENT_PATH, JSON.stringify(event));
+    await assert.rejects(
+      authorizePaidWorkflow(f.context, { plan: G1_RECOVERY_MODE }),
+    );
+    assert.equal(f.calls.length, 0);
+  });
 
 async function first(
   t,
@@ -331,6 +422,11 @@ for (const [code, secondFail] of [
       process.env.MODEL_API_KEY = f.values.MODEL_API_KEY;
       await runRepairSend(process.env); // repeated callback/restart cannot create a third POST
       assert.equal(f.calls.length, 2);
+      assert.equal(
+        JSON.parse(readFileSync(join(f.output, "trial-repair.json"), "utf8"))
+          .modelGeneration,
+        "GENERATED",
+      );
       process.exitCode = 0;
     },
   );
@@ -477,5 +573,100 @@ test(
     );
     await assert.rejects(requireG1RepairCapability(process.env, f.context));
     assert.equal(f.calls.length, 1);
+  },
+);
+
+test(
+  "concurrent native repair sessions reserve one second send only",
+  linux,
+  async (t) => {
+    const f = await first(t);
+    process.env.MODEL_API_KEY = f.values.MODEL_API_KEY;
+    const caps = await Promise.all([
+      requireG1RepairCapability(process.env, f.context),
+      requireG1RepairCapability(process.env, f.context),
+    ]);
+    const facts = g1CapabilityDetails(caps[0], f.context);
+    const providers = [];
+    for (const cap of caps) {
+      const auth = await authorizePaidWorkflow(f.context, {
+        plan: G1_RECOVERY_MODE,
+        attempt: 2,
+        feedback: facts.feedback,
+        previousChanges: facts.previousChanges,
+        firstAttemptCandidateSha: facts.firstAttemptCandidateSha,
+        firstAttemptEstimatedUsd: facts.firstAttemptEstimatedUsd,
+        g1Capability: cap,
+      });
+      providers.push(
+        createMetaMigrationProvider(f.context, {
+          authorization: auth,
+          firstAttempt: 2,
+          previousChanges: facts.previousChanges,
+        }),
+      );
+    }
+    const request = {
+      unitId: "workshop-api",
+      tier: "spark",
+      action: "repair",
+      attempt: 2,
+      repairFeedback: facts.feedback,
+    };
+    const outcomes = await Promise.allSettled(
+      providers.map((p) =>
+        p.provider.generate(request, new AbortController().signal),
+      ),
+    );
+    assert.equal(outcomes.filter((o) => o.status === "fulfilled").length, 1);
+    assert.equal(f.calls.length, 2);
+    await assert.rejects(requireG1RepairCapability(process.env, f.context));
+  },
+);
+
+test(
+  "network throw after durable reservation is SEND_UNKNOWN and never retried",
+  linux,
+  async (t) => {
+    const f = await first(t);
+    assert.equal((await compilerRepairGate(process.env)).eligible, true);
+    t.mock.method(https, "request", () => {
+      const req = new EventEmitter();
+      req.destroy = () => {
+        if (!req.destroyed) {
+          req.destroyed = true;
+          queueMicrotask(() => req.emit("close"));
+        }
+      };
+      req.end = (body) => {
+        f.calls.push(body);
+        queueMicrotask(() =>
+          req.emit("error", new Error("PRIVATE_PROVIDER_ERROR")),
+        );
+      };
+      return req;
+    });
+    process.env.MODEL_API_KEY = f.values.MODEL_API_KEY;
+    await runRepairSend(process.env);
+    assert.equal(f.calls.length, 2);
+    const trial = JSON.parse(
+      readFileSync(join(f.output, "trial-repair.json"), "utf8"),
+    );
+    assert.equal(trial.modelGeneration, "ERROR");
+    assert.doesNotMatch(
+      JSON.stringify(trial),
+      /PRIVATE_PROVIDER_ERROR|stack|stderr/,
+    );
+    const ledger = JSON.parse(
+      readFileSync(
+        join(f.directory, `mmp078-${f.values.GITHUB_RUN_ID}-attempt-2.json`),
+        "utf8",
+      ),
+    );
+    assert.equal(ledger.status, "UNKNOWN");
+    await runRepairSend(process.env);
+    assert.equal(f.calls.length, 2);
+    await assert.rejects(requireG1RepairCapability(process.env, f.context));
+    process.exitCode = 0;
   },
 );
