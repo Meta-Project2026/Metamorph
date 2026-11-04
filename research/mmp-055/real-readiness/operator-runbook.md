@@ -11,9 +11,18 @@ authorized D7 epoch.
 
 - [ ] Authenticated D1 + D2 + D4-impl + D4-keys records exist
       ([readiness-worksheet.md](readiness-worksheet.md)).
+- [ ] **Cross-domain I/O design gate resolved**: a separately agreed, jointly
+      reviewed two-domain transfer design exists and is independently verified.
+      Until then the real-media steps below are
+      **`BLOCKED_CROSS_DOMAIN_IO_DESIGN` / `NOT_EXECUTABLE_FOR_REAL_MEDIA`** —
+      the current code writes/reads both copies in one process, requires each
+      root's owner UID to equal the process UID, and refuses non-synthetic
+      deployment ([two-domain-deployment.md §1a](two-domain-deployment.md)).
 - [ ] Independent exact-head security re-review of the #64 B1/B2 remediation recorded.
 - [ ] Domains provisioned per [two-domain-deployment.md](two-domain-deployment.md):
       separate hosts/accounts, `0700`/`0600`, disjoint roots, quotas set.
+      Each store root is owned by its own domain principal; **no candidate
+      author (C) account administers either domain**.
 - [ ] Key ceremony done ([roles-and-key-flow.md](roles-and-key-flow.md) §2);
       witness + authority + owner/reviewer/custodian + recipient keys on their
       own hosts; no key ever on the runner.
@@ -23,15 +32,23 @@ authorized D7 epoch.
 ```sh
 pnpm install --frozen-lockfile
 pnpm --filter @metamorph/evidence-retention test   # regression floor incl. 117-file manifest
-# then drive the real publish with fixture packs using the package's
-# synthetic usage example as the mechanical template — test/fixture.mjs —
-# but with REAL LocalStore roots on the two real domains and REAL witness/
-# reader configs; do not reuse the fixture's mock administration model.
+# then drive publish/witness against SYNTHETIC roots using the package's
+# synthetic usage example (test/fixture.mjs) as the mechanical template.
 ```
 
-Publication needs `publish({input, witness, witnessPublicKey,
-expectedWitnessSha256, stores, nonceRoot, journal})` with `stores` = the two
-real domains ([engine.mjs:54](../../../packages/evidence-retention/src/engine.mjs)).
+**This step is single-process and proves code paths only.** `publish()` and
+`witnessStorage()` operate on both stores from one Node process, and each root
+must be owned by that process's UID — so this rehearsal does **not**
+demonstrate two-domain administration
+([two-domain-deployment.md §1a](two-domain-deployment.md)).
+
+**Gated — real two-domain publish/witness.** Running `publish({… stores:
+[LocalStore(domain1), LocalStore(domain2)] …})` against two real
+independently-owned roots is **not an executable procedure with current code**
+(`BLOCKED_CROSS_DOMAIN_IO_DESIGN`); it becomes available only through the
+separately agreed cross-domain design and its domain-local writer/reader
+execution. Do not attempt a workaround (shared root account, weakened mode
+checks) — none is acceptable ([qualification-plan.md](qualification-plan.md)).
 
 ## 2. Witness receipts (witness host)
 
@@ -40,6 +57,9 @@ real domains ([engine.mjs:54](../../../packages/evidence-retention/src/engine.mj
    public key.
 2. After publication, `witnessStorage` over **both** stores; signed immutable
    storage receipt ([engine.mjs:146](../../../packages/evidence-retention/src/engine.mjs)).
+   On real media this step is inside the same cross-domain gate: current code
+   reads both copies in one process, so the resolved design must define how
+   the witness verifies each domain without both UIDs in one process.
 3. Record blinded public commitment; openings stay in the encrypted private
    bundle; R may verify via restricted path only.
 

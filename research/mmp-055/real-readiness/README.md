@@ -17,8 +17,11 @@ real EXTERNAL_RETENTION NOT_RUN; PR #31 AUDIT_FAIL unchanged.**
 | Authenticated joint owner record, appointments (C/E/R, storage owners, delegates) | **NOT_ESTABLISHED** — no authenticated second-owner signature is invented here |
 | Physical media, custodian machines, keys, escrow | **NOT_SELECTED / NOT_DEPLOYED** |
 | Real deployment, real restore, real day-90 check | **NOT_RUN** |
+| Real two-domain publish/witness/restore execution | **`BLOCKED_CROSS_DOMAIN_IO_DESIGN` / `NOT_EXECUTABLE_FOR_REAL_MEDIA`** even after D1/D2/D4: current code writes/reads both copies in one Node process, requires every root's owner UID to equal the process UID (`0700`), and refuses non-synthetic deployment ([§1a of the deployment doc](two-domain-deployment.md)); needs a separate jointly reviewed cross-domain design + implementation |
+| Storage administration | Candidate author (C) and C-controlled accounts administer **no** retained copy, witness/authority anchor or escrow under every profile; `LIMITED_TWO_PERSON` does not exempt this ([roles doc §1](roles-and-key-flow.md)) |
 | Independent exact-head confirmation of the #64 B1/B2 security remediation | **NOT_RECORDED** (automated Codex review ran at pre-fix head `e538603`; B1/B2 were found by owner review, fixed, but no recorded independent approval at final head `af7a36d`) |
 | #56 registration seam | Synthetic witnessed registry and single-draw journal merged on main ([PR #185](https://github.com/Meta-Project2026/Metamorph/pull/185), commit `e0e971b`, 2026-11-04) — [mmp-056 notes](../../mmp-056/README.md) |
+| Independent review of this package | [Review #5774882140](https://github.com/Meta-Project2026/Metamorph/pull/186#pullrequestreview-5774882140): **HOLD — two P1 findings** (cross-domain I/O; candidate-author administration). Both remediated in this docs update; **re-audit PENDING** |
 
 ## Documents
 
@@ -36,15 +39,17 @@ real EXTERNAL_RETENTION NOT_RUN; PR #31 AUDIT_FAIL unchanged.**
 
 ## Inputs and currency
 
-Prepared 2026-11-04 from re-fetched `origin/main` at
-`e0e971bd8d8c3d1a28c8332d42748e78e59a970a` (the task-card handoff SHA
-`3cf75ae` had already been superseded by [PR #185](https://github.com/Meta-Project2026/Metamorph/pull/185)
-later the same day; this package aligns to the newer state). Read: issues
+Prepared 2026-11-04; first review remediation the same day. Branch reconciled
+with `origin/main` at `3814af2fb8f658d9b50d38789e9daf299b37926e` (PR #184 G0
+slice merged; its inventory/validator changes are preserved untouched). The
+task-card handoff SHA `3cf75ae` had been superseded by [PR #185](https://github.com/Meta-Project2026/Metamorph/pull/185)
+(`packages/g4-registry`, `e0e971b`) before this package was written; both are
+aligned. Read: issues
 [#55](https://github.com/Meta-Project2026/Metamorph/issues/55), [#56](https://github.com/Meta-Project2026/Metamorph/issues/56),
 [#57](https://github.com/Meta-Project2026/Metamorph/issues/57); [PR #64](https://github.com/Meta-Project2026/Metamorph/pull/64)
-including review 5690747718 and the B1/B2 remediation thread; `AGENTS.md`;
-`specs/017-formal-g4/*`; `packages/evidence-retention/` README, source and
-tests; `packages/g4-registry/` (PR #185); `research/mmp-055/v1/*` and
+including review 5690747718 and the B1/B2 remediation thread; [PR #186 review #5774882140](https://github.com/Meta-Project2026/Metamorph/pull/186#pullrequestreview-5774882140);
+`AGENTS.md`; `specs/017-formal-g4/*`; `packages/evidence-retention/` README,
+source and tests; `packages/g4-registry/` (PR #185); `research/mmp-055/v1/*` and
 `research/mmp-056/*`. Every claim below is checked against committed code;
 older research snapshots are cited, not rewritten.
 

@@ -46,6 +46,66 @@ This matches the default target in
 custodian-controlled encrypted primary disk/NAS **plus** physically separate
 encrypted offline medium under independent control.
 
+## 1a. Execution boundary — cross-domain I/O gate (currently blocked)
+
+The section above is the **target** deployment, not an executable procedure
+today. Exact current-code facts (verified against the merged tree):
+
+1. **One process writes and reads both copies.** `publish()` loops
+   `store.put()` over **both** `LocalStore` instances in the same Node process,
+   re-reads both in the same process, and `witnessStorage()` likewise opens and
+   reads **both** copies in one process
+   ([engine.mjs:54–123](../../../packages/evidence-retention/src/engine.mjs), [engine.mjs:146–183](../../../packages/evidence-retention/src/engine.mjs)).
+2. **Each root must be owned by the calling process's own UID.** The POSIX
+   layer requires every root directory to satisfy `uid === process.getuid()`
+   with mode exactly `0700` (files `0600`, `nlink=1`)
+   ([secure-fs.mjs:37–44](../../../packages/evidence-retention/src/secure-fs.mjs)).
+3. **Real media admission is refused.** `LocalStore` and the reader check
+   `config.deployment === "SYNTHETIC_ONLY"` and fail with
+   `REAL_MEDIA_NOT_DEPLOYED` otherwise
+   ([store.mjs:27](../../../packages/evidence-retention/src/store.mjs),
+   [reader.mjs:31](../../../packages/evidence-retention/src/reader.mjs)).
+
+Consequence: **passing two separate real `LocalStore` paths owned by two
+independent Linux UIDs to the existing `publish()`/`witnessStorage()` is not an
+executable procedure.** A single control-plane process holding both roots would
+defeat the claimed administrative separation, and the UID/mode checks reject
+the configuration outright. The synthetic single-process model therefore
+proves code paths only — it does not demonstrate administration of separate
+devices.
+
+**Decision gate: `BLOCKED_CROSS_DOMAIN_IO_DESIGN` /
+`NOT_EXECUTABLE_FOR_REAL_MEDIA`.** This gate applies **even after D1/D2/D4 are
+accepted**: real two-domain publish/witness/restore requires a separate,
+jointly reviewed architectural decision and implementation establishing a
+controlled transfer of encrypted bytes and signed receipts across domains —
+for example domain-local writer/reader processes (one process per domain, each
+running as that domain's admin UID and touching only its own root), or an
+equivalently isolated scheme (e.g. offline transfer of sealed ciphertext and
+domain-minted receipts executed by each domain's administrator). Owners choose
+the variant; **this package does not fix a new shared API or protocol.**
+
+Mandatory acceptance controls whatever variant is chosen: per-operation UID
+attribution (each operation executed under exactly one domain principal); a
+one-process/one-root invariant (no process or principal touches both store
+roots, the witness dir and the authority anchor); domain-locally minted signed
+receipts consumed by an independent witness; scoped transfer credentials for
+the exact operations they serve; a defined offline-medium activation procedure;
+and restore exercised from **each** copy under its own domain principal. The
+`0700`/owner-UID rules are **not** weakened and a shared root account is
+**not** an acceptable workaround.
+
+Concrete questions this adds to the owner decision list: who executes each
+operation and under which UID; which machine/OS principal owns each `0700`
+root; which transfer credentials are issued and for which operations; how the
+offline medium is activated and by whom; how one author/operator is prevented
+from administering both copies; where independent receipts originate; how the
+storage witness verifies both copies without both UIDs in one process; how
+restore proceeds from each copy. These are recorded with the D4 decisions in
+[readiness-worksheet.md](readiness-worksheet.md) and gated in
+[qualification-plan.md](qualification-plan.md) and
+[operator-runbook.md](operator-runbook.md).
+
 ## 2. Explicitly insufficient deployments (rejected by policy)
 
 Per [#55](https://github.com/Meta-Project2026/Metamorph/issues/55),
@@ -126,7 +186,13 @@ Domain 1: device= model= serial= location= filesystem=
   admin account= custodian=          (separate from candidate author: yes/no)
   at-rest encryption= fsync/power=   quota=/network=
 Domain 2: medium= serial= storage site= mount host= mount policy=
-  admin account= storage owner=      (separate from Domain 1 admin: yes/no)
+  admin account= storage owner=      (separate from Domain 1 admin AND from
+                                      candidate author: yes/no)
   medium encryption= offline policy=
+  offline-medium activation: who= when= witnessed by=
+Cross-domain transport (after design gate): per-operation executor UID per
+  domain= transfer credentials= which operations= receipts minted where=
+  independent witness=                    (no process/principal touches both
+                                           domains: yes/no)
 Separation drills planned: device-loss / site-loss / admin-loss / power-cut
 ```

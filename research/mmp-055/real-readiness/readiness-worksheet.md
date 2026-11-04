@@ -31,8 +31,9 @@ delegates, quotas, independence profile, authenticated joint record.
 | ID | Choice required | Authority | Satisfying record (receipt) | Current state |
 | --- | --- | --- | --- | --- |
 | D1 | Accept exact versions of protocol, threat model, storage policy, checklist, plan | Both owners, each naming document version + PR commit | Authenticated owner statements per the [receipt form](../../../specs/017-formal-g4/decision-record.md); independent public review findings resolved | PENDING |
-| D2 | Choose `LIMITED_TWO_PERSON` or `INDEPENDENT_CUSTODIAN`; name C, E, R, two storage owners, recovery delegate; declare exposures/conflicts; administrator trust base | Both owners jointly; reviewer eligibility attested; no self-appointment | Signed appointment record + exposure/conflict declarations; access matrix from [threat-model.md:32–53](../../../specs/017-formal-g4/threat-model.md) | PENDING — no appointments exist |
+| D2 | Choose `LIMITED_TWO_PERSON` or `INDEPENDENT_CUSTODIAN`; name C, E, R, recovery delegate and **two eligible non-C storage administrators** (S1/S2 — a candidate author, including a candidate-author owner, may not administer either retained copy, the witness/authority anchors or escrow); declare exposures/conflicts; administrator trust base | Both owners jointly; reviewer eligibility attested; no self-appointment | Signed appointment record + exposure/conflict declarations; access matrix from [threat-model.md:32–53](../../../specs/017-formal-g4/threat-model.md); storage-admin prohibition per [storage.md:128–138](../../../specs/017-formal-g4/storage.md) | PENDING — no appointments exist |
 | D4-impl | Select concrete primary medium/NAS + physically separate offline encrypted medium; locations; filesystem/fsync/power profile; quotas | Custodian(s) proposed by owners; accepted by both owners | [two-domain-deployment.md](two-domain-deployment.md) worksheet completed with real device identities + custody rehearsal receipt | NOT_SELECTED |
+| D4-io | Choose the cross-domain transfer design (domain-local writer/reader processes, or another equivalently isolated scheme) and its acceptance controls; authorize its separate implementation + independent review | Both owners jointly, after D1/D2/D4-impl | Signed design decision + independently reviewed implementation gate; **this docs PR implements nothing** ([two-domain-deployment.md §1a](two-domain-deployment.md)) | **BLOCKED_CROSS_DOMAIN_IO_DESIGN / NOT_EXECUTABLE_FOR_REAL_MEDIA** |
 | D4-keys | Select key ceremony, escrow, recovery delegate path, authority anchor administration | Both owners; delegates named; never a candidate author | [roles-and-key-flow.md](roles-and-key-flow.md) §5–6 executed as a synthetic-key rehearsal with real named principals | NOT_SELECTED |
 | D4-run | Approve the [qualification plan](qualification-plan.md) on real hardware with synthetic evidence | Both owners | Dated authorization naming the two domains + custodians | NOT_RUN |
 | D5–D7 | Attempt/finality rules, implementation authorization, exact-run authorization | Both owners | Per [decision-record.md:53–55](../../../specs/017-formal-g4/decision-record.md) | PENDING / NOT_RUN |
@@ -47,6 +48,16 @@ scope here. **No worksheet entry implies another.**
 - `CUSTODY_PROVISIONED`: real two domains deployed, named custodians exercised,
   rehearsal receipts from [qualification-plan.md](qualification-plan.md) Phase 1–2
   exist. Still **no hidden data**.
+- **`BLOCKED_CROSS_DOMAIN_IO_DESIGN` / `NOT_EXECUTABLE_FOR_REAL_MEDIA`
+  (technical gate, applies even after D1/D2/D4):** real two-domain
+  publish/witness/restore is not executable with current code — one process
+  operates both copies and every root must be owned by that process's UID, and
+  non-synthetic deployment is refused
+  ([two-domain-deployment.md §1a](two-domain-deployment.md)). It unblocks only
+  through a separately agreed, jointly reviewed cross-domain transfer design
+  (domain-local writer/reader processes or an equivalently isolated scheme)
+  that is implemented and independently verified — **not** by this docs PR,
+  and **not** by merely removing the `SYNTHETIC_ONLY` gate.
 - `RETENTION_QUALIFIED`: immediate post-teardown exact-byte + full-index restore
   from **each** copy verified against prior witnessed commitments on real media
   (Phase 3); day-90 obligation scheduled, not yet due.
@@ -83,9 +94,10 @@ executor never signs for an owner.
 | Receipt | Produced by | Exists? |
 | --- | --- | --- |
 | Decision form rows completed and authenticated by both owners | Owners, on the merged version of this PR | NO |
-| Two-domain inventory with device identities + administrator split | Owners + custodians, per [two-domain-deployment.md](two-domain-deployment.md) §7 | NO |
+| Two-domain inventory with device identities + administrator split (both admins non-C) | Owners + custodians, per [two-domain-deployment.md](two-domain-deployment.md) §7 | NO |
+| Cross-domain transfer design decision + independently reviewed implementation (separate code task) | Owners + implementation slice, per [two-domain-deployment.md §1a](two-domain-deployment.md) | NO — gate OPEN |
 | Synthetic-on-real-hardware rehearsal transcript (no hidden data) | Custodians, per [qualification-plan.md](qualification-plan.md) Phase 1–2 | NO |
-| Independent immediate restore receipts from EACH copy | Reader CLI runs per [operator-runbook.md](operator-runbook.md) §6 | NO |
+| Independent immediate restore receipts from EACH copy | Reader runs per [operator-runbook.md](operator-runbook.md) §6, under the resolved cross-domain design | NO |
 | Day-90 scheduled task with named operator | Custodian + owners | NO (obligation recorded, clock not started) |
 | Independent exact-head security re-review of #64 remediation | Independent reviewer, at `af7a36d…` | NOT_RECORDED |
 

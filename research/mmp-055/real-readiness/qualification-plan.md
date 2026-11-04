@@ -21,7 +21,30 @@ D1 + D2 + D4-impl + D4-keys authenticated; two-domain inventory completed;
 independent exact-head security re-review of the #64 B1/B2 remediation
 recorded (currently NOT_RECORDED — [README](README.md)); #26 117/117
 umask-022 acceptance green for any reused retention path
-([checklist.md B3](../../../specs/017-formal-g4/checklist.md)).
+([checklist.md B3](../../../specs/017-formal-g4/checklist.md)); **and the
+cross-domain I/O design gate resolved** — see below and
+[two-domain-deployment.md §1a](two-domain-deployment.md).
+
+### Cross-domain I/O gate (technical, separate from owner policy)
+
+Real-media execution of `publish()`/`witnessStorage()`/restore is
+**`NOT_EXECUTABLE_FOR_REAL_MEDIA` today regardless of owner decisions**:
+current code writes and reads both copies from one Node process, requires each
+root's owner UID to equal the process UID (`0700`), and refuses anything but
+`SYNTHETIC_ONLY` ([engine.mjs:54–183](../../../packages/evidence-retention/src/engine.mjs),
+[secure-fs.mjs:37–44](../../../packages/evidence-retention/src/secure-fs.mjs),
+[store.mjs:27](../../../packages/evidence-retention/src/store.mjs),
+[reader.mjs:31](../../../packages/evidence-retention/src/reader.mjs)).
+Phases 1–3 below therefore run against **synthetic roots in a single
+process/UID** (proving code paths only) until a separately agreed, jointly
+reviewed cross-domain design (domain-local writer/reader processes or an
+equivalently isolated transfer of ciphertext and signed receipts, with the
+acceptance controls listed in
+[two-domain-deployment.md §1a](two-domain-deployment.md)) is decided,
+implemented and independently verified. Owners pick the variant; this plan
+does not. Hardware receipts earned in Phase 1–2 drills on provisioning,
+power, keys and devices remain valid inputs; **no HARDWARE_OBSERVED receipt
+may claim two-domain publish/witness/restore until the gate passes.**
 
 ## Phase 1 — provision and rehearse on the real domains (synthetic data)
 
@@ -30,7 +53,8 @@ umask-022 acceptance green for any reused retention path
 | 1.1 | Domain provisioning audit | OS-level check of accounts, ACLs, mounts, quotas per [two-domain-deployment.md](two-domain-deployment.md) §4–5 | Signed inventory by S1/S2 |
 | 1.2 | fsync/power honesty | Rehearse power-cut during `publish()` on synthetic packs (UPS behavior / fsync semantics) | Power-cut drill transcript; crash-between-journal-and-anchor fails closed and is recovered by witnessed procedure |
 | 1.3 | Key ceremony | Generate all §2 keys of [roles-and-key-flow.md](roles-and-key-flow.md) on principal hosts | Key inventory with fingerprints (public parts only recorded) |
-| 1.4 | Full publish to both real domains | `publish()` with real `LocalStore` roots on Domain 1 + Domain 2; witness catalog + storage receipts | Signed catalog receipt, signed two-store storage receipt, public blinded commitment |
+| 1.4 | Publish rehearsal (single process, synthetic roots) | `publish()` + `witnessCatalog`/`witnessStorage` against synthetic roots in one process/UID — proves code paths only; **not** a two-domain demonstration | Signed catalog/storage receipts labeled SIMULATED |
+| 1.4-gated | Full publish to both real domains | `publish()` with real `LocalStore` roots on Domain 1 + Domain 2, then independent two-copy storage witness | **GATED: `BLOCKED_CROSS_DOMAIN_IO_DESIGN` / `NOT_EXECUTABLE_FOR_REAL_MEDIA`** — not executable with current code; requires the resolved cross-domain design gate ([two-domain-deployment.md §1a](two-domain-deployment.md)) |
 
 ## Phase 2 — adversarial drills on the real infrastructure (synthetic data)
 
@@ -38,7 +62,7 @@ Each drill names the adapter mechanism it exercises. All are denied-unless-prove
 
 | # | Scenario | Expected observed result | Receipt class |
 | --- | --- | --- | --- |
-| 2.1 | Immediate post-teardown restore from **EACH** copy | Fresh reader process per copy, new `0700` destination parent, decrypt + `PrivateEvidence.verify` + complete root inspection; exact bytes + full index match prior witnessed commitments; signed private receipt per copy | HARDWARE_OBSERVED ([engine.mjs:214](../../../packages/evidence-retention/src/engine.mjs) `restore`, [README step 6](../../../packages/evidence-retention/README.md)) |
+| 2.1 | Immediate post-teardown restore from **EACH** copy | Fresh reader process per copy, new `0700` destination parent, decrypt + `PrivateEvidence.verify` + complete root inspection; exact bytes + full index match prior witnessed commitments; signed private receipt per copy | **GATED for real media** (see Phase 0 gate): currently executable only on synthetic roots; the cross-domain design must define per-copy reader execution under each domain's UID ([two-domain-deployment.md §1a](two-domain-deployment.md)) |
 | 2.2 | Lost / invalid Domain-2 device | Restore from Domain 1 still succeeds with copy-A receipts; Domain 2 unavailable recorded as incident; no silent overwrite when the medium returns | HARDWARE_OBSERVED |
 | 2.3 | Wrong key / revoked grant | Reader denies: wrong recipient key; stale config after a committed `GRANT_REVOKED` via live authority + anchor | HARDWARE_OBSERVED ([authority.mjs:98](../../../packages/evidence-retention/src/authority.mjs)) |
 | 2.4 | Disconnected secondary | Domain 2 unplugged during verification window: incident sticky; day-90/deletion blocked while unresolved | HARDWARE_OBSERVED |

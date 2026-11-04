@@ -16,11 +16,24 @@ real-custody counterpart of that warning.
 | Candidate author | C | Submit exact candidate bundle; no storage/custody duties during the epoch | Any decrypt key, witness key, authority key, store/journal/anchor/nonce-root access; hidden pool access |
 | Custodian (evaluator) | E | Operate approved evaluator; admit/free candidate; execute the one draw; publish evidence | Unreviewed policy changes; candidate repair; shared private diagnostics with C |
 | Reviewer | R | Verify commitments, custody history, coverage; no-hold attestation at expiry; restricted private review | Authoring candidates qualified on the same corpus after exposure ([threat-model.md:52–53](../../../specs/017-formal-g4/threat-model.md)) |
-| Storage owner 1 | S1 | Administers Domain 1 (primary); store principal account | Any role conflict declared in the appointment record |
-| Storage owner 2 | S2 | Administers Domain 2 (offline medium + its mount host) | Shared root/admin with S1 or C |
+| Storage owner 1 | S1 | Administers Domain 1 (primary); store principal account. **Must be an eligible non-C principal** — not the candidate author and not administered by a candidate-author account | Any role conflict declared in the appointment record |
+| Storage owner 2 | S2 | Administers Domain 2 (offline medium + its mount host). **Must be an eligible non-C principal**, distinct from S1's administration | Shared root/admin with S1 or C |
 | Reader administrator | (may be E or a delegate) | Runs the reader CLI from pinned configs for restores | Authority signing key; writer-supplied trust anchors |
 | Recovery delegate | D | Key-escrow recovery path, independent of the transient runner account | Same-corpus exposure; C must not be able to reach escrow ([storage.md:135–138](../../../specs/017-formal-g4/storage.md)) |
-| Owners | Vladimir + Ilia | Joint decisions D1–D7; deletion authorization; acceptance/refusal | — |
+| Owners | Vladimir + Ilia | Joint decisions D1–D7; deletion authorization; acceptance/refusal | An owner who is the candidate author (C) cannot simultaneously be S1/S2 or hold storage/anchor/escrow administration |
+
+**Non-C storage administration is required under every independence profile.**
+`LIMITED_TWO_PERSON` limits the human-independence claim of the G4
+*assessment*; it does **not** exempt the deployment from two independently
+administered storage domains. Per the [access matrix](../../../specs/017-formal-g4/threat-model.md)
+and [storage policy](../../../specs/017-formal-g4/storage.md), C and
+C-controlled service/admin accounts manage no retained copy, key, witness,
+authority anchor or escrow — withholding the decrypt key does not neutralize
+root/admin ability to delete, roll back or substitute ciphertext. If the two
+owners cannot supply two eligible non-C storage administrators (an owner who
+is C is ineligible), qualified additional participants or separate
+organizational administration are required; otherwise the real storage
+profile stays **BLOCKED**. Declaring the conflict never waives it.
 
 Appointments must satisfy the [access matrix](../../../specs/017-formal-g4/threat-model.md)
 and the chosen independence profile ([risk-matrix.md](risk-matrix.md)); a
