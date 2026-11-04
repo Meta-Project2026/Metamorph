@@ -74,6 +74,101 @@ test("registration cannot be omitted, repeated, or replaced after freeze", () =>
   assert.throws(() => f.registry.freeze(f.freeze), /FREEZE_ORDER/);
 });
 
+test("distinct synthetic principals in distinct administrative domains register", () => {
+  const f = fixture();
+  const receipt = f.registry.register(f.registration);
+  assert.equal(receipt.stage, "SYNTHETIC_REGISTERED");
+});
+
+test("registration rejects a principal repeated across administrative domains", () => {
+  const f = fixture();
+  f.registration.custody.adminDomains.push({
+    id: "synthetic-other-storage-domain",
+    principals: ["synthetic-storage"],
+  });
+  assert.throws(
+    () => f.registry.register(f.registration),
+    (error) => error.message === "ADMIN_PRINCIPAL_DUPLICATE",
+  );
+  assert.equal(f.registry.receipt().stage, "SYNTHETIC_EMPTY");
+});
+
+test("registration permits a fully supported scope with no unsupported entries", () => {
+  const f = fixture();
+  f.registration.scope.unsupported = [];
+  const receipt = f.registry.register(f.registration);
+  assert.equal(receipt.stage, "SYNTHETIC_REGISTERED");
+  assert.deepEqual(
+    f.records()[0].event.payload.registration.scope.unsupported,
+    [],
+  );
+});
+
+for (const key of ["routes", "units", "unsupported"]) {
+  for (const [name, invalid, code] of [
+    ["non-array", () => null, "INVALID_ARRAY"],
+    [
+      "invalid identifier",
+      () => ["invalid-identifier"],
+      "SYNTHETIC_IDENTIFIER_REQUIRED",
+    ],
+    ["duplicate identifier", (values) => [values[0], values[0]], "DUPLICATE"],
+  ]) {
+    test(`registration rejects ${name} in ${key}`, () => {
+      const f = fixture();
+      f.registration.scope[key] = invalid(f.registration.scope[key]);
+      assert.throws(
+        () => f.registry.register(f.registration),
+        (error) => error.message === code,
+      );
+    });
+  }
+}
+
+for (const key of ["routes", "units"]) {
+  test(`registration requires nonempty ${key}`, () => {
+    const f = fixture();
+    f.registration.scope[key] = [];
+    assert.throws(
+      () => f.registry.register(f.registration),
+      (error) => error.message === "INVALID_ARRAY",
+    );
+  });
+}
+
+for (const [name, change, code] of [
+  [
+    "unknown principal",
+    (domains) => {
+      domains[0].principals = ["synthetic-unknown"];
+    },
+    "UNKNOWN_PRINCIPAL",
+  ],
+  [
+    "duplicate domain ID",
+    (domains) => {
+      domains[1].id = domains[0].id;
+    },
+    "DUPLICATE",
+  ],
+  [
+    "missing principal",
+    (domains) => {
+      domains.pop();
+    },
+    "ADMIN_HISTORY_MISSING",
+  ],
+]) {
+  test(`administrative domains reject ${name}`, () => {
+    const f = fixture();
+    change(f.registration.custody.adminDomains);
+    assert.throws(
+      () => f.registry.register(f.registration),
+      (error) => error.message === code,
+    );
+  });
+}
+
 for (const [name, change, code] of [
   [
     "missing owner profile",

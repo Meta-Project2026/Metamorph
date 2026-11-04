@@ -218,7 +218,7 @@ export function validateRegistration(reg, trust) {
     "gates",
   ]);
   for (const key of ["routes", "units", "unsupported"]) {
-    array(reg.scope[key], 64);
+    array(reg.scope[key], 64, key === "unsupported" ? 0 : 1);
     reg.scope[key].forEach(id);
     unique(reg.scope[key]);
   }
@@ -339,6 +339,10 @@ export function validateRegistration(reg, trust) {
     }
   }
   unique(reg.custody.adminDomains.map((domain) => domain.id));
+  unique(
+    reg.custody.adminDomains.flatMap((domain) => domain.principals),
+    "ADMIN_PRINCIPAL_DUPLICATE",
+  );
   requireThat(
     Object.keys(trust.principals).every((principal) =>
       reg.custody.adminDomains.some((domain) =>
