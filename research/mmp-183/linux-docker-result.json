@@ -344,7 +344,7 @@
   ],
   "privateCatalogSha256": "c09a75dc5a525e915841e5110b33a60c16662be2d7f47341196e2b40f4c40df5",
   "recordedAtUtc": "2026-11-04T21:55:58.467170+00:00",
-  "baseSha": "297919d3e1476eb7f17b59e7e671787e0af94",
+  "baseSha": "297919d3e1476eb7f17b1fb59e7e671787e0af94",
   "scope": "fixed-public-synthetic-only",
   "executor": {
     "session": "Codex",

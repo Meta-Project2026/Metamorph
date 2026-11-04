@@ -7,7 +7,7 @@ Refs [#183](https://github.com/Meta-Project2026/Metamorph/issues/183),
 
 **PUBLIC_SYNTHETIC_DOCKER_QUALIFIED**, strictly for the fixed public 11+1
 qualification session at clean evaluator `48f182374b260cc3bcaaeeed0569a1eeb50979ad`.
-Fetched base: `297919d3e1476eb7f17b59e7e671787e0af94` (merged #189).
+Fetched base: `297919d3e1476eb7f17b1fb59e7e671787e0af94` (merged #189).
 The following report commit adds documentation; it does not inherit or rewrite
 the evaluator identity. Final delivery HEAD/base, CI merge checkout and checks
 on that final HEAD are recorded in PR #191. This report cannot contain its own
