@@ -181,7 +181,15 @@ async function runPaidAttempt({
         ? error.custodyStage
         : "UNKNOWN";
     } finally {
-      await lease.release();
+      // Release failures never mask the already-decided capture outcome: a
+      // failed capture keeps its stage and blocker, a successful capture
+      // keeps its custody receipt. Downstream validation still re-admits
+      // the candidate fresh, so any real source change stays fail-closed.
+      try {
+        await lease.release();
+      } catch {
+        /* source lease already invalid; scratch directory only */
+      }
     }
     result.modelGeneration = "GENERATED";
     result.aiGeneration =

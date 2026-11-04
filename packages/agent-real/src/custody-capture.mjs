@@ -30,6 +30,18 @@ const custodyStage = (stage) =>
     custodyStage: CUSTODY_CAPTURE_STAGES.includes(stage) ? stage : "UNKNOWN",
   });
 
+/** Registers `onAbort` once on the attempt signal and returns the exact
+ * removal function, so every collector settle path can drop the listener —
+ * no stale anonymous handlers accumulate on the long-lived attempt signal.
+ * The handler fires at most once (event listener `once` plus the explicit
+ * immediate call when the signal has already aborted). */
+export function bridgeAbort(signal, onAbort) {
+  const handler = () => onAbort();
+  signal.addEventListener("abort", handler, { once: true });
+  if (signal.aborted) handler();
+  return () => signal.removeEventListener("abort", handler);
+}
+
 /** Pure classifier for the credential-free collector process outcome.
  * Precedence: parent abort, tracked timeout, tracked kill, process error,
  * tracked stderr/output overflow, then a plain nonzero exit. */
@@ -55,12 +67,27 @@ export function classifyCollectorOutcome({
 }
 
 export async function captureLease(token, lease, receipt, signal, attempt = 1) {
+  // Phase 0: source-lease integrity, trustworthily established before any
+  // capsule work. A change here is classified SOURCE_LEASE_CHANGED, never a
+  // capsule or receipt failure.
+  try {
+    await lease.assertUnchanged();
+  } catch {
+    throw custodyStage("SOURCE_LEASE_CHANGED");
+  }
   let capsule;
   try {
     capsule = await capsuleFromLease(token, lease, receipt, attempt);
   } catch {
-    // Capsule/host-policy rejection: data- or policy-dependent. The original
-    // error never crosses this boundary; only the fixed stage does.
+    // capsuleFromLease re-asserts the lease internally: re-check to separate
+    // a source-integrity violation (SOURCE_LEASE_CHANGED) from a capsule
+    // rejection (data/policy dependent). The original error never crosses
+    // this boundary; only the fixed stage does.
+    try {
+      await lease.assertUnchanged();
+    } catch {
+      throw custodyStage("SOURCE_LEASE_CHANGED");
+    }
     throw custodyStage("CAPSULE_REJECTED");
   }
   const env = process.env;
@@ -126,18 +153,10 @@ export async function captureLease(token, lease, receipt, signal, attempt = 1) {
         failed = true;
         child.kill("SIGKILL");
       }, 85000);
-      signal.addEventListener(
-        "abort",
-        () => {
-          outcome.aborted = true;
-          stop();
-        },
-        { once: true },
-      );
-      if (signal.aborted) {
+      const removeAbort = bridgeAbort(signal, () => {
         outcome.aborted = true;
         stop();
-      }
+      });
       child.stderr.on("data", (b) => {
         bytes += b.length;
         if (bytes > 4096) {
@@ -155,7 +174,8 @@ export async function captureLease(token, lease, receipt, signal, attempt = 1) {
       child.on("close", (code, term) => {
         clearTimeout(timer);
         clearTimeout(kill);
-        signal.removeEventListener("abort", stop);
+        // Remove exactly the registered handler on every settle path.
+        removeAbort();
         outcome.code = code;
         outcome.termSignal = term;
         outcome.ok = !failed && code === 0 && !term;
@@ -171,8 +191,16 @@ export async function captureLease(token, lease, receipt, signal, attempt = 1) {
       aborted: outcome.aborted || signal.aborted,
     });
     if (stage !== null) throw custodyStage(stage);
+    // Phase 3: source lease must still match after the collector ran; only
+    // then do the host receipt/readback checks distinguish
+    // HOST_RECEIPT_INVALID (receipt/ciphertext mismatch) from a source
+    // integrity violation (SOURCE_LEASE_CHANGED).
     try {
       await lease.assertUnchanged();
+    } catch {
+      throw custodyStage("SOURCE_LEASE_CHANGED");
+    }
+    try {
       const spoolPath = join(env.RUNNER_TEMP, spool);
       const record = validateReceipt(
         readRecord(join(spoolPath, "capture.json")),
