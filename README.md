@@ -43,8 +43,8 @@ flowchart LR
   G1 --> ORA["Oracle replays the same<br/>HTTP scenarios on PHP and TS"]
   PHP --> ORA
   ORA --> G23["G2: HTTP parity<br/>G3: SQLite state parity"]
-  G23 -- "FAIL: allowlisted codes only" --> MUSE
-  G23 -- "verdicts + hashes" --> R["Public receipts<br/>offline evidence viewer"]
+  G23 -->|"FAIL: allowlisted codes only"| MUSE
+  G23 -->|"verdicts + hashes"| R["Public receipts<br/>offline evidence viewer"]
 ```
 
 ## Result: a real model on a real run
