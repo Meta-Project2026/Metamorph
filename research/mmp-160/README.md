@@ -1,4 +1,14 @@
-# MMP-160 — first-pass compiler discipline
+# MMP-160 — compiler recovery research
+
+Current follow-up: [offline G1 repair spike and implementation plan](offline-design.md),
+[executed acceptance record](offline-validation.md). **OFFLINE_ONLY /
+NO_PRODUCTION_AUTHORITY**. The prototype does not activate production repair.
+
+The prompt intervention below is historical PR #178 material. Its original
+MODEL_NOT_TESTED status is superseded by real run #41840074013 (G1 FAIL,
+TS2339); it is not a successful compiler repair. See the follow-up for evidence.
+
+## Historical first-pass compiler discipline
 
 Refs [#160](https://github.com/Meta-Project2026/Metamorph/issues/160),
 [#154](https://github.com/Meta-Project2026/Metamorph/issues/154),

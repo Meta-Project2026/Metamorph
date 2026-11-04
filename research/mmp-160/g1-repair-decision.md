@@ -1,20 +1,24 @@
 # MMP-160 — G1 repair owner decision card
 
-**DESIGN ONLY / PENDING VLADIMIR + ILIA APPROVAL.** No shared trust contract,
-workflow, admission, feedback code or paid repair path is implemented here.
-The prompt-only PR can be reviewed independently. Refs #160, #154, #161.
+**PRODUCTION DESIGN ONLY / PENDING VLADIMIR + ILIA APPROVAL.** No production
+shared trust contract, workflow, admission, feedback code or paid repair path is
+implemented here. An isolated TEST-only prototype and updated versioned proposal
+are in [offline-design.md](offline-design.md). Refs #160, #154, #161.
+That updated proposal additionally requires an original v2 G1 opt-in and an
+authenticated link between distinct custody and Oracle attempt IDs.
 
 ## Decision and tradeoffs
 
 | Option | Expected impact (unmeasured) | Effort | Main risk |
 | --- | --- | --- | --- |
-| Developer compiler discipline (this PR) | May improve first-attempt compilation; cannot react to an actual compiler failure | Small; prompt, wire identities and regression tests | Redundancy, slightly larger input, no measured model benefit |
+| Developer compiler discipline (merged #178) | May improve first-attempt compilation; cannot react to an actual compiler failure | Small; prompt, wire identities and regression tests | Redundancy, slightly larger input, no measured model benefit |
 | Signed `G1_BUILD_RECOVERABLE` follow-up | Allows one repair to respond to its own actual compile failure; potentially higher impact for repeated G1 failures | Medium to large; trusted diagnostics, runner staging, signed admission, custody and controls across owners | Declassification/identity errors or failure routing could authorize an unintended second paid send |
 
-Recommendation: deliver prompt hardening now; jointly decide whether to build
-the second path as a separate slice. A code/location-only TS2769 message may be
-insufficient for the model to identify the precise overload, so effectiveness is
-still uncertain. No measured improvement or guaranteed completion is claimed.
+Updated recommendation (2026-11-04): prompt hardening merged in #178 but the
+first subsequent genuine run #41840074013 failed G1 with one TS2339. Review the
+offline spike, then obtain both owners' agreement before a distinct versioned
+production slice. Code/location-only TS2339 or TS2769 feedback may be insufficient;
+effectiveness remains unmeasured. No guaranteed completion is claimed.
 
 ## Current boundary that must survive
 
@@ -38,7 +42,7 @@ Use a distinct stage result and opaque trusted repair capability. Admit only:
 2. Normal compiler failure in the first typecheck stage only: exactly one
    executed failing G1 test, no build/environment error or cancellation, and
    complete trusted `mmp082-g1-diagnostics-v1` diagnostics with status AVAILABLE,
-   `errorCount=1`, `truncated=false`, exactly one allowlisted TS2769. Its path is
+   `errorCount=1`, `truncated=false`, exactly one allowlisted TS2339 or TS2769. Its path is
    a bounded canonical `src/**/*.ts` path present in the admitted bundle; line
    and column are positive bounded integers within that exact file.
 3. The verifier binds run ID/attempt, exact reviewed head/workflow, public source,
