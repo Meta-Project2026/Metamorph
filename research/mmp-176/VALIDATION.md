@@ -57,6 +57,14 @@ CLI warning output was suppressed and the test now passes. An intermediate
 research-lint check caught cleanup-precedence control flow in `finally`; the
 function now performs explicit cleanup after capturing a preparation error, with
 cleanup failure taking precedence. Neither finding involved private data.
+The first hosted Fast CI at `d90f41ed5a4adfdaa77b852f9ad33127c0401d6d`
+failed `Active research syntax` with `RESEARCH_INVENTORY_DRIFT`: the new research
+directory had not been registered. Added its descriptive row to the existing
+coverage matrix; private/Docker acceptance remains manual and no CI step changed.
+After correction, `node research/mmp-069/check-syntax.mjs` passed 134/134 (exit 0),
+`node research/mmp-069/validate.mjs` returned VALID (exit 0), and its negative
+controls `node --test research/mmp-069/validate.test.mjs` passed 45/45 on both
+Windows and Linux (exit 0). Scoped research lint also passed (exit 0).
 
 | NOT_RUN                                                             | Status / reason                                                                                      |
 | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |

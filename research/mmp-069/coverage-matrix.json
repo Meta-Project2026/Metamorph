@@ -423,6 +423,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Offline synthetic public G1 workload stress qualification harness with graded tiers (baseline, moderate, heavy) and trusted TargetWorker Docker compilation. Deterministic generator, validator, and trial components receive package-level test coverage in packages/agent-real/test/g1-stress.test.mjs under pnpm test and hosted syntax checks in Fast CI. Docker-based stress measurements execute strictly within dedicated workflow .github/workflows/mmp174-offline-g1-stress.yml on ubuntu-24.04 runners. No paid model calls, candidate decryption, held-out data access, production recipe changes, or gate weakening."
+    },
+    {
+      "path": "research/mmp-176",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Owner-only G1 replay command receives syntax checking only; fixed-enum, exact-receipt, network and cleanup unit controls run through packages/agent-real/test/owner-local-g1.test.mjs in pnpm test. The matrix does not trace package-test imports. Generated TEST-key real age/Docker acceptance is manual-only and was executed separately on disposable Linux with public synthetic fixtures. No real owner key/candidate is accessed by agents or CI. Real owner replay under external VM disconnection remains NOT_RUN; no paid request, workflow dispatch, Oracle or production pin change."
     }
   ],
   "skips": [
