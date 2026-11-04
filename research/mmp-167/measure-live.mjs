@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { performance } from "node:perf_hooks";
 import { TargetWorker } from "../../packages/target-worker/src/controller.mjs";
@@ -9,7 +9,7 @@ import { buildTrustedRuntime } from "../../packages/target-worker/src/runtime-br
 import { admitDirectory } from "../../packages/target-worker/src/admission.mjs";
 import { WORKSHOP_CANDIDATE_SHA } from "../../packages/differential/src/workshop-policy.mjs";
 import { WORKSHOP_PROFILE } from "../../packages/target-worker/runtime/profile.mjs";
-import { observeBuild } from "../../packages/agent-real/src/runtime.mjs";
+import { observeBuild, RECIPE_PIN } from "../../packages/agent-real/src/runtime.mjs";
 import { validateBatchResults } from "./harness-validator.mjs";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
@@ -36,7 +36,6 @@ async function runTrial(runtime, bundle, trialIndex, mode, mockFailMode = null) 
   let error = null;
   let cleanupError = null;
   let g1Observed = null;
-  const started = performance.now();
   let provisionElapsed = 0;
 
   try {
@@ -85,6 +84,23 @@ async function runTrial(runtime, bundle, trialIndex, mode, mockFailMode = null) 
     }
   } catch {}
 
+  // Allowlisted sanitized checks projection: strictly excludes stdout, stderr, and raw paths
+  const sanitizedChecks = parsedChecks
+    ? parsedChecks.map((c) => ({
+        phase: c.phase,
+        exitCode: c.exitCode,
+        signal: c.signal,
+        error: c.error,
+      }))
+    : null;
+
+  const sanitizedError = error
+    ? String(error).split(":")[0].replace(/[^A-Za-z0-9_-]/g, "")
+    : null;
+  const sanitizedCleanupError = cleanupError
+    ? String(cleanupError).split(":")[0].replace(/[^A-Za-z0-9_-]/g, "")
+    : null;
+
   return {
     trialIndex,
     mode,
@@ -97,15 +113,15 @@ async function runTrial(runtime, bundle, trialIndex, mode, mockFailMode = null) 
     buildSignal: buildReceipt?.signal ?? null,
     buildError: buildReceipt?.spawnError ?? null,
     buildTimedOut: buildReceipt?.timedOut ?? false,
-    checks: parsedChecks,
+    checks: sanitizedChecks,
     g1Verdict: g1Observed?.build?.verdict ?? (error ? "ERROR" : "UNKNOWN"),
     g1FindingCodes: g1Observed?.build?.findingCodes ?? [],
     executedTestIds: g1Observed?.build?.executedTestIds ?? [],
     sidecarCode: g1Observed?.buildPhaseDiagnostics?.code ?? null,
     cleanupVerified: mockFailMode === "cleanup-failure" ? false : worker.evidence.cleanupVerified,
     zeroResourcesVerified: zeroRes.containersCount === 0 && zeroRes.volumesCount === 0,
-    error,
-    cleanupError,
+    error: sanitizedError,
+    cleanupError: sanitizedCleanupError,
   };
 }
 
@@ -133,14 +149,12 @@ async function main() {
         buildError: null,
         buildTimedOut: false,
         checks: [
-          { phase: "typecheck", exitCode: 0, signal: null, error: null, stdout: "", stderr: "" },
+          { phase: "typecheck", exitCode: 0, signal: null, error: null },
           {
             phase: "build",
             exitCode: mode === "pass" ? 0 : 2,
             signal: null,
             error: null,
-            stdout: "",
-            stderr: "",
           },
         ],
         g1Verdict: mode === "pass" ? "PASS" : "ERROR",
@@ -175,7 +189,12 @@ async function main() {
   const freshCount = Math.floor(totalTrials / 2);
   const warmCount = totalTrials - freshCount;
 
-  console.log("=== MMP-167 Fail-Closed G1 Live Qualification Harness ===");
+  const outArg = args.find((a) => a.startsWith("--out="));
+  const outputPath = outArg
+    ? resolve(outArg.split("=")[1])
+    : join(root, "research/mmp-167/qualification-results.json");
+
+  console.log("=== MMP-167 Fail-Closed G1 Qualification Harness ===");
   const headSha = execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim();
   console.log("HEAD SHA:", headSha);
 
@@ -183,6 +202,15 @@ async function main() {
   const runtime = await buildTrustedRuntime();
   console.log("Trusted Runtime Image:", runtime.imageId);
   console.log("Runtime Recipe SHA:", runtime.provenance?.recipeSha);
+  console.log("Expected RECIPE_PIN:", RECIPE_PIN);
+
+  const recipeMatchesPin = runtime.provenance?.recipeSha === RECIPE_PIN;
+  console.log("Matches RECIPE_PIN:", recipeMatchesPin);
+
+  if (process.platform === "linux" && !recipeMatchesPin) {
+    console.error("FATAL: Runtime recipeSha does not match RECIPE_PIN on Linux!");
+    process.exit(1);
+  }
 
   console.log("Admitting workshop fixture...");
   const bundle = await admitDirectory(
@@ -235,8 +263,17 @@ async function main() {
     format: "mmp167-g1-qualification-v1",
     executedAt: new Date().toISOString(),
     headSha,
+    environment: {
+      platform: process.platform,
+      arch: process.arch,
+      nodeVersion: process.version,
+      runnerOs: process.env.RUNNER_OS || process.platform,
+      isHostedRunner: Boolean(process.env.GITHUB_ACTIONS),
+      recipeMatchesPin,
+    },
     runtimeImageId: runtime.imageId,
     runtimeRecipeSha: runtime.provenance?.recipeSha,
+    expectedRecipePin: RECIPE_PIN,
     candidateSha: bundle.candidateSha,
     totalTrials,
     freshContainerTrials: freshCount,
@@ -245,11 +282,10 @@ async function main() {
     trials: results,
   };
 
-  const outputPath = join(root, "research/mmp-167/qualification-results.json");
   writeFileSync(outputPath, `${JSON.stringify(outputPayload, null, 2)}\n`, {
     mode: 0o644,
   });
-  console.log(`Saved machine-readable qualification results to ${outputPath}`);
+  console.log(`Saved sanitized machine-readable qualification results to ${outputPath}`);
 
   if (!validation.passed) {
     console.error("\n*** QUALIFICATION FAILED (FAIL-CLOSED) ***");
