@@ -151,7 +151,7 @@ test("release() rejects on a tampered source; runPaidAttempt must not mask it", 
   );
   assert.match(
     trialSource,
-    /Release failures never mask the already-decided capture outcome[\s\S]*?try \{\s*await lease\.release\(\);\s*\} catch \{/,
+    /Release re-admits the source fresh: a failure here is a real[\s\S]*?try \{\s*await lease\.release\(\);\s*\} catch \{\s*releaseFailed = true;/,
   );
 });
 

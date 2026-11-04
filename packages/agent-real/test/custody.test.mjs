@@ -317,6 +317,10 @@ test("generation stays GENERATED when custody rejects, with no second model requ
   // (missing MIT notice); no error text ever surfaces.
   assert.equal(r.custodyCaptureStage, "CAPSULE_REJECTED");
   assert.ok(CUSTODY_CAPTURE_STAGES.includes(r.custodyCaptureStage));
+  // The candidate root is never exposed on a failed capture: no stored or
+  // Oracle transfer can start from it.
+  assert.equal(r.custodyCaptureStage && r.candidateRoot, undefined);
+  assert.ok(!Object.getOwnPropertyNames(r).includes("candidateRoot"));
   assert.equal(f.calls.length, 1);
   await assert.rejects(
     runPublicMigration({

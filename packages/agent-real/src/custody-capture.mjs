@@ -56,7 +56,9 @@ export function classifyCollectorOutcome({
   // information beyond COLLECTOR_EXITED, and exit text must never surface.
   termSignal = null,
 }) {
-  if (ok) return null;
+  // Cancellation and every contradictory failure flag take precedence over
+  // a nominally successful exit: a parent cancellation that lands just
+  // after the collector closes must never pass as a successful capture.
   if (aborted) return "COLLECTOR_ABORTED";
   if (timedOut) return "COLLECTOR_TIMEOUT";
   if (killed) return "COLLECTOR_KILLED";
@@ -64,6 +66,7 @@ export function classifyCollectorOutcome({
   if (overflow) return "COLLECTOR_KILLED";
   if (termSignal !== null && termSignal !== undefined)
     return "COLLECTOR_KILLED";
+  if (ok) return null;
   return "COLLECTOR_EXITED";
 }
 

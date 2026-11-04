@@ -12,6 +12,28 @@ import { publicAttempt } from "./report.mjs";
 import { createEnvironment, RealVerifier } from "./runtime.mjs";
 import { createSourceSession } from "./source.mjs";
 
+/** Pure post-capture outcome resolution. A failed capture keeps its own
+ * coarse stage even when the release also fails; a successful capture whose
+ * release fails is a real post-capture integrity finding and fails closed
+ * as SOURCE_LEASE_CHANGED. Null means the capture and release both proved
+ * the candidate source intact. */
+export function resolveCaptureOutcome({
+  captureFailed,
+  captureStage = null,
+  releaseFailed,
+}) {
+  if (captureFailed)
+    return {
+      blocker: "CUSTODY_CAPTURE_FAILED",
+      stage: CUSTODY_CAPTURE_STAGES.includes(captureStage)
+        ? captureStage
+        : "UNKNOWN",
+    };
+  if (releaseFailed)
+    return { blocker: "CUSTODY_CAPTURE_FAILED", stage: "SOURCE_LEASE_CHANGED" };
+  return null;
+}
+
 /** Missing admission is a first-class result before filesystem/worker effects.
  * Keep production construction here: callers cannot inject a synthetic provider
  * or override a paid bound to turn a unit harness into an inference claim. */
@@ -163,7 +185,8 @@ async function runPaidAttempt({
     );
     let custody,
       captureFailed = false,
-      captureStage = null;
+      captureStage = null,
+      releaseFailed = false;
     try {
       custody = await captureLease(
         custodyAttempt,
@@ -180,23 +203,27 @@ async function runPaidAttempt({
       captureStage = CUSTODY_CAPTURE_STAGES.includes(error?.custodyStage)
         ? error.custodyStage
         : "UNKNOWN";
-    } finally {
-      // Release failures never mask the already-decided capture outcome: a
-      // failed capture keeps its stage and blocker, a successful capture
-      // keeps its custody receipt. Downstream validation still re-admits
-      // the candidate fresh, so any real source change stays fail-closed.
-      try {
-        await lease.release();
-      } catch {
-        /* source lease already invalid; scratch directory only */
-      }
+    }
+    // Release re-admits the source fresh: a failure here is a real
+    // post-capture integrity finding, never masked and never masking the
+    // capture outcome above. The candidate root is not exposed in either
+    // failure branch, so no stored/Oracle transfer can start from it.
+    try {
+      await lease.release();
+    } catch {
+      releaseFailed = true;
     }
     result.modelGeneration = "GENERATED";
     result.aiGeneration =
       attempt === 1 ? "REAL_INFERENCE_GENERATED" : "REAL_INFERENCE_REPAIRED";
-    if (captureFailed) {
+    const captureOutcome = resolveCaptureOutcome({
+      captureFailed,
+      captureStage,
+      releaseFailed,
+    });
+    if (captureOutcome !== null) {
       result.blockers = ["CUSTODY_CAPTURE_FAILED"];
-      result.custodyCaptureStage = captureStage;
+      result.custodyCaptureStage = captureOutcome.stage;
       return result;
     }
     result.custody = custody;

@@ -21,6 +21,7 @@ import {
 import { generationScorecard } from "../src/live-experiment.mjs";
 import { bindMigrationContext } from "../src/migration-context.mjs";
 import { generationPreflight } from "../src/migration-preflight.mjs";
+import { resolveCaptureOutcome } from "../src/migration-trial.mjs";
 import { DIAGNOSTIC_POLICY } from "../src/private-diagnostics.mjs";
 
 const head = "a".repeat(40);
@@ -48,6 +49,28 @@ test("custody capture stages are a closed allowlisted enum", () => {
 
 test("collector outcome classifier pins every coarse stage", () => {
   assert.equal(classifyCollectorOutcome({ ok: true }), null);
+  // P0 regression: cancellation overrides a nominally successful exit.
+  assert.equal(
+    classifyCollectorOutcome({ ok: true, aborted: true }),
+    "COLLECTOR_ABORTED",
+  );
+  assert.equal(classifyCollectorOutcome({ ok: true, aborted: false }), null);
+  assert.equal(
+    classifyCollectorOutcome({ ok: true, timedOut: true, killed: true }),
+    "COLLECTOR_TIMEOUT",
+  );
+  assert.equal(
+    classifyCollectorOutcome({ ok: true, killed: true }),
+    "COLLECTOR_KILLED",
+  );
+  assert.equal(
+    classifyCollectorOutcome({
+      ok: true,
+      code: 0,
+      termSignal: "SIGTERM",
+    }),
+    "COLLECTOR_KILLED",
+  );
   assert.equal(
     classifyCollectorOutcome({ ok: false, aborted: true }),
     "COLLECTOR_ABORTED",
@@ -156,6 +179,46 @@ test("readiness probe returns fixed verdicts with an injected runner", async (t)
   // The verdict enum is closed.
   for (const verdict of CUSTODY_READINESS)
     assert.ok(typeof verdict === "string");
+});
+
+test("post-capture outcome resolution preserves and fails closed correctly", () => {
+  // Failed capture keeps its own coarse stage even when release also fails.
+  assert.deepEqual(
+    resolveCaptureOutcome({
+      captureFailed: true,
+      captureStage: "CAPSULE_REJECTED",
+      releaseFailed: true,
+    }),
+    { blocker: "CUSTODY_CAPTURE_FAILED", stage: "CAPSULE_REJECTED" },
+  );
+  assert.deepEqual(
+    resolveCaptureOutcome({
+      captureFailed: true,
+      captureStage: null,
+      releaseFailed: true,
+    }),
+    { blocker: "CUSTODY_CAPTURE_FAILED", stage: "UNKNOWN" },
+  );
+  // Successful capture + failed release: real post-capture integrity
+  // finding, fails closed as SOURCE_LEASE_CHANGED.
+  assert.deepEqual(
+    resolveCaptureOutcome({ captureFailed: false, releaseFailed: true }),
+    { blocker: "CUSTODY_CAPTURE_FAILED", stage: "SOURCE_LEASE_CHANGED" },
+  );
+  // Both clean: no blocker, custody proceeds.
+  assert.equal(
+    resolveCaptureOutcome({ captureFailed: false, releaseFailed: false }),
+    null,
+  );
+  // Unknown stages are coerced into the closed enum.
+  assert.deepEqual(
+    resolveCaptureOutcome({
+      captureFailed: true,
+      captureStage: "MADE_UP",
+      releaseFailed: false,
+    }),
+    { blocker: "CUSTODY_CAPTURE_FAILED", stage: "UNKNOWN" },
+  );
 });
 
 test("capture-failed trials stop with an explicit no-Oracle reason and stage", () => {
