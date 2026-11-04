@@ -1,5 +1,10 @@
 # Operator runbook — six-track recorded demo (MMP-162)
 
+For the latest verified public G1–G3 snapshot and submission recording, start with
+the [MMP-194 operator flow](../mmp-194/RUNBOOK.md) and
+[exact 3-minute English storyboard](SUBMISSION.md). This A–F walkthrough remains
+the historical fallback; it does not include the later candidate.
+
 Интерфейс английский, речь русская. Все слоты — **target pacing**, не замер.
 Human timed rehearsal: **NOT_RUN**. [Проверки и screenshots](VALIDATION-162.md).
 

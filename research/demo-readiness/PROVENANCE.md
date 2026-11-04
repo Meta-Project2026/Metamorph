@@ -1,5 +1,10 @@
 # Public snapshots and receipt trust
 
+MMP-194 adds a separate latest-run proof sheet, not a replacement for A–F.
+See the [original public archive audit](../mmp-194/provenance.md) for run
+41856569137, exact candidate identities, G1/G2/G3 PASS scope and distinct
+owner-recorded synthetic G0. Formal G0/G4/product remain unestablished.
+
 MMP-148 adds E from independently retrieved original PUBLIC metadata of run
 41505679809; see the final section below. Earlier A–D preparation records retain
 their historical scope and do not establish current custody/owner-restore state.
