@@ -1,7 +1,7 @@
 # MMP-167 Hosted Qualification Decision Report: Decision B0
 
 **Date:** 2026-11-04  
-**Workflow Run:** [GitHub Actions #41813835915](https://github.com/Meta-Project2026/Metamorph/actions/runs/41813835915)  
+**Workflow Runs:** [#41813835915](https://github.com/Meta-Project2026/Metamorph/actions/runs/41813835915) (initial 10/10) and [#41814496390](https://github.com/Meta-Project2026/Metamorph/actions/runs/41814496390) (hosted rerun at PR head, 10/10)  
 **Runner Environment:** Azure `northcentralus` / Ubuntu 24.04.5 LTS / Docker 28.5.1 / Node v24.22.1  
 **Target Fixture:** Synthetic known-good `packages/target-worker/fixtures/workshop` (`candidateSha = 34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334`)  
 **Target Recipe Digest:** `f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3` (matches committed `RECIPE_PIN` exactly)  
@@ -18,9 +18,9 @@
    - `zeroResourcesVerified = true` across all 10 trials (`VERIFIED_ZERO_RESOURCES`).
 2. **Decision: `B0` (No Production Timeout Changes).**
    - The synthetic fixture compiles stably in **10.63s – 11.09s total** for both phases combined.
-   - Each phase takes ~5.3s – 5.5s, providing **~54% headroom** against the 12,000 ms per-phase limit.
+   - Individual phase durations are **not reported by the canonical build recipe**. Since the phases execute serially inside a Docker command that took at most 11,087 ms in the first hosted run, only a conservative >913 ms (>7.6%) lower bound on phase headroom follows from that run; no 54% phase margin was measured.
    - Outer container execution takes ~11.0s, providing **~68% headroom** against the 35,000 ms outer Docker limit.
-   - There is no empirical justification on the target hosted runner platform to bump production timeouts.
+   - These synthetic hosted runs do not support a production timeout change on their own; they do not establish the authentic model-generated candidate's build behavior or historical root cause.
 3. **Migration & Product Status: `NOT_ESTABLISHED`.**
    - Authentic paid run #41749479450 remains G1 `ERROR` with build-phase subtype `UNKNOWN`.
    - G2/G3 had 0/17 HTTP and 0/20 SQLite executed checks.
@@ -55,13 +55,13 @@ Data from [GitHub Actions run #41813835915](https://github.com/Meta-Project2026/
 | Storage / I/O | VHDX / NTFS 9P translation overhead | Native ext4 Azure ephemeral SSD |
 | Recipe Hash | `bd2296...` (CRLF Dockerfile artifact) | `f09b12...` (Exact LF canonical pin) |
 | Total Build Cmd Duration | 23.7s – 24.8s | 10.6s – 11.1s |
-| Est. Phase Duration | ~11.8s – 12.5s per phase | ~5.3s – 5.5s per phase |
+| Individual phase duration | Not available from canonical production receipts; 5/10 observed timeouts | Not available from canonical production receipts; 0/20 observed timeouts |
 | G1 Qualification Outcome | 5 PASS / 5 ERROR (`BUILD_PHASE_TIMEOUT`) | **10 PASS / 0 FAIL (100% PASS)** |
-| 12,000 ms Margin | ~0% (razor's edge; 50% timeout rate) | **~54% margin (~6.5s headroom)** |
+| 12,000 ms margin | 5/10 timed out in local runs | Exact phase margin unknown; >0.9s bound from first hosted full-command maximum, not a measured 54% |
 | 35,000 ms Outer Margin | ~29% margin | **~68% margin (~24s headroom)** |
 
 ### Conclusion on Timeout Fragility
-The 5/10 timeouts observed on local WSL2 were an artifact of WSL2 virtualization and I/O translation overhead under `--cpus 1` and `--memory 256m` limits. When executed on native Ubuntu 24.04 Azure runners, compilation is more than twice as fast (~10.8s total vs ~24.5s total), leaving comfortable margins.
+Local WSL2 runs exhibited 5/10 phase timeouts while two hosted Ubuntu 24.04 runs each passed 10/10. The platforms differ in scheduling, storage and caching, but these observations **do not isolate WSL2, VHDX or 9P as a causal factor**. Recorded full Docker command elapsed times differed materially (~23.7–24.8s locally versus ~10.6–11.1s in the first hosted run); individual compiler-phase timings are not measured by the canonical recipe. No historical paid-run subtype is established.
 
 ---
 
@@ -69,14 +69,14 @@ The 5/10 timeouts observed on local WSL2 were an artifact of WSL2 virtualization
 
 | Limit | Location | Current Value | Hosted Measurement | Margin | Status |
 |---|---|:---:|:---:|:---:|:---:|
-| `timeout` (phase) | `runtime/build.mjs` | 12,000 ms | ~5,300–5,500 ms | ~54% | **RETAIN (B0)** |
+| `timeout` (phase) | `runtime/build.mjs` | 12,000 ms | Not measured; full Docker command max 11,087 ms | >913 ms conservative lower bound in initial hosted batch; exact unknown | **RETAIN (B0)** |
 | `timeoutMs` (provision) | `src/controller.mjs` | 35,000 ms | 10,630–11,087 ms | ~68% | **RETAIN (B0)** |
 | `operationTimeoutMs` | `src/controller.mjs` | 15,000 ms | N/A (build phase) | N/A | **RETAIN** |
 | `lifetimeMs` | `src/controller.mjs` | 180,000 ms | ~11,400 ms (provision) | ~94% | **RETAIN** |
 | `deadlineMs` | `private-diagnostics.mjs` | 30,000 ms | N/A | N/A | **RETAIN** |
 
 **Decision:**
-Because the hosted baseline passes with 10/10 G1 PASS and healthy margins, **we do not alter any production timeout constants**. Production constants and recipe pins remain intact.
+Both hosted batches (10/10 each) passed with the canonical recipe, and the observed full Docker command times were within the 35,000 ms outer deadline. Individual per-phase headroom and authentic candidate performance remain unknown. **Decision B0: no production timeout changes on the present evidence.** Production constants and recipe pins remain intact.
 
 ---
 
@@ -86,7 +86,7 @@ As requested, we evaluated the concept of removing the duplicate `tsc` invocatio
 
 - **Description:** Instead of running `tsc` twice (phase 1: typecheck with `--noEmit`, phase 2: build with emit), run a single `tsc` compilation that produces diagnostic checks and emits artifacts in one pass.
 - **Impact:**
-  - Wall-clock compilation time cut by roughly half (~5.4s total instead of ~10.8s on hosted runners; ~12s instead of ~24s on WSL2).
+  - Theoretical opportunity to avoid a duplicate full TypeScript invocation; **no single-pass benchmark was executed**, so neither speedup magnitude nor resulting G1 semantics are established.
   - Doubles timeout margin without increasing any deadlines.
 - **Effort:**
   - Moderate (~1 engineer day). Requires rewriting `build.mjs`, adjusting `observeBuild` and `summarizeBuildPhaseDiagnostics`, updating `TargetWorker` verification logic, and re-pinning `RECIPE_PIN` and `DIAGNOSTIC_POLICY.recipeSha`.
