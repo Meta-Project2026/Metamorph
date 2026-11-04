@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MMP-160 proposed public compiler repair feedback v1; no production authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "code", "path", "line", "column", "bindingDigest"],
+  "properties": {
+    "format": { "const": "mmp160-g1-feedback-v1" },
+    "code": { "enum": ["TS2339", "TS2769"] },
+    "path": {
+      "type": "string",
+      "maxLength": 240,
+      "pattern": "^src/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+\\.ts$"
+    },
+    "line": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "column": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
+    "bindingDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
