@@ -62,12 +62,12 @@ export function fields(value, keys, code = "G0_FIELDS") {
     code,
   );
 }
-function ids(value, code) {
+function ids(value, code, minimum = 1) {
   check(
     Array.isArray(value) &&
-      value.length > 0 &&
+      value.length >= minimum &&
       value.length <= 64 &&
-      value.every((id) => typeof id === "string" && ID.test(id)) &&
+      [...value].every((id) => typeof id === "string" && ID.test(id)) &&
       new Set(value).size === value.length,
     code,
   );
@@ -137,7 +137,7 @@ export function registerScope(input, bundle) {
     "G0_TEST_IDS",
   );
   exactIds(input.controlIds, CONTROLS, "G0_CONTROL_IDS");
-  ids(input.unsupported, "G0_UNSUPPORTED");
+  ids(input.unsupported, "G0_UNSUPPORTED", 0);
   check(
     Array.isArray(input.units) &&
       input.units.length > 0 &&
@@ -250,6 +250,14 @@ export function identity(scope, runId) {
     imageId: scope.imageId,
     recipeSha: scope.recipeSha,
   };
+}
+// These local hash declarations do not authenticate source custody or owner
+// admission. Even the known public bundle SHA proves only exact byte identity.
+export function candidateProvenance(candidateSha) {
+  return candidateSha ===
+    "4207053ada23f8e94ecf6301452ee4ea8228a3717c0a478d3e550443cec130e6"
+    ? "EXACT_PUBLIC_SHA_MATCHED_ATTESTATION_PENDING"
+    : "OWNER_ATTESTATION_PENDING";
 }
 export const SAFE_CODES = new Set([
   "G0_SCOPE",

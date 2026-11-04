@@ -40,7 +40,10 @@ Two deliberately bounded challenge profiles exist:
   identity values, dates, subsequent reads and deletion observations. This is
   not every PHP route, error, header, data type or possible state transition.
 
-The owner must explicitly exclude unsupported behavior. A unit-to-route map and
+The owner must explicitly exclude unsupported behavior. A scope with no
+exclusions uses `unsupported: []`; identifiers remain bounded and
+unique. Source/manifest/provenance hashes in a local declaration are claims,
+not independently authenticated owner custody. A unit-to-route map and
 finite challenges establish **declared coverage**, not code/branch coverage or
 proof about arbitrary PHP behavior. Additions need a new version and reviewed
 challenge policy; a smaller scope cannot inherit a broader completeness claim.
@@ -87,6 +90,15 @@ Each candidate invocation is bounded to 180 seconds, 1 CPU, 256 MiB RAM/swap,
 64 PIDs, 64 MiB work, 16 MiB state and 16 MiB temporary storage. Commands have
 15-second limits (isolated compilation up to 35 seconds within the same lifetime).
 Cleanup and independent finalization each have a separate 10-second budget.
+Normal cleanup first bounds its cancelled-work join inside that budget. Command
+waits also have host-side deadlines even if a command wrapper ignores abort.
+An unresolved operation yields `G0_CLEANUP`, unknown normal cleanup (`null`) and
+an independent ledger finalizer attempt; it cannot yield normal zero counts.
+The adapter starts no further normal mutations when the join is uncertain, and
+no new commands after its cleanup deadline. Late command settlement cannot write
+sealed evidence. A stuck external daemon operation may still complete later;
+the finalizer's inventory is an observation, not proof that operation stopped.
+Such a run stays ERROR and may require later owner/supervisor recovery.
 Private capture is bounded to 512 events, 4 MiB per command and 32 MiB per trace.
 Trusted image setup is separately bounded to 240 seconds; only setup may use the
 host's network. Setup does not run candidate material.
@@ -103,6 +115,11 @@ Only live complete fixture observations can qualify that exact image/recipe/
 evaluator, after which a twelfth invocation rechecks a positive and may issue
 `G0_PASS`. A single candidate run cannot bypass this procedure. No serialized
 past PASS or caller-selected expected result can qualify an adapter.
+Qualification additionally requires the private live observation's verified
+evidence condition. Every material secondary fault participates in assessment:
+a challenge FAIL plus evidence/capture/finalizer integrity error is ERROR while
+retaining the original challenge finding. Both normal and finalizer catalogs
+are independently verified, and a failed receipt write gets no live authority.
 
 The host persists a private exact-name/ID/run/owner/role ledger **before creation**.
 Normal cleanup validates labels and deletes only exact full container IDs.
@@ -198,6 +215,11 @@ Do not give a model age keys, ciphertext, restored TS, private logs or raw packs
 
 Until that owner operation and safe independent attestation exist,
 **G0_REAL_CANDIDATE=NOT_RUN**. Passing synthetic controls alone cannot change it.
+This module has no authenticated owner-attestation input: `realCandidate` remains
+`NOT_RUN`, including after a scoped PASS and exact known bundle SHA match.
+`candidateProvenance: EXACT_PUBLIC_SHA_MATCHED_ATTESTATION_PENDING` records only
+that exact byte identity; other bundles report `OWNER_ATTESTATION_PENDING`.
+An owner attestation remains a separate independently reviewed record.
 
 ## G0 → #57 boundary and residual attacks
 

@@ -49,3 +49,74 @@ All sandbox failures above remain recorded as environment errors; successful
 host-permission reruns do not rewrite them. The full root suite does not include
 workshop-audit: its final suite was separately executed after the last G0-only
 changes. The coverage validator's tests and actual inventory were also checked.
+
+## PR #184 independent-review remediation — 2026-11-04
+
+Review target was `14836568d8763eaaecde42b38cda31ce023ed1f9`, review
+[5774098085](https://github.com/Meta-Project2026/Metamorph/pull/184#pullrequestreview-5774098085).
+Fresh `origin/main` was `e0e971bd8d8c3d1a28c8332d42748e78e59a970a`.
+Inspectable merge `ab2cbba484e33e7e86555a8a2fe0b490c02809a0` retains both original
+parents, PR #185's G4 registry/package inventory and PR #184's G0 POSIX skip and
+validator binding. No force push or history rewrite. The exact remediation HEAD,
+new PR merge-ref/tree and actual hosted run IDs are recorded in the PR follow-up.
+
+Before source changes, new regressions ran on that merge with tests-only edits:
+
+| Command / observation | Actual result |
+| --- | --- |
+| `node --test --test-name-pattern='fully supported\|secondary integrity\|cleanup bounds' packages/workshop-audit/test/g0.test.mjs` | Exit 1; 0 pass / 3 fail. Empty unsupported rejected; secondary evidence fault returned FAIL; nonsettling join reached 500 ms HUNG guard |
+| `node --experimental-test-module-mocks --test packages/workshop-audit/test/g0-run-controls.mjs` (corrected isolated harness, normal host permissions) | Exit 1; 0 pass / 6 fail. Behavioral/post-seal tamper returned FAIL; invalid live negative control qualification unexpectedly succeeded; finalizer tamper returned FAIL; missing verified-state fields; independent finalization blocked by join |
+
+An earlier sandbox lifecycle attempt failed at atomic evidence rename (`EPERM`),
+so did not reproduce the reviewed defects. One initial normal-host harness run
+preloaded the unmocked runner via the synthetic import: 1 pass / 5 fail with
+`G0_LINUX_REQUIRED`; that harness error was corrected before the baseline above.
+Neither result is counted as a product regression. An initial sandbox formatter
+attempt exited 1 when pnpm's store symlink was denied. Host-permission reruns
+below succeeded; these environment failures are retained, not reclassified PASS.
+
+Final local checks used Node `v24.21.0`, pinned pnpm `11.25.0`, Windows PowerShell,
+the merged 12-package workspace and only original public/synthetic fixtures.
+Normal host permissions were used for pnpm and evidence/ownership tests after
+the observed sandbox failures. No candidate/probe programs ran on the host.
+
+| Command | Exit / actual result |
+| --- | --- |
+| `git fetch origin main codex/mmp183-g0` | 0 after normal-permission rerun; initial sandbox exit 1, `.git/FETCH_HEAD` denied |
+| `git merge --no-ff origin/main -m 'Merge current main with synthetic G4 inventory into MMP-183'` | 0; merge recorded above |
+| `pnpm install --frozen-lockfile` | 0; lockfile unchanged, 12 workspace projects |
+| Scoped `pnpm exec biome check --write` | 0; five G0 source/test files only |
+| `pnpm lint` | 0; four existing warnings/two infos in unrelated agent-real files |
+| `pnpm typecheck` | 0 |
+| `pnpm test` | 0; 947 pass / 131 platform skips / 0 fail, including merged synthetic G4 registry tests |
+| `pnpm build` | 0 |
+| `pnpm --filter @metamorph/workshop-audit test` | 0; 77 pass / 2 Windows skips / 0 fail; includes the isolated seven-case receipt lifecycle suite |
+| `node --test packages/workshop-audit/test/g0.test.mjs` | 0; 24 pass / 1 Windows POSIX skip / 0 fail |
+| `node --experimental-test-module-mocks --test packages/workshop-audit/test/g0-run-controls.mjs` | 0; 7 pass / 0 fail / 0 skip (inner cases are not added to the parent suite totals) |
+| `pnpm --filter @metamorph/target-worker test` | 0; 69 pass / 0 fail / 0 skip |
+| `pnpm --filter @metamorph/differential test` | 0; 77 pass / 45 platform skips / 0 fail |
+| `node research/mmp-069/validate.mjs` | 0; VALID, 12 packages; privileged runner NOT_RUN |
+| `node --test research/mmp-069/validate.test.mjs` | 0; 45 pass / 0 fail / 0 skip |
+| `git diff --check` | 0 |
+| `docker info --format '{{json .}}'` | 1; Linux engine named pipe absent |
+| Public/synthetic actual Docker qualification | DOCKER_NOT_RUN |
+| Authentic candidate run / owner attestation | G0_REAL_CANDIDATE=NOT_RUN |
+
+Corrected behavior: all material secondary faults override behavioral FAIL;
+verified evidence is required in private live receipt state before qualification;
+both catalogs and publication are checked. A nonsettling command/join cannot
+prevent independent ledger finalization, produce normal zero counts, start
+normal mutations after uncertainty or write sealed evidence on late settlement.
+Underlying daemon completion remains unknown after abort failure; ERROR requires
+owner/supervisor recovery, not a claim of successful cleanup. Exact known bundle
+SHA is only `EXACT_PUBLIC_SHA_MATCHED_ATTESTATION_PENDING`; `realCandidate` cannot
+be PASS in this module. Empty unsupported is valid; malformed/sparse/duplicate/
+oversized/non-array exclusions and incomplete mandatory coverage still reject.
+
+The isolated lifecycle tests use Node's experimental module mocks in a separate
+test process; production `runG0` accepts no injected adapter, platform override or
+expected verdict. The existing wildcard reaches that process without CI changes.
+POSIX Windows skips remain NOT_RUN locally. Green Fast CI is implementation
+evidence only. Independent exact-head ChatGPT re-review, real Linux Docker fault
+qualification and owner-local authenticated candidate admission remain pending;
+PR #184 stays Draft, #183 stays open and product acceptance is NOT_ESTABLISHED.

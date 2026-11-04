@@ -18,6 +18,30 @@ export function requireAdmittedImage(imageId, recipeSha) {
   check(admittedImages.get(imageId) === recipeSha, "G0_IDENTITY");
 }
 const containerId = (id) => /^[a-f0-9]{64}$/.test(id);
+async function bounded(task, milliseconds, code, abort, signal) {
+  check(milliseconds > 0, code);
+  check(!signal?.aborted, "G0_CANCELLED");
+  let timer, cancel;
+  try {
+    return await Promise.race([
+      task,
+      new Promise((_, reject) => {
+        cancel = () =>
+          reject(
+            Object.assign(new Error("G0_CANCELLED"), { code: "G0_CANCELLED" }),
+          );
+        signal?.addEventListener("abort", cancel, { once: true });
+        timer = setTimeout(() => {
+          abort?.abort();
+          reject(Object.assign(new Error(code), { code }));
+        }, milliseconds);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+    if (cancel) signal?.removeEventListener("abort", cancel);
+  }
+}
 export async function recipe() {
   const names = (await readdir(RUNTIME_ROOT))
     .filter(
@@ -163,7 +187,15 @@ export function validateIsolation(value, expected, imageEnv) {
 }
 
 export class G0Docker {
-  constructor(runId, sink, { execute = command, owner = randomUUID() } = {}) {
+  constructor(
+    runId,
+    sink,
+    {
+      execute = command,
+      owner = randomUUID(),
+      cleanupMs = LIMITS.cleanupMs,
+    } = {},
+  ) {
     check(
       /^g0-[a-f0-9-]{36}$/.test(runId) && /^[a-f0-9-]{36}$/.test(owner),
       "G0_OWNERSHIP",
@@ -172,6 +204,13 @@ export class G0Docker {
     this.owner = owner;
     this.sink = sink;
     this.execute = execute; // Trusted test seam; runG0 never accepts an adapter.
+    check(
+      Number.isFinite(cleanupMs) &&
+        cleanupMs > 0 &&
+        cleanupMs <= LIMITS.cleanupMs,
+      "G0_CLEANUP",
+    );
+    this.cleanupMs = cleanupMs;
     this.ledger = [];
     this.pending = new Set();
     this.deadline = performance.now() + LIMITS.lifetimeMs;
@@ -185,31 +224,64 @@ export class G0Docker {
       (cleanup ? this.cleanupDeadline : this.deadline) - performance.now();
     check(remaining > 0, cleanup ? "G0_CLEANUP" : "G0_TIMEOUT");
     if (!cleanup)
-      check(!this.workAbort.signal.aborted && !signal?.aborted, "G0_CANCELLED");
-    const task = this.execute(args, {
-      input,
-      timeoutMs: Math.min(timeoutMs, remaining),
-      signal: cleanup
-        ? undefined
-        : AbortSignal.any([this.workAbort.signal, ...(signal ? [signal] : [])]),
-    });
+      check(
+        !this.closing && !this.workAbort.signal.aborted && !signal?.aborted,
+        "G0_CANCELLED",
+      );
+    const abort = new AbortController();
+    const cancellation = cleanup
+      ? undefined
+      : AbortSignal.any([this.workAbort.signal, ...(signal ? [signal] : [])]);
+    const duration = Math.min(timeoutMs, remaining);
+    const task = Promise.resolve(
+      this.execute(args, {
+        input,
+        timeoutMs: duration,
+        signal: AbortSignal.any([
+          abort.signal,
+          ...(cancellation ? [cancellation] : []),
+        ]),
+      }),
+    );
     this.pending.add(task);
-    let result;
+    // Keep the underlying operation in the join even if our own timeout wins.
+    // Both handlers consume settlement; no detached rejecting finally promise.
+    task.then(
+      () => this.pending.delete(task),
+      () => this.pending.delete(task),
+    );
+    const result = await bounded(
+      task,
+      duration,
+      cleanup ? "G0_CLEANUP" : "G0_TIMEOUT",
+      abort,
+      cancellation,
+    );
+    if (!cleanup) check(!this.closing, "G0_CANCELLED");
+    check(
+      performance.now() < (cleanup ? this.cleanupDeadline : this.deadline),
+      cleanup ? "G0_CLEANUP" : "G0_TIMEOUT",
+    );
     try {
-      result = await task;
-    } finally {
-      this.pending.delete(task);
+      this.sink.record("command", { args, ...result, input: undefined });
+    } catch {
+      this.evidenceFailed = true;
+      check(false, "G0_EVIDENCE");
     }
-    this.sink.record("command", { args, ...result, input: undefined });
     return result;
   }
   save() {
-    this.sink.ledger({
-      version: 1,
-      runId: this.runId,
-      owner: this.owner,
-      resources: this.ledger,
-    });
+    try {
+      this.sink.ledger({
+        version: 1,
+        runId: this.runId,
+        owner: this.owner,
+        resources: this.ledger,
+      });
+    } catch {
+      this.evidenceFailed = true;
+      check(false, "G0_EVIDENCE");
+    }
   }
   async health() {
     const r = await this.call(["info", "--format", "{{json .}}"]);
@@ -501,8 +573,16 @@ export class G0Docker {
     this.save();
   }
   async close() {
+    this.closing = true;
     this.workAbort.abort();
-    this.cleanupDeadline = performance.now() + LIMITS.cleanupMs;
+    this.cleanupDeadline = performance.now() + this.cleanupMs;
+    // Join before any Docker mutation. An abort-ignoring create/start may still
+    // be active; uncertain work cannot yield a zero-resource cleanup receipt.
+    await bounded(
+      Promise.allSettled([...this.pending]),
+      this.cleanupDeadline - performance.now(),
+      "G0_CLEANUP",
+    );
     let failed = false;
     try {
       await this.inventory();
@@ -518,7 +598,7 @@ export class G0Docker {
         failed = true;
       }
     }
-    await Promise.allSettled([...this.pending]);
+    check(this.pending.size === 0, "G0_CLEANUP");
     let remaining = null;
     try {
       remaining = await this.inventory();
@@ -531,7 +611,7 @@ export class G0Docker {
   // A distinct finalizer invocation uses only this validated run ledger. It
   // refuses unknown IDs/labels and never searches/removes by a name prefix.
   async finalize() {
-    this.cleanupDeadline = performance.now() + LIMITS.cleanupMs;
+    this.cleanupDeadline = performance.now() + this.cleanupMs;
     let failed = false,
       removed = 0;
     try {

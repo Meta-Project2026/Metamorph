@@ -1,6 +1,7 @@
 // Trusted Docker CLI simulations and public data only; never execute candidate
 // TS, compiled JS, probe programs or a mock application on the host.
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import {
   chmodSync,
   linkSync,
@@ -14,6 +15,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { Script } from "node:vm";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import { challenge } from "../src/g0/challenge.mjs";
@@ -33,6 +35,7 @@ import {
 } from "../src/g0/evidence.mjs";
 import {
   CONTROLS,
+  candidateProvenance,
   DRIVERS,
   digest,
   exactIds,
@@ -64,6 +67,7 @@ const passInput = () => ({
   cleanup: { ...zero },
   finalizer: { ...zero },
   evidence: { bytes: 100 },
+  evidenceVerified: true,
   fault: null,
 });
 const rejectsCode = (fn, code) => assert.throws(fn, (e) => e.code === code);
@@ -110,9 +114,6 @@ test("G0 missing routes/units, extra source, duplicate/missing tests and control
     (s) => s.controlIds.push(s.controlIds[0]),
     (s) => s.controlIds.pop(),
     (s) => {
-      s.unsupported = [];
-    },
-    (s) => {
       s.unregistered = true;
     },
   ];
@@ -121,6 +122,79 @@ test("G0 missing routes/units, extra source, duplicate/missing tests and control
     mutate(s);
     assert.throws(() => registerScope(s, bundle));
   }
+});
+test("G0 fully supported scopes allow no exclusions but reject invalid unsupported IDs", () => {
+  const s = structuredClone(scope());
+  s.unsupported = [];
+  assert.deepEqual(registerScope(s, bundle).unsupported, []);
+  for (const unsupported of [
+    null,
+    "none",
+    {},
+    ["duplicate", "duplicate"],
+    ["Invalid"],
+    ["has/slash"],
+    ["a".repeat(65)],
+    [1],
+    Array(1),
+    Array.from({ length: 65 }, (_, i) => `id-${i}`),
+  ]) {
+    rejectsCode(
+      () => registerScope({ ...s, unsupported }, bundle),
+      "G0_UNSUPPORTED",
+    );
+  }
+});
+test("G0 exact known bundle SHA and well-formed provenance declarations never attest owner custody", () => {
+  assert.equal(
+    candidateProvenance(
+      "4207053ada23f8e94ecf6301452ee4ea8228a3717c0a478d3e550443cec130e6",
+    ),
+    "EXACT_PUBLIC_SHA_MATCHED_ATTESTATION_PENDING",
+  );
+  const declaration = structuredClone(scope());
+  declaration.sourceSha = "d".repeat(64);
+  declaration.manifestSha = "e".repeat(64);
+  declaration.candidateGitSha = "f".repeat(40);
+  const registered = registerScope(declaration, bundle);
+  assert.equal(
+    candidateProvenance(registered.candidateSha),
+    "OWNER_ATTESTATION_PENDING",
+  );
+});
+test("G0 secondary integrity faults override behavioral FAIL and unverified catalogs", () => {
+  for (const secondary of ["G0_EVIDENCE", "G0_CLEANUP", "G0_INTERNAL"]) {
+    const v = passInput();
+    v.fault = "G0_CHALLENGE";
+    v.faults = [v.fault, secondary];
+    assert.equal(assess(v), "ERROR");
+  }
+  const v = passInput();
+  v.fault = "G0_CHALLENGE";
+  v.evidenceVerified = false;
+  assert.equal(assess(v), "ERROR");
+});
+test("G0 live receipt evidence, qualification and finalization regressions", () => {
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--experimental-test-module-mocks",
+      "--test",
+      "--test-reporter=tap",
+      fileURLToPath(new URL("./g0-run-controls.mjs", import.meta.url)),
+    ],
+    {
+      encoding: "utf8",
+      timeout: 30000,
+      windowsHide: true,
+      env: Object.fromEntries(
+        Object.entries(process.env).filter(
+          ([key]) => key !== "NODE_TEST_CONTEXT",
+        ),
+      ),
+    },
+  );
+  assert.match(output, /# fail 0/);
 });
 test("G0 forbidden imports/loaders are structural rejection, never Docker evidence", () => {
   inspectSource(bundle);
@@ -452,11 +526,41 @@ function harness(options = {}) {
       );
     throw Error("UNMODELLED_TRUSTED_COMMAND");
   };
-  const adapter = new G0Docker(makeRunId(), sink, { execute });
+  const adapter = new G0Docker(makeRunId(), sink, {
+    execute,
+    cleanupMs: options.cleanupMs ?? 10000,
+  });
   adapter.imageId = imageId;
   adapter.imageEnv = env;
   return { adapter, containers, volumes, calls, sink };
 }
+test("G0 cleanup bounds an abort-ignoring join and issues no uncertain zero receipt", async () => {
+  const h = harness({ cleanupMs: 30 });
+  const never = new Promise(() => {});
+  h.adapter.pending.add(never);
+  const started = performance.now();
+  let guard;
+  try {
+    const outcome = await Promise.race([
+      h.adapter.close().then(
+        () => "PASS",
+        (e) => e.code,
+      ),
+      new Promise((resolve) => {
+        guard = setTimeout(() => resolve("HUNG"), 500);
+      }),
+    ]);
+    assert.equal(outcome, "G0_CLEANUP");
+    assert.ok(performance.now() - started < 500);
+    assert.equal(
+      h.calls.length,
+      0,
+      "uncertain commands prohibit normal mutations",
+    );
+  } finally {
+    clearTimeout(guard);
+  }
+});
 test("G0 normal cleanup and fresh finalizer observe exact ownership and zero resources", async () => {
   const h = harness();
   const id = await h.adapter.create("runtime", "/opt/worker/launch.mjs");
@@ -469,6 +573,38 @@ test("G0 normal cleanup and fresh finalizer observe exact ownership and zero res
       .every((a) => /^[a-f0-9]{64}$/.test(a.at(-1))),
   );
   validateLedger(h.sink.latest);
+});
+test("G0 abort-ignoring cleanup commands cannot overrun close or independent finalize budgets", async () => {
+  for (const method of ["close", "finalize"]) {
+    const h = harness({ cleanupMs: 30 });
+    await h.adapter.create("runtime", "/opt/worker/launch.mjs");
+    const commands = [];
+    h.adapter.execute = (args) => {
+      commands.push(args);
+      return new Promise(() => {});
+    };
+    let guard;
+    try {
+      const outcome = await Promise.race([
+        h.adapter[method]().then(
+          () => "PASS",
+          (e) => e.code,
+        ),
+        new Promise((resolve) => {
+          guard = setTimeout(() => resolve("HUNG"), 500);
+        }),
+      ]);
+      assert.equal(outcome, "G0_CLEANUP");
+      assert.equal(
+        commands.length,
+        1,
+        "no new Docker operations after budget expires",
+      );
+      assert.equal(h.containers.size, 1, "unknown cleanup never reports zero");
+    } finally {
+      clearTimeout(guard);
+    }
+  }
 });
 test("G0 finalizer never deletes a foreign same-prefix container or volume", async () => {
   const h = harness();

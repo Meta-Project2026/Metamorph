@@ -6,6 +6,7 @@ import { Evidence, verifyEvidence } from "./evidence.mjs";
 import { finalizeLedger } from "./finalizer.mjs";
 import {
   CONTROLS,
+  candidateProvenance,
   check,
   digest,
   exactIds,
@@ -44,11 +45,12 @@ export async function qualifyAdapter(receipts) {
       observed = observations.get(r);
     check(
       issued.has(r) &&
+        observed?.evidenceVerified === true &&
         observed?.verdict === fixture.verdict &&
         observed.fault === fixture.code &&
         r.identity.candidateSha === fixture.bundle.candidateSha &&
         runtimeKey(r.identity) === key &&
-        r.evidence &&
+        r.evidenceVerified === true &&
         r.cleanup?.containers === 0 &&
         r.cleanup.volumes === 0 &&
         r.finalizer?.emergencyRemoved === 0,
@@ -74,6 +76,7 @@ export function consumePass(receipt, expectedIdentity) {
   check(
     issued.has(receipt) &&
       receipt.verdict === "PASS" &&
+      observations.get(receipt)?.evidenceVerified === true &&
       receipt.qualification ===
         qualifications.get(runtimeKey(receipt.identity)) &&
       digest(receipt.identity) === digest(expectedIdentity),
@@ -98,7 +101,9 @@ export function assess({
   cleanup,
   finalizer,
   fault,
+  faults = fault ? [fault] : [],
   evidence,
+  evidenceVerified,
 }) {
   // Evidence/cleanup faults take precedence without discarding the primary fault.
   if (
@@ -110,13 +115,14 @@ export function assess({
     finalizer.containers !== 0 ||
     finalizer.volumes !== 0 ||
     finalizer.emergencyRemoved !== 0 ||
-    !evidence
+    !evidence ||
+    evidenceVerified !== true ||
+    faults.some(
+      (code) => !admissionFailures.has(code) && !behavioralFailures.has(code),
+    )
   )
     return "ERROR";
-  if (fault)
-    return admissionFailures.has(fault) || behavioralFailures.has(fault)
-      ? "FAIL"
-      : "ERROR";
+  if (faults.length) return "FAIL";
   try {
     exactIds(controls, CONTROLS);
     exactIds(tests, scope.testIds);
@@ -139,6 +145,7 @@ export async function runG0(scope, bundle, output, signal) {
     tests = [],
     faults = [];
   let cleanup, finalizer, artifactSha, evidence;
+  let evidenceVerified = false;
   const cancel = () => adapter.workAbort.abort();
   signal?.addEventListener("abort", cancel, { once: true });
   const timer = setTimeout(() => {
@@ -199,6 +206,7 @@ export async function runG0(scope, bundle, output, signal) {
     } catch (e) {
       faults.push(safeCode(e) === "G0_INTERNAL" ? "G0_CLEANUP" : safeCode(e));
     }
+    if (adapter.evidenceFailed) faults.push("G0_EVIDENCE");
     try {
       // Separate budget/descriptor/trace: exhausted or failed normal capture
       // must not disable the independent cleanup attempt.
@@ -207,12 +215,18 @@ export async function runG0(scope, bundle, output, signal) {
       try {
         finalizer = await finalizeLedger(output, independent, runId);
       } finally {
-        finalizerEvidence = independent.seal();
+        try {
+          finalizerEvidence = independent.seal();
+          verifyEvidence(`${output}-finalizer`, finalizerEvidence);
+        } catch {
+          faults.push("G0_EVIDENCE");
+          check(false, "G0_EVIDENCE");
+        }
       }
       finalizer = { ...finalizer, evidence: finalizerEvidence };
       sink.write("finalizer.json", { runId, ...finalizer });
-    } catch {
-      faults.push("G0_CLEANUP");
+    } catch (e) {
+      faults.push(safeCode(e) === "G0_EVIDENCE" ? "G0_EVIDENCE" : "G0_CLEANUP");
     }
     try {
       sink.record("completion", {
@@ -224,6 +238,7 @@ export async function runG0(scope, bundle, output, signal) {
       });
       evidence = sink.seal(["ledger.json", "finalizer.json"]);
       verifyEvidence(output, evidence);
+      evidenceVerified = !faults.includes("G0_EVIDENCE");
     } catch {
       faults.push("G0_EVIDENCE");
     }
@@ -236,7 +251,9 @@ export async function runG0(scope, bundle, output, signal) {
     cleanup,
     finalizer,
     fault,
+    faults,
     evidence,
+    evidenceVerified,
   });
   const qualification =
     qualifications.get(runtimeKey(identity(scope, runId))) ?? null;
@@ -262,28 +279,33 @@ export async function runG0(scope, bundle, output, signal) {
     cleanup: cleanup ?? null,
     finalizer: finalizer ?? null,
     evidence: evidence ?? null,
-    realCandidate:
-      verdict === "PASS" &&
-      scope.candidateSha ===
-        "4207053ada23f8e94ecf6301452ee4ea8228a3717c0a478d3e550443cec130e6"
-        ? "PASS"
-        : "NOT_RUN",
+    evidenceVerified,
+    candidateProvenance: candidateProvenance(scope.candidateSha),
+    realCandidate: "NOT_RUN",
   });
-  issued.add(receipt);
-  observations.set(receipt, { verdict: observedVerdict, fault: fault ?? null });
-  // Persist the safe envelope only after every writer has joined and the
-  // independent finalizer and exact-byte evidence catalog have been verified.
+  // Only verified completion gets live authority. An uncertain join can still
+  // publish an ERROR, with no normal zero-cleanup claim or late writer access.
   try {
     sink.write("receipt.json", receipt);
+    if (evidenceVerified) {
+      verifyEvidence(output, evidence);
+      verifyEvidence(`${output}-finalizer`, finalizer.evidence);
+    }
   } catch {
-    issued.delete(receipt);
     return freeze({
       ...receipt,
       verdict: "ERROR",
       status: "G0_ERROR",
       faults: [...receipt.faults, "G0_EVIDENCE"],
       realCandidate: "NOT_RUN",
+      evidenceVerified: false,
     });
   }
+  issued.add(receipt);
+  observations.set(receipt, {
+    verdict: observedVerdict,
+    fault: fault ?? null,
+    evidenceVerified,
+  });
   return receipt;
 }
