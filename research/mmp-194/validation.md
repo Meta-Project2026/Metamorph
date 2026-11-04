@@ -46,7 +46,7 @@ Command outputs were captured locally; counts below are executed results.
 | workflow Git blob SHA-256 and ZIP/member/API/synthetic hashing scripts | 0 | identities and hashes matched; no candidate execution |
 | `node --version`, `pnpm --version`, `gh --version` | 0 | Node 22.23.1 / pnpm 11.25.0 / gh 2.101.0 |
 | `pnpm install --frozen-lockfile` | 0 | frozen install; no lockfile changes |
-| `pnpm lint` | 0 | root lint passed |
+| `pnpm lint` | 0 | root lint passed; 4 existing warnings / 2 infos left unchanged |
 | `pnpm typecheck` | 0 | dependency builds + workspace typechecks passed |
 | `pnpm test` | 0 | 1,078 tests: **947 pass, 131 skip, 0 fail** |
 | `pnpm build` | 0 | workspace builds passed |
@@ -57,11 +57,35 @@ Command outputs were captured locally; counts below are executed results.
 | `pnpm exec biome check --write` for new/changed .mjs | 0 | formatting/imports only |
 | `pnpm exec biome check research/demo-readiness research/mmp-069 research/mmp-054-connected` (initial/final) | 0 / 0 | active research lint passed |
 | `node research/mmp-069/validate.mjs` | 0 | VALID; dynamic inventory includes new G tests/modules; privileged runner NOT_RUN |
-| `node research/mmp-069/check-syntax.mjs` | 0 | initial 141 syntax files; final count recorded in publication update |
+| `node research/mmp-069/check-syntax.mjs` | 0 | initial 141 / final 142 syntax files PASS |
 | actual `node research/demo-readiness/serve.mjs` child + HTTP smoke | 0 | startup message observed; `/`, `/latest.html`, exact G projection HTTP 200; child stopped |
 | existing `browser-smoke.mjs` with installed Playwright/Chrome | 0 | 31 groups, A–F picker/atomic/race/negative/recovery controls, no browser errors or external requests |
 | new `latest-browser-smoke.mjs` first / second / third / final | **1 / 1 / 0 / 0** | readiness race, then mobile overflow corrected; final 7 groups PASS, 4 screenshots |
 | `git diff --check` | 0 | clean; repeated before publication |
+
+Additional publication checks: 47 local Markdown links valid (0 broken),
+storyboard narration 317 words with target slots totaling 180 seconds; script
+exit 0, human timed rehearsal NOT_RUN. `git add`, commit and push exited 0;
+`gh pr create --draft` exited 0, producing [Draft PR #195](https://github.com/Meta-Project2026/Metamorph/pull/195).
+
+## Published implementation / first hosted check
+
+Implementation HEAD `578912190652a3ee23df6271fad4ce05b8ec3e3a`, base
+`14a54665a94394ca9fdb68a7c27f0c596428cbea`. First automatic
+[Fast CI 41933324309](https://github.com/Meta-Project2026/Metamorph/actions/runs/41933324309),
+**attempt 1 SUCCESS**, both
+[Node 22](https://github.com/Meta-Project2026/Metamorph/actions/runs/41933324309/job/126935449158)
+and [Node 24](https://github.com/Meta-Project2026/Metamorph/actions/runs/41933324309/job/126935449687).
+Actual PR merge checkout `02c63064c85ac04eda007a67fed39b74409c4f6e`, tree
+`04ed99eec096b727da88acfd176547f511658f2d`, parents base + implementation HEAD.
+Checkout logs were checked against the actual merge ref; this is hosted fast CI,
+not a differential/model run or product acceptance.
+
+This follow-up adds only publication/validation documentation. Its exact final
+HEAD, automatic replacement CI and final merge checkout are recorded in the
+PR body and live checks after they complete. That record is authoritative for
+independent review; this document does not self-certify its own commit hash or
+silently inherit green checks from an earlier head. No manual dispatch/rerun.
 
 Original failures are retained, not rewritten as green: first G suite invoked
 Python unittest with a dotted filename incorrectly, and the shared strict parser

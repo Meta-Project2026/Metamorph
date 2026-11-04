@@ -10,7 +10,7 @@ personal consent, submission and formal product acceptance.
 - [x] Source-backed technical claims, exact candidate/run/archive hashes and executed-vs-passed distinction documented in [provenance](../mmp-194/provenance.md).
 - [x] English three-minute storyboard, concrete developer workflow and call to action in [SUBMISSION.md](SUBMISSION.md); slot total 3:00, timing rehearsal NOT_RUN.
 - [x] English copy pack includes all owner-listed form fields, with human-only placeholders in [submission-answers.md](submission-answers.md).
-- [ ] Final exact-HEAD local checks and Node22/24 hosted CI: read actual [validation](../mmp-194/validation.md) and PR checks; never infer from an earlier head.
+- [x] Local checks and implementation-head Node22/24 CI passed: read actual [validation](../mmp-194/validation.md). For final exact-HEAD CI, use the published PR body/checks; never inherit an earlier head's result.
 - [ ] Owner runs the one-command viewer from the reviewed checkout, verifies expected states, and rehearses recording; physical disconnected-laptop rehearsal NOT_RUN.
 - [ ] Owner records/edits the actual 3-minute video; verify duration, readable UI, audible English and no sensitive tabs/paths/keys.
 - [ ] Owner uploads video and inserts its actual accessible URL into the copy pack/form.

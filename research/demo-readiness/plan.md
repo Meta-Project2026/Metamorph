@@ -14,7 +14,8 @@ one-command offline viewer, recordable 3:00 storyboard and truthful form pack.
 - [x] Separate latest proof sheet preserving A–F and distinct synthetic G0 identity.
 - [x] Operator flow, English storyboard, form pack and human-only missing inputs.
 - [x] Required local checks; see mmp-194/validation.md for actual results/first failures.
-- [ ] Exact-head hosted CI, Draft PR delivery and independent ChatGPT review.
+- [x] Draft PR #195 and implementation exact-head hosted CI Node22/24 attempt 1 PASS; final documentation-head CI is recorded in the PR.
+- [ ] Independent ChatGPT exact-head review and merge decision.
 - [ ] Human recording/upload, personal answers/consent and actual submission.
 
 Earlier milestone entries below are historical. New evidence does not change
