@@ -1,0 +1,402 @@
+{
+  "format": "mmp167-g1-qualification-v1",
+  "executedAt": "2026-11-04T10:26:09.325Z",
+  "headSha": "8cfde0e98502637257eaa338016f303035b0c018",
+  "environment": {
+    "platform": "linux",
+    "arch": "x64",
+    "nodeVersion": "v24.22.1",
+    "runnerOs": "Linux",
+    "isHostedRunner": true,
+    "recipeMatchesPin": true
+  },
+  "runtimeImageId": "sha256:23e480f9b081ad1463d93eff05ba43938f5446fe3bb20ecbae5f5a3203dd2a76",
+  "runtimeRecipeSha": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "expectedRecipePin": "f09b12fecd221cb720188266fbb004958e6112eb77e308bf113d15436649dab3",
+  "candidateSha": "34c8325a89db434bf5e869bbcb0999b9d2ef2496e4cff2db577a1e19c95f1334",
+  "totalTrials": 10,
+  "freshContainerTrials": 5,
+  "warmContainerTrials": 5,
+  "validation": {
+    "passed": true,
+    "failures": [],
+    "summary": {
+      "total": 10,
+      "expected": 10,
+      "passed": 10,
+      "failed": 0
+    }
+  },
+  "trials": [
+    {
+      "trialIndex": 1,
+      "mode": "fresh-container/repeated-image",
+      "provisionElapsedMs": 11637,
+      "dockerBuildCmdElapsedMs": 11031,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 2,
+      "mode": "fresh-container/repeated-image",
+      "provisionElapsedMs": 11364,
+      "dockerBuildCmdElapsedMs": 10773,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 3,
+      "mode": "fresh-container/repeated-image",
+      "provisionElapsedMs": 11316,
+      "dockerBuildCmdElapsedMs": 10670,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 4,
+      "mode": "fresh-container/repeated-image",
+      "provisionElapsedMs": 11283,
+      "dockerBuildCmdElapsedMs": 10699,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 5,
+      "mode": "fresh-container/repeated-image",
+      "provisionElapsedMs": 11332,
+      "dockerBuildCmdElapsedMs": 10759,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 6,
+      "mode": "back-to-back-warm-container",
+      "provisionElapsedMs": 11462,
+      "dockerBuildCmdElapsedMs": 10878,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 7,
+      "mode": "back-to-back-warm-container",
+      "provisionElapsedMs": 11225,
+      "dockerBuildCmdElapsedMs": 10630,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 8,
+      "mode": "back-to-back-warm-container",
+      "provisionElapsedMs": 11337,
+      "dockerBuildCmdElapsedMs": 10761,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 9,
+      "mode": "back-to-back-warm-container",
+      "provisionElapsedMs": 11364,
+      "dockerBuildCmdElapsedMs": 10752,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    },
+    {
+      "trialIndex": 10,
+      "mode": "back-to-back-warm-container",
+      "provisionElapsedMs": 11688,
+      "dockerBuildCmdElapsedMs": 11087,
+      "typecheckDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildDuration": "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+      "buildExitCode": 0,
+      "buildSignal": null,
+      "buildError": null,
+      "buildTimedOut": false,
+      "checks": [
+        {
+          "phase": "typecheck",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        },
+        {
+          "phase": "build",
+          "exitCode": 0,
+          "signal": null,
+          "error": null
+        }
+      ],
+      "g1Verdict": "PASS",
+      "g1FindingCodes": [],
+      "executedTestIds": [
+        "workshop-business:typecheck",
+        "workshop-business:build"
+      ],
+      "sidecarCode": null,
+      "cleanupVerified": true,
+      "zeroResourcesVerified": true,
+      "error": null,
+      "cleanupError": null
+    }
+  ]
+}
