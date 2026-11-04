@@ -1,4 +1,147 @@
-# Metamorph — development and agent foundations
+# Metamorph
+
+**AI migrates a legacy PHP service to TypeScript. An independent Oracle checks
+whether it still behaves the same, before anyone merges it.**
+
+Built for the Meta Global AI Developer Hackathon 2026 with **Muse Spark 1.3 on
+Meta Model API**. Developer tool: PHP source in, TypeScript candidate out, plus
+hash-pinned evidence for every verdict.
+
+![Recorded public proof: one Muse Spark 1.3 candidate with G1 6/6, G2 17/17 and G3 20/20 PASS](research/demo-readiness/screenshots/mmp194/public-result-1440.png)
+
+## The problem
+
+An LLM can rewrite a PHP service in TypeScript in minutes. Trusting the result
+is the hard part. Generated code can compile, look idiomatic and still change
+behavior: a JSON value comes back with a different type, a rejected booking is
+stored anyway, an error path disappears. Compilers and code review rarely catch
+these. Teams either read every line or ship and hope.
+
+## What Metamorph does
+
+1. **Generate.** Sends the pinned PHP source to **Muse Spark 1.3** (Meta Model
+   API, JSON-schema structured output) with a strict migration contract and gets
+   back a complete TypeScript project.
+2. **Verify independently.** The Oracle is a separate package with a separate
+   owner, and model confidence never counts as a pass. It builds the candidate
+   in a disposable Docker sandbox. Then it runs the **original PHP 7.4 app and
+   the TypeScript candidate side by side**, replays the same HTTP scenarios and
+   compares every response **and the SQLite database state** step by step.
+3. **Repair, within limits.** If a check fails, the model gets only allowlisted
+   failure codes such as `HTTP_JSON_TYPE` for one capped repair attempt. Hidden
+   test data never reaches it.
+4. **Prove.** Every verdict is tied to exact SHA-256 identities of the PHP
+   source, the candidate and the evaluator commit. These are published as
+   public receipts that anyone can inspect offline.
+
+```mermaid
+flowchart LR
+  PHP["Pinned PHP 7.4 service"] --> CTX["Migration context"]
+  CTX --> MUSE["Muse Spark 1.3<br/>Meta Model API"]
+  MUSE --> TS["TypeScript candidate"]
+  TS --> G1["G1: typecheck + build<br/>disposable Docker"]
+  G1 --> ORA["Oracle replays the same<br/>HTTP scenarios on PHP and TS"]
+  PHP --> ORA
+  ORA --> G23["G2: HTTP parity<br/>G3: SQLite state parity"]
+  G23 -- "FAIL: allowlisted codes only" --> MUSE
+  G23 -- "verdicts + hashes" --> R["Public receipts<br/>offline evidence viewer"]
+```
+
+## Result: a real model on a real run
+
+On **4 November 2026**
+([GitHub Actions run 41856569137](https://github.com/Meta-Project2026/Metamorph/actions/runs/41856569137)),
+a single Muse Spark 1.3 response migrated an open-source PHP car-workshop
+booking API (MIT). On the first attempt, with zero repairs, the candidate passed:
+
+| Gate | What the Oracle checked (3 public scenarios) | Result |
+| --- | --- | --- |
+| G1 | Typecheck + build in fresh isolated pairs | **6/6 PASS** |
+| G2 | HTTP responses, PHP vs TypeScript | **17/17 PASS** |
+| G3 | HTTP responses + typed SQLite state, initial and after each step | **20/20 PASS** |
+
+It used 6,571 input and 11,170 output tokens, about USD 0.056 (estimate; the
+actual charge was not reported). Candidate SHA-256 `4207053a…c130e6`. Full
+identities are in the [source audit](research/mmp-194/provenance.md).
+
+Earlier real candidates from the same pipeline failed, and we keep those
+failures visible. On 29 Oct one candidate did not compile. On 2 Nov one built
+cleanly but returned JSON values of the wrong type. On 3 Nov a real generate,
+Oracle, repair, Oracle loop still failed. Catching the "compiles but behaves
+differently" case is what the Oracle is for.
+
+## Try it in 30 seconds (no API key, Docker or install)
+
+Requires Node.js 22.13+ or 24.
+
+```sh
+git clone https://github.com/Meta-Project2026/Metamorph.git
+cd Metamorph
+node research/demo-readiness/serve.mjs
+```
+
+Open <http://127.0.0.1:4171/latest.html> and click **Verify pinned public
+evidence**. Your browser checks the size and SHA-256 of the saved public receipt
+before showing the gates. <http://127.0.0.1:4171/> holds the full history,
+including the failed runs (tracks A–F).
+
+Full engineering checks (pnpm 11.25.0) run 1,000+ tests:
+`pnpm install --frozen-lockfile && pnpm lint && pnpm typecheck && pnpm test`.
+
+## How we use Meta's models
+
+- **Muse Spark 1.3** via Meta Model API (`/v1/chat/completions`) generates the
+  whole TypeScript candidate in one structured call. In repair mode it receives
+  only Oracle failure classes and returns a revised candidate. A real
+  generate, verify, repair cycle is recorded in
+  [run 41726833705](https://github.com/Meta-Project2026/Metamorph/actions/runs/41726833705).
+- Paid calls run only in a guarded workflow
+  ([meta-paid-migration.yml](.github/workflows/meta-paid-migration.yml)). It
+  requires an exact reviewed commit, explicit owner confirmation and a pre-send
+  cost estimate ceiling, and allows at most 2 POSTs with no retries. The API key
+  lives in a protected GitHub environment and never enters the candidate sandbox.
+- Generation and verification are kept separate on purpose: the model proposes,
+  the Oracle decides.
+
+## Honest scope and what comes next
+
+**Proven:** parity of one exact AI candidate on the recorded public scenario
+manifest (3 scenarios over a small SQLite-backed booking API).
+
+**Not yet proven, next milestones:** isolation and anti-proxy controls (G0) on
+this exact candidate, which have so far run only on a separate synthetic
+candidate (11 controls + 1 qualified positive). Also hidden held-out scenarios
+(G4). Full product acceptance therefore stays **NOT_ESTABLISHED**, and the
+viewer says so on every screen. The groundwork for both is in the repo:
+`packages/g4-registry`, `packages/evidence-retention`, `packages/workshop-audit`.
+
+## Repository map
+
+| Path | What it is |
+| --- | --- |
+| [`research/demo-readiness/`](research/demo-readiness/README.md) | Offline evidence viewer (the demo), storyboard and pinned receipts |
+| [`packages/agent-real/`](packages/agent-real/README.md) | Meta Model API migration adapter, bounded repair, candidate custody |
+| [`packages/agent/`](packages/agent/README.md) | Agent orchestrator, budget/stop rules, Meta Model API client |
+| [`packages/oracle/`](packages/oracle/README.md) | Independent HTTP + SQLite comparator, controls, PHP 7.4 reference |
+| [`packages/differential/`](packages/differential/README.md) | PHP ↔ TypeScript differential bridge |
+| [`packages/target-worker/`](packages/target-worker/README.md) | Disposable Docker TypeScript runtime with host admission |
+| [`packages/workshop-audit/`](packages/workshop-audit/) | Independent audit harness and G0 controls |
+| `packages/g4-registry/`, `packages/evidence-retention/` | Held-out registry and encrypted evidence retention (G4 groundwork) |
+| `specs/`, `research/` | Specifications and dated engineering records for each milestone |
+
+**Team:** Vladimir (migration, orchestration, integration) and Ilia
+(independent baseline, comparator, Oracle). **Reused input:** the PHP
+car-workshop fixture by Tanjila Afsari Rubina (MIT), with its notice kept in
+[`LICENSE.upstream`](research/demo-readiness/evidence/LICENSE.upstream). Demo:
+[3-minute storyboard](research/demo-readiness/SUBMISSION.md).
+
+---
+
+## Engineering status and developer notes
+
+Detailed, dated status for maintainers and reviewers. Gate codes: G0 independent
+complete target and controls, G1 build/type safety, G2 HTTP contracts, G3 stateful
+differential parity, G4 independent held-out acceptance.
 
 For the submission demo, run `node research/demo-readiness/serve.mjs` and open
 `http://127.0.0.1:4171/`. Follow the latest-proof link to inspect recorded public
@@ -43,7 +186,7 @@ governance or the imported architecture. Both Vladimir and Ilia must explicitly
 agree to shared cross-team API changes and governance ratification; ordinary
 reversible work within authorized scope needs no repeated approval.
 
-## Windows PowerShell
+### Windows PowerShell
 
 Use Node.js 22.13+ in the 22 LTS line, or Node.js 24 LTS. This task was developed
 on Node 22.23.1. pnpm is pinned to 11.25.0, with exact direct dependency versions
@@ -53,7 +196,7 @@ and a committed lockfile. Install the matching package manager if necessary:
 node --version
 npm install --global pnpm@11.25.0
 pnpm --version
-Set-Location -LiteralPath 'C:\Users\user\Documents\1. Metamorph'
+Set-Location -LiteralPath '<path to your Metamorph checkout>'
 pnpm install --frozen-lockfile
 pnpm lint
 pnpm typecheck
@@ -77,7 +220,7 @@ capabilities: migration/Oracle `not_implemented`, Meta `not_integrated`, benchma
 `undecided`. This describes the health service, without a migration verdict. The capability
 strings are that service's static labels, not current project status.
 
-## Checks and layout
+### Checks and layout
 
 | Command | Executed work |
 | --- | --- |
@@ -133,7 +276,7 @@ independent G0–G4 execution, all mandatory scenarios and evidence for the exac
 candidate. Schemas, health, unit tests and compilation do not establish parity.
 See the unchanged [Oracle contract](metamorph-architecture-v0.1/docs/architecture/oracle-contract.md).
 
-## Ilia / parallel work
+### Ilia / parallel work
 
 MMP-001 is merged into `main` through [PR #1](https://github.com/Meta-Project2026/Metamorph/pull/1);
 MMP-002/003/004/005 and the target-worker, differential, workshop-audit,
@@ -169,7 +312,7 @@ trusted public synthetic fixtures only. Production isolated PHP/TS worker adapte
 and verified Meta API access remain future work; model IDs and pricing require a
 separately authorized live probe.
 
-## Dependency provenance
+### Dependency provenance
 
 Dependencies come from npm and retain upstream notices in installed packages.
 Fastify, Zod, pnpm and Node types use MIT; TypeScript uses Apache-2.0; Biome uses
