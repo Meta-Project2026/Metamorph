@@ -1,0 +1,59 @@
+{
+  "format": "mmp055-real-readiness-v1",
+  "prepared": "2026-11-04",
+  "BASE_SHA": "e0e971bd8d8c3d1a28c8332d42748e78e59a970a",
+  "SCOPE": "DOCS_ONLY_READINESS_PACKAGE_NO_CODE_CHANGES",
+  "TASK_CARD": "MVP-G4-REAL-CUSTODY",
+  "ISSUES": ["55", "56", "57"],
+  "STATUS": "BLOCKED_REAL_CUSTODY / READY_FOR_OWNER_DECISION",
+  "DELIVERABLES": {
+    "readinessWorksheet": "research/mmp-055/real-readiness/readiness-worksheet.md",
+    "twoDomainDeployment": "research/mmp-055/real-readiness/two-domain-deployment.md",
+    "rolesAndKeyFlow": "research/mmp-055/real-readiness/roles-and-key-flow.md",
+    "qualificationPlan": "research/mmp-055/real-readiness/qualification-plan.md",
+    "handoff56And57": "research/mmp-055/real-readiness/handoff-56-57.md",
+    "riskMatrix": "research/mmp-055/real-readiness/risk-matrix.md",
+    "operatorRunbook": "research/mmp-055/real-readiness/operator-runbook.md",
+    "validation": "research/mmp-055/real-readiness/validation.md"
+  },
+  "FIXED_POLICY_OWNER_REPORTED": {
+    "LOCAL_FIRST": true,
+    "RETENTION_MIN_DAYS": 180,
+    "RETENTION_CLOCK": "latest terminal receipt",
+    "DAY90_INDEPENDENT_EXACT_BYTE_AND_FULL_INDEX_RESTORE": true,
+    "HOLD_EXTENSION": true,
+    "SAFE_EXPIRATION_DELETION": true,
+    "AUTHENTICATED_JOINT_RECORD": "PENDING"
+  },
+  "EVIDENCE_BASE": {
+    "SYNTHETIC_ADAPTER": "PR #64 merged 2026-10-28 (B1/B2 remediation at af7a36d)",
+    "REGISTRY_SEAM": "PR #185 merged 2026-11-04 (packages/g4-registry at e0e971b)",
+    "SPEC_PACKAGE": "specs/017-formal-g4 (PROPOSED / PENDING BOTH OWNERS)"
+  },
+  "REAL_CUSTODY": {
+    "MEDIA": "NOT_SELECTED",
+    "DOMAINS": "NOT_DEPLOYED",
+    "CUSTODIANS_APPOINTED": false,
+    "KEYS_GENERATED": false,
+    "ESCROW": "NOT_ESTABLISHED",
+    "RESTORE": "NOT_RUN",
+    "DAY90": "NOT_RUN_NOT_YET_DUE",
+    "DELETION": "NOT_RUN"
+  },
+  "OPEN_OWNER_DECISIONS": [
+    "D1_PROTOCOL_ACCEPTANCE",
+    "D2_INDEPENDENCE_PROFILE_AND_APPOINTMENTS",
+    "D4_MEDIA_ADMIN_KEYS_RECOVERY_SELECTION",
+    "D5_ATTEMPT_FINALITY_RULES",
+    "D6_IMPLEMENTATION_AUTHORIZATION",
+    "D7_EXACT_RUN_AUTHORIZATION"
+  ],
+  "SMALLEST_FOLLOW_UP_CODE_CHANGE": "separately admitted real-deployment profile replacing SYNTHETIC_ONLY gate; no crypto change without demonstrated defect + independent review",
+  "INDEPENDENT_REVIEW_OF_64_REMEDIATION": "NOT_RECORDED_AT_FINAL_HEAD",
+  "G4": "INCONCLUSIVE",
+  "PRODUCT": "NOT_ESTABLISHED",
+  "EXTERNAL_RETENTION": "NOT_RUN",
+  "HISTORICAL_PR31": "AUDIT_FAIL_UNCHANGED",
+  "SELF_MERGE": "NOT_PERMITTED",
+  "ISSUE_55_CLOSURE": "NOT_PERMITTED_BY_PLAN"
+}
