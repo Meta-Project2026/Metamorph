@@ -29,7 +29,7 @@ candidate side, reference side, or a shared cause.
 
 The issue's purpose — de-risk the pipeline's first-HTTP verifier behavior before
 more paid attempts — is answered by direct evidence: authentic run
-[#41856569137](https://github.com/Metamorph/actions/runs/41856569137) at exact
+[#41856569137](https://github.com/Meta-Project2026/Metamorph/actions/runs/41856569137) at exact
 `main@95397bbff94f3e0121ebdc9fa375880762bcbac7` produced a genuine model-generated
 candidate with **G1 6/6, G2 17/17, G3 20/20 PASS** (`COMPLETE_PUBLIC_PASS`), custody
 artifact 13338306385 and cleanups 0/0/0. The HTTP+SQLite path now has an authentic
