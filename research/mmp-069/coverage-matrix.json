@@ -415,6 +415,14 @@
       "staticCheck": "GATED_HOSTED_SYNTAX",
       "tests": "NOT_VERIFIED",
       "gap": "Offline source-grounded diagnosis of paid run 41749479450 and synthetic build-phase controls receive hosted syntax checking only; the production buildReceipt/observeBuild/publicAttempt matrix runs through the existing packages/agent-real test glob in pnpm test, and the research-local negative-controls.mjs is a manual assertion receipt. One bounded manual Docker measurement used only the trusted workshop fixture on a locally cached node 24.11.0 / typescript 5.9.3 image with network none; no candidate bytes, Meta call, paid dispatch/rerun, candidate decryption, artifact upload or gate weakening. The real run's exact build-phase subtype stays UNKNOWN."
+    },
+    {
+      "path": "research/mmp-174",
+      "lifecycle": "ACTIVE",
+      "execution": "MANUAL_DOCKER",
+      "staticCheck": "GATED_HOSTED_SYNTAX",
+      "tests": "NOT_VERIFIED",
+      "gap": "Offline synthetic public G1 workload stress qualification harness with graded tiers (baseline, moderate, heavy) and trusted TargetWorker Docker compilation. Deterministic generator, validator, and trial components receive package-level test coverage in packages/agent-real/test/g1-stress.test.mjs under pnpm test and hosted syntax checks in Fast CI. Docker-based stress measurements execute strictly within dedicated workflow .github/workflows/mmp174-offline-g1-stress.yml on ubuntu-24.04 runners. No paid model calls, candidate decryption, held-out data access, production recipe changes, or gate weakening."
     }
   ],
   "skips": [
