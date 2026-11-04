@@ -1,10 +1,17 @@
-// SYNTHETIC_UNIT_ONLY: deterministic controls for G1 qualification and timeout boundaries.
+// SYNTHETIC_UNIT_ONLY: deterministic controls for G1 qualification, timeout boundaries,
+// and fail-closed harness validation.
 // No candidate source evaluated on host; exercises production buildReceipt, observeBuild,
 // and publicAttempt paths with exact phase receipt structures.
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { MANIFEST } from "@metamorph/oracle";
+import {
+  validateBatchResults,
+  validateTrial,
+} from "../../../research/mmp-167/harness-validator.mjs";
 import { sha256, validateBundle } from "../../target-worker/src/admission.mjs";
 import { publicAttempt } from "../src/report.mjs";
 import { observeBuild } from "../src/runtime.mjs";
@@ -65,7 +72,42 @@ const publish = (observed, errorCode = "BUILD_FAILED") => {
   });
 };
 
-test("normal two-phase build with elapsedMs passes G1 and emits no sidecar", () => {
+test("normal two-phase build with canonical production checks (no elapsedMs) passes G1", () => {
+  const canonicalChecks = [
+    {
+      phase: "typecheck",
+      exitCode: 0,
+      signal: null,
+      error: null,
+      stdout: "",
+      stderr: "",
+    },
+    {
+      phase: "build",
+      exitCode: 0,
+      signal: null,
+      error: null,
+      stdout: "",
+      stderr: "",
+    },
+  ];
+  const w = makeWorker(canonicalChecks, {
+    exitCode: 0,
+    stdout: JSON.stringify({ checks: canonicalChecks, artifacts: [] }),
+  });
+  const observed = observeBuild(w, scenarioId);
+
+  assert.equal(observed.build.verdict, "PASS");
+  assert.deepEqual(observed.build.findingCodes, []);
+  assert.deepEqual(observed.build.executedTestIds, [
+    `${scenarioId}:typecheck`,
+    `${scenarioId}:build`,
+  ]);
+  assert.equal(observed.buildPhaseDiagnostics, null);
+  assert.equal(observed.compilerDiagnostics, undefined);
+});
+
+test("normal two-phase build with optional check fields passes G1 and emits no sidecar", () => {
   const checks = [
     {
       phase: "typecheck",
@@ -110,7 +152,6 @@ test("internal phase timeout in typecheck vs build distinguishes executed ids an
       exitCode: null,
       signal: "SIGTERM",
       error: "ETIMEDOUT",
-      elapsedMs: 12005,
       stdout: "",
       stderr: "",
     },
@@ -143,7 +184,6 @@ test("internal phase timeout in typecheck vs build distinguishes executed ids an
       exitCode: 0,
       signal: null,
       error: null,
-      elapsedMs: 5200,
       stdout: "",
       stderr: "",
     },
@@ -152,7 +192,6 @@ test("internal phase timeout in typecheck vs build distinguishes executed ids an
       exitCode: null,
       signal: "SIGTERM",
       error: "ETIMEDOUT",
-      elapsedMs: 12008,
       stdout: "",
       stderr: "",
     },
@@ -211,7 +250,6 @@ test("compiler type error (FAIL) vs abnormal termination (ERROR)", () => {
       exitCode: 2,
       signal: null,
       error: null,
-      elapsedMs: 4500,
       stdout: "src/main.ts(1,1): error TS2322: Type error",
       stderr: "",
     },
@@ -230,7 +268,6 @@ test("compiler type error (FAIL) vs abnormal termination (ERROR)", () => {
       exitCode: null,
       signal: null,
       error: "EAGAIN",
-      elapsedMs: 12,
       stdout: "",
       stderr: "",
     },
@@ -254,7 +291,6 @@ test("privacy guarantee: sensitive markers, raw stderr/stdout and paths do not l
       exitCode: 0,
       signal: null,
       error: null,
-      elapsedMs: 5000,
       stdout: marker,
       stderr: marker,
     },
@@ -263,7 +299,6 @@ test("privacy guarantee: sensitive markers, raw stderr/stdout and paths do not l
       exitCode: null,
       signal: "SIGTERM",
       error: "ETIMEDOUT",
-      elapsedMs: 12010,
       stdout: marker,
       stderr: marker,
     },
@@ -280,4 +315,157 @@ test("privacy guarantee: sensitive markers, raw stderr/stdout and paths do not l
   assert.doesNotMatch(serialized, /ETIMEDOUT/);
   assert.doesNotMatch(serialized, /SIGTERM/);
   assert.doesNotMatch(serialized, /\/work\//);
+});
+
+// Deterministic positive and negative controls for qualification harness validator
+const makeValidTrial = (
+  index = 1,
+  mode = "fresh-container/repeated-image",
+) => ({
+  trialIndex: index,
+  mode,
+  provisionElapsedMs: 13500,
+  dockerBuildCmdElapsedMs: 11400,
+  typecheckDuration: "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+  buildDuration: "NOT_AVAILABLE_FROM_PRODUCTION_RECEIPT",
+  buildExitCode: 0,
+  buildSignal: null,
+  buildError: null,
+  buildTimedOut: false,
+  checks: [
+    {
+      phase: "typecheck",
+      exitCode: 0,
+      signal: null,
+      error: null,
+      stdout: "",
+      stderr: "",
+    },
+    {
+      phase: "build",
+      exitCode: 0,
+      signal: null,
+      error: null,
+      stdout: "",
+      stderr: "",
+    },
+  ],
+  g1Verdict: "PASS",
+  g1FindingCodes: [],
+  executedTestIds: ["workshop-business:typecheck", "workshop-business:build"],
+  sidecarCode: null,
+  cleanupVerified: true,
+  zeroResourcesVerified: true,
+  error: null,
+  cleanupError: null,
+});
+
+test("harness-validator: nominal 10-trial PASS batch validates cleanly", () => {
+  const batch = Array.from({ length: 10 }, (_, i) =>
+    makeValidTrial(
+      i + 1,
+      i < 5 ? "fresh-container/repeated-image" : "back-to-back-warm-container",
+    ),
+  );
+  const validation = validateBatchResults(batch, 10);
+  assert.equal(validation.passed, true);
+  assert.equal(validation.summary.total, 10);
+  assert.equal(validation.summary.passed, 10);
+  assert.equal(validation.summary.failed, 0);
+  assert.deepEqual(validation.failures, []);
+});
+
+test("harness-validator negative controls: rejects abnormal outcomes and leaks fail-closed", () => {
+  // Control 1: G1 ERROR
+  const g1ErrorTrial = {
+    ...makeValidTrial(1),
+    g1Verdict: "ERROR",
+    sidecarCode: "BUILD_PHASE_TIMEOUT",
+  };
+  const v1 = validateTrial(g1ErrorTrial);
+  assert.equal(v1.valid, false);
+  assert.ok(v1.reasons.some((r) => r.startsWith("UNEXPECTED_G1_VERDICT")));
+
+  // Control 2: Missing executed build ID
+  const missingBuildIdTrial = {
+    ...makeValidTrial(2),
+    executedTestIds: ["workshop-business:typecheck"],
+  };
+  const v2 = validateTrial(missingBuildIdTrial);
+  assert.equal(v2.valid, false);
+  assert.ok(
+    v2.reasons.some((r) => r.startsWith("INCOMPLETE_EXECUTED_TEST_IDS")),
+  );
+
+  // Control 3: Non-zero build exit code
+  const nonzeroBuildTrial = { ...makeValidTrial(3), buildExitCode: 2 };
+  const v3 = validateTrial(nonzeroBuildTrial);
+  assert.equal(v3.valid, false);
+  assert.ok(v3.reasons.some((r) => r.startsWith("UNEXPECTED_BUILD_EXIT")));
+
+  // Control 4: Cleanup not verified
+  const unverifiedCleanupTrial = {
+    ...makeValidTrial(4),
+    cleanupVerified: false,
+  };
+  const v4 = validateTrial(unverifiedCleanupTrial);
+  assert.equal(v4.valid, false);
+  assert.ok(v4.reasons.includes("CLEANUP_NOT_VERIFIED"));
+
+  // Control 5: Residual owned resource / Docker leak
+  const leakTrial = { ...makeValidTrial(5), zeroResourcesVerified: false };
+  const v5 = validateTrial(leakTrial);
+  assert.equal(v5.valid, false);
+  assert.ok(v5.reasons.includes("RESIDUAL_OWNED_RESOURCES"));
+
+  // Control 6: Cleanup error thrown
+  const cleanupFaultTrial = {
+    ...makeValidTrial(6),
+    cleanupError: "CLEANUP_ERROR",
+  };
+  const v6 = validateTrial(cleanupFaultTrial);
+  assert.equal(v6.valid, false);
+  assert.ok(v6.reasons.some((r) => r.startsWith("CLEANUP_FAULT")));
+
+  // Control 7: Worker provision exception
+  const workerErrorTrial = { ...makeValidTrial(7), error: "TIMEOUT" };
+  const v7 = validateTrial(workerErrorTrial);
+  assert.equal(v7.valid, false);
+  assert.ok(v7.reasons.some((r) => r.startsWith("UNEXPECTED_WORKER_ERROR")));
+
+  // Control 8: Trial count mismatch in batch
+  const incompleteBatch = [makeValidTrial(1), makeValidTrial(2)];
+  const v8 = validateBatchResults(incompleteBatch, 10);
+  assert.equal(v8.passed, false);
+  assert.equal(v8.summary.failed, 8);
+});
+
+test("measure-live CLI: mock unit exits verify fail-closed and pass behavior", () => {
+  const harnessPath = fileURLToPath(
+    new URL("../../../research/mmp-167/measure-live.mjs", import.meta.url),
+  );
+  // Negative test: mock failure must exit with code 1
+  const failChild = spawnSync(
+    process.execPath,
+    [harnessPath, "--mock-unit=fail"],
+    { encoding: "utf8", timeout: 10000 },
+  );
+  assert.equal(failChild.status, 1, "CLI must exit nonzero on trial failure");
+  assert.ok(
+    failChild.stderr.includes("QUALIFICATION FAILED (FAIL-CLOSED)") ||
+      failChild.stdout.includes("QUALIFICATION FAILED (FAIL-CLOSED)"),
+    "CLI must log fail-closed summary",
+  );
+
+  // Positive test: mock pass must exit with code 0
+  const passChild = spawnSync(
+    process.execPath,
+    [harnessPath, "--mock-unit=pass"],
+    { encoding: "utf8", timeout: 10000 },
+  );
+  assert.equal(passChild.status, 0, "CLI must exit 0 on clean qualification");
+  assert.ok(
+    passChild.stdout.includes("QUALIFICATION PASSED (ALL CRITERIA MET)"),
+    "CLI must log success message",
+  );
 });
