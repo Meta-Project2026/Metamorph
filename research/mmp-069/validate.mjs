@@ -338,17 +338,28 @@ export function validate(root = ROOT) {
       reason: "Requires uid 0",
       guard: "process.getuid?.() !== 0",
     },
+    {
+      title: "POSIX G0 staging and evidence reject links and permission tamper",
+      status: "WINDOWS_NOT_RUN",
+      reason: "Requires POSIX mode/link semantics; executes on hosted Linux",
+      guard: 'skip: process.platform === "win32"',
+    },
   ];
   same(matrix.skips, expectedSkips, "SKIP_CLAIM");
   const retention = read(
     root,
     "packages/evidence-retention/test/retention.test.mjs",
   );
-  for (const skip of expectedSkips)
+  for (const skip of expectedSkips) {
+    const source =
+      skip.status === "WINDOWS_NOT_RUN"
+        ? read(root, "packages/workshop-audit/test/g0.test.mjs")
+        : retention;
     check(
-      retention.includes(skip.title) && retention.includes(skip.guard),
+      source.includes(skip.title) && source.includes(skip.guard),
       "SKIP_SOURCE_DRIFT",
     );
+  }
   return {
     status: "VALID",
     workspacePackages: packages.length,
