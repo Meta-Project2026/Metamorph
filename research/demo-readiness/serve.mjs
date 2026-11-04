@@ -6,6 +6,7 @@ import { REAL_AI_PINS } from "./real-ai-pins.mjs";
 
 const routes = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
+  ["/latest.html", ["latest.html", "text/html; charset=utf-8"]],
   ...[
     "viewer.mjs",
     "adapter.mjs",
@@ -18,8 +19,18 @@ const routes = new Map([
     "track-e-pins.mjs",
     "track-f-adapter.mjs",
     "track-f-pins.mjs",
+    "latest.mjs",
+    "track-g-adapter.mjs",
+    "track-g-pins.mjs",
   ].map((name) => [`/${name}`, [name, "text/javascript; charset=utf-8"]]),
   ["/style.css", ["style.css", "text/css; charset=utf-8"]],
+  [
+    "/evidence/real-ai-41856569137/mmp194-track-g-v1.json",
+    [
+      "evidence/real-ai-41856569137/mmp194-track-g-v1.json",
+      "application/json; charset=utf-8",
+    ],
+  ],
   [
     "/evidence/real-ai-41505679809/mmp148-track-e-v1.json",
     [

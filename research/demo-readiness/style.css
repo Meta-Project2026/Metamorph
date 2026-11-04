@@ -272,3 +272,6 @@ footer { display: flex; justify-content: space-between; gap: 24px; padding-block
 #repair-session dt, #repair-session dd { margin: 0; }
 @media (max-width: 800px) { .repair-attempts { grid-template-columns: 1fr; } .repair-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .repair-flow { grid-template-columns: 1fr; } .repair-flow li { padding: 14px; } .repair-attempt { padding: 14px; } #repair-session dl { grid-template-columns: 1fr; gap: 4px; } #repair-session dd { margin-bottom: 12px; } }
+
+/* MMP-194 proof sheet: long public identities stay inside the mobile viewport. */
+.proof-sheet p { overflow-wrap: anywhere; }

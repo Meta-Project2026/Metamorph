@@ -1,5 +1,15 @@
 # Metamorph — recorded demo & offline evidence desk
 
+MMP-194: run `node research/demo-readiness/serve.mjs`, open
+`http://127.0.0.1:4171/` and follow **Open the latest recorded PHP → TypeScript
+proof**. The separate proof sheet validates original public run 41856569137;
+A–F below retain their original identities and outcomes. G0_REAL_CANDIDATE
+NOT_RUN · G4 INCONCLUSIVE · PRODUCT NOT_ESTABLISHED.
+See [3-minute English storyboard](SUBMISSION.md), [form answer pack](submission-answers.md),
+[submission checklist](SUBMISSION-CHECKLIST.md), [operator flow](../mmp-194/RUNBOOK.md)
+and [source audit](../mmp-194/provenance.md). Video URL is pending human upload;
+the form is NOT_SUBMITTED.
+
 [MMP-140](https://github.com/Meta-Project2026/Metamorph/issues/140) improves the
 existing vanilla HTML/CSS/ESM viewer. It presents **PHP → TypeScript with independent
 behavioral verification**, using six recorded public tracks (A–F). It is not a live

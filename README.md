@@ -1,5 +1,14 @@
 # Metamorph — development and agent foundations
 
+For the submission demo, run `node research/demo-readiness/serve.mjs` and open
+`http://127.0.0.1:4171/`. Follow the latest-proof link to inspect recorded public
+G1–G3 results for the 4 November model-generated candidate; A–F remain available
+as historical evidence. Real-candidate G0 NOT_RUN, G4 INCONCLUSIVE, product
+NOT_ESTABLISHED. [Three-minute storyboard](research/demo-readiness/SUBMISSION.md),
+[form answers](research/demo-readiness/submission-answers.md) and
+[submission checklist](research/demo-readiness/SUBMISSION-CHECKLIST.md).
+The paragraphs below describe the foundation and earlier milestones.
+
 The implemented foundation covers shared TypeScript/Zod contracts and a local
 Fastify health endpoint (MMP-001), a bounded offline agent lifecycle with
 scripted providers (MMP-003), a standalone

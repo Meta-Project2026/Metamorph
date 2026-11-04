@@ -1,5 +1,26 @@
 # MMP-071 compact spec / plan / tasks
 
+## MMP-194 — public success and submission slice (5 November 2026)
+
+Base `14a54665a94394ca9fdb68a7c27f0c596428cbea`; isolated branch
+`Vladimir/mmp-194-offline-mvp-demo`. Scope: demo-readiness, mmp-194 audit and a
+root README quickstart link. No active feature pointer, shared API, worker,
+Oracle, workflow, dependency or original A–F evidence/pin changes.
+Acceptance: source-bound public proof sheet, visible formal acceptance limits,
+one-command offline viewer, recordable 3:00 storyboard and truthful form pack.
+
+- [x] Refresh main/open PRs and reconcile original public ZIP/API/job/workflow bytes.
+- [x] Reproducible allowlist projection; strict pins/semantics and negative tests.
+- [x] Separate latest proof sheet preserving A–F and distinct synthetic G0 identity.
+- [x] Operator flow, English storyboard, form pack and human-only missing inputs.
+- [x] Required local checks; see mmp-194/validation.md for actual results/first failures.
+- [x] Draft PR #195 and implementation exact-head hosted CI Node22/24 attempt 1 PASS; final documentation-head CI is recorded in the PR.
+- [ ] Independent ChatGPT exact-head review and merge decision.
+- [ ] Human recording/upload, personal answers/consent and actual submission.
+
+Earlier milestone entries below are historical. New evidence does not change
+their recorded outcomes or establish formal G0/G4/product acceptance.
+
 Base: `2a6eef6a583cf981e604d697bc1cb287174a823c` from freshly fetched `origin/main`.
 Branch: `demo/mmp-071-hackathon`. All changed files stay in `research/demo-readiness/`.
 Root constitution remains PROPOSED / PENDING OWNER RATIFICATION.
