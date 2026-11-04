@@ -22,6 +22,11 @@ The exact implementation HEAD and hosted check links belong to the Draft PR.
 | G0_REAL_CANDIDATE_NOT_RUN | No private candidate/key/ciphertext accessed; no owner-local attestation supplied |
 | Product acceptance | NOT_ESTABLISHED; existing Oracle G0/G4 results unchanged |
 
+Later execution: [Linux Docker validation](linux-docker-validation.md) records
+the source-bound 2026-11-04 public/synthetic qualification and preserved failed
+attempts. The implementation-stage table above is historical; real fault controls,
+authentic candidate admission and formal acceptance remain separate.
+
 ## Scope and implementation decisions
 
 `policy.mjs` registers a trusted local `g0-standalone-v1` declaration before
