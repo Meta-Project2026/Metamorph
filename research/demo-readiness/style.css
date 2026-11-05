@@ -275,3 +275,63 @@ footer { display: flex; justify-content: space-between; gap: 24px; padding-block
 
 /* MMP-194 proof sheet: long public identities stay inside the mobile viewport. */
 .proof-sheet p { overflow-wrap: anywhere; }
+
+/* MMP-197: scoped to the recorded-run page; historical A–F keep their layout. */
+.proof-sheet { background: #f6f7f9; color: #242a34; --muted: #596270; --line: #dce0e6; --purple: #3859a6; }
+.proof-sheet header, .proof-sheet main, .proof-sheet footer { max-width: 1160px; padding-inline: 40px; }
+.proof-sheet header { min-height: 72px; }
+.proof-sheet .brand { letter-spacing: -.4px; }
+.proof-sheet .eyebrow { letter-spacing: 1px; margin-bottom: 8px; }
+.proof-sheet .run-heading { padding-top: 32px; }
+.proof-sheet h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 12px; }
+.proof-sheet .lede { font-size: 16px; margin-bottom: 10px; }
+.proof-sheet .run-context { color: var(--muted); font-size: 13px; margin: 0; }
+.proof-sheet .load-row { display: flex; align-items: center; gap: 18px; margin: 22px 0; }
+.proof-sheet #latest-status { font-size: 12px; color: var(--muted); margin: 0; }
+.proof-sheet .run-overview { border: 1px solid var(--line); background: white; border-radius: 8px; padding: 24px; }
+.proof-sheet .run-summary { display: grid; grid-template-columns: 1fr auto; gap: 24px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.proof-sheet .run-summary h2 { font-size: 20px; margin: 0; letter-spacing: -.3px; }
+.proof-sheet .run-summary p:not(.eyebrow) { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+.proof-sheet .run-cost { text-align: right; }
+.proof-sheet .run-cost strong { font-size: 28px; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.proof-sheet .results-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-top: 20px; }
+.proof-sheet .results-heading h2 { font-size: 16px; margin: 0; }
+.proof-sheet #latest-boundary { font-size: 12px; color: #545d6a; margin: 0; }
+.proof-sheet .outcome-rows { margin-top: 12px; }
+.proof-sheet .outcome-rows > div { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid #edf0f3; font-size: 15px; }
+.proof-sheet .outcome-rows strong { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 15px; }
+.proof-sheet .scope-note { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
+.proof-sheet .inspection { margin-top: 16px; border: 1px solid var(--line); border-radius: 8px; background: white; overflow: hidden; }
+.proof-sheet .inspection-panel + .inspection-panel { border-top: 1px solid var(--line); }
+.proof-sheet .inspection-panel > summary { padding: 15px 24px; min-height: 48px; color: var(--purple); font-size: 14px; }
+.proof-sheet summary:focus-visible { outline-offset: -4px; }
+.proof-sheet .panel-content { border-top: 1px solid var(--line); padding: 24px; font-size: 14px; }
+.proof-sheet .panel-content h2 { font-size: 20px; }
+.proof-sheet .panel-content h3 { margin: 28px 0 8px; font-size: 15px; }
+.proof-sheet .panel-content details { margin-top: 12px; }
+.proof-sheet .panel-content summary { padding-block: 12px; }
+.proof-sheet #latest-formal { display: grid; grid-template-columns: minmax(140px, 1fr) 2fr; gap: 12px; }
+.proof-sheet #latest-formal dt, .proof-sheet #latest-formal dd { margin: 0; }
+.proof-sheet .history-link { display: flex; gap: 16px; align-items: center; font-size: 12px; margin: 18px 0 24px; }
+.proof-sheet .history-link a { padding-block: 10px; }
+.proof-sheet .history-link span { color: var(--muted); }
+.proof-sheet footer { padding-block: 18px; }
+@media (max-width: 600px) {
+  .proof-sheet header, .proof-sheet main, .proof-sheet footer { padding-inline: 20px; }
+  .proof-sheet header { min-height: 64px; }
+  .proof-sheet .run-heading { padding-top: 24px; }
+  .proof-sheet h1 { font-size: 30px; }
+  .proof-sheet .lede { font-size: 14px; }
+  .proof-sheet .load-row { flex-direction: column; align-items: start; gap: 10px; margin: 18px 0; }
+  .proof-sheet .run-overview, .proof-sheet .panel-content { padding: 18px; }
+  .proof-sheet .run-summary { grid-template-columns: 1fr; gap: 16px; padding-bottom: 18px; }
+  .proof-sheet .run-summary h2 { font-size: 18px; }
+  .proof-sheet .run-cost { text-align: left; }
+  .proof-sheet .run-cost strong { font-size: 25px; }
+  .proof-sheet .results-heading { flex-direction: column; gap: 8px; padding-top: 16px; }
+  .proof-sheet .outcome-rows > div { font-size: 14px; padding: 10px 0; }
+  .proof-sheet .inspection-panel > summary { padding-inline: 18px; }
+  .proof-sheet #latest-formal { grid-template-columns: 1fr; gap: 4px; }
+  .proof-sheet #latest-formal dd { margin-bottom: 10px; }
+  .proof-sheet .history-link { flex-wrap: wrap; gap: 0 16px; }
+}

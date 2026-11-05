@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "checks": [
+    "1440px: home link, empty state, keyboard load, real and synthetic identities, no overflow",
+    "390px: home link, empty state, keyboard load, real and synthetic identities, no overflow",
+    "missing: atomic clear and recovery",
+    "tampered: atomic clear and recovery",
+    "forged-pass: atomic clear and recovery",
+    "A–F fallback loads while G unavailable",
+    "no browser errors or external requests"
+  ],
+  "errors": [],
+  "external": [],
+  "captures": [
+    {
+      "name": "latest-1440.png",
+      "capturedAtUtc": "2026-11-04T23:58:32.080Z",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0
+    },
+    {
+      "name": "audit-1440.png",
+      "capturedAtUtc": "2026-11-04T23:58:32.360Z",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 743
+    },
+    {
+      "name": "latest-390.png",
+      "capturedAtUtc": "2026-11-04T23:58:32.749Z",
+      "width": 390,
+      "height": 844,
+      "scrollY": 0
+    },
+    {
+      "name": "audit-390.png",
+      "capturedAtUtc": "2026-11-04T23:58:32.950Z",
+      "width": 390,
+      "height": 844,
+      "scrollY": 863
+    }
+  ]
+}
