@@ -7,7 +7,7 @@ Built for the Meta Global AI Developer Hackathon 2026 with **Muse Spark 1.3 on
 Meta Model API**. Developer tool: PHP source in, TypeScript candidate out, plus
 hash-pinned evidence for every verdict.
 
-![Recorded public proof: one Muse Spark 1.3 candidate with G1 6/6, G2 17/17 and G3 20/20 PASS](research/demo-readiness/screenshots/mmp194/public-result-1440.png)
+![Recorded migration: Muse Spark 1.3 candidate with build 6/6, HTTP 17/17 and database state 20/20 PASS](research/demo-readiness/screenshots/mmp197/latest-1440.png)
 
 ## The problem
 
@@ -80,8 +80,7 @@ cd Metamorph
 node research/demo-readiness/serve.mjs
 ```
 
-Open <http://127.0.0.1:4171/latest.html> and click **Verify pinned public
-evidence**. Your browser checks the size and SHA-256 of the saved public receipt
+Open <http://127.0.0.1:4171/latest.html> and click **Load recorded results**. Your browser checks the size and SHA-256 of the saved public receipt
 before showing the gates. <http://127.0.0.1:4171/> holds the full history,
 including the failed runs (tracks A–F).
 
@@ -112,7 +111,7 @@ manifest (3 scenarios over a small SQLite-backed booking API).
 this exact candidate, which have so far run only on a separate synthetic
 candidate (11 controls + 1 qualified positive). Also hidden held-out scenarios
 (G4). Full product acceptance therefore stays **NOT_ESTABLISHED**, and the
-viewer says so on every screen. The groundwork for both is in the repo:
+viewer's **Audit & limitations** panel says so. The groundwork for both is in the repo:
 `packages/g4-registry`, `packages/evidence-retention`, `packages/workshop-audit`.
 
 ## Repository map
