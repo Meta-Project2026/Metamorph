@@ -51,7 +51,7 @@ try {
     });
   }
   for (const width of [1440, 390]) {
-    await page.setViewportSize({ width, height: 900 });
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 900 });
     await page.goto("http://127.0.0.1:4171/");
     await page
       .getByRole("link", {
@@ -63,10 +63,7 @@ try {
       await page.locator("#latest-status").textContent(),
       /NOT_VERIFIED/,
     );
-    assert.match(
-      await page.locator(".acceptance").textContent(),
-      /NOT_ESTABLISHED/,
-    );
+    assert.equal(await page.locator("#latest-cost").textContent(), "");
     await page.waitForFunction(
       () => !document.getElementById("load-latest").disabled,
     );
@@ -75,12 +72,12 @@ try {
     await page.locator("#latest-evidence").waitFor({ state: "visible" });
     assert.match(
       await page.locator("#latest-status").textContent(),
-      /PINNED_PUBLIC_SNAPSHOT/,
+      /Local receipt verified/,
     );
-    assert.equal(await page.locator("#latest-gates span").count(), 5);
+    assert.equal(await page.locator("#latest-gates > div").count(), 3);
     assert.match(
       await page.locator("#latest-gates").textContent(),
-      /G2 PASS · 17\/17/,
+      /HTTP behavior17\/17 PASS/,
     );
     assert.match(
       await page.locator("#latest-synthetic").textContent(),
@@ -94,8 +91,72 @@ try {
     );
     await page.evaluate(() => scrollTo(0, 0));
     await capture(`latest-${width}.png`);
-    await page.locator("#real-title").scrollIntoViewIfNeeded();
-    await capture(`public-result-${width}.png`);
+    assert.equal(
+      await page.locator("#latest-model").textContent(),
+      "Meta Model API · Muse Spark 1.3",
+    );
+    assert.equal(await page.locator("#latest-cost").textContent(), "~$0.056");
+    assert.match(
+      await page.locator(".run-cost").textContent(),
+      /Estimated model cost for this recorded run/,
+    );
+    for (const selector of [
+      "#latest-model",
+      ".run-cost",
+      "#latest-gates",
+      "#latest-boundary",
+    ]) {
+      const box = await page.locator(selector).boundingBox();
+      assert.ok(
+        box.y >= 0 && box.y + box.height <= (width === 390 ? 844 : 900),
+        `${selector} above fold at ${width}`,
+      );
+    }
+    await page.locator("#load-latest").focus();
+    await page.keyboard.press("Tab");
+    assert.equal(
+      await page
+        .locator("#checks-panel > summary")
+        .evaluate((el) => el === document.activeElement),
+      true,
+    );
+    await page.keyboard.press("Enter");
+    assert.equal(await page.locator("#latest-scenarios details").count(), 3);
+    await page.locator("#latest-scenarios summary").first().click();
+    assert.match(
+      await page.locator("#latest-scenarios pre").first().textContent(),
+      /workshop-business:step-0/,
+    );
+    await page.locator("#checks-panel > summary").click();
+    await page.locator("#audit-panel > summary").focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await page.locator("#latest-formal").isVisible(), true);
+    for (const status of [
+      "NOT_RUN",
+      "INCONCLUSIVE",
+      "NOT_ESTABLISHED",
+      "NOT_INDEPENDENTLY_VERIFIED",
+    ])
+      assert.ok(
+        (await page.locator("#latest-formal").textContent()).includes(status),
+      );
+    assert.match(
+      await page.locator("#latest-usage").textContent(),
+      /USD 0.05568625/,
+    );
+    assert.match(
+      await page.locator("#latest-identities").textContent(),
+      new RegExp(P.candidateSha256),
+    );
+    await page.locator("#audit-panel").scrollIntoViewIfNeeded();
+    await capture(`audit-${width}.png`);
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      true,
+    );
+    await page.locator("#audit-panel > summary").click();
     checks.push(
       `${width}px: home link, empty state, keyboard load, real and synthetic identities, no overflow`,
     );
@@ -130,6 +191,12 @@ try {
     );
     for (const id of [
       "latest-gates",
+      "latest-model",
+      "latest-cost",
+      "latest-response",
+      "latest-boundary",
+      "latest-formal",
+      "latest-scenarios",
       "latest-summary",
       "latest-usage",
       "latest-cleanup",
