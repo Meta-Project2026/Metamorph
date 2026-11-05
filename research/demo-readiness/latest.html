@@ -3,28 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Metamorph · Recorded public success</title>
+  <title>Metamorph · Recorded migrations</title>
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/latest.mjs"></script>
 </head>
 <body class="proof-sheet">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header><a class="brand" href="/">Metamorph <span class="edition">/ public proof</span></a><nav aria-label="Page navigation"><a href="/#receipt-desk">Historical tracks A–F</a></nav><span class="offline-label">Offline · read only</span></header>
+  <header><a class="brand" href="/">Metamorph <span class="edition">/ Recorded migrations</span></a><span class="offline-label">Offline evidence</span></header>
   <main id="main">
-    <section class="intro" aria-labelledby="title">
-      <div><p class="eyebrow">RECORDED PHP → TYPESCRIPT · 4 NOVEMBER 2026 UTC</p><h1 id="title">Real AI.<br><span>Public parity.</span></h1><p class="lede">Inspect one real model candidate against its pinned public build, HTTP and state comparisons.</p><p>Saved evidence only. No live generation or candidate execution.</p><button id="load-latest" type="button" disabled>Verify pinned public evidence ↓</button><p id="latest-status" role="status" aria-live="polite">NOT_VERIFIED · No receipts loaded.</p></div>
-      <aside class="acceptance" aria-labelledby="acceptance-title"><p class="eyebrow" id="acceptance-title">PRODUCT ACCEPTANCE</p><strong>NOT_ESTABLISHED</strong><div class="acceptance-rule"></div><p>G0_REAL_CANDIDATE = NOT_RUN<br>G4 = INCONCLUSIVE<br>Held-out = NOT_RUN</p><p>Public parity covers the recorded manifest. Formal independent acceptance remains unestablished.</p></aside>
+    <section class="run-heading" aria-labelledby="title">
+      <p class="eyebrow">RECORDED MIGRATION · TRACK G</p>
+      <h1 id="title">PHP → TypeScript</h1>
+      <p class="lede">Review a generated candidate against the original service’s public behavior.</p>
+      <p class="run-context">Public workshop benchmark · 4 Nov 2026</p>
+      <div class="load-row"><button id="load-latest" type="button" disabled>Load recorded results</button><p id="latest-status" role="status" aria-live="polite">NOT_VERIFIED · No receipts loaded.</p></div>
     </section>
     <div id="latest-evidence" hidden>
-      <section class="card" aria-labelledby="real-title"><p class="eyebrow">G / GENUINE MODEL CANDIDATE · PUBLIC MANIFEST ONLY</p><h2 id="real-title">One response. One candidate. Zero repairs.</h2><div id="latest-gates" class="gate-strip"></div><p id="latest-summary"></p><p>Counts describe completed checks with explicit PASS verdicts and empty findings in both aggregate and scenario receipts. They are not a percentage of all routes, functions or future inputs.</p><div id="latest-usage"></div><p id="latest-cleanup"></p>
-        <details><summary>Exact tested IDs, scenario verdicts and public JSON</summary><pre id="latest-json"></pre></details>
-        <details><summary>Run, source, candidate and archive identities</summary><dl id="latest-identities"></dl></details>
+      <section class="run-overview" aria-labelledby="real-title">
+        <div class="run-summary"><div><p class="eyebrow">MODEL</p><h2 id="latest-model"></h2><p id="latest-response"></p></div><div class="run-cost"><strong id="latest-cost"></strong><p>Estimated model cost for this recorded run</p></div></div>
+        <div class="results-heading"><h2 id="real-title">Public checks</h2><p id="latest-boundary"></p></div>
+        <div id="latest-gates" class="outcome-rows"></div>
+        <p class="scope-note">Recorded public scenarios only. Database state includes HTTP and typed SQLite comparisons.</p>
       </section>
-      <section class="card" aria-labelledby="synthetic-title"><p class="eyebrow">SEPARATE CANDIDATE / OWNER-RECORDED SYNTHETIC G0</p><h2 id="synthetic-title">11 controls + 1 qualified positive</h2><p id="latest-synthetic"></p><p>The synthetic positive is a different candidate with a different workload. Its PASS cannot fill the genuine candidate’s G0. Raw owner-private engine logs were unavailable for independent attestation. Earlier environment and implementation errors remain in the source record; fault-injection controls are NOT_RUN.</p></section>
-      <section class="card"><p class="eyebrow">PROVENANCE / LIMITS</p><h2>What these bytes establish</h2><p id="latest-source"></p><p>PINNED_PUBLIC_SNAPSHOT: offline bytes match the reviewed public artifact and its metadata. This does not rerun the Oracle, inspect candidate source, attest private custody, prove authenticity of arbitrary uploads, or establish G0/G4/product acceptance. The archive is retained locally even after GitHub expiry.</p><p id="latest-limits"></p><p>One preliminary send receipt records ERROR / UNKNOWN before the final successful response. It is preserved in the archive, not counted as another model response or repair. Charged cost and exact model version remain unknown.</p></section>
+      <div class="inspection">
+        <details id="checks-panel" class="inspection-panel"><summary>View checks</summary><div class="panel-content"><h2>Exact scenario comparisons</h2><p id="latest-summary"></p><div id="latest-scenarios"></div><details><summary>Validated public JSON · all result IDs</summary><pre id="latest-json" tabindex="0" aria-label="Validated public JSON"></pre></details></div></details>
+        <details id="audit-panel" class="inspection-panel"><summary>Audit &amp; limitations</summary><div class="panel-content">
+          <h2>Full verification pending</h2><dl id="latest-formal"></dl>
+          <h3>Model usage &amp; billing</h3><p id="latest-usage"></p><p>One preliminary send receipt records ERROR / UNKNOWN before the final confirmed response. It remains in the original archive, not counted as another model response or repair. This estimate is not a fixed price or a billed charge.</p>
+          <h3>Run, source, candidate and archive identities</h3><dl id="latest-identities"></dl>
+          <h3>Separate owner-reported synthetic G0</h3><p>11 fixed controls + one qualified positive</p><p id="latest-synthetic"></p><p>This is a different candidate and workload, not G0 PASS for the generated candidate. Raw engine attestation is unavailable. Earlier environment and implementation errors remain recorded; fault-injection controls are NOT_RUN.</p>
+          <h3>Provenance &amp; recorded limits</h3><p id="latest-source"></p><p>PINNED_PUBLIC_SNAPSHOT: local bytes match the pinned public projection. This does not rerun the Oracle, inspect candidate source, attest private custody or authenticate arbitrary uploads. The original ZIP is retained in the repository, outside the served assets.</p><p id="latest-limits"></p><p id="latest-cleanup"></p>
+          <h3>Evidence legend</h3><p>PASS: the stated scoped operation passed. FAIL: an executed check proved failure. ERROR: environment or harness prevented a conclusion. INCONCLUSIVE: evidence is insufficient. NOT_RUN: the operation did not execute. NOT_VERIFIED: this page has not validated its local bytes.</p>
+        </div></details>
+      </div>
     </div>
-    <section class="card"><h2>Evidence legend</h2><p>PASS: the stated scoped operation passed. FAIL: an executed check proved failure. ERROR: environment or harness prevented a conclusion. INCONCLUSIVE: evidence is insufficient. NOT_RUN: the operation did not execute. NOT_VERIFIED: this page has not validated its local bytes.</p><p><a href="/#receipt-desk">60-second fallback: load pinned historical A–F evidence →</a></p></section>
+    <p class="history-link"><a href="/#receipt-desk">Historical runs A–F</a><span>Earlier outcomes and fallback evidence</span></p>
   </main>
-  <footer>Offline public snapshot · No provider calls · Independent review pending</footer>
+  <footer>Recorded evidence · No live generation or candidate execution · No telemetry</footer>
 </body>
 </html>
