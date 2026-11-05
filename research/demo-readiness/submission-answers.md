@@ -84,3 +84,43 @@ Reuse/provenance: workshop PHP fixture comes from Tanjila Afsari Rubina's MIT
 upstream; notice is retained. Project tooling and demo work are distinct from
 reused inputs and pre-event research. No claim of all-new hackathon authorship.
 [Upstream notice](evidence/LICENSE.upstream).
+
+## v2: tighter judge-facing wording (same facts, optional)
+
+These are shorter, positive versions of the three free-text answers above. The
+facts are the same and the sources are the same audit links. Disclaimers about
+what we do *not* claim are dropped, because a form answer does not need to list
+non-claims. Owner review is still required.
+
+**Project Description.** Metamorph lets developers hand a legacy PHP service to
+AI and get back a TypeScript migration with evidence of whether it still behaves
+the same. Meta's Muse Spark 1.3 generates the complete TypeScript project. An
+independent Oracle then builds it in a disposable Docker sandbox, runs the
+original PHP app and the candidate side by side, replays identical HTTP
+scenarios, and compares every response and the SQLite database state step by
+step. Failures go back to the model as allowlisted codes for one capped repair.
+Every verdict is tied to exact hashes and published as receipts that anyone can
+hash-check offline in 30 seconds. In our 4 November run, a single Muse Spark
+response passed 6/6 build, 17/17 HTTP and 20/20 state comparisons on the public
+scenarios. Hidden held-out tests are next.
+
+**Describe your use of Meta products.** Muse Spark 1.3 on the Meta Model API is
+our migration engine. We send the pinned PHP source with a strict migration
+contract and request JSON-schema structured output, so each response is a
+complete, machine-checkable TypeScript project. When the independent Oracle
+finds a defect, Metamorph sends only allowlisted failure classes (for example
+`HTTP_JSON_TYPE`) back to Muse Spark for a capped repair attempt. A real
+generate, verify, repair, verify cycle is recorded in run 41726833705. Our
+4 November run used one Muse Spark response: 6,571 input and 11,170 output
+tokens, about USD 0.056 estimated. Its candidate passed public G1 6/6, G2 17/17
+and G3 20/20. Calls go only through a guarded GitHub Actions workflow with a
+cost ceiling and no retries, and the API key is kept away from the sandbox.
+
+**Why are Meta's models important?** Muse Spark 1.3 does the hard creative part.
+In a single structured response it translates a whole PHP service, including its
+JSON and database behavior, into strict TypeScript, and it can revise that code
+from compact Oracle feedback. Each attempt is one request, one candidate hash and
+one verdict, at a few cents. That makes migration an auditable transaction and
+keeps repeated, verified attempts affordable. Metamorph adds independent
+verification on top, so a team can use Muse Spark for real migrations without
+taking its output on faith.
